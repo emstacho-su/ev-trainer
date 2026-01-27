@@ -1,0 +1,13 @@
+# ev-drill-trainer — Requirements
+
+Created: 2026-01-27T21:50:26Z
+
+## Project Description
+Build a web app (Next.js + TypeScript) that drills poker decision points (spots) and grades every user action by EV loss vs a solver strategy baseline. Opponents act by sampling from solver mixed frequencies. Must integrate an open-source solver via an adapter (service/WASM/hybrid to be decided), cache solver outputs by canonical node hash, and use deterministic RNG seeding. Must not copy GTOWizard UI/text/assets/branding/datasets. Modes: Spot Quiz, Hand Play, Review/Mistakes by EV loss, Targeted Drill. Toggles: preflop/postflop, streets, positions, stack depth presets, board buckets, tree restrictions, feedback verbosity.
+
+## Status
+Initialized (requirements not yet authored).
+
+## Notes
+- This file is a stub created during spec initialization.
+- The full requirements will be generated in the next phase.
