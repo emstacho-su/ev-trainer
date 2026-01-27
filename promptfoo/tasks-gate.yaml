@@ -6,12 +6,10 @@ prompts:
   - "{{tasks_text}}"
 tests:
   - vars:
-      tasks_text: file://.kiro/specs/ev-drill-trainer/tasks.md
+      tasks_text: file://../.kiro/specs/ev-drill-trainer/tasks.md
     assert:
       - type: javascript
         value: |
-          // Expect tasks.md to use this structure:
-          // "## Task 1: ..." for each task, and each task must include "Definition of Done" (or "DoD")
           const text = output;
 
           const taskHeaders = [...text.matchAll(/^##\s+Task\s+(\d+)\s*:/gmi)].map(m => Number(m[1]));
@@ -19,18 +17,16 @@ tests:
             throw new Error(`Expected at least 6 tasks, found ${taskHeaders.length}.`);
           }
 
-          // Check ordered 1..N with no gaps
           for (let i = 0; i < taskHeaders.length; i++) {
             if (taskHeaders[i] !== i + 1) {
-              throw new Error(`Tasks must be ordered sequentially as Task 1..N. Found: ${taskHeaders.join(", ")}`);
+              throw new Error(`Tasks must be sequential Task 1..N. Found: ${taskHeaders.join(", ")}`);
             }
           }
 
-          // Every task section must include DoD/Definition of Done
           const sections = text.split(/^##\s+Task\s+\d+\s*:/gmi).slice(1);
           const missingDod = [];
           sections.forEach((sec, idx) => {
-            if (!/Definition of Done|\\bDoD\\b/i.test(sec)) missingDod.push(idx + 1);
+            if (!/Definition of Done|\bDoD\b/i.test(sec)) missingDod.push(idx + 1);
           });
           if (missingDod.length) {
             throw new Error(`Missing Definition of Done in tasks: ${missingDod.join(", ")}`);

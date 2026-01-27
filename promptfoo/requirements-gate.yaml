@@ -6,7 +6,7 @@ prompts:
   - "{{requirements_text}}"
 tests:
   - vars:
-      requirements_text: file://.kiro/specs/ev-drill-trainer/requirements.md
+      requirements_text: file://../.kiro/specs/ev-drill-trainer/requirements.md
     assert:
       - type: javascript
         value: |
@@ -24,7 +24,5 @@ tests:
           ];
 
           const missing = checks.filter(c => !c.re.test(output)).map(c => c.name);
-          if (missing.length) {
-            throw new Error("Requirements gate failed. Missing: " + missing.join(", "));
-          }
+          if (missing.length) throw new Error("Requirements gate failed. Missing: " + missing.join(", "));
           return true;
