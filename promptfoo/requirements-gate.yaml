@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "Gate: Requirements QA (EV-first, adapter, caching, acceptance, non-goals)"
+providers:
+  - echo
+prompts:
+  - "{{requirements_text}}"
+tests:
+  - vars:
+      requirements_text: file://.kiro/specs/ev-drill-trainer/requirements.md
+    assert:
+      - type: javascript
+        value: |
+          const checks = [
+            { name: "EV-first grading (EV_loss_vs_mix)", re: /EV_loss_vs_mix/i },
+            { name: "Solver adapter contract", re: /Solver Integration/i },
+            { name: "Adapter output (freq + EV)", re: /Frequencies|frequency|p\\(ai\\)|EV\\(ai\\)/i },
+            { name: "Canonical node hash", re: /canonical node hash/i },
+            { name: "Caching + persistence", re: /Caching\\s*\\+\\s*Persistence|Persistent cache|disk/i },
+            { name: "Acceptance criteria", re: /Acceptance Criteria/i },
+            { name: "Non-goals", re: /Non-goals/i },
+            { name: "Non-copy constraint", re: /GTOWizard/i },
+            { name: "Deterministic RNG seed", re: /Deterministic RNG|seed/i },
+            { name: "Playstyle transforms", re: /Playstyle transforms|p'\\(ai\\)|reweight|Normalize/i }
+          ];
+
+          const missing = checks.filter(c => !c.re.test(output)).map(c => c.name);
+          if (missing.length) {
+            throw new Error("Requirements gate failed. Missing: " + missing.join(", "));
+          }
+          return true;
