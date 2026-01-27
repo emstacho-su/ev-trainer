@@ -1,0 +1,6 @@
+{
+  "feature_name": "{{FEATURE_NAME}}",
+  "created_at": "{{TIMESTAMP}}",
+  "language": "en-US",
+  "project_description": "{{PROJECT_DESCRIPTION}}"
+}
