@@ -2,22 +2,7 @@
 
 import { createHash } from "node:crypto";
 import type { ActionId } from "./types";
-import type { NodeHistory, NodePublicState } from "./solverAdapter";
-
-export interface ActionAbstraction {
-  betSizesBb: number[];
-  raiseSizesBb: number[];
-  maxRaisesPerStreet: number;
-}
-
-export interface CanonicalNodeInput {
-  gameVersion: string;
-  abstractionVersion: string;
-  solverVersion: string;
-  publicState: NodePublicState;
-  history: NodeHistory;
-  abstraction: ActionAbstraction;
-}
+import type { CanonicalNode } from "./nodeTypes";
 
 const NUMBER_EPS = 1e-12;
 
@@ -138,7 +123,7 @@ function stableStringify(value: unknown): string {
   throw new Error(`unsupported value type: ${typeof value}`);
 }
 
-export function buildCanonicalNodeHash(input: CanonicalNodeInput): string {
+export function buildCanonicalNodeHash(input: CanonicalNode): string {
   if (input === null || typeof input !== "object") {
     throw new Error("input must be an object");
   }

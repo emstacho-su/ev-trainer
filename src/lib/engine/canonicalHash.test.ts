@@ -1,8 +1,10 @@
 // src/lib/engine/canonicalHash.test.ts
 
 import { describe, expect, it } from "vitest";
-import { buildCanonicalNodeHash, type ActionAbstraction } from "./canonicalHash";
+import { buildCanonicalNodeHash } from "./canonicalHash";
+import type { CanonicalNode } from "./nodeTypes";
 import type { NodeHistory, NodePublicState } from "./solverAdapter";
+import type { ActionAbstraction } from "./nodeTypes";
 
 const basePublicState: NodePublicState = {
   street: "FLOP",
@@ -22,12 +24,13 @@ const baseAbstraction: ActionAbstraction = {
   maxRaisesPerStreet: 2,
 };
 
-const baseInput = {
+const baseInput: CanonicalNode = {
   gameVersion: "HU-NLHE",
   abstractionVersion: "v1",
   solverVersion: "mock-0",
   publicState: basePublicState,
   history: baseHistory,
+  toAct: "BTN",
   abstraction: baseAbstraction,
 };
 
@@ -58,6 +61,7 @@ describe("buildCanonicalNodeHash", () => {
       gameVersion: "HU-NLHE",
       publicState: publicStateReordered,
       history: historyReordered,
+      toAct: "BTN",
       abstraction: {
         raiseSizesBb: [20, 7.5],
         maxRaisesPerStreet: 2,

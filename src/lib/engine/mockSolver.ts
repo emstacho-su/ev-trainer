@@ -1,19 +1,16 @@
 // src/lib/engine/mockSolver.ts
 
 import { createHash } from "node:crypto";
-import type { SolverNodeOutput, SolverRequest } from "./solverAdapter";
-import { buildCanonicalNodeHash, type ActionAbstraction } from "./canonicalHash";
-
-export type MockSolverRequest = SolverRequest & {
-  abstraction: ActionAbstraction;
-};
+import type { SolverNodeOutput } from "./solverAdapter";
+import type { CanonicalNode } from "./nodeTypes";
+import { buildCanonicalNodeHash } from "./canonicalHash";
 
 function hashToUint32(hex: string): number {
   const slice = hex.slice(0, 8);
   return Number.parseInt(slice, 16) >>> 0;
 }
 
-export function mockSolve(request: MockSolverRequest): SolverNodeOutput {
+export function mockSolve(request: CanonicalNode): SolverNodeOutput {
   const nodeHash = buildCanonicalNodeHash({
     gameVersion: request.gameVersion,
     abstractionVersion: request.abstractionVersion,

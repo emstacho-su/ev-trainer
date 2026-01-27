@@ -2,9 +2,9 @@
 
 import { describe, expect, it } from "vitest";
 import { mockSolve } from "./mockSolver";
-import type { MockSolverRequest } from "./mockSolver";
+import type { CanonicalNode } from "./nodeTypes";
 
-const baseRequest: MockSolverRequest = {
+const baseRequest: CanonicalNode = {
   gameVersion: "HU-NLHE",
   abstractionVersion: "v1",
   solverVersion: "mock-0",
