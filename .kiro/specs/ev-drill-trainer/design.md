@@ -39,7 +39,7 @@ flowchart LR
 ## 4. Technology Stack & Alignment
 - **Web**: Next.js (App Router) + TypeScript + Tailwind CSS. (Req 9)
 - **Solver Service**: Separate process (C++/Python or Rust) using an open-source solver framework.  
-  Primary candidate: OpenSpiel-based service (Apache-2.0). Fallback: ACPC-based service. (Req 4)
+  Do not assume a specific solver yet; MVP uses a mock solver for tests and a “solver evaluation spike” will select an OSS NLHE-capable engine/framework and confirm licensing/performance. (Req 4)
 - **Persistence**: SQLite for MVP (local dev), with schema compatible with Postgres for production scaling.
 - **Caching**: Memory LRU + persistent cache table keyed by canonical node hash. (Req 5)
 - **RNG**: Deterministic, seeded, explicit algorithm (e.g., xoroshiro128+) implemented in a shared utility for server and tests. (Req 3.1)
