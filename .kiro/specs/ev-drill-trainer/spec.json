@@ -1,15 +1,19 @@
 {
   "feature_name": "ev-drill-trainer",
   "created_at": "2026-01-27T21:50:26Z",
-  "updated_at": "2026-01-27T22:34:10Z",
+  "updated_at": "2026-01-27T22:46:16Z",
   "language": "en-US",
-  "phase": "design-generated",
+  "phase": "tasks-generated",
   "approvals": {
     "requirements": {
       "generated": true,
       "approved": true
     },
     "design": {
+      "generated": true,
+      "approved": true
+    },
+    "tasks": {
       "generated": true,
       "approved": false
     }
