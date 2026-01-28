@@ -7,8 +7,10 @@ import {
   renderHandPlayView,
   renderReviewView,
   renderSpotQuizView,
+  renderTrainingShell,
   renderTargetedDrillView,
 } from "./trainingUi";
+import type { TrainingUiState } from "./trainingUi";
 
 const actions: SolverActionOutput[] = [
   { actionId: "CHECK", frequency: 0.55, ev: 0.4 },
@@ -98,5 +100,46 @@ describe("training UI renderers", () => {
     expect(thirdIndex).toBeGreaterThan(-1);
     expect(firstIndex).toBeLessThan(secondIndex);
     expect(secondIndex).toBeLessThan(thirdIndex);
+  });
+
+  it("renders mode markers and EV labels in the training shell", () => {
+    const state: TrainingUiState = {
+      activeMode: "spot-quiz",
+      spotQuiz: {
+        prompt: "Pick the highest EV line.",
+        actions,
+        selectedActionId: "CHECK",
+        evLossVsMix: 0.12,
+        evLossVsBest: 0.25,
+      },
+      handPlay: {
+        prompt: "Advance the hand with discipline.",
+        actions,
+        selectedActionId: "BET_75PCT",
+        step: 2,
+        log: [{ step: 1, actor: "user", actionId: "CHECK" }],
+      },
+      targetedDrill: {
+        prompt: "Focus on thin value decisions.",
+        streets: ["FLOP"],
+        boardBuckets: ["paired"],
+        maxRaisesPerStreet: 1,
+        betSizesBb: [0.5],
+        raiseSizesBb: [1],
+        verbosity: "compact",
+      },
+      review: {
+        title: "Review",
+        items: [makeRecord("a", 0.1)],
+      },
+    };
+
+    const html = renderTrainingShell(state);
+
+    expect(html).toContain("Spot Quiz");
+    expect(html).toContain("Hand Play");
+    expect(html).toContain("Targeted Drill");
+    expect(html).toContain("Review");
+    expect(html).toContain("EV Loss vs Mix");
   });
 });
