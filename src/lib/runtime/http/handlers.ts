@@ -18,17 +18,26 @@ export interface ErrorResponse {
   error: string;
 }
 
-export interface HandlerResult<T> {
+export interface HandlerSuccess<T> {
   status: number;
-  body: T | ErrorResponse;
+  body: T;
+  headers?: Record<string, string>;
 }
+
+export interface HandlerError {
+  status: number;
+  body: ErrorResponse;
+  headers?: Record<string, string>;
+}
+
+export type HandlerResult<T> = HandlerSuccess<T> | HandlerError;
 
 interface SessionInput {
   seed: string;
   sessionId: string;
 }
 
-function badRequest(message: string): HandlerResult<ErrorResponse> {
+function badRequest(message: string): HandlerError {
   return { status: 400, body: { error: message } };
 }
 
@@ -48,13 +57,21 @@ function requireNumber(source: Record<string, unknown>, key: string): number | n
   return value;
 }
 
-function requireSession(input: unknown): SessionInput | HandlerResult<ErrorResponse> {
+function requireSession(input: unknown): SessionInput | HandlerError {
   if (!isObject(input)) return badRequest("body must be an object");
   const seed = requireString(input, "seed");
   const sessionId = requireString(input, "sessionId");
   if (!seed) return badRequest("seed is required");
   if (!sessionId) return badRequest("sessionId is required");
   return { seed, sessionId };
+}
+
+function isHandlerError(value: SessionInput | HandlerError): value is HandlerError {
+  return "status" in value && "body" in value;
+}
+
+function asCanonicalNode(value: Record<string, unknown>): CanonicalNode {
+  return value as unknown as CanonicalNode;
 }
 
 function parseOptionalModes(
@@ -76,7 +93,7 @@ function parseOptionalSort(input: Record<string, unknown>): ReviewSort | undefin
 
 export function handleSpotQuiz(input: unknown): HandlerResult<SpotQuizResponse> {
   const session = requireSession(input);
-  if ("status" in session) return session;
+  if (isHandlerError(session)) return session;
   const body = input as Record<string, unknown>;
 
   const node = body.node;
@@ -86,7 +103,7 @@ export function handleSpotQuiz(input: unknown): HandlerResult<SpotQuizResponse> 
 
   const runtime = getRuntime(session.seed, session.sessionId);
   const result = runtime.trainingApi.spotQuiz({
-    node: node as CanonicalNode,
+    node: asCanonicalNode(node),
     userActionId: userActionId as ActionId,
     sessionId: session.sessionId,
   });
@@ -96,7 +113,7 @@ export function handleSpotQuiz(input: unknown): HandlerResult<SpotQuizResponse> 
 
 export function handleHandPlay(input: unknown): HandlerResult<HandPlayResponse> {
   const session = requireSession(input);
-  if ("status" in session) return session;
+  if (isHandlerError(session)) return session;
   const body = input as Record<string, unknown>;
 
   const node = body.node;
@@ -108,7 +125,7 @@ export function handleHandPlay(input: unknown): HandlerResult<HandPlayResponse> 
 
   const runtime = getRuntime(session.seed, session.sessionId);
   const result = runtime.trainingApi.handPlayStep({
-    node: node as CanonicalNode,
+    node: asCanonicalNode(node),
     userActionId: userActionId as ActionId,
     sequenceIndex,
     sessionId: session.sessionId,
@@ -119,7 +136,7 @@ export function handleHandPlay(input: unknown): HandlerResult<HandPlayResponse> 
 
 export function handleTargetedDrill(input: unknown): HandlerResult<TargetedDrillResponse> {
   const session = requireSession(input);
-  if ("status" in session) return session;
+  if (isHandlerError(session)) return session;
   const body = input as Record<string, unknown>;
 
   const candidatesValue = body.candidates;
@@ -155,7 +172,7 @@ export function handleTargetedDrill(input: unknown): HandlerResult<TargetedDrill
 
 export function handleReviewList(input: unknown): HandlerResult<ReviewListResponse> {
   const session = requireSession(input);
-  if ("status" in session) return session;
+  if (isHandlerError(session)) return session;
   const body = input as Record<string, unknown>;
 
   const modes = parseOptionalModes(body);
@@ -183,7 +200,7 @@ export function handleReviewList(input: unknown): HandlerResult<ReviewListRespon
 
 export function handleReviewDetail(input: unknown): HandlerResult<ReviewDetailResponse> {
   const session = requireSession(input);
-  if ("status" in session) return session;
+  if (isHandlerError(session)) return session;
   const body = input as Record<string, unknown>;
 
   const id = requireString(body, "id");
@@ -195,7 +212,7 @@ export function handleReviewDetail(input: unknown): HandlerResult<ReviewDetailRe
   const runtime = getRuntime(session.seed, session.sessionId);
   const result = runtime.trainingApi.reviewDetail({
     id,
-    node: node as CanonicalNode | undefined,
+    node: node ? asCanonicalNode(node) : undefined,
   });
 
   return { status: 200, body: result };
