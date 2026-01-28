@@ -17,6 +17,7 @@ export function mockSolve(request: CanonicalNode): SolverNodeOutput {
     solverVersion: request.solverVersion,
     publicState: request.publicState,
     history: request.history,
+    toAct: request.toAct,
     abstraction: request.abstraction,
   });
 
