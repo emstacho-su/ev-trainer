@@ -23,6 +23,15 @@ describe("createSeededRng", () => {
 
     expect(a).not.toEqual(b);
   });
+
+  it("matches a golden sequence for a fixed seed", () => {
+    const rng = createSeededRng("seed:golden");
+
+    expect(rng.nextUint32()).toBe(2903743666);
+    expect(rng.nextUint32()).toBe(2570031585);
+    expect(rng.nextUint32()).toBe(1248839336);
+    expect(rng.state()).toBe("176ed4ad2");
+  });
 });
 
 describe("combineSeed", () => {
