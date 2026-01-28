@@ -101,6 +101,31 @@ export function runSpotQuizDecision(
   return { nodeHash, output, grade, record };
 }
 
+export function runTargetedDrillDecision(
+  node: CanonicalNode,
+  userActionId: ActionId,
+  deps: SpotQuizDeps
+): SpotQuizResult {
+  const { nodeHash, output } = resolveSolverNode(node, deps);
+  const grade = deps.gradeDecision(output, userActionId);
+  const record = buildDecisionRecord(
+    {
+      nodeHash,
+      sessionId: deps.sessionId,
+      mode: "targeted-drill",
+      userActionId,
+      grade,
+      configSnapshot: deps.configSnapshot,
+      seed: deps.seed,
+    },
+    { now: deps.now, idFactory: deps.idFactory }
+  );
+
+  deps.decisionStore.add(record);
+
+  return { nodeHash, output, grade, record };
+}
+
 export type HandPlayActor = "user" | "opponent";
 
 export interface HandPlayAdvanceDeps {
