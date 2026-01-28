@@ -1,0 +1,20 @@
+description: "Gate: ev-runtime-preview tasks.md"
+providers:
+  - echo
+prompts:
+  - file://../../.kiro/specs/ev-runtime-preview/tasks.md
+tests:
+  - description: "Must include required tasks A-D + DoD"
+    assert:
+      - type: contains
+        value: "TASK A"
+      - type: contains
+        value: "TASK B"
+      - type: contains
+        value: "TASK C"
+      - type: contains
+        value: "TASK D"
+      - type: contains
+        value: "Definition of Done"
+      - type: contains
+        value: "npm test"

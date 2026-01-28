@@ -1,0 +1,18 @@
+description: "Gate: ev-runtime-preview design.md"
+providers:
+  - echo
+prompts:
+  - file://../../.kiro/specs/ev-runtime-preview/design.md
+tests:
+  - description: "Must describe boundaries + determinism + testing"
+    assert:
+      - type: contains
+        value: "src/lib/engine"
+      - type: contains
+        value: "src/lib/runtime"
+      - type: contains
+        value: "seed"
+      - type: contains
+        value: "Determinism"
+      - type: contains
+        value: "Testing"
