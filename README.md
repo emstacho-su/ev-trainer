@@ -3,8 +3,9 @@
 ## Manual preview
 1. Install dependencies: `npm install`
 2. Start the Next.js dev server: `npm run dev`
-3. Open the local URL printed by Next.js.
+3. Open the local URL printed by Next.js and visit `/train`.
+4. Enter a seed + sessionId, then use the Spot Quiz / Hand Play / Targeted Drill / Review tabs.
 
 ### Determinism note
-Runtime determinism (explicit seed and session IDs) will be wired in Tasks B–D.
-Until then, the preview is a static placeholder.
+Seed and sessionId inputs are required for every request. Reusing the same inputs
+replays the same solver outputs and EV grading.
