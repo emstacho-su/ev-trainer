@@ -26,6 +26,7 @@ const makeRecord = (id: string, evLossVsMix: number, createdSeq: number): Decisi
     evLossVsBest: 0.3,
     pureMistake: false,
     policyDivergence: 0.1,
+    isBestAction: false,
   };
   return {
     recordId: id,

@@ -2,30 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 import type { SolverNodeOutput } from "./solverAdapter";
-import type { ActionId } from "./types";
-import type { DecisionGrade } from "./trainingOrchestrator";
-
-function gradeDecision(output: SolverNodeOutput, userActionId: ActionId): DecisionGrade {
-  const user = output.actions.find((action) => action.actionId === userActionId);
-  if (!user) {
-    throw new Error("user action not in solver output");
-  }
-  const evMix = output.actions.reduce(
-    (sum, action) => sum + action.frequency * action.ev,
-    0
-  );
-  const evBest = Math.max(...output.actions.map((action) => action.ev));
-  const evUser = user.ev;
-  return {
-    evUser,
-    evMix,
-    evBest,
-    evLossVsMix: evMix - evUser,
-    evLossVsBest: evBest - evUser,
-    pureMistake: false,
-    policyDivergence: Math.abs(user.frequency - 0.5),
-  };
-}
+import { gradeDecision } from "./grading";
 
 describe("gradeDecision", () => {
   it("computes EV mix, best, and losses for a golden output", () => {
@@ -45,5 +22,6 @@ describe("gradeDecision", () => {
     expect(grade.evUser).toBeCloseTo(0.4, 6);
     expect(grade.evLossVsMix).toBeCloseTo(0.48, 6);
     expect(grade.evLossVsBest).toBeCloseTo(0.8, 6);
+    expect(grade.isBestAction).toBe(false);
   });
 });

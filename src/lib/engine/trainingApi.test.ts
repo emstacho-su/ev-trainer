@@ -56,6 +56,7 @@ function solveForPot(node: CanonicalNode): SolverNodeOutput {
 }
 
 function gradeDecision(output: SolverNodeOutput, userActionId: ActionId): DecisionGrade {
+  const epsilon = 1e-9;
   const user = output.actions.find((action) => action.actionId === userActionId);
   if (!user) {
     throw new Error("user action not in solver output");
@@ -66,6 +67,7 @@ function gradeDecision(output: SolverNodeOutput, userActionId: ActionId): Decisi
   );
   const evBest = Math.max(...output.actions.map((action) => action.ev));
   const evUser = user.ev;
+  const isBestAction = evBest - evUser <= epsilon;
   return {
     evUser,
     evMix,
@@ -74,6 +76,7 @@ function gradeDecision(output: SolverNodeOutput, userActionId: ActionId): Decisi
     evLossVsBest: evBest - evUser,
     pureMistake: false,
     policyDivergence: Math.abs(user.frequency - 0.5),
+    isBestAction,
   };
 }
 

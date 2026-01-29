@@ -1,19 +1,19 @@
-// src/lib/runtime/createRuntime.ts
+// src/lib/engine/session.ts
 
-import type { SpotFilters } from "../engine/filters";
-import { validateSpotFilters } from "../engine/filters";
-import { MemoryDecisionStore } from "../engine/decisionStore";
-import { MemoryNodeCache } from "../engine/nodeCache";
-import { createTrainingApi } from "../engine/trainingApi";
-import type { CanonicalNode } from "../engine/nodeTypes";
-import type { SolverNodeOutput } from "../engine/solverAdapter";
-import { mockSolve } from "../engine/mockSolver";
-import type { Evaluator } from "../engine/evaluator";
-import { createMockEvaluator } from "../engine/evaluator";
-import { gradeDecision } from "./gradeDecision";
-import { runtimeKeyFrom } from "./runtimeKey";
+import type { SpotFilters } from "./filters";
+import { validateSpotFilters } from "./filters";
+import { MemoryDecisionStore } from "./decisionStore";
+import { MemoryNodeCache } from "./nodeCache";
+import { createTrainingApi } from "./trainingApi";
+import type { CanonicalNode } from "./nodeTypes";
+import type { SolverNodeOutput } from "./solverAdapter";
+import type { Evaluator } from "./evaluator";
+import { createMockEvaluator } from "./evaluator";
+import { gradeDecision } from "./grading";
+import { runtimeKeyFrom } from "../runtime/runtimeKey";
 
-export interface RuntimeConfig {
+// Configuration for a new engine session.
+export interface SessionConfig {
   seed: string;
   sessionId: string;
   now?: () => string;
@@ -23,7 +23,8 @@ export interface RuntimeConfig {
   cacheSize?: number;
 }
 
-export interface Runtime {
+// Engine session state and API surface.
+export interface Session {
   cache: MemoryNodeCache;
   decisionStore: MemoryDecisionStore;
   trainingApi: ReturnType<typeof createTrainingApi>;
@@ -66,11 +67,8 @@ function createDeterministicNow(): () => string {
   };
 }
 
-export function demoSolve(node: CanonicalNode): SolverNodeOutput {
-  return mockSolve(node);
-}
-
-export function createRuntime(config: RuntimeConfig): Runtime {
+// Creates a deterministic engine session with a training API.
+export function createSession(config: SessionConfig): Session {
   assertSeed(config.seed);
   assertSessionId(config.sessionId);
   const cacheSize = config.cacheSize ?? 500;

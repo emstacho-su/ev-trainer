@@ -52,11 +52,13 @@ describe("runSpotQuizDecision", () => {
     };
 
     const gradeDecision = (output: SolverNodeOutput, userActionId: string): DecisionGrade => {
+      const epsilon = 1e-9;
       const actions = output.actions;
       const evMix = actions.reduce((sum, action) => sum + action.frequency * action.ev, 0);
       const evBest = Math.max(...actions.map((action) => action.ev));
       const user = actions.find((action) => action.actionId === userActionId);
       if (!user) throw new Error("missing action");
+      const isBestAction = evBest - user.ev <= epsilon;
       return {
         evUser: user.ev,
         evMix,
@@ -65,6 +67,7 @@ describe("runSpotQuizDecision", () => {
         evLossVsBest: evBest - user.ev,
         pureMistake: user.frequency === 0,
         policyDivergence: 1 - user.frequency,
+        isBestAction,
       };
     };
 
@@ -121,11 +124,13 @@ describe("advanceHandPlayStep", () => {
     const solve = (node: CanonicalNode) => (node.toAct === "BTN" ? spotOutput : opponentOutput);
 
     const gradeDecision = (output: SolverNodeOutput, userActionId: string): DecisionGrade => {
+      const epsilon = 1e-9;
       const actions = output.actions;
       const evMix = actions.reduce((sum, action) => sum + action.frequency * action.ev, 0);
       const evBest = Math.max(...actions.map((action) => action.ev));
       const user = actions.find((action) => action.actionId === userActionId);
       if (!user) throw new Error("missing action");
+      const isBestAction = evBest - user.ev <= epsilon;
       return {
         evUser: user.ev,
         evMix,
@@ -134,6 +139,7 @@ describe("advanceHandPlayStep", () => {
         evLossVsBest: evBest - user.ev,
         pureMistake: user.frequency === 0,
         policyDivergence: 1 - user.frequency,
+        isBestAction,
       };
     };
 

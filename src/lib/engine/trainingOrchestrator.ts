@@ -18,6 +18,8 @@ export interface DecisionGrade {
   evLossVsBest: number;
   pureMistake: boolean;
   policyDivergence: number;
+  isBestAction: boolean;
+  gradeLabel?: string;
 }
 
 export interface DecisionMetrics {
