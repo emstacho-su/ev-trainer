@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "Gate: ev-dev-app Design QA (architecture, API, state, replay, tests, migration)"
+providers:
+  - echo
+prompts:
+  - file://../../.kiro/specs/ev-dev-app/design.md
+tests:
+  - assert:
+      - type: javascript
+        value: |
+          const checks = [
+            { name: "Layered architecture", re: /Layered architecture/i },
+            { name: "UI pages", re: /UI pages/i },
+            { name: "API/DTO design", re: /API\/DTO design/i },
+            { name: "Routes", re: /Routes/i },
+            { name: "State model", re: /State model/i },
+            { name: "Replay/export format", re: /Replay\/export format/i },
+            { name: "Testing strategy", re: /Testing strategy/i },
+            { name: "Migration plan", re: /Migration plan/i }
+          ];
+
+          const missing = checks.filter(c => !c.re.test(output)).map(c => c.name);
+          if (missing.length) throw new Error("Design gate failed. Missing: " + missing.join(", "));
+          return true;

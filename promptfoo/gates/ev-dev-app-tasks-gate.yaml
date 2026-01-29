@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "Gate: ev-dev-app Tasks QA (1/2/3, scope, determinism, tests, deferred)"
+providers:
+  - echo
+prompts:
+  - file://../../.kiro/specs/ev-dev-app/tasks.md
+tests:
+  - assert:
+      - type: javascript
+        value: |
+          const text = output;
+
+          const taskHeaders = [...text.matchAll(/^##\s+Task\s+(\d+)\s*:/gmi)].map(m => Number(m[1]));
+          if (taskHeaders.length < 3) {
+            throw new Error(`Expected at least 3 tasks, found ${taskHeaders.length}.`);
+          }
+          const required = [1, 2, 3];
+          for (const r of required) {
+            if (!taskHeaders.includes(r)) throw new Error(`Missing Task ${r}.`);
+          }
+
+          const sections = text.split(/^##\s+Task\s+\d+\s*:/gmi).slice(1);
+          const missing = [];
+          sections.forEach((sec, idx) => {
+            const needs = [
+              "Objective",
+              "Scope \\(in\\)",
+              "Scope \\(out\\)",
+              "Acceptance criteria",
+              "Files likely touched",
+              "Determinism checklist",
+              "Tests/gates to run"
+            ];
+            const absent = needs.filter(n => !new RegExp(n, "i").test(sec));
+            if (absent.length) missing.push(`Task ${idx + 1}: ${absent.join(", ")}`);
+          });
+          if (missing.length) throw new Error(`Missing task sections: ${missing.join("; ")}`);
+
+          if (!/Anti-scope/i.test(text)) throw new Error("Missing Anti-scope section.");
+          if (!/Deferred/i.test(text)) throw new Error("Missing Deferred section.");
+
+          return true;

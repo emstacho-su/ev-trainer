@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "Gate: ev-dev-app Requirements QA (scope, personas, determinism, error model)"
+providers:
+  - echo
+prompts:
+  - file://../../.kiro/specs/ev-dev-app/requirements.md
+tests:
+  - assert:
+      - type: javascript
+        value: |
+          const checks = [
+            { name: "Purpose and scope", re: /Purpose and scope/i },
+            { name: "Personas and user journeys", re: /Personas and user journeys/i },
+            { name: "Session lifecycle", re: /Session lifecycle/i },
+            { name: "Training modes", re: /Training modes/i },
+            { name: "Review list and detail", re: /Review list and detail/i },
+            { name: "Export\/import", re: /Export\/import/i },
+            { name: "Validation and error model", re: /Validation and error model/i },
+            { name: "Determinism contract", re: /Determinism contract/i },
+            { name: "Fixture strategy", re: /Fixture strategy/i },
+            { name: "Non-functional requirements", re: /Non-functional requirements/i },
+            { name: "Edge cases", re: /Edge cases/i },
+            { name: "Deferred scope", re: /Deferred scope/i },
+            { name: "Non-copy constraint", re: /Non-copy|GTOWizard/i }
+          ];
+
+          const missing = checks.filter(c => !c.re.test(output)).map(c => c.name);
+          if (missing.length) throw new Error("Requirements gate failed. Missing: " + missing.join(", "));
+          return true;
