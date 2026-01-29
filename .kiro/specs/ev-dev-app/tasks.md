@@ -1,6 +1,6 @@
 # Tasks — ev-dev-app (dev-grade)
 
-## Task A: Runtime consolidation (reuse-first) + deterministic record model
+## Task 1: Runtime consolidation (reuse-first) + deterministic record model
 **Objective**: Extend the existing runtime-preview runtime/registry to support a dev-grade record model suitable for review + replay + export/import, without rebuilding parallel state.
 
 **Scope (in)**
@@ -30,7 +30,7 @@
 - Unit tests: ordering tie-breaks + record snapshot completeness.
 - Spec gates (all three): requirements/design/tasks.
 
-## Task B: Fixtures + deterministic selection (targeted drill foundation)
+## Task 2: Fixtures + deterministic selection (targeted drill foundation)
 **Objective**: Define non-proprietary fixture packs and deterministic candidate ordering/selection so targeted drill and spot quiz have real dev content.
 
 **Scope (in)**
@@ -59,7 +59,7 @@
 - Unit tests: fixture ordering + selection reproducibility.
 - Spec gates (all three).
 
-## Task C: Fixture schema validation + tooling (content pipeline without DB)
+## Task 3: Fixture schema validation + tooling (content pipeline without DB)
 **Objective**: Prevent fixture drift by adding a deterministic schema validator and a minimal fixture tooling loop.
 
 **Scope (in)**
@@ -96,7 +96,7 @@
 **Dependencies**
 - Depends on Task B (fixtures).
 
-## Task D: Export/import bundle (versioned) + parity tests
+## Task 4: Export/import bundle (versioned) + parity tests
 **Objective**: Implement versioned export/import that reconstructs session state and guarantees replay parity, with explicit conflict behavior.
 
 **Scope (in)**
@@ -125,7 +125,7 @@
 - Parity tests: export→import→replay.
 - Spec gates (all three).
 
-## Task E: Pure HTTP handlers + DTO envelope standardization
+## Task 5: Pure HTTP handlers + DTO envelope standardization
 **Objective**: Implement/extend pure handlers so all endpoints share a consistent response envelope and stable error codes, aligned with dev-grade requirements.
 
 **Scope (in)**
@@ -153,7 +153,7 @@
 - Handler tests: missing seed/sessionId; unknown IDs; conflict behavior.
 - Spec gates (all three).
 
-## Task F: Next.js route wiring (thin wrappers) + route surface decision
+## Task 6: Next.js route wiring (thin wrappers) + route surface decision
 **Objective**: Wire Next App Router routes as thin wrappers to pure handlers, and explicitly decide canonical vs alias routes to avoid fragmentation.
 
 **Scope (in)**
@@ -178,7 +178,7 @@
 - Build passes (npm run build).
 - Spec gates (all three).
 
-## Task G: Typed client helpers for UI ↔ handlers (contract hygiene)
+## Task 7: Typed client helpers for UI ↔ handlers (contract hygiene)
 **Objective**: Reduce UI/DTO drift by creating minimal typed request helpers used by UI pages (no new framework).
 
 **Scope (in)**
@@ -210,7 +210,7 @@
 **Dependencies**
 - Depends on Task E/Task F (handler envelope + routes).
 
-## Task H: UI (original + minimal) for dev-grade flows
+## Task 8: UI (original + minimal) for dev-grade flows
 **Objective**: Implement the minimal pages needed for a real dev run: train, review, fixtures, and optional session introspection, with strong error visibility.
 
 **Scope (in)**
@@ -242,7 +242,7 @@
 - npm test, npm run build.
 - Spec gates (all three).
 
-## Task I: End-to-end smoke test harness (without Playwright)
+## Task 9: End-to-end smoke test harness (without Playwright)
 **Objective**: Add a deterministic “happy-path” smoke test that exercises the core flows end-to-end (without a browser framework).
 
 **Scope (in)**
@@ -277,7 +277,7 @@
 **Dependencies**
 - Depends on Task B (fixtures) + Task D (export/import) + Task E (handlers).
 
-## Task J: Determinism regression suite (must-not-break tests)
+## Task 10: Determinism regression suite (must-not-break tests)
 **Objective**: Add tests that prevent accidental nondeterminism regressions across runtime, handlers, and review ordering.
 
 **Scope (in)**
@@ -304,7 +304,7 @@
 - npm test.
 - Spec gates (all three).
 
-## Task K: “Developer release” checklist + golden bundles (regression artifacts)
+## Task 11: “Developer release” checklist + golden bundles (regression artifacts)
 **Objective**: Improve the development cycle by adding a lightweight release checklist and golden export bundles used for regression detection.
 
 **Scope (in)**
@@ -338,7 +338,7 @@
 **Dependencies**
 - Depends on Task D (export/import) and Task I (smoke harness) for parity enforcement.
 
-## Task L: Developer docs + runbooks (operational maturity)
+## Task 12: Developer docs + runbooks (operational maturity)
 **Objective**: Document how to run, debug, and extend the dev app without tribal knowledge, including determinism rules and replay/export workflows.
 
 **Scope (in)**
@@ -375,7 +375,7 @@
 **Dependencies**
 - Depends on Task D (export/import) and Task B/Task C (fixtures + validation) so docs reflect real behavior.
 
-## Task M: DB/persistence readiness plan (deferred but designed)
+## Task 13: DB/persistence readiness plan (deferred but designed)
 **Objective**: Define a clear persistence upgrade path without implementing DB now (DB allowed later).
 
 **Scope (in)**
@@ -407,7 +407,7 @@
 **Dependencies**
 - Depends on Task D (export/import contract).
 
-## Task N: CI workflow + gate enforcement (development-cycle hardening)
+## Task 14: CI workflow + gate enforcement (development-cycle hardening)
 **Objective**: Add CI automation so every PR consistently runs the same test/build/spec gates and prevents regressions from landing.
 
 **Scope (in)**
