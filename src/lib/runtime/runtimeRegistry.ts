@@ -2,6 +2,7 @@
 
 import type { Runtime } from "./createRuntime";
 import { createRuntime } from "./createRuntime";
+import { runtimeKeyFrom } from "./runtimeKey";
 
 const BASE_TIME_MS = Date.parse("2026-01-01T00:00:00.000Z");
 
@@ -10,10 +11,6 @@ interface RuntimeEntry {
 }
 
 const registry = new Map<string, RuntimeEntry>();
-
-function makeKey(seed: string, sessionId: string): string {
-  return JSON.stringify([seed, sessionId]);
-}
 
 function createDeterministicNow(): () => string {
   let counter = 0;
@@ -25,7 +22,7 @@ function createDeterministicNow(): () => string {
 }
 
 export function getRuntime(seed: string, sessionId: string): Runtime {
-  const key = makeKey(seed, sessionId);
+  const key = runtimeKeyFrom(seed, sessionId);
   const existing = registry.get(key);
   if (existing) return existing.runtime;
 

@@ -212,10 +212,10 @@ export function renderTargetedDrillView(state: TargetedDrillUiState): string {
 
 function orderReviewItems(items: DecisionRecord[]): DecisionRecord[] {
   return [...items].sort((a, b) => {
-    const diff = b.grade.evLossVsMix - a.grade.evLossVsMix;
+    const diff = b.metrics.evLossVsMix - a.metrics.evLossVsMix;
     if (diff !== 0) return diff;
-    if (a.createdAt === b.createdAt) return a.id.localeCompare(b.id);
-    return b.createdAt.localeCompare(a.createdAt);
+    if (a.createdSeq !== b.createdSeq) return a.createdSeq - b.createdSeq;
+    return a.recordId.localeCompare(b.recordId);
   });
 }
 

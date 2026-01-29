@@ -97,17 +97,41 @@ function gradeDecision(output: SolverNodeOutput, userActionId: ActionId): Decisi
   };
 }
 
+function createRecordFactory() {
+  let seq = 0;
+  return () => {
+    seq += 1;
+    return { recordId: `rec_${seq}`, createdSeq: seq };
+  };
+}
+
+function createDeterministicNow() {
+  let counter = 0;
+  return () => {
+    const base = Date.parse("2026-01-01T00:00:00.000Z");
+    const timestamp = new Date(base + counter * 1000).toISOString();
+    counter += 1;
+    return timestamp;
+  };
+}
+
 describe("runtime integration behavior", () => {
   it("is deterministic for opponent sampling and targeted spot selection with the same seed", () => {
     const cache = new MemoryNodeCache();
     const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
+    const now = createDeterministicNow();
     const api = createTrainingApi({
       cache,
       solve: solveNode,
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-alpha",
+      runtimeKey: "seed-alpha::session-alpha",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-alpha",
+      now,
       resolveNextNode: (node, _actionId, actor) => {
         if (actor === "user") {
           return { ...node, toAct: "BB", publicState: { ...node.publicState, toAct: "BB" } };
@@ -160,6 +184,8 @@ describe("runtime integration behavior", () => {
       solveCalls += 1;
       return solveNode(node);
     };
+    const recordFactory = createRecordFactory();
+    const now = createDeterministicNow();
 
     const api = createTrainingApi({
       cache,
@@ -167,7 +193,11 @@ describe("runtime integration behavior", () => {
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-beta",
+      runtimeKey: "seed-beta::session-beta",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-beta",
+      now,
     });
 
     api.spotQuiz({

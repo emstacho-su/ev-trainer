@@ -5,7 +5,14 @@ import type { NodeCache } from "./nodeCache";
 import type { CanonicalNode } from "./nodeTypes";
 import type { ActionId } from "./types";
 import type { SolverNodeOutput } from "./solverAdapter";
-import type { DecisionRecord, DecisionGrade, HandPlayActor, TrainingMode } from "./trainingOrchestrator";
+import type {
+  DecisionRecord,
+  DecisionGrade,
+  HandPlayActor,
+  TrainingMode,
+  RecordFactory,
+  DecisionRequestSnapshot,
+} from "./trainingOrchestrator";
 import {
   advanceHandPlayStep,
   runSpotQuizDecision,
@@ -22,10 +29,11 @@ export interface TrainingApiDeps {
   decisionStore: DecisionRecordStore;
   gradeDecision: (output: SolverNodeOutput, userActionId: ActionId) => DecisionGrade;
   seed: string;
+  runtimeKey: string;
+  recordFactory: RecordFactory;
   configSnapshot: SpotFilters;
   sessionId?: string;
   now?: () => string;
-  idFactory?: () => string;
   resolveNextNode?: (
     node: CanonicalNode,
     actionId: ActionId,
@@ -106,25 +114,43 @@ function resolveSessionId(requestSessionId: string | undefined, deps: TrainingAp
   return requestSessionId ?? deps.sessionId;
 }
 
+function requestSnapshot(
+  mode: TrainingMode,
+  payload: Record<string, unknown>
+): DecisionRequestSnapshot {
+  return { mode, payload };
+}
+
 export function createTrainingApi(deps: TrainingApiDeps) {
   return {
     spotQuiz(request: SpotQuizRequest): SpotQuizResponse {
+      const snapshot = requestSnapshot("spot-quiz", {
+        node: request.node,
+        userActionId: request.userActionId,
+      });
       const result = runSpotQuizDecision(request.node, request.userActionId, {
         cache: deps.cache,
         solve: deps.solve,
         decisionStore: deps.decisionStore,
         gradeDecision: deps.gradeDecision,
         seed: deps.seed,
+        runtimeKey: deps.runtimeKey,
+        recordFactory: deps.recordFactory,
+        requestSnapshot: snapshot,
         configSnapshot: deps.configSnapshot,
         sessionId: resolveSessionId(request.sessionId, deps),
         now: deps.now,
-        idFactory: deps.idFactory,
       });
 
       return result;
     },
 
     handPlayStep(request: HandPlayRequest): HandPlayResponse {
+      const snapshot = requestSnapshot("hand-play", {
+        node: request.node,
+        userActionId: request.userActionId,
+        sequenceIndex: request.sequenceIndex,
+      });
       return advanceHandPlayStep(
         {
           node: request.node,
@@ -137,10 +163,12 @@ export function createTrainingApi(deps: TrainingApiDeps) {
           decisionStore: deps.decisionStore,
           gradeDecision: deps.gradeDecision,
           seed: deps.seed,
+          runtimeKey: deps.runtimeKey,
+          recordFactory: deps.recordFactory,
+          requestSnapshot: snapshot,
           configSnapshot: deps.configSnapshot,
           sessionId: resolveSessionId(request.sessionId, deps),
           now: deps.now,
-          idFactory: deps.idFactory,
           resolveNextNode: deps.resolveNextNode,
         }
       );
@@ -158,16 +186,24 @@ export function createTrainingApi(deps: TrainingApiDeps) {
         return { spot: null };
       }
 
+      const snapshot = requestSnapshot("targeted-drill", {
+        candidates: request.candidates,
+        filters: request.filters,
+        userActionId: request.userActionId,
+        sequenceIndex: request.sequenceIndex,
+      });
       const result = runTargetedDrillDecision(spot.node, request.userActionId, {
         cache: deps.cache,
         solve: deps.solve,
         decisionStore: deps.decisionStore,
         gradeDecision: deps.gradeDecision,
         seed: deps.seed,
+        runtimeKey: deps.runtimeKey,
+        recordFactory: deps.recordFactory,
+        requestSnapshot: snapshot,
         configSnapshot: deps.configSnapshot,
         sessionId: resolveSessionId(request.sessionId, deps),
         now: deps.now,
-        idFactory: deps.idFactory,
       });
 
       return { spot, ...result };

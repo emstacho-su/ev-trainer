@@ -45,6 +45,11 @@ describe("runSpotQuizDecision", () => {
         records.push(record.grade);
       },
     };
+    let seq = 0;
+    const recordFactory = () => {
+      seq += 1;
+      return { recordId: `rec_${seq}`, createdSeq: seq };
+    };
 
     const gradeDecision = (output: SolverNodeOutput, userActionId: string): DecisionGrade => {
       const actions = output.actions;
@@ -69,9 +74,11 @@ describe("runSpotQuizDecision", () => {
       decisionStore,
       gradeDecision,
       seed: "seed-quiz",
+      runtimeKey: "seed-quiz::session-quiz",
+      recordFactory,
+      requestSnapshot: { mode: "spot-quiz", payload: { node: baseNode, userActionId: "CHECK" } },
       configSnapshot: { streets: ["FLOP"] },
       now: () => "2026-01-28T12:00:00.000Z",
-      idFactory: () => "decision-1",
     });
 
     expect(result.record.nodeHash).toBe(result.nodeHash);
@@ -89,6 +96,11 @@ describe("advanceHandPlayStep", () => {
       add(record) {
         records.push(record.grade);
       },
+    };
+    let seq = 0;
+    const recordFactory = () => {
+      seq += 1;
+      return { recordId: `rec_${seq}`, createdSeq: seq };
     };
 
     const opponentNode: CanonicalNode = {
@@ -133,7 +145,14 @@ describe("advanceHandPlayStep", () => {
         decisionStore,
         gradeDecision,
         seed: "seed-hand",
+        runtimeKey: "seed-hand::session-hand",
+        recordFactory,
+        requestSnapshot: {
+          mode: "hand-play",
+          payload: { node: baseNode, userActionId: "CHECK", sequenceIndex: 0 },
+        },
         configSnapshot: { streets: ["FLOP"] },
+        now: () => "2026-01-28T12:00:00.000Z",
         resolveNextNode: (_node, _actionId, actor) => (actor === "user" ? opponentNode : null),
       }
     );

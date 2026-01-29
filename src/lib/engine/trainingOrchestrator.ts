@@ -20,8 +20,26 @@ export interface DecisionGrade {
   policyDivergence: number;
 }
 
+export interface DecisionMetrics {
+  evUser: number;
+  evMix: number;
+  evBest: number;
+  evLossVsMix: number;
+  evLossVsBest: number;
+}
+
+export interface DecisionRequestSnapshot {
+  mode: TrainingMode;
+  payload: Record<string, unknown>;
+}
+
 export interface DecisionRecord {
+  recordId: string;
+  createdSeq: number;
+  runtimeKey: string;
   id: string;
+  request: DecisionRequestSnapshot;
+  metrics: DecisionMetrics;
   nodeHash: string;
   sessionId?: string;
   mode: TrainingMode;
@@ -38,16 +56,20 @@ export interface DecisionStore {
 
 export type GradeDecision = (output: SolverNodeOutput, userActionId: ActionId) => DecisionGrade;
 
+export type RecordFactory = () => { recordId: string; createdSeq: number };
+
 export interface SpotQuizDeps {
   cache: NodeCache;
   solve: (node: CanonicalNode) => SolverNodeOutput;
   decisionStore: DecisionStore;
   gradeDecision: GradeDecision;
   seed: string;
+  runtimeKey: string;
+  recordFactory: RecordFactory;
+  requestSnapshot: DecisionRequestSnapshot;
   configSnapshot: SpotFilters;
   sessionId?: string;
   now?: () => string;
-  idFactory?: () => string;
 }
 
 export interface SpotQuizResult {
@@ -57,23 +79,25 @@ export interface SpotQuizResult {
   record: DecisionRecord;
 }
 
+function metricsFromGrade(grade: DecisionGrade): DecisionMetrics {
+  return {
+    evUser: grade.evUser,
+    evMix: grade.evMix,
+    evBest: grade.evBest,
+    evLossVsMix: grade.evLossVsMix,
+    evLossVsBest: grade.evLossVsBest,
+  };
+}
+
 function buildDecisionRecord(
   input: Omit<DecisionRecord, "id" | "createdAt">,
-  deps: { now?: () => string; idFactory?: () => string }
+  deps: { now?: () => string }
 ): DecisionRecord {
-  const now = deps.now ?? (() => new Date().toISOString());
-  const createdAt = now();
-  // Deterministic default ID; override via idFactory for custom schemes.
-  const idFactory =
-    deps.idFactory ??
-    (() =>
-      `decision:${input.mode}:${input.seed}:${input.nodeHash}:${input.userActionId}:${createdAt}`);
-
-  return {
-    ...input,
-    id: idFactory(),
-    createdAt,
-  };
+  if (!deps.now) {
+    throw new Error("now must be provided to build deterministic decision records");
+  }
+  const createdAt = deps.now();
+  return { ...input, createdAt };
 }
 
 export function runSpotQuizDecision(
@@ -83,8 +107,16 @@ export function runSpotQuizDecision(
 ): SpotQuizResult {
   const { nodeHash, output } = resolveSolverNode(node, deps);
   const grade = deps.gradeDecision(output, userActionId);
+  const metrics = metricsFromGrade(grade);
+  const { recordId, createdSeq } = deps.recordFactory();
   const record = buildDecisionRecord(
     {
+      recordId,
+      createdSeq,
+      runtimeKey: deps.runtimeKey,
+      request: deps.requestSnapshot,
+      metrics,
+      id: recordId,
       nodeHash,
       sessionId: deps.sessionId,
       mode: "spot-quiz",
@@ -93,7 +125,40 @@ export function runSpotQuizDecision(
       configSnapshot: deps.configSnapshot,
       seed: deps.seed,
     },
-    { now: deps.now, idFactory: deps.idFactory }
+    { now: deps.now }
+  );
+
+  deps.decisionStore.add(record);
+
+  return { nodeHash, output, grade, record };
+}
+
+export function runTargetedDrillDecision(
+  node: CanonicalNode,
+  userActionId: ActionId,
+  deps: SpotQuizDeps
+): SpotQuizResult {
+  const { nodeHash, output } = resolveSolverNode(node, deps);
+  const grade = deps.gradeDecision(output, userActionId);
+  const metrics = metricsFromGrade(grade);
+  const { recordId, createdSeq } = deps.recordFactory();
+  const record = buildDecisionRecord(
+    {
+      recordId,
+      createdSeq,
+      runtimeKey: deps.runtimeKey,
+      request: deps.requestSnapshot,
+      metrics,
+      id: recordId,
+      nodeHash,
+      sessionId: deps.sessionId,
+      mode: "targeted-drill",
+      userActionId,
+      grade,
+      configSnapshot: deps.configSnapshot,
+      seed: deps.seed,
+    },
+    { now: deps.now }
   );
 
   deps.decisionStore.add(record);
@@ -109,10 +174,12 @@ export interface HandPlayAdvanceDeps {
   decisionStore: DecisionStore;
   gradeDecision: GradeDecision;
   seed: string;
+  runtimeKey: string;
+  recordFactory: RecordFactory;
+  requestSnapshot: DecisionRequestSnapshot;
   configSnapshot: SpotFilters;
   sessionId?: string;
   now?: () => string;
-  idFactory?: () => string;
   resolveNextNode?: (
     node: CanonicalNode,
     actionId: ActionId,
@@ -142,8 +209,16 @@ export function advanceHandPlayStep(
 ): HandPlayStepResult {
   const { nodeHash, output } = resolveSolverNode(input.node, deps);
   const grade = deps.gradeDecision(output, input.userActionId);
+  const metrics = metricsFromGrade(grade);
+  const { recordId, createdSeq } = deps.recordFactory();
   const record = buildDecisionRecord(
     {
+      recordId,
+      createdSeq,
+      runtimeKey: deps.runtimeKey,
+      request: deps.requestSnapshot,
+      metrics,
+      id: recordId,
       nodeHash,
       sessionId: deps.sessionId,
       mode: "hand-play",
@@ -152,7 +227,7 @@ export function advanceHandPlayStep(
       configSnapshot: deps.configSnapshot,
       seed: deps.seed,
     },
-    { now: deps.now, idFactory: deps.idFactory }
+    { now: deps.now }
   );
 
   deps.decisionStore.add(record);

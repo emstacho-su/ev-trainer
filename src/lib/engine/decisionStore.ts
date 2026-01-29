@@ -18,17 +18,17 @@ export interface DecisionRecordStore extends DecisionStore {
 }
 
 function compareByEvLoss(a: DecisionRecord, b: DecisionRecord): number {
-  const diff = b.grade.evLossVsMix - a.grade.evLossVsMix;
+  const diff = b.metrics.evLossVsMix - a.metrics.evLossVsMix;
   if (diff !== 0) return diff;
-  if (a.createdAt === b.createdAt) {
-    return a.id.localeCompare(b.id);
+  if (a.createdSeq !== b.createdSeq) {
+    return a.createdSeq - b.createdSeq;
   }
-  return b.createdAt.localeCompare(a.createdAt);
+  return a.recordId.localeCompare(b.recordId);
 }
 
 function compareByCreatedAt(a: DecisionRecord, b: DecisionRecord): number {
   if (a.createdAt === b.createdAt) {
-    return a.id.localeCompare(b.id);
+    return a.recordId.localeCompare(b.recordId);
   }
   return b.createdAt.localeCompare(a.createdAt);
 }

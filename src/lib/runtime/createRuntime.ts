@@ -9,12 +9,12 @@ import type { CanonicalNode } from "../engine/nodeTypes";
 import type { SolverNodeOutput } from "../engine/solverAdapter";
 import { mockSolve } from "../engine/mockSolver";
 import { gradeDecision } from "./gradeDecision";
+import { runtimeKeyFrom } from "./runtimeKey";
 
 export interface RuntimeConfig {
   seed: string;
-  sessionId?: string;
+  sessionId: string;
   now?: () => string;
-  idFactory?: () => string;
   configSnapshot?: SpotFilters;
   solve?: (node: CanonicalNode) => SolverNodeOutput;
   cacheSize?: number;
@@ -28,12 +28,16 @@ export interface Runtime {
   gradeDecision: typeof gradeDecision;
   config: {
     seed: string;
-    sessionId?: string;
+    sessionId: string;
     now?: () => string;
-    idFactory?: () => string;
     configSnapshot: SpotFilters;
     cacheSize: number;
   };
+  counters: {
+    createdSeq: number;
+    recordIdSeq: number;
+  };
+  runtimeKey: string;
 }
 
 function assertSeed(seed: string): void {
@@ -42,12 +46,29 @@ function assertSeed(seed: string): void {
   }
 }
 
+function assertSessionId(sessionId: string): void {
+  if (typeof sessionId !== "string" || sessionId.length === 0) {
+    throw new Error("sessionId must be a non-empty string");
+  }
+}
+
+function createDeterministicNow(): () => string {
+  const base = Date.parse("2026-01-01T00:00:00.000Z");
+  let counter = 0;
+  return () => {
+    const timestamp = new Date(base + counter * 1000).toISOString();
+    counter += 1;
+    return timestamp;
+  };
+}
+
 export function demoSolve(node: CanonicalNode): SolverNodeOutput {
   return mockSolve(node);
 }
 
 export function createRuntime(config: RuntimeConfig): Runtime {
   assertSeed(config.seed);
+  assertSessionId(config.sessionId);
   const cacheSize = config.cacheSize ?? 500;
   if (!Number.isInteger(cacheSize) || cacheSize <= 0) {
     throw new Error("cacheSize must be a positive integer");
@@ -57,6 +78,18 @@ export function createRuntime(config: RuntimeConfig): Runtime {
   const cache = new MemoryNodeCache(cacheSize);
   const decisionStore = new MemoryDecisionStore();
   const solve = config.solve ?? demoSolve;
+  const now = config.now ?? createDeterministicNow();
+  const runtimeKey = runtimeKeyFrom(config.seed, config.sessionId);
+  const counters = {
+    createdSeq: 0,
+    recordIdSeq: 0,
+  };
+  const recordFactory = () => {
+    counters.createdSeq += 1;
+    counters.recordIdSeq += 1;
+    const recordId = `rec_${counters.recordIdSeq.toString(36).padStart(6, "0")}`;
+    return { recordId, createdSeq: counters.createdSeq };
+  };
 
   const trainingApi = createTrainingApi({
     cache,
@@ -64,10 +97,11 @@ export function createRuntime(config: RuntimeConfig): Runtime {
     decisionStore,
     gradeDecision,
     seed: config.seed,
+    runtimeKey,
+    recordFactory,
     configSnapshot,
     sessionId: config.sessionId,
-    now: config.now,
-    idFactory: config.idFactory,
+    now,
   });
 
   return {
@@ -79,10 +113,11 @@ export function createRuntime(config: RuntimeConfig): Runtime {
     config: {
       seed: config.seed,
       sessionId: config.sessionId,
-      now: config.now,
-      idFactory: config.idFactory,
+      now,
       configSnapshot,
       cacheSize,
     },
+    counters,
+    runtimeKey,
   };
 }

@@ -77,17 +77,40 @@ function gradeDecision(output: SolverNodeOutput, userActionId: ActionId): Decisi
   };
 }
 
+function createRecordFactory() {
+  let seq = 0;
+  return () => {
+    seq += 1;
+    return { recordId: `rec_${seq}`, createdSeq: seq };
+  };
+}
+
+function createDeterministicNow() {
+  let counter = 0;
+  return () => {
+    const base = Date.parse("2026-01-01T00:00:00.000Z");
+    const timestamp = new Date(base + counter * 1000).toISOString();
+    counter += 1;
+    return timestamp;
+  };
+}
+
 describe("trainingApi", () => {
   it("returns solver actions, grading, and decision metadata for spot quiz", () => {
     const cache = new MemoryNodeCache();
     const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
     const api = createTrainingApi({
       cache,
       solve: solveForPot,
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-1",
+      runtimeKey: "seed-1::session-1",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-1",
+      now: createDeterministicNow(),
     });
 
     const result = api.spotQuiz({
@@ -105,13 +128,18 @@ describe("trainingApi", () => {
   it("advances hand-play steps with deterministic opponent sampling", () => {
     const cache = new MemoryNodeCache();
     const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
     const api = createTrainingApi({
       cache,
       solve: solveForPot,
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-2",
+      runtimeKey: "seed-2::session-2",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-2",
+      now: createDeterministicNow(),
       resolveNextNode: (node, _actionId, actor) => {
         if (actor === "user") {
           return buildNode(node.publicState.potBb + 1, "BB");
@@ -141,13 +169,18 @@ describe("trainingApi", () => {
   it("selects a targeted drill spot and records grading output", () => {
     const cache = new MemoryNodeCache();
     const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
     const api = createTrainingApi({
       cache,
       solve: solveForPot,
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-3",
+      runtimeKey: "seed-3::session-3",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-3",
+      now: createDeterministicNow(),
     });
 
     const result = api.targetedDrill({
@@ -165,13 +198,18 @@ describe("trainingApi", () => {
   it("orders review list by EV loss vs mix descending by default", () => {
     const cache = new MemoryNodeCache();
     const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
     const api = createTrainingApi({
       cache,
       solve: solveForPot,
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-4",
+      runtimeKey: "seed-4::session-4",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-4",
+      now: createDeterministicNow(),
     });
 
     api.spotQuiz({ node: buildNode(10), userActionId: "BET_75PCT" });
@@ -187,13 +225,18 @@ describe("trainingApi", () => {
   it("returns review detail with solver output when node is provided", () => {
     const cache = new MemoryNodeCache();
     const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
     const api = createTrainingApi({
       cache,
       solve: solveForPot,
       decisionStore: decisions,
       gradeDecision,
       seed: "seed-5",
+      runtimeKey: "seed-5::session-5",
+      recordFactory,
       configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-5",
+      now: createDeterministicNow(),
     });
 
     const decision = api.spotQuiz({ node: buildNode(10), userActionId: "CHECK" });
