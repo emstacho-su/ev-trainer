@@ -19,7 +19,6 @@ export function mockSolve(request: CanonicalNode): SolverNodeOutput {
     history: request.history,
     toAct: request.toAct,
     abstraction: request.abstraction,
-    toAct: request.toAct,
   });
 
   const seed = hashToUint32(nodeHash);
