@@ -105,4 +105,25 @@ describe("resolveSolverNode", () => {
     expect(calls).toBe(1);
     expect(cache.size()).toBe(1);
   });
+
+  it("emits cache hit/miss events using the mock solver adapter", () => {
+    const cache = new MemoryNodeCache(10);
+    const events: { type: "hit" | "miss"; key: { nodeHash: string } }[] = [];
+
+    const first = resolveSolverNode(baseNode, {
+      cache,
+      solve: mockSolve,
+      onCacheEvent: (event) => events.push(event),
+    });
+    const second = resolveSolverNode(baseNode, {
+      cache,
+      solve: mockSolve,
+      onCacheEvent: (event) => events.push(event),
+    });
+
+    expect(first.nodeHash).toBe(second.nodeHash);
+    expect(events.map((event) => event.type)).toEqual(["miss", "hit"]);
+    expect(events[0]?.key.nodeHash).toBe(first.nodeHash);
+    expect(events[1]?.key.nodeHash).toBe(first.nodeHash);
+  });
 });

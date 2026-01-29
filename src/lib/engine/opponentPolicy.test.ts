@@ -40,6 +40,12 @@ describe("sampleOpponentAction", () => {
     const sample = sampleOpponentAction({ base: baseActions, transforms }, context);
     expect(sample.action.actionId).toBe("BET_75PCT");
   });
+
+  it("matches a golden sample for a fixed seed", () => {
+    const sample = sampleOpponentAction({ base: baseActions }, context);
+    expect(sample.action.actionId).toBe("BET_75PCT");
+    expect(sample.rngState).toBe("9b2eb7a7");
+  });
 });
 
 describe("applyPolicyTransforms", () => {

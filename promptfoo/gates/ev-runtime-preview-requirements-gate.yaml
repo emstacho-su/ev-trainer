@@ -1,0 +1,24 @@
+description: "Gate: ev-runtime-preview requirements.md"
+providers:
+  - echo
+prompts:
+  - file://../../.kiro/specs/ev-runtime-preview/requirements.md
+tests:
+  - description: "Must include key sections + constraints"
+    assert:
+      - type: contains
+        value: "Current state"
+      - type: contains
+        value: "What we are adding"
+      - type: contains
+        value: "Non-goals"
+      - type: contains
+        value: "Next.js"
+      - type: contains
+        value: "App Router"
+      - type: contains
+        value: "Determinism"
+      - type: contains
+        value: "GTOWizard"
+      - type: contains
+        value: "gradeDecision"
