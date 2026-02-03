@@ -19,7 +19,6 @@ import {
   appendSessionEntry,
   createSessionRecord,
   getSessionRecord,
-  getSessionRecordById,
   updateSessionSpot,
 } from "../sessionStore";
 import { getFilteredSpots, selectDeterministicSpot } from "../spotSource";
@@ -212,7 +211,8 @@ function deriveSessionId(input: StartRequest, filters: SpotFilterInput): string 
     mode: input.mode,
     filters,
   });
-  return `sess_${packed.length}_${packed.slice(0, 12).replace(/[^a-zA-Z0-9]/g, "")}`;
+  const digest = createHash("sha256").update(packed).digest("hex");
+  return `sess_${digest.slice(0, 24)}`;
 }
 
 function getPack(packId?: string): SpotPack | ApiFailure {
@@ -348,6 +348,16 @@ export function handleNext(input: unknown): ApiResult<NextResponse> {
 
   const record = getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
+  const hasSubmissionForCurrentDecision = record.entries.some(
+    (entry) => entry.index === record.decisionIndex
+  );
+  if (!hasSubmissionForCurrentDecision) {
+    return errorResult(
+      409,
+      "SUBMIT_REQUIRED",
+      "submit the current decision before requesting next"
+    );
+  }
 
   let registrySnapshot;
   try {
@@ -420,6 +430,27 @@ export function handleSubmit(input: unknown): ApiResult<SubmitTrainingResponse |
     return errorResult(409, "INVALID_STATE", "spot does not match current session state");
   }
 
+  const existingEntry = record.entries.find((entry) => entry.index === record.decisionIndex);
+  if (existingEntry) {
+    if (existingEntry.actionId !== (actionId as ActionId)) {
+      return errorResult(
+        409,
+        "DUPLICATE_SUBMIT_CONFLICT",
+        "decision already submitted with a different action"
+      );
+    }
+    if (record.mode === "PRACTICE") {
+      return { status: 200, body: { ok: true, recorded: true } };
+    }
+    return {
+      status: 200,
+      body: {
+        ok: true,
+        result: existingEntry.result ?? gradeAction(spot, actionId as ActionId),
+      },
+    };
+  }
+
   const grade = gradeAction(spot, actionId as ActionId);
   appendSessionEntry(sessionId, seed, {
     index: record.decisionIndex,
@@ -436,14 +467,38 @@ export function handleSubmit(input: unknown): ApiResult<SubmitTrainingResponse |
 }
 
 export function handleGetSession(sessionId: string, seed?: string | null): ApiResult<SessionDetailResponse> {
-  const record = seed ? getSessionRecord(sessionId, seed) : getSessionRecordById(sessionId);
+  if (!seed || seed.trim().length === 0) {
+    return errorResult(400, "INVALID_ARGUMENT", "seed is required");
+  }
+  const record = getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
 
   const registrySnapshot = getSession(record.sessionId, record.seed);
   if (!registrySnapshot) return errorResult(404, "NOT_FOUND", "session not found");
 
+  if (
+    record.entries.length < registrySnapshot.decisionIndex ||
+    record.entries.length > registrySnapshot.decisionIndex + 1
+  ) {
+    return errorResult(
+      409,
+      "PROTOCOL_STATE_INVALID",
+      "entries are out of sync with decision index"
+    );
+  }
+  if (
+    registrySnapshot.isComplete &&
+    record.entries.length !== registrySnapshot.decisionsPerSession
+  ) {
+    return errorResult(
+      409,
+      "PROTOCOL_STATE_INVALID",
+      "completed sessions must contain submissions for all decisions"
+    );
+  }
+
   const isComplete = registrySnapshot.isComplete;
-  const reviewAvailable = record.mode === "TRAINING" || isComplete;
+  const reviewAvailable = isComplete;
 
   const sessionSnapshot: SessionSnapshot = {
     sessionId: record.sessionId,
@@ -483,3 +538,4 @@ export function handleGetSession(sessionId: string, seed?: string | null): ApiRe
     },
   };
 }
+import { createHash } from "node:crypto";

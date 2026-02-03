@@ -5,6 +5,8 @@ import {
   deleteSessionRecord,
   readSessionIndex,
   readSessionRecord,
+  updateFromSessionDetail,
+  updateSessionRecord,
   writeSessionRecord,
 } from "./sessionStorage";
 
@@ -92,5 +94,29 @@ describe("sessionStorage", () => {
     clearAllSessionRecords();
     expect(readSessionIndex()).toEqual([]);
     expect(readSessionRecord("s1")).toBeNull();
+  });
+
+  it("marks completedAt when a completed session detail is observed", () => {
+    writeSessionRecord(sample);
+    updateFromSessionDetail({
+      ok: true,
+      session: { ...sample.session, isComplete: true },
+      reviewAvailable: true,
+      entries: [],
+    });
+    const record = readSessionRecord("s1");
+    expect(record?.completedAt).toBeTruthy();
+  });
+
+  it("updates session record with updater helper", () => {
+    writeSessionRecord(sample);
+    updateSessionRecord("s1", (previous) => {
+      if (!previous) return null;
+      return {
+        ...previous,
+        startedAt: "2026-02-03T00:00:00.000Z",
+      };
+    });
+    expect(readSessionRecord("s1")?.startedAt).toBe("2026-02-03T00:00:00.000Z");
   });
 });

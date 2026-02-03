@@ -26,6 +26,16 @@ export interface PersistedSessionRecord {
   currentSpot: Spot | null;
   reviewAvailable?: boolean;
   lastSubmit?: SubmitTrainingResponse | SubmitPracticeResponse;
+  startedAt?: string;
+  completedAt?: string;
+  aggregates?: PersistedSessionAggregates;
+}
+
+export interface PersistedSessionAggregates {
+  volume: number;
+  meanEvLoss: number;
+  bestActionRate: number;
+  durationMs: number;
 }
 
 function getStorage(): Storage | null {
@@ -75,7 +85,7 @@ function buildIndexItem(record: PersistedSessionRecord): PersistedSessionIndexIt
     decisionIndex: record.session.decisionIndex,
     decisionsPerSession: record.session.decisionsPerSession,
     isComplete: record.session.isComplete,
-    lastUpdated: undefined,
+    lastUpdated: record.completedAt ?? record.startedAt,
   };
 }
 
@@ -122,12 +132,29 @@ export function writeSessionRecord(record: PersistedSessionRecord): void {
 
 export function updateFromSessionDetail(detail: SessionDetailResponse, spot?: Spot | null): void {
   const previous = readSessionRecord(detail.session.sessionId);
+  const completedAt =
+    detail.session.isComplete && !previous?.completedAt
+      ? new Date().toISOString()
+      : previous?.completedAt;
   writeSessionRecord({
     session: detail.session,
     currentSpot: spot === undefined ? previous?.currentSpot ?? null : spot,
     reviewAvailable: detail.reviewAvailable,
     lastSubmit: previous?.lastSubmit,
+    startedAt: previous?.startedAt,
+    completedAt,
+    aggregates: previous?.aggregates,
   });
+}
+
+export function updateSessionRecord(
+  sessionId: string,
+  updater: (previous: PersistedSessionRecord | null) => PersistedSessionRecord | null
+): void {
+  const previous = readSessionRecord(sessionId);
+  const next = updater(previous);
+  if (!next) return;
+  writeSessionRecord(next);
 }
 
 export function deleteSessionRecord(sessionId: string): void {

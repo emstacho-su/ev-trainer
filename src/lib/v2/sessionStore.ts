@@ -26,7 +26,29 @@ export interface SessionRecord {
   entries: SessionEntry[];
 }
 
-const store = new Map<string, SessionRecord>();
+export interface SessionStoreBackend {
+  get(key: string): SessionRecord | undefined;
+  set(key: string, value: SessionRecord): void;
+  clear(): void;
+}
+
+class InMemorySessionStoreBackend implements SessionStoreBackend {
+  private readonly store = new Map<string, SessionRecord>();
+
+  get(key: string): SessionRecord | undefined {
+    return this.store.get(key);
+  }
+
+  set(key: string, value: SessionRecord): void {
+    this.store.set(key, value);
+  }
+
+  clear(): void {
+    this.store.clear();
+  }
+}
+
+let backend: SessionStoreBackend = new InMemorySessionStoreBackend();
 
 export function createSessionRecord(input: {
   sessionId: string;
@@ -38,7 +60,7 @@ export function createSessionRecord(input: {
   decisionsPerSession: number;
 }): SessionRecord {
   const key = runtimeKeyFrom(input.seed, input.sessionId);
-  const existing = store.get(key);
+  const existing = backend.get(key);
   if (existing) return existing;
   const record: SessionRecord = {
     sessionId: input.sessionId,
@@ -51,20 +73,13 @@ export function createSessionRecord(input: {
     currentSpot: null,
     entries: [],
   };
-  store.set(key, record);
+  backend.set(key, record);
   return record;
 }
 
 export function getSessionRecord(sessionId: string, seed: string): SessionRecord | null {
   const key = runtimeKeyFrom(seed, sessionId);
-  return store.get(key) ?? null;
-}
-
-export function getSessionRecordById(sessionId: string): SessionRecord | null {
-  for (const record of store.values()) {
-    if (record.sessionId === sessionId) return record;
-  }
-  return null;
+  return backend.get(key) ?? null;
 }
 
 export function updateSessionSpot(
@@ -96,5 +111,9 @@ export function appendSessionEntry(
 }
 
 export function clearSessionStore(): void {
-  store.clear();
+  backend.clear();
+}
+
+export function setSessionStoreBackend(nextBackend: SessionStoreBackend): void {
+  backend = nextBackend;
 }

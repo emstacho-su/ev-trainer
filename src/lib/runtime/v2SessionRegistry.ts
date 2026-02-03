@@ -17,7 +17,29 @@ interface RegistryEntry {
   state: V2SessionState;
 }
 
-const registry = new Map<string, RegistryEntry>();
+export interface V2SessionRegistryBackend {
+  get(key: string): { state: V2SessionState } | undefined;
+  set(key: string, value: { state: V2SessionState }): void;
+  clear(): void;
+}
+
+class InMemoryV2SessionRegistryBackend implements V2SessionRegistryBackend {
+  private readonly registry = new Map<string, RegistryEntry>();
+
+  get(key: string): RegistryEntry | undefined {
+    return this.registry.get(key);
+  }
+
+  set(key: string, value: RegistryEntry): void {
+    this.registry.set(key, value);
+  }
+
+  clear(): void {
+    this.registry.clear();
+  }
+}
+
+let backend: V2SessionRegistryBackend = new InMemoryV2SessionRegistryBackend();
 const DEFAULT_DECISIONS_PER_SESSION = 10;
 
 function assertNonEmptyString(value: unknown, name: string): asserts value is string {
@@ -52,7 +74,7 @@ export function createSession(input: {
   assertPositiveInteger(decisionsPerSession, "decisionsPerSession");
 
   const key = runtimeKeyFrom(input.seed, input.sessionId);
-  const existing = registry.get(key);
+  const existing = backend.get(key);
   if (existing) {
     return snapshot(existing.state);
   }
@@ -63,13 +85,13 @@ export function createSession(input: {
     decisionIndex: 0,
     decisionsPerSession,
   };
-  registry.set(key, { state });
+  backend.set(key, { state });
   return snapshot(state);
 }
 
 export function getSession(sessionId: string, seed: string): V2SessionSnapshot | null {
   const key = runtimeKeyFrom(seed, sessionId);
-  const entry = registry.get(key);
+  const entry = backend.get(key);
   return entry ? snapshot(entry.state) : null;
 }
 
@@ -77,7 +99,7 @@ export function advanceSession(sessionId: string, seed: string): V2SessionSnapsh
   assertNonEmptyString(sessionId, "sessionId");
   assertNonEmptyString(seed, "seed");
   const key = runtimeKeyFrom(seed, sessionId);
-  const entry = registry.get(key);
+  const entry = backend.get(key);
   if (!entry) {
     throw new Error("session not found");
   }
@@ -91,9 +113,13 @@ export function advanceSession(sessionId: string, seed: string): V2SessionSnapsh
 }
 
 export function clearSessionRegistry(): void {
-  registry.clear();
+  backend.clear();
 }
 
 export function getDefaultDecisionsPerSession(): number {
   return DEFAULT_DECISIONS_PER_SESSION;
+}
+
+export function setV2SessionRegistryBackend(nextBackend: V2SessionRegistryBackend): void {
+  backend = nextBackend;
 }

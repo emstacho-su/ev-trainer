@@ -108,9 +108,9 @@ export async function nextDecision(
 
 export async function getSession(
   sessionId: string,
-  seed?: string
+  seed: string
 ): Promise<SessionDetailResponse> {
-  const query = seed ? `?seed=${encodeURIComponent(seed)}` : "";
+  const query = `?seed=${encodeURIComponent(seed)}`;
   return requestJson<SessionDetailResponse>(`/api/session/${sessionId}${query}`, {
     method: "GET",
   });
