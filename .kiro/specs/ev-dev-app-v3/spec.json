@@ -1,0 +1,22 @@
+﻿{
+  "feature_name": "ev-dev-app-v3",
+  "created_at": "2026-02-03T00:00:00Z",
+  "updated_at": "2026-02-03T00:00:00Z",
+  "language": "en-US",
+  "phase": "requirements",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false
+    },
+    "design": {
+      "generated": false,
+      "approved": false
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false
+    }
+  },
+  "project_description": "Define v3 requirements for a solver-backed EV-first trainer that extends v2 with preflop/postflop training, deterministic solver-policy opponent sampling, and canonical node hash caching via an open-source solver adapter without introducing production code in this phase."
+}
