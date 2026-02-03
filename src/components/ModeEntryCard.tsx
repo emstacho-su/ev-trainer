@@ -1,3 +1,9 @@
+/**
+ * Overview: Reusable card link for entering a specific mode.
+ * Interacts with: Home page mode grid.
+ * Importance: Keeps mode entry UI consistent and easy to extend.
+ */
+
 import Link from "next/link";
 
 interface ModeEntryCardProps {

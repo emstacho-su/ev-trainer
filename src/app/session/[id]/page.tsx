@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Overview: Core in-session loop (load spot, submit action, advance decision).
+ * Interacts with: session API client, feedback/status components, local session storage.
+ * Importance: Main training/practice workflow where decisions are executed and tracked.
+ */
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -21,6 +27,7 @@ import {
   submitAction,
 } from "../../../lib/v2/api-client/sessionClient";
 import {
+  consumeStorageWarning,
   deleteSessionRecord,
   readSessionRecord,
   updateSessionRecord,
@@ -54,11 +61,13 @@ export default function SessionPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
 
   const loadSession = useCallback(
     async (sessionSeed: string) => {
       const detail = await getSession(sessionId, sessionSeed);
       updateFromSessionDetail(detail);
+      setStorageWarning(consumeStorageWarning());
       setSession(detail.session);
       if (detail.session.isComplete) {
         router.replace(toSummaryHref(detail));
@@ -76,6 +85,7 @@ export default function SessionPage() {
       setErrorMessage(null);
 
       const stored = readSessionRecord(sessionId);
+      setStorageWarning(consumeStorageWarning());
       const paramSeed = searchParams.get("seed");
       const resolvedSeed = paramSeed ?? stored?.session.seed ?? null;
 
@@ -152,6 +162,7 @@ export default function SessionPage() {
         completedAt: previous?.completedAt,
         aggregates: previous?.aggregates,
       }));
+      setStorageWarning(consumeStorageWarning());
     } catch (error) {
       if (error instanceof SessionApiError) {
         setErrorMessage(`${error.code}: ${error.message}`);
@@ -190,6 +201,7 @@ export default function SessionPage() {
             : previous?.completedAt,
         aggregates: previous?.aggregates,
       }));
+      setStorageWarning(consumeStorageWarning());
       if (response.session.isComplete) {
         router.replace(
           `/summary/${response.session.sessionId}?seed=${encodeURIComponent(
@@ -236,6 +248,11 @@ export default function SessionPage() {
       {errorMessage ? (
         <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
           {errorMessage}
+        </div>
+      ) : null}
+      {storageWarning ? (
+        <div className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+          {storageWarning}
         </div>
       ) : null}
       {showDeleteMissingSeed ? (

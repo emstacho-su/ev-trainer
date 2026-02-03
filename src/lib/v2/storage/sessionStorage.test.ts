@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { PersistedSessionRecord } from "./sessionStorage";
 import {
   clearAllSessionRecords,
+  consumeStorageWarning,
   deleteSessionRecord,
   readSessionIndex,
   readSessionRecord,
@@ -35,6 +36,27 @@ class MemoryStorage implements Storage {
 
   setItem(key: string, value: string): void {
     this.values.set(key, value);
+  }
+}
+
+class ThrowingStorage implements Storage {
+  get length(): number {
+    return 0;
+  }
+  clear(): void {
+    throw new Error("blocked");
+  }
+  getItem(): string | null {
+    throw new Error("blocked");
+  }
+  key(): string | null {
+    return null;
+  }
+  removeItem(): void {
+    throw new Error("blocked");
+  }
+  setItem(): void {
+    throw new Error("blocked");
   }
 }
 
@@ -118,5 +140,14 @@ describe("sessionStorage", () => {
       };
     });
     expect(readSessionRecord("s1")?.startedAt).toBe("2026-02-03T00:00:00.000Z");
+  });
+
+  it("exposes non-blocking storage warning on storage failures", () => {
+    (globalThis as { window?: { localStorage: Storage } }).window = {
+      localStorage: new ThrowingStorage(),
+    };
+    writeSessionRecord(sample);
+    expect(consumeStorageWarning()).toContain("Storage is unavailable");
+    expect(consumeStorageWarning()).toBeNull();
   });
 });

@@ -1,3 +1,9 @@
+/**
+ * Overview: Normalizes review entry EV-loss reading and best-action checks.
+ * Interacts with: review UI and aggregate calculators.
+ * Importance: Keeps EV-based review semantics consistent across surfaces.
+ */
+
 export interface ReviewEntryGradeLike {
   grade?: {
     evLossVsBest?: number;

@@ -1,3 +1,9 @@
+/**
+ * Overview: Spot filter model, stack bucketing, and AND-style filter matching.
+ * Interacts with: spot pack metadata and setup/session filtering inputs.
+ * Importance: Determines candidate pool quality before deterministic selection.
+ */
+
 import type { Position, Street } from "../../engine/types";
 import type { PotType, SpotEntry } from "../packs/spotPack";
 

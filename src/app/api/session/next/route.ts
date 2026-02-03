@@ -1,3 +1,9 @@
+/**
+ * Overview: POST route for advancing to the next decision in a session.
+ * Interacts with: sessionHandlers.handleNext and structured API errors.
+ * Importance: Moves deterministic progression through the session lifecycle.
+ */
+
 import { NextResponse } from "next/server";
 import { handleNext } from "../../../../lib/v2/api/sessionHandlers";
 

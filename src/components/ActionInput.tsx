@@ -1,3 +1,9 @@
+/**
+ * Overview: Action picker with submit and next controls for the session loop.
+ * Interacts with: Session page callbacks/state flags.
+ * Importance: Primary decision input control during play.
+ */
+
 import type { ActionId } from "../lib/engine/types";
 
 const ACTION_OPTIONS: ActionId[] = ["CHECK", "FOLD", "CALL"];

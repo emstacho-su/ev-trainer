@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Overview: End-of-session summary with aggregates and review entry point.
+ * Interacts with: session detail API, aggregate calculators, persisted session records.
+ * Importance: Converts completed session data into actionable EV-focused outcomes.
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";

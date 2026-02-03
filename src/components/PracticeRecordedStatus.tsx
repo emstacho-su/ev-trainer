@@ -1,3 +1,9 @@
+/**
+ * Overview: Practice-only acknowledgement panel after submit.
+ * Interacts with: Session page practice submit state.
+ * Importance: Enforces no mid-session EV feedback in Practice mode.
+ */
+
 interface PracticeRecordedStatusProps {
   visible: boolean;
 }

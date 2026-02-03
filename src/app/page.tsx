@@ -1,10 +1,17 @@
 "use client";
 
+/**
+ * Overview: Home entry screen for Training/Practice.
+ * Interacts with: mode cards, recent-session list, localStorage session index helpers.
+ * Importance: Primary navigation hub and session resume/delete/clear controls.
+ */
+
 import { useEffect, useState } from "react";
 import ModeEntryCard from "../components/ModeEntryCard";
 import RecentSessionsList from "../components/RecentSessionsList";
 import type { PersistedSessionIndexItem } from "../lib/v2/storage/sessionStorage";
 import {
+  consumeStorageWarning,
   clearAllSessionRecords,
   deleteSessionRecord,
   readSessionIndex,
@@ -12,9 +19,15 @@ import {
 
 export default function Home() {
   const [sessions, setSessions] = useState<PersistedSessionIndexItem[]>([]);
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
+
+  const refreshSessions = () => {
+    setSessions(readSessionIndex());
+    setStorageWarning(consumeStorageWarning());
+  };
 
   useEffect(() => {
-    setSessions(readSessionIndex());
+    refreshSessions();
   }, []);
 
   return (
@@ -39,13 +52,18 @@ export default function Home() {
         sessions={sessions}
         onDelete={(sessionId) => {
           deleteSessionRecord(sessionId);
-          setSessions(readSessionIndex());
+          refreshSessions();
         }}
         onClearAll={() => {
           clearAllSessionRecords();
-          setSessions(readSessionIndex());
+          refreshSessions();
         }}
       />
+      {storageWarning ? (
+        <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+          {storageWarning}
+        </p>
+      ) : null}
     </main>
   );
 }

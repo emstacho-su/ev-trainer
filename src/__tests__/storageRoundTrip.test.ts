@@ -4,6 +4,7 @@ import {
   SESSION_INDEX_KEY,
   SESSION_KEY_PREFIX,
   clearAllSessionRecords,
+  consumeStorageWarning,
   deleteSessionRecord,
   readSessionIndex,
   readSessionRecord,
@@ -143,6 +144,7 @@ describe("session storage round-trip", () => {
     expect(() => writeSessionRecord(record)).not.toThrow();
     expect(() => deleteSessionRecord(record.session.sessionId)).not.toThrow();
     expect(() => clearAllSessionRecords()).not.toThrow();
+    expect(consumeStorageWarning()).toContain("Storage is unavailable");
     expect(readSessionIndex()).toEqual([]);
     expect(readSessionRecord(record.session.sessionId)).toBeNull();
   });

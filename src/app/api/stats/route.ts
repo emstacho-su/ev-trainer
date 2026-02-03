@@ -1,3 +1,9 @@
+/**
+ * Overview: GET route that computes global stats from encoded persisted records.
+ * Interacts with: global aggregate calculator and header-based record transport.
+ * Importance: Server boundary for normalized cross-session analytics.
+ */
+
 import { NextResponse, type NextRequest } from "next/server";
 import { computeGlobalStats, createZeroGlobalStats } from "../../../lib/aggregates/globalStats";
 

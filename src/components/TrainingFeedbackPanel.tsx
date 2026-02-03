@@ -1,3 +1,9 @@
+/**
+ * Overview: Training-only EV feedback panel (desktop + mobile modal).
+ * Interacts with: Session page submit response state.
+ * Importance: Immediate coaching surface for training decisions.
+ */
+
 import type { SubmitTrainingResponse } from "../lib/v2/api/sessionHandlers";
 
 interface TrainingFeedbackPanelProps {

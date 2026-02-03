@@ -1,3 +1,9 @@
+/**
+ * Overview: Renders persisted session index with resume/summary/delete controls.
+ * Interacts with: Home page callbacks and storage-backed session metadata.
+ * Importance: Core persistence UX for restoring and managing local sessions.
+ */
+
 import Link from "next/link";
 import type { PersistedSessionIndexItem } from "../lib/v2/storage/sessionStorage";
 

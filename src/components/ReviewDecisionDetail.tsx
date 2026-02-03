@@ -1,3 +1,9 @@
+/**
+ * Overview: Shows full spot and grading payload for one reviewed decision.
+ * Interacts with: SessionEntryView data from review page.
+ * Importance: Deep inspection layer for understanding EV loss causes.
+ */
+
 import type { SessionEntryView } from "../lib/v2/api/sessionHandlers";
 
 interface ReviewDecisionDetailProps {

@@ -1,3 +1,9 @@
+/**
+ * Overview: Filtered candidate retrieval and deterministic spot selection.
+ * Interacts with: filter matcher, seeded RNG, and session selection inputs.
+ * Importance: Enforces repeatable decision ordering for deterministic practice.
+ */
+
 import { combineSeed, createSeededRng } from "../engine/rng";
 import type { SpotPack, SpotEntry } from "./packs/spotPack";
 import type { SpotFilterInput } from "./filters/spotFilters";

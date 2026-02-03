@@ -1,3 +1,9 @@
+/**
+ * Overview: In-memory app-layer session record store for current run state.
+ * Interacts with: session handlers and runtime keying utilities.
+ * Importance: Tracks current spot and submitted entries per session.
+ */
+
 import type { DecisionGrade } from "../engine/trainingOrchestrator";
 import type { ActionId } from "../engine/types";
 import type { Spot } from "../engine/spot";

@@ -32,13 +32,11 @@ function collectDecisionSequence(input: {
   mode: "TRAINING" | "PRACTICE";
   seed: string;
   filters: SpotFilterInput;
-  sessionId: string;
   limit: number;
 }): string[] {
   const start = expectOk<StartResponse>(
     handleStart({
       seed: input.seed,
-      sessionId: input.sessionId,
       mode: input.mode,
       packId: "ev-dev-pack-v1",
       filters: input.filters,
@@ -88,7 +86,6 @@ describe("determinism replay (training vs practice)", () => {
     const runInput = {
       seed: "replay-seed",
       filters: { street: "FLOP" } satisfies SpotFilterInput,
-      sessionId: "sess_replay_shared",
       limit: 10,
     };
 
@@ -111,7 +108,6 @@ describe("determinism replay (training vs practice)", () => {
       mode: "TRAINING",
       seed: "seed-one",
       filters: {},
-      sessionId: "sess_seed_one",
       limit: 8,
     });
 
@@ -121,7 +117,6 @@ describe("determinism replay (training vs practice)", () => {
       mode: "TRAINING",
       seed: "seed-two",
       filters: {},
-      sessionId: "sess_seed_two",
       limit: 8,
     });
 

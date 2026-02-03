@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Overview: Session review surface with decision list and detailed drilldown.
+ * Interacts with: session detail API, review list/detail components, stored seed/session metadata.
+ * Importance: Enables post-session mistake analysis once review is unlocked.
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";

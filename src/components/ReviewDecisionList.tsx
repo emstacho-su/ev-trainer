@@ -1,3 +1,9 @@
+/**
+ * Overview: Selectable list of reviewed decisions ordered externally.
+ * Interacts with: reviewEntry EV helpers and selected-entry state.
+ * Importance: Fast triage of high-impact mistakes.
+ */
+
 import type { SessionEntryView } from "../lib/v2/api/sessionHandlers";
 import { isBestActionFromEvLoss, readEvLossVsBest } from "../lib/v2/reviewEntry";
 

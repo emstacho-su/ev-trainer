@@ -1,3 +1,9 @@
+/**
+ * Overview: Browser client for session lifecycle endpoints with typed responses.
+ * Interacts with: fetch, API routes, and SessionApiError normalization.
+ * Importance: Stable integration boundary between UI pages and backend handlers.
+ */
+
 import type { Spot } from "../../engine/spot";
 import type { ActionId } from "../../engine/types";
 import type { SpotFilterInput } from "../filters/spotFilters";

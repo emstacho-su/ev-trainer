@@ -1,3 +1,9 @@
+/**
+ * Overview: In-memory deterministic session progression registry.
+ * Interacts with: session handlers via create/get/advance lifecycle methods.
+ * Importance: Controls decision index and completion state per seeded session.
+ */
+
 // In-memory registry for v2 sessions. Non-durable and not serverless-safe.
 
 import { runtimeKeyFrom } from "./runtimeKey";

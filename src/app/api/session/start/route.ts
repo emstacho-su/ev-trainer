@@ -1,3 +1,9 @@
+/**
+ * Overview: POST route to start or resume a seeded session.
+ * Interacts with: sessionHandlers.handleStart and stable JSON error responses.
+ * Importance: API entry point for creating deterministic session state.
+ */
+
 import { NextResponse } from "next/server";
 import { handleStart } from "../../../../lib/v2/api/sessionHandlers";
 

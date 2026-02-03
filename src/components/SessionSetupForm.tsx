@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Overview: Collects seed, filters, and decision count for session creation.
+ * Interacts with: engine enums/constants and setup page async start handler.
+ * Importance: Defines the deterministic session configuration contract from UI input.
+ */
+
 import { useMemo, useState } from "react";
 import { Positions, Streets } from "../lib/engine/types";
 import type { StartSessionRequest } from "../lib/v2/api-client/sessionClient";

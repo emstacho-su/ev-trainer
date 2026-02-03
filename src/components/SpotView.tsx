@@ -1,3 +1,9 @@
+/**
+ * Overview: Displays the current spot summary and raw payload.
+ * Interacts with: Session page currentSpot state.
+ * Importance: Gives the user the exact decision context being graded.
+ */
+
 import type { Spot } from "../lib/engine/spot";
 
 interface SpotViewProps {

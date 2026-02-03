@@ -1,3 +1,9 @@
+/**
+ * Overview: Summary metric cards for volume, EV loss, best-action rate, and duration.
+ * Interacts with: persisted session aggregates.
+ * Importance: Compact EV-centric readout at session completion.
+ */
+
 import type { PersistedSessionAggregates } from "../lib/v2/storage/sessionStorage";
 
 interface SummaryStatsCardsProps {

@@ -1,3 +1,9 @@
+/**
+ * Overview: Browser localStorage persistence for session records and index.
+ * Interacts with: summary/review/stats pages and storage-warning consumers.
+ * Importance: Durable local history and recovery path across reloads.
+ */
+
 import type { Spot } from "../../engine/spot";
 import type {
   SessionDetailResponse,
@@ -38,6 +44,20 @@ export interface PersistedSessionAggregates {
   durationMs: number;
 }
 
+const STORAGE_WARNING_MESSAGE =
+  "Storage is unavailable. Changes may not persist in this browser.";
+let storageWarning: string | null = null;
+
+function setStorageWarning(): void {
+  storageWarning = STORAGE_WARNING_MESSAGE;
+}
+
+export function consumeStorageWarning(): string | null {
+  const warning = storageWarning;
+  storageWarning = null;
+  return warning;
+}
+
 function getStorage(): Storage | null {
   if (typeof window === "undefined") return null;
   return window.localStorage ?? null;
@@ -47,6 +67,7 @@ function safeGetItem(storage: Storage, key: string): string | null {
   try {
     return storage.getItem(key);
   } catch {
+    setStorageWarning();
     return null;
   }
 }
@@ -55,6 +76,7 @@ function safeSetItem(storage: Storage, key: string, value: string): void {
   try {
     storage.setItem(key, value);
   } catch {
+    setStorageWarning();
     // Swallow storage failures (quota/private mode) to keep UI non-blocking.
   }
 }
@@ -63,6 +85,7 @@ function safeRemoveItem(storage: Storage, key: string): void {
   try {
     storage.removeItem(key);
   } catch {
+    setStorageWarning();
     // Swallow storage failures (quota/private mode) to keep UI non-blocking.
   }
 }

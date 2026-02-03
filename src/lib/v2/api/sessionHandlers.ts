@@ -1,3 +1,9 @@
+/**
+ * Overview: Core session lifecycle business logic for start/submit/next/get.
+ * Interacts with: pack/filter selection, runtime registry, in-memory session store, grading.
+ * Importance: Central deterministic contract used by all session API routes.
+ */
+
 import type { Spot } from "../../engine/spot";
 import { validateSpot } from "../../engine/spot";
 import type { ActionId } from "../../engine/types";
@@ -215,6 +221,20 @@ function deriveSessionId(input: StartRequest, filters: SpotFilterInput): string 
   return `sess_${digest.slice(0, 24)}`;
 }
 
+function deriveSelectionSessionId(input: {
+  seed: string;
+  packId: string;
+  filters: SpotFilterInput;
+}): string {
+  const packed = stableStringify({
+    seed: input.seed,
+    packId: input.packId,
+    filters: input.filters,
+  });
+  const digest = createHash("sha256").update(packed).digest("hex");
+  return `sel_${digest.slice(0, 24)}`;
+}
+
 function getPack(packId?: string): SpotPack | ApiFailure {
   const pack = loadBundledPack();
   if (packId && packId !== pack.packId) {
@@ -320,7 +340,7 @@ export function handleStart(input: unknown): ApiResult<StartResponse> {
   const selected = selectDeterministicSpot(
     candidates,
     seed,
-    sessionId,
+    deriveSelectionSessionId({ seed, packId: pack.packId, filters }),
     registrySnapshot.decisionIndex
   );
   if (!selected) {
@@ -384,7 +404,7 @@ export function handleNext(input: unknown): ApiResult<NextResponse> {
   const selected = selectDeterministicSpot(
     candidates,
     seed,
-    sessionId,
+    deriveSelectionSessionId({ seed, packId: record.packId, filters: record.filters }),
     registrySnapshot.decisionIndex
   );
   if (!selected) {

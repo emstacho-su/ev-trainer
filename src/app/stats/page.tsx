@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Overview: Global stats dashboard for completed persisted sessions.
+ * Interacts with: local records extraction, /api/stats endpoint, breakdown rendering tables.
+ * Importance: Gives cross-session EV trend visibility and practice prioritization context.
+ */
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { GlobalStatsResult } from "../../lib/aggregates/globalStats";

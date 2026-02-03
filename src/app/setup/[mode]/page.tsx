@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Overview: Mode-specific session setup and session bootstrapping.
+ * Interacts with: setup form UI, session start API client, local session persistence.
+ * Importance: Creates canonical session context (seed/mode/filters) before the core loop.
+ */
+
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";

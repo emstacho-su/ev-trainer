@@ -1,3 +1,9 @@
+/**
+ * Overview: Computes per-session aggregate metrics from decision grades.
+ * Interacts with: review entry EV helper functions.
+ * Importance: Summary/statistics foundation with EV as source of truth.
+ */
+
 import { isBestActionFromEvLoss, readEvLossVsBest, type ReviewEntryGradeLike } from "../v2/reviewEntry";
 
 export interface SessionAggregates {

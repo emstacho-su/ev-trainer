@@ -1,3 +1,9 @@
+/**
+ * Overview: SpotPack schema/types plus runtime validation and URL loader.
+ * Interacts with: engine spot validation and v2 filter metadata expectations.
+ * Importance: Guards data integrity for all downstream selection and grading.
+ */
+
 import { SpotSchemaVersion, validateSpot, type Spot } from "../../engine/spot";
 import {
   Positions,

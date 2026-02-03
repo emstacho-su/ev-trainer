@@ -1,3 +1,9 @@
+/**
+ * Overview: Computes global totals and bucketed breakdowns across sessions.
+ * Interacts with: session aggregate fallback logic and stack bucket helpers.
+ * Importance: Powers cross-session analytics and prioritization views.
+ */
+
 import { computeSessionAggregates } from "./sessionAggregates";
 import { bucketEffectiveStackBb } from "../v2/filters/spotFilters";
 import { isBestActionFromEvLoss, readEvLossVsBest, type ReviewEntryGradeLike } from "../v2/reviewEntry";
