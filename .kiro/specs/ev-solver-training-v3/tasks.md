@@ -31,7 +31,14 @@ git commit -m "<phase-task-id>: <deliverable> (DoD passed)"
 git push -u origin <phase-task-id>-<short-slug>
 ```
 
-## Phase 1: Solver Foundation + Licensing Gate
+## Phase 1 strategy update (OpenSpiel selected)
+- OpenSpiel is the selected solver path for Phase 1 execution.
+- Phase 1 now includes both:
+  - foundation specs (adapter/hash/cache/determinism/EV contracts)
+  - initial OpenSpiel integration implementation, if feasible within gate constraints.
+- Keep provider-agnostic adapter boundaries so fallback/in-house path remains viable.
+
+## Phase 1: Solver Foundation + OpenSpiel Implementation
 
 ### P1.T1 - Commercial licensing decision memo
 - Goal: finalize whether an existing solver can be used in a sellable product.
@@ -54,7 +61,7 @@ git push -u origin <phase-task-id>-<short-slug>
 - Deliverables:
   - interface spec section in design/docs
   - typed contract draft (spec artifact only in this phase)
-  - .kiro/specs/ev-solver-training-v3/p1-t2-adapter-spec.md (OpenSpiel-first draft)
+  - `.kiro/specs/ev-solver-training-v3/p1-t2-adapter-spec.md` (OpenSpiel-first draft)
 - DoD:
   - covers hero/villain action sets, EV units, and version fields
 
@@ -104,7 +111,44 @@ git push -u origin <phase-task-id>-<short-slug>
 - DoD:
   - formulas and ordering are unambiguous and testable
 
-### P1.T7 - Preflop/postflop scenario contract
+### P1.T7 - OpenSpiel integration spike (runtime path)
+- Goal: verify end-to-end OpenSpiel adapter connectivity in runtime.
+- Scope:
+  - choose integration mode for P1 (`service` preferred unless WASM is proven viable)
+  - implement minimal adapter call path and response normalization
+  - wire adapter through existing runtime boundary without UI coupling
+- Deliverables:
+  - integration note + implementation PR
+  - runnable local setup instructions for adapter/service
+- DoD:
+  - runtime can resolve at least one supported node via OpenSpiel path
+  - normalized response conforms to P1.T2 contract
+
+### P1.T8 - OpenSpiel cache + hash implementation
+- Goal: implement versioned cache keyed by canonical node hash for OpenSpiel responses.
+- Scope:
+  - compute canonical hash from normalized request input
+  - implement memory cache + persistent cache layer
+  - include version dimensions (`solverVersion`, `abstractionVersion`)
+- Deliverables:
+  - cache implementation + tests
+- DoD:
+  - first request miss then subsequent hit for identical versioned node key
+  - cache invalidates on version change
+
+### P1.T9 - OpenSpiel-backed deterministic sampling + EV grading hookup
+- Goal: integrate solver outputs into deterministic opponent sampling and EV grading.
+- Scope:
+  - use solver frequencies for opponent policy sampling
+  - apply EV-first grading fields from normalized solver output
+  - preserve deterministic replay behavior
+- Deliverables:
+  - runtime integration changes + tests
+- DoD:
+  - same seed/config/action history yields reproducible outcomes
+  - grading records include `evUser`, `evBest`, `evMix`, `evLossVsMix`, `evLossVsBest`
+
+### P1.T10 - Preflop/postflop scenario contract
 - Goal: define minimal scenario payloads for both modes.
 - Scope:
   - shared trainer config snapshot shape
@@ -115,7 +159,7 @@ git push -u origin <phase-task-id>-<short-slug>
 - DoD:
   - payloads are sufficient for deterministic regeneration
 
-### P1.T8 - 13x13 range matrix interaction spec
+### P1.T11 - 13x13 range matrix interaction spec
 - Goal: define original range visualization behavior.
 - Scope:
   - hero/villain view states
@@ -126,10 +170,10 @@ git push -u origin <phase-task-id>-<short-slug>
 - DoD:
   - UX constraints satisfy non-copy policy and EV visibility needs
 
-### P1.T9 - Test plan and gate mapping for Phase 1 outputs
-- Goal: ensure Phase 1 specs are implementation-ready.
+### P1.T12 - Test plan and gate mapping for Phase 1 outputs
+- Goal: ensure Phase 1 specs and integrations are implementation-ready.
 - Scope:
-  - unit-test matrix for hashing, caching, sampling, grading
+  - unit-test matrix for hashing, caching, sampling, grading, adapter normalization
   - gate checklist mapping (`npm test`, `tsc`, `build`)
 - Deliverables:
   - phase test plan section with acceptance checks
@@ -146,8 +190,10 @@ git push -u origin <phase-task-id>-<short-slug>
 7. P1.T7
 8. P1.T8
 9. P1.T9
+10. P1.T10
+11. P1.T11
+12. P1.T12
 
 ## Notes
-- No production code is authorized by this tasks file alone.
+- Production code is allowed only for implementation tasks in this file after preceding design/spec dependencies are satisfied.
 - Move to Phase 2 task planning only after all P1 tasks are completed/accepted.
-
