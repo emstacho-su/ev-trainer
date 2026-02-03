@@ -1,0 +1,22 @@
+{
+  "feature_name": "ev-dev-app-v2",
+  "created_at": "2026-01-29T00:00:00Z",
+  "updated_at": "2026-01-29T00:00:00Z",
+  "language": "en-US",
+  "phase": "design",
+  "approvals": {
+    "requirements": {
+      "generated": false,
+      "approved": false
+    },
+    "design": {
+      "generated": true,
+      "approved": false
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false
+    }
+  },
+  "project_description": "Build v2 dev app UX that cleanly separates Training (per-decision grading + end-of-session summary) from Practice (no metrics during run; review unlocked at end), with EV-first metrics, a minimum viable filter set (street, hero/villain position, effective stack bucket, pot type), localStorage persistence for session records, a Spot-first runtime API boundary, and an Evaluator-preserving path toward server-side solver integration."
+}

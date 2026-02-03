@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1",
+  "packId": "ev-dev-pack-v1",
+  "name": "EV Dev Pack v1",
+  "description": "Minimal demo pack for v2 development.",
+  "author": "EV Trainer",
+  "version": "1.0.0",
+  "createdAt": "2026-01-29T00:00:00Z",
+  "spots": [
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-001",
+        "gameType": "NLHE",
+        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
+        "positions": ["SB", "BB"],
+        "stacksBb": { "SB": 20, "BB": 20 },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-002",
+        "gameType": "NLHE",
+        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
+        "positions": ["BTN", "BB"],
+        "stacksBb": { "BTN": 40, "BB": 40 },
+        "potBb": 6,
+        "board": ["Ah", "Kd", "7c"],
+        "history": ["CHECK"],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-003",
+        "gameType": "NLHE",
+        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
+        "positions": ["BTN", "SB"],
+        "stacksBb": { "BTN": 60, "SB": 60 },
+        "potBb": 9,
+        "board": ["Qs", "Jh", "4d", "2c"],
+        "history": ["CALL", "CHECK"],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-004",
+        "gameType": "NLHE",
+        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
+        "positions": ["BTN", "BB"],
+        "stacksBb": { "BTN": 100, "BB": 100 },
+        "potBb": 6,
+        "board": ["9h", "8d", "2s"],
+        "history": ["CHECK"],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-005",
+        "gameType": "NLHE",
+        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
+        "positions": ["CO", "BTN"],
+        "stacksBb": { "CO": 200, "BTN": 200 },
+        "potBb": 12,
+        "board": ["Ad", "Td", "6c", "3s", "2h"],
+        "history": ["CALL", "CHECK", "CHECK"],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "CO",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 200,
+        "potType": "3BP"
+      }
+    }
+  ]
+}
