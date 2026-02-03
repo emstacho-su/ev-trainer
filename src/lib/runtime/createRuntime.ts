@@ -6,10 +6,11 @@ import { MemoryDecisionStore } from "../engine/decisionStore";
 import { MemoryNodeCache } from "../engine/nodeCache";
 import { createTrainingApi } from "../engine/trainingApi";
 import type { CanonicalNode } from "../engine/nodeTypes";
-import type { SolverNodeOutput } from "../engine/solverAdapter";
+import type { SolverNodeOutput, SolverProvider } from "../engine/solverAdapter";
 import { mockSolve } from "../engine/mockSolver";
+import { openSpielSolve } from "../engine/openSpielSolver";
+import { assertCommercialSolverPolicy } from "../engine/solverPolicy";
 import type { Evaluator } from "../engine/evaluator";
-import { createMockEvaluator } from "../engine/evaluator";
 import { gradeDecision } from "./gradeDecision";
 import { runtimeKeyFrom } from "./runtimeKey";
 
@@ -21,6 +22,8 @@ export interface RuntimeConfig {
   solve?: (node: CanonicalNode) => SolverNodeOutput;
   evaluator?: Evaluator;
   cacheSize?: number;
+  solverProvider?: SolverProvider;
+  legalApproved?: boolean;
 }
 
 export interface Runtime {
@@ -78,14 +81,21 @@ export function createRuntime(config: RuntimeConfig): Runtime {
     throw new Error("cacheSize must be a positive integer");
   }
 
+  const solverProvider = config.solverProvider ?? "openspiel";
+  assertCommercialSolverPolicy(solverProvider, { legalApproved: config.legalApproved });
+
   const configSnapshot = validateSpotFilters(config.configSnapshot ?? {});
   const cache = new MemoryNodeCache(cacheSize);
   const decisionStore = new MemoryDecisionStore();
+  const defaultSolve =
+    solverProvider === "openspiel" ? openSpielSolve : (node: CanonicalNode) => mockSolve(node);
+
   const evaluator =
     config.evaluator ??
     (config.solve
       ? { evaluate: ({ node }: { node: CanonicalNode }) => config.solve!(node) }
-      : createMockEvaluator());
+      : { evaluate: ({ node }: { node: CanonicalNode }) => defaultSolve(node) });
+
   const solve = config.solve ?? ((node: CanonicalNode) => evaluator.evaluate({ node }));
   const now = config.now ?? createDeterministicNow();
   const runtimeKey = runtimeKeyFrom(config.seed, config.sessionId);

@@ -30,6 +30,26 @@ function makeNode(potBb: number): CanonicalNode {
 }
 
 describe("createRuntime", () => {
+  it("uses openspiel provider by default when no custom solver is provided", () => {
+    const runtime = createRuntime({
+      seed: "seed:provider",
+      sessionId: "session:provider",
+    });
+
+    const out = runtime.solve(makeNode(10));
+    expect(out.nodeId?.startsWith("openspiel:")).toBe(true);
+  });
+
+  it("blocks runtime creation when legal approval is not granted", () => {
+    expect(() =>
+      createRuntime({
+        seed: "seed:blocked",
+        sessionId: "session:blocked",
+        legalApproved: false,
+      })
+    ).toThrow("LICENSE_BLOCKED");
+  });
+
   it("records deterministic snapshots and sorts review list by EV loss desc", () => {
     const timestamps = [
       "2026-01-01T00:00:00.000Z",
