@@ -74,9 +74,18 @@ git push -u origin <phase-task-id>-<short-slug>
   - cache key schema with version dimensions
 - Deliverables:
   - canonical hash algorithm spec + examples
+  - explicit canonical input schema with field order and normalization table
+  - positive/negative equivalence examples (same hash vs different hash)
+  - `.kiro/specs/ev-solver-training-v3/p1-t3-canonical-node-hash-spec.md`
 - DoD:
-  - semantically equivalent inputs map to same hash
-  - versioned cache key format frozen for MVP
+  - Canonical input schema is frozen and documented with exact field order.
+  - Numeric normalization is explicit (precision, rounding mode, units) for all numeric fields.
+  - Action history canonicalization is explicit (token format, actor/action encoding, size encoding).
+  - Hash algorithm and output are fixed to `SHA-256` lowercase hex.
+  - Versioned cache key format is frozen as `<solverVersion>|<abstractionVersion>|<nodeHash>`.
+  - At least 10 example vectors are documented, including equivalence and non-equivalence cases.
+  - Semantically equivalent inputs are shown to map to identical hashes.
+  - A change-impact rule is documented: which field changes MUST produce a new hash.
 
 ### P1.T4 - Cache architecture + invalidation rules
 - Goal: define memory + persistent cache behavior.
@@ -197,3 +206,4 @@ git push -u origin <phase-task-id>-<short-slug>
 ## Notes
 - Production code is allowed only for implementation tasks in this file after preceding design/spec dependencies are satisfied.
 - Move to Phase 2 task planning only after all P1 tasks are completed/accepted.
+
