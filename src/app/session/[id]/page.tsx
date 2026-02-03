@@ -23,8 +23,8 @@ import {
 import {
   deleteSessionRecord,
   readSessionRecord,
+  updateSessionRecord,
   updateFromSessionDetail,
-  writeSessionRecord,
 } from "../../../lib/v2/storage/sessionStorage";
 
 function toSummaryHref(detail: SessionDetailResponse): string {
@@ -143,12 +143,15 @@ export default function SessionPage() {
         setPracticeRecorded(true);
       }
 
-      writeSessionRecord({
+      updateSessionRecord(session.sessionId, (previous) => ({
         session,
         currentSpot,
         reviewAvailable: session.mode === "TRAINING",
         lastSubmit: response,
-      });
+        startedAt: previous?.startedAt,
+        completedAt: previous?.completedAt,
+        aggregates: previous?.aggregates,
+      }));
     } catch (error) {
       if (error instanceof SessionApiError) {
         setErrorMessage(`${error.code}: ${error.message}`);
@@ -175,11 +178,18 @@ export default function SessionPage() {
       setPracticeRecorded(false);
       setMobileFeedbackOpen(false);
       setSelectedActionId("CHECK");
-      writeSessionRecord({
+      updateSessionRecord(response.session.sessionId, (previous) => ({
         session: response.session,
         currentSpot: response.spot,
         reviewAvailable: response.session.mode === "TRAINING",
-      });
+        lastSubmit: previous?.lastSubmit,
+        startedAt: previous?.startedAt,
+        completedAt:
+          response.session.isComplete && !previous?.completedAt
+            ? new Date().toISOString()
+            : previous?.completedAt,
+        aggregates: previous?.aggregates,
+      }));
       if (response.session.isComplete) {
         router.replace(
           `/summary/${response.session.sessionId}?seed=${encodeURIComponent(

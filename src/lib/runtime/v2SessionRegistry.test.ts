@@ -5,10 +5,29 @@ import {
   createSession,
   getDefaultDecisionsPerSession,
   getSession,
+  setV2SessionRegistryBackend,
+  type V2SessionRegistryBackend,
 } from "./v2SessionRegistry";
+
+class TestRegistryBackend implements V2SessionRegistryBackend {
+  private values = new Map<string, { state: { sessionId: string; seed: string; decisionIndex: number; decisionsPerSession: number } }>();
+
+  get(key: string) {
+    return this.values.get(key);
+  }
+
+  set(key: string, value: { state: { sessionId: string; seed: string; decisionIndex: number; decisionsPerSession: number } }) {
+    this.values.set(key, value);
+  }
+
+  clear() {
+    this.values.clear();
+  }
+}
 
 describe("v2SessionRegistry", () => {
   beforeEach(() => {
+    setV2SessionRegistryBackend(new TestRegistryBackend());
     clearSessionRegistry();
   });
 

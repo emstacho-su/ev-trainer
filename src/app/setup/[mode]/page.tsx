@@ -52,6 +52,7 @@ export default function SetupModePage() {
               session: response.session,
               currentSpot: response.spot,
               reviewAvailable: response.session.mode === "TRAINING",
+              startedAt: new Date().toISOString(),
             });
             router.push(
               `/session/${response.session.sessionId}?seed=${encodeURIComponent(
