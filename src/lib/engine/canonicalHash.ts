@@ -175,6 +175,11 @@ export function buildCanonicalNodeHash(input: CanonicalNode): string {
   return createHash("sha256").update(canonicalJson).digest("hex");
 }
 
+export function buildVersionedNodeCacheKey(input: CanonicalNode, nodeHash?: string): string {
+  const hash = nodeHash ?? buildCanonicalNodeHash(input);
+  return `${input.solverVersion}|${input.abstractionVersion}|${hash}`;
+}
+
 export const __internal = {
   stableStringify,
   normalizeBoard,

@@ -40,12 +40,117 @@ export interface SolverRequest {
 
 export type SolverResponse = SolverNodeOutput;
 
+// P1.T2 OpenSpiel-first adapter contract (provider-agnostic).
+export type SolverProvider = "openspiel" | "precomputed" | "inhouse";
+export type SolverEvUnit = "bb_per_hand";
+
+export interface SolverNodeRequestV2 {
+  provider: SolverProvider;
+  nodeHash: string;
+  context: {
+    gameVersion: string;
+    abstractionVersion: string;
+    solverVersion: string;
+    evUnit: SolverEvUnit;
+  };
+  state: {
+    street: "preflop" | "flop" | "turn" | "river";
+    board: string[];
+    potBb: number;
+    effectiveStackBb: number;
+    heroPosition: string;
+    villainPosition: string;
+    toAct: "hero" | "villain";
+  };
+  actionHistory: Array<{
+    actor: "hero" | "villain";
+    action: "fold" | "check" | "call" | "bet" | "raise";
+    sizeBb?: number;
+  }>;
+}
+
+export interface SolverActionPolicyV2 {
+  actionId: string;
+  action: "fold" | "check" | "call" | "bet" | "raise";
+  sizeBb?: number;
+  frequency: number;
+  ev: number;
+}
+
+export interface SolverNodeResponseV2 {
+  provider: SolverProvider;
+  nodeHash: string;
+  actions: SolverActionPolicyV2[];
+  meta: {
+    source: "cache" | "live" | "precomputed" | "fallback";
+    solveMs?: number;
+    solvedAt?: string;
+  };
+}
+
+export type SolverErrorCodeV2 =
+  | "INVALID_REQUEST"
+  | "UNSUPPORTED_NODE"
+  | "SOLVER_TIMEOUT"
+  | "SOLVER_UNAVAILABLE"
+  | "LICENSE_BLOCKED"
+  | "INTERNAL_ERROR";
+
+export interface SolverErrorV2 {
+  ok: false;
+  code: SolverErrorCodeV2;
+  message: string;
+  provider?: SolverProvider;
+  nodeHash?: string;
+  retriable: boolean;
+}
+
 const FREQ_EPS = 1e-4;
 
 function assertFiniteNumber(value: unknown, name: string): asserts value is number {
   if (typeof value !== "number" || !Number.isFinite(value)) {
     throw new Error(`${name} must be a finite number`);
   }
+}
+
+export function normalizeSolverActionPolicies(
+  actions: SolverActionPolicyV2[],
+  eps = 1e-9
+): SolverActionPolicyV2[] {
+  if (!Array.isArray(actions) || actions.length === 0) {
+    throw new Error("actions must be a non-empty array");
+  }
+
+  const normalized = actions.map((a, i) => {
+    if (a === null || typeof a !== "object") {
+      throw new Error(`actions[${i}] must be an object`);
+    }
+    if (typeof a.actionId !== "string" || a.actionId.length === 0) {
+      throw new Error(`actions[${i}].actionId must be a non-empty string`);
+    }
+    assertFiniteNumber(a.frequency, `actions[${i}].frequency`);
+    assertFiniteNumber(a.ev, `actions[${i}].ev`);
+    if (a.frequency < 0) {
+      throw new Error(`actions[${i}].frequency must be >= 0`);
+    }
+    return { ...a };
+  });
+
+  const sum = normalized.reduce((acc, a) => acc + a.frequency, 0);
+  if (sum <= eps) {
+    throw new Error("frequency sum must be > 0");
+  }
+
+  const renormalized = normalized
+    .map((a) => ({ ...a, frequency: a.frequency / sum }))
+    .sort((a, b) => a.actionId.localeCompare(b.actionId));
+
+  const post = renormalized.reduce((acc, a) => acc + a.frequency, 0);
+  if (Math.abs(post - 1) > eps * 10) {
+    throw new Error(`normalized frequency sum must be ~1.0 (got ${post})`);
+  }
+
+  return renormalized;
 }
 
 export function validateSolverNodeOutput(output: unknown): SolverNodeOutput {

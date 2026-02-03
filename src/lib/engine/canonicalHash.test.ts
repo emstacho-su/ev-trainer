@@ -1,7 +1,7 @@
 // src/lib/engine/canonicalHash.test.ts
 
 import { describe, expect, it } from "vitest";
-import { buildCanonicalNodeHash } from "./canonicalHash";
+import { buildCanonicalNodeHash, buildVersionedNodeCacheKey } from "./canonicalHash";
 import type { CanonicalNode } from "./nodeTypes";
 import type { NodeHistory, NodePublicState } from "./solverAdapter";
 import type { ActionAbstraction } from "./nodeTypes";
@@ -111,5 +111,25 @@ describe("buildCanonicalNodeHash", () => {
     });
 
     expect(hashA).not.toBe(hashB);
+  });
+
+  it("builds versioned cache key as <solverVersion>|<abstractionVersion>|<nodeHash>", () => {
+    const hash = buildCanonicalNodeHash(baseInput);
+    const key = buildVersionedNodeCacheKey(baseInput, hash);
+    expect(key).toBe(`mock-0|v1|${hash}`);
+  });
+
+  it("changes versioned cache key when abstractionVersion changes", () => {
+    const keyA = buildVersionedNodeCacheKey(baseInput);
+    const keyB = buildVersionedNodeCacheKey({ ...baseInput, abstractionVersion: "v2" });
+    expect(keyA).not.toBe(keyB);
+  });
+
+  it("matches the documented OpenSpiel example vector hash", () => {
+    const hash = buildCanonicalNodeHash({
+      ...baseInput,
+      solverVersion: "openspiel:1.0.0",
+    });
+    expect(hash).toBe("35918441bf1ae05fbcbdc94acce5326a712b0dab614a5cdc933e8633f3873aff");
   });
 });
