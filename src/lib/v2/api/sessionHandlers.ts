@@ -11,9 +11,9 @@ import {
   getSession,
 } from "../../runtime/v2SessionRegistry";
 import type { SpotFilterInput } from "../filters/spotFilters";
-import { EffectiveStackBuckets, PotTypes } from "../filters/spotFilters";
+import { EffectiveStackBuckets } from "../filters/spotFilters";
 import { loadBundledPack } from "../packs/loadBundledPack";
-import type { SpotPack } from "../packs/spotPack";
+import { PotTypes, type SpotPack } from "../packs/spotPack";
 import type { SessionMode, SessionRecord } from "../sessionStore";
 import {
   appendSessionEntry,
@@ -280,9 +280,21 @@ export function handleStart(input: unknown): ApiResult<StartResponse> {
       ? input.sessionId
       : null) ?? deriveSessionId({ seed, mode, packId: pack.packId }, filters);
 
-  const decisionsPerSession = input.decisionsPerSession ?? undefined;
-  if (decisionsPerSession !== undefined && (!Number.isInteger(decisionsPerSession) || decisionsPerSession <= 0)) {
-    return errorResult(400, "INVALID_ARGUMENT", "decisionsPerSession must be a positive integer");
+  let decisionsPerSession: number | undefined;
+  if (input.decisionsPerSession !== undefined) {
+    const parsedDecisionsPerSession = requireNumber(input, "decisionsPerSession");
+    if (
+      parsedDecisionsPerSession === null ||
+      !Number.isInteger(parsedDecisionsPerSession) ||
+      parsedDecisionsPerSession <= 0
+    ) {
+      return errorResult(
+        400,
+        "INVALID_ARGUMENT",
+        "decisionsPerSession must be a positive integer"
+      );
+    }
+    decisionsPerSession = parsedDecisionsPerSession;
   }
 
   const registrySnapshot = createSession({
@@ -398,7 +410,7 @@ export function handleSubmit(input: unknown): ApiResult<SubmitTrainingResponse |
 
   let spot: Spot;
   try {
-    spot = validateSpot(spotValue as Spot);
+    spot = validateSpot(spotValue as unknown as Spot);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return errorResult(400, "INVALID_ARGUMENT", message);

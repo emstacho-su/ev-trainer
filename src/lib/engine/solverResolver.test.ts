@@ -6,6 +6,7 @@ import { resolveSolverNode } from "./solverResolver";
 import { mockSolve } from "./mockSolver";
 import type { CanonicalNode } from "./nodeTypes";
 import { buildCanonicalNodeHash } from "./canonicalHash";
+import type { SolverNodeOutput } from "./solverAdapter";
 
 const baseNode: CanonicalNode = {
   gameVersion: "HU-NLHE",
@@ -83,7 +84,7 @@ describe("resolveSolverNode", () => {
 
   it("does not cache invalid solver outputs", () => {
     const cache = new MemoryNodeCache(10);
-    const invalidSolve = () => ({
+    const invalidSolve = (): SolverNodeOutput => ({
       status: "ok",
       units: "bb",
       actions: [

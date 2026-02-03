@@ -1,0 +1,96 @@
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import type { PersistedSessionRecord } from "./sessionStorage";
+import {
+  clearAllSessionRecords,
+  deleteSessionRecord,
+  readSessionIndex,
+  readSessionRecord,
+  writeSessionRecord,
+} from "./sessionStorage";
+
+class MemoryStorage implements Storage {
+  private values = new Map<string, string>();
+
+  get length(): number {
+    return this.values.size;
+  }
+
+  clear(): void {
+    this.values.clear();
+  }
+
+  getItem(key: string): string | null {
+    return this.values.get(key) ?? null;
+  }
+
+  key(index: number): string | null {
+    return Array.from(this.values.keys())[index] ?? null;
+  }
+
+  removeItem(key: string): void {
+    this.values.delete(key);
+  }
+
+  setItem(key: string, value: string): void {
+    this.values.set(key, value);
+  }
+}
+
+const sample: PersistedSessionRecord = {
+  session: {
+    sessionId: "s1",
+    seed: "seed-a",
+    mode: "TRAINING",
+    packId: "ev-dev-pack-v1",
+    decisionIndex: 0,
+    decisionsPerSession: 10,
+    isComplete: false,
+    filters: {},
+  },
+  currentSpot: null,
+};
+
+beforeEach(() => {
+  (globalThis as { window?: { localStorage: Storage } }).window = {
+    localStorage: new MemoryStorage(),
+  };
+});
+
+afterEach(() => {
+  delete (globalThis as { window?: unknown }).window;
+});
+
+describe("sessionStorage", () => {
+  it("writes and reads session records and index", () => {
+    writeSessionRecord(sample);
+    const record = readSessionRecord(sample.session.sessionId);
+    expect(record?.session.seed).toBe("seed-a");
+
+    const index = readSessionIndex();
+    expect(index).toHaveLength(1);
+    expect(index[0]?.sessionId).toBe("s1");
+  });
+
+  it("deletes one session without corrupting the index", () => {
+    writeSessionRecord(sample);
+    writeSessionRecord({
+      ...sample,
+      session: {
+        ...sample.session,
+        sessionId: "s2",
+      },
+    });
+    deleteSessionRecord("s1");
+    expect(readSessionRecord("s1")).toBeNull();
+    const index = readSessionIndex();
+    expect(index).toHaveLength(1);
+    expect(index[0]?.sessionId).toBe("s2");
+  });
+
+  it("clears all sessions", () => {
+    writeSessionRecord(sample);
+    clearAllSessionRecords();
+    expect(readSessionIndex()).toEqual([]);
+    expect(readSessionRecord("s1")).toBeNull();
+  });
+});

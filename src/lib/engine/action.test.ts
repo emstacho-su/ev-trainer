@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { actionToId, idToAction, validateAction } from "./action";
+import { actionToId, idToAction, validateAction, type Action } from "./action";
 
 describe("action", () => {
   it("round-trips sized actions through actionId", () => {
-    const action = { type: "BET", sizeBb: 2.5 };
+    const action: Action = { type: "BET", sizeBb: 2.5 };
     const id = actionToId(action);
     expect(id).toBe("BET_2.5BB");
     expect(idToAction(id)).toEqual(action);
   });
 
   it("round-trips non-sized actions through actionId", () => {
-    const action = { type: "CHECK" };
+    const action: Action = { type: "CHECK" };
     const id = actionToId(action);
     expect(id).toBe("CHECK");
     expect(idToAction(id)).toEqual(action);

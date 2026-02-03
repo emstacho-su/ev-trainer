@@ -145,7 +145,7 @@ describe("training UI renderers", () => {
       },
       review: {
         title: "Review",
-        items: [makeRecord("a", 0.1)],
+        items: [makeRecord("a", 0.1, 1)],
       },
     };
 

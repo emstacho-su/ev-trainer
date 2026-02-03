@@ -6,6 +6,7 @@ import {
   nextSpot,
 } from "./index";
 import type { CanonicalNode } from "./nodeTypes";
+import type { SpotQuizResponse } from "./trainingApi";
 
 function buildNode(potBb: number, toAct: "BTN" | "BB" = "BTN"): CanonicalNode {
   return {
@@ -39,7 +40,7 @@ describe("engine public API", () => {
       mode: "spot-quiz",
       node,
       userActionId: "CHECK",
-    });
+    }) as SpotQuizResponse;
     expect(result.grade.evLossVsMix).toBeDefined();
     expect(result.record.mode).toBe("spot-quiz");
   });

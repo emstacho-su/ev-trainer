@@ -7,7 +7,7 @@ function buildSpot(overrides: Partial<Spot> = {}): Spot {
     gameType: "NLHE",
     blinds: { sb: 0.5, bb: 1, ante: 0 },
     positions: ["SB", "BB", "BTN"],
-    stacksBb: { SB: 50, BB: 50, BTN: 50 },
+    stacksBb: { SB: 50, BB: 50, BTN: 50 } as unknown as Spot["stacksBb"],
     potBb: 1.5,
     board: ["Ah", "Kd", "7c"],
     history: ["CHECK"],
@@ -35,7 +35,7 @@ describe("spot", () => {
 
   it("rejects negative stacks or pot", () => {
     const badStacks = buildSpot({
-      stacksBb: { SB: 50, BB: -1, BTN: 50 },
+      stacksBb: { SB: 50, BB: -1, BTN: 50 } as unknown as Spot["stacksBb"],
     });
     expect(() => validateSpot(badStacks)).toThrow();
 
