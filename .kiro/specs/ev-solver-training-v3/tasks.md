@@ -54,6 +54,7 @@ git push -u origin <phase-task-id>-<short-slug>
 - Deliverables:
   - interface spec section in design/docs
   - typed contract draft (spec artifact only in this phase)
+  - .kiro/specs/ev-solver-training-v3/p1-t2-adapter-spec.md (OpenSpiel-first draft)
 - DoD:
   - covers hero/villain action sets, EV units, and version fields
 
@@ -149,3 +150,4 @@ git push -u origin <phase-task-id>-<short-slug>
 ## Notes
 - No production code is authorized by this tasks file alone.
 - Move to Phase 2 task planning only after all P1 tasks are completed/accepted.
+
