@@ -22,6 +22,21 @@ export interface ApplyActionRequest {
   sessionId?: string;
 }
 
+export interface SpotQuizApplyActionRequest extends ApplyActionRequest {
+  mode: "spot-quiz";
+}
+
+export interface HandPlayApplyActionRequest extends ApplyActionRequest {
+  mode: "hand-play";
+  sequenceIndex: number;
+}
+
+export interface TargetedDrillApplyActionRequest extends ApplyActionRequest {
+  mode: "targeted-drill";
+  candidates: SpotCandidate[];
+  filters: TargetedDrillFilters;
+}
+
 // Selects the next spot from a SpotSource with deterministic seeding.
 export function nextSpot(
   source: SpotSource,
@@ -33,6 +48,18 @@ export function nextSpot(
 }
 
 // Applies a user action and returns grading output for the selected mode.
+export function applyAction(
+  session: Session,
+  request: SpotQuizApplyActionRequest
+): SpotQuizResponse;
+export function applyAction(
+  session: Session,
+  request: HandPlayApplyActionRequest
+): HandPlayResponse;
+export function applyAction(
+  session: Session,
+  request: TargetedDrillApplyActionRequest
+): TargetedDrillResponse;
 export function applyAction(
   session: Session,
   request: ApplyActionRequest

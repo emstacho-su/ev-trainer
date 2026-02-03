@@ -14,7 +14,7 @@ function buildSpot(overrides: Partial<Spot> = {}): Spot {
     gameType: "NLHE",
     blinds: { sb: 0.5, bb: 1, ante: 0 },
     positions: ["BTN", "BB"],
-    stacksBb: { BTN: 100, BB: 100 },
+    stacksBb: { SB: 0, BB: 100, UTG: 0, HJ: 0, CO: 0, BTN: 100 },
     potBb: 3,
     board: ["Ah", "Kd", "7c"],
     history: ["CHECK"],

@@ -18,7 +18,7 @@ export interface Spot {
     ante?: number;
   };
   positions: Position[];
-  stacksBb: Record<Position, number>;
+  stacksBb: Partial<Record<Position, number>>;
   potBb: number;
   board: string[];
   history: ActionId[];

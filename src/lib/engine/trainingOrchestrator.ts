@@ -92,7 +92,7 @@ function metricsFromGrade(grade: DecisionGrade): DecisionMetrics {
 }
 
 function buildDecisionRecord(
-  input: Omit<DecisionRecord, "id" | "createdAt">,
+  input: Omit<DecisionRecord, "createdAt">,
   deps: { now?: () => string }
 ): DecisionRecord {
   if (!deps.now) {

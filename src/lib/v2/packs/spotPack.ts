@@ -105,8 +105,11 @@ function validateSpotMeta(meta: unknown, spot: Spot): SpotMeta {
     throw new Error("meta.villainPosition must be included in spot.positions");
   }
 
-  const stacks = Object.values(spot.stacksBb);
-  const effectiveStackBb = Math.min(...stacks);
+  const stacks = spot.positions.map((position) => spot.stacksBb[position]);
+  if (stacks.some((value) => typeof value !== "number" || !Number.isFinite(value))) {
+    throw new Error("spot.stacksBb must define finite stacks for each active position");
+  }
+  const effectiveStackBb = Math.min(...(stacks as number[]));
   if (Math.abs(effectiveStackBb - (raw.effectiveStackBb as number)) > 1e-9) {
     throw new Error("meta.effectiveStackBb must match effective stack from spot");
   }

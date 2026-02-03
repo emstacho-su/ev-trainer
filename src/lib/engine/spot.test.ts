@@ -6,8 +6,8 @@ function buildSpot(overrides: Partial<Spot> = {}): Spot {
     schemaVersion: SpotSchemaVersion,
     gameType: "NLHE",
     blinds: { sb: 0.5, bb: 1, ante: 0 },
-    positions: ["SB", "BB", "BTN"],
-    stacksBb: { SB: 50, BB: 50, BTN: 50 },
+    positions: ["SB", "BB", "UTG", "HJ", "CO", "BTN"],
+    stacksBb: { SB: 50, BB: 50, UTG: 0, HJ: 0, CO: 0, BTN: 50 },
     potBb: 1.5,
     board: ["Ah", "Kd", "7c"],
     history: ["CHECK"],
@@ -35,7 +35,7 @@ describe("spot", () => {
 
   it("rejects negative stacks or pot", () => {
     const badStacks = buildSpot({
-      stacksBb: { SB: 50, BB: -1, BTN: 50 },
+      stacksBb: { SB: 50, BB: -1, UTG: 0, HJ: 0, CO: 0, BTN: 50 },
     });
     expect(() => validateSpot(badStacks)).toThrow();
 
@@ -44,7 +44,7 @@ describe("spot", () => {
   });
 
   it("requires heroToAct within positions", () => {
-    const spot = buildSpot({ heroToAct: "UTG" as Spot["heroToAct"] });
+    const spot = buildSpot({ heroToAct: "NOT_A_POSITION" as Spot["heroToAct"] });
     expect(() => validateSpot(spot)).toThrow();
   });
 });
