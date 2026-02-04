@@ -43,8 +43,28 @@ describe("sampleOpponentAction", () => {
 
   it("matches a golden sample for a fixed seed", () => {
     const sample = sampleOpponentAction({ base: baseActions }, context);
-    expect(sample.action.actionId).toBe("BET_75PCT");
+    expect(sample.action.actionId).toBe("CHECK");
     expect(sample.rngState).toBe("9b2eb7a7");
+  });
+
+  it("is stable across different incoming action array orders", () => {
+    const ordered = sampleOpponentAction({ base: baseActions }, context);
+    const reversed = sampleOpponentAction({ base: [...baseActions].reverse() }, context);
+    expect(reversed.action.actionId).toBe(ordered.action.actionId);
+  });
+
+  it("rejects duplicate action ids in policy base", () => {
+    expect(() =>
+      sampleOpponentAction(
+        {
+          base: [
+            { actionId: "CHECK", frequency: 0.6, ev: 0.2 },
+            { actionId: "CHECK", frequency: 0.4, ev: 0.1 },
+          ],
+        },
+        context
+      )
+    ).toThrow(/duplicate actionId/i);
   });
 });
 

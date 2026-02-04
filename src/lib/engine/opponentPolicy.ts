@@ -24,6 +24,23 @@ export interface OpponentActionSample {
   rngState: string;
 }
 
+function compareActionId(a: string, b: string): number {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+}
+
+function assertUniqueActionIds(actions: SolverActionOutput[]): void {
+  const seen = new Set<string>();
+  for (let i = 0; i < actions.length; i++) {
+    const id = actions[i].actionId;
+    if (seen.has(id)) {
+      throw new Error(`policy.base has duplicate actionId '${id}'`);
+    }
+    seen.add(id);
+  }
+}
+
 function normalizeWeights(weights: number[]): number[] {
   let sum = 0;
   for (let i = 0; i < weights.length; i++) {
@@ -66,24 +83,28 @@ export function sampleOpponentAction(
   if (!Array.isArray(policy.base) || policy.base.length === 0) {
     throw new Error("policy.base must be a non-empty array");
   }
+  assertUniqueActionIds(policy.base);
 
   const probabilities = applyPolicyTransforms(policy.base, context, policy.transforms ?? []);
+  const weightedActions = policy.base
+    .map((action, index) => ({ action, probability: probabilities[index] }))
+    .sort((a, b) => compareActionId(a.action.actionId, b.action.actionId));
   const rng = createSeededRng(buildOpponentSeed(context));
   const roll = rng.next();
 
   let cumulative = 0;
-  for (let i = 0; i < probabilities.length; i++) {
-    cumulative += probabilities[i];
-    if (roll <= cumulative || i === probabilities.length - 1) {
+  for (let i = 0; i < weightedActions.length; i++) {
+    cumulative += weightedActions[i].probability;
+    if (roll < cumulative || i === weightedActions.length - 1) {
       return {
-        action: policy.base[i],
+        action: weightedActions[i].action,
         rngState: rng.state(),
       };
     }
   }
 
   return {
-    action: policy.base[policy.base.length - 1],
+    action: weightedActions[weightedActions.length - 1].action,
     rngState: rng.state(),
   };
 }

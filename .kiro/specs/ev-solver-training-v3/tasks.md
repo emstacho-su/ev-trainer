@@ -105,9 +105,14 @@ git push -u origin <phase-task-id>-<short-slug>
   - cumulative frequency traversal algorithm
   - tie-breaking rules
 - Deliverables:
-  - deterministic sampling pseudocode + invariants
+  - deterministic sampling pseudocode with explicit input/output contract
+  - invariants list (seed/context determinism, probability normalization, zero-probability exclusion)
+  - canonical action ordering rule for tie-breaking and provider-order independence
+  - edge-case behavior table (invalid weights, all-zero weights, boundary roll handling)
 - DoD:
   - same seed/config/history always yields same sampled sequence
+  - same weighted policy yields identical sample regardless of incoming action array order
+  - unit tests cover deterministic replay and tie-break behavior
 
 ### P1.T6 - EV grading math spec
 - Goal: freeze EV-first grade calculations for MVP.
