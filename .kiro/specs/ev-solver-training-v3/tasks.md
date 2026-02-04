@@ -245,8 +245,21 @@ git push -u origin <phase-task-id>-<short-slug>
   - gate checklist mapping (`npm test`, `tsc`, `build`)
 - Deliverables:
   - phase test plan section with acceptance checks
+  - P1 traceability matrix (`task -> artifact -> verification -> evidence`)
+  - gate execution policy with failure handling and rerun rules
+  - CI-ready command contract (local and CI parity)
 - DoD:
-  - each P1 task has at least one verifiable acceptance criterion
+  - each P1 task (`P1.T1`..`P1.T12`) has at least one explicit, verifiable acceptance criterion with artifact path and objective pass condition
+  - deterministic-risk tasks (`T3`, `T5`, `T6`, `T8`, `T9`, `T10`, `T11`) have named replay/ordering/hash invariants mapped to concrete test cases
+  - adapter/solver integration tasks (`T2`, `T7`, `T8`, `T9`) include contract and failure-path verification criteria (typed errors, normalization constraints, metadata provenance)
+  - test matrix includes required minimum fields per row: `taskId`, `requirement`, `testType`, `testFileOrSuite`, `command`, `expectedEvidence`
+  - gate map is strict and ordered with stop-on-failure policy:
+    1. `npm test`
+    2. `npx tsc --noEmit --pretty false`
+    3. `npm run build`
+  - rerun policy is explicit: failed gate must pass from clean rerun before task is considered complete
+  - documentation includes PR evidence template for gate outputs (test summary, typecheck result, build result, commit SHA/date)
+  - plan is implementation-oriented (ready for CI wiring) without introducing proprietary assets, datasets, or copied third-party UX/text
 
 ## Execution order
 1. P1.T1
