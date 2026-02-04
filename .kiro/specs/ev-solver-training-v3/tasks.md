@@ -1,7 +1,7 @@
 # Tasks - ev-solver-training-v3 (Phase 2 only)
 
 Created: 2026-02-04T00:00:00Z
-Updated: 2026-02-04T01:00:00Z
+Updated: 2026-02-04T02:00:00Z
 
 ## Phase Context
 - This file is now scoped to **Phase 2 (UI Foundation)** from `overarching-phases.md`.
@@ -85,13 +85,41 @@ Tasking implications:
   - color tokens, spacing, radius, typography scale, elevation
   - dark-theme token mapping with contrast-safe defaults
   - state tokens for EV semantics (good/warn/bad) with non-proprietary naming
-- Deliverables:
-  - token spec and implementation plan
-  - theme usage guide for components
-- DoD:
-  - token set is centralized and referenced by components
-  - dark theme toggle strategy is documented and testable
-  - contrast constraints are defined for key text/background pairs
+- Deliverables (strict):
+  - token specification doc at `.kiro/specs/ev-solver-training-v3/p2-t2-design-tokens-theme-spec.md` with:
+    - token taxonomy (global/base -> semantic -> component) and naming grammar
+    - explicit light + dark token tables for color/text/border/surface/focus states
+    - EV semantic token set (`ev-positive`, `ev-neutral`, `ev-negative`, `ev-accent`) with usage intent
+  - implementation artifacts in code:
+    - centralized token source in CSS variables (single authoritative file)
+    - Tailwind theme bridge mapping utilities to token variables where applicable
+    - theme mode selector strategy (system + manual override contract)
+  - theme usage guide section in spec docs with:
+    - example mappings for setup/session/summary/review/train surfaces
+    - do/don't rules to prevent hard-coded colors/spacing in new components
+- DoD (strict / testable):
+  - token completeness:
+    - includes at least 45 tokens across color, spacing, radius, typography, elevation, and focus
+    - each token has name, value, purpose, and at least one usage example
+    - no proprietary or third-party branded naming
+  - architecture + source-of-truth:
+    - all new theme values originate from one canonical token file; no duplicate token definitions
+    - at least 3 representative UI surfaces consume semantic tokens instead of raw color literals
+    - lint/search evidence confirms no newly introduced raw hex values outside token definitions
+  - dark theme behavior:
+    - supports `prefers-color-scheme` baseline and a deterministic manual override (class or data-attribute)
+    - manual toggle persists user preference and applies before first paint strategy is documented
+    - light/dark mode produces readable state for all core text + interactive controls
+  - accessibility constraints:
+    - normal text token pairs meet WCAG AA 4.5:1 minimum contrast
+    - non-text UI component and focus indicator token pairs meet 3:1 minimum contrast
+    - focus style spec defines minimum visible focus treatment (>=2px perimeter-equivalent or stronger)
+  - EV semantics:
+    - EV-primary semantics are visually encoded with dedicated semantic tokens and documented hierarchy
+    - EV token usage does not invert meaning between light and dark themes
+  - verification evidence:
+    - `npm test`, `npx tsc --noEmit --pretty false`, and `npm run build` pass
+    - updated docs include a migration note for replacing existing hard-coded values incrementally
 
 ### P2.T3 - Poker table foundation component
 - Goal: introduce a reusable table surface component for training modes.

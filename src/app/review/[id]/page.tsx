@@ -75,30 +75,30 @@ export default function ReviewPage() {
   const selectedEntry = entries[selectedEntryIndex] ?? null;
 
   return (
-    <main className="mx-auto max-w-6xl space-y-4 p-6">
-      <Link href="/" className="text-sm underline">
+    <main className="app-page mx-auto max-w-6xl space-y-4 p-6">
+      <Link href="/" className="link-subtle text-sm">
         Back home
       </Link>
       <h1 className="text-2xl font-semibold">Session Review</h1>
-      <p className="text-sm text-stone-600">
+      <p className="text-muted text-sm">
         sessionId: <span className="font-mono">{sessionId || "unknown"}</span>
       </p>
 
-      {loading ? <p className="text-sm text-stone-600">Loading review...</p> : null}
+      {loading ? <p className="text-muted text-sm">Loading review...</p> : null}
       {errorMessage ? (
-        <p className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <p className="alert-error text-sm">
           {errorMessage}
         </p>
       ) : null}
       {blockedMessage ? (
-        <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+        <p className="alert-warning text-sm">
           {blockedMessage}
         </p>
       ) : null}
 
       {!loading && !errorMessage && !blockedMessage ? (
         entries.length === 0 ? (
-          <p className="rounded border border-stone-300 bg-white p-3 text-sm text-stone-600">
+          <p className="surface-card text-muted p-3 text-sm">
             No review entries found for this session.
           </p>
         ) : (

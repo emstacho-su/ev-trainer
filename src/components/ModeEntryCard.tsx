@@ -20,10 +20,10 @@ export default function ModeEntryCard({
   return (
     <Link
       href={href}
-      className="block rounded-lg border border-stone-300 bg-white p-4 transition hover:border-stone-500"
+      className="surface-card block p-4 transition hover:border-borderSubtle hover:bg-surfaceMuted"
     >
       <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="mt-2 text-sm text-stone-600">{description}</p>
+      <p className="text-muted mt-2 text-sm">{description}</p>
     </Link>
   );
 }

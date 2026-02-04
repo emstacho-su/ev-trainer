@@ -233,27 +233,23 @@ export default function SessionPage() {
     !seed && !isLoading && errorMessage?.includes("Missing seed") === true;
 
   return (
-    <main className="mx-auto max-w-6xl space-y-4 p-6">
+    <main className="app-page mx-auto max-w-6xl space-y-4 p-6">
       <div className="flex items-center justify-between gap-2">
-        <Link href="/" className="text-sm underline">
+        <Link href="/" className="link-subtle text-sm">
           Back home
         </Link>
         {session ? (
-          <p className="text-sm text-stone-600">
-            {session.mode} · {session.decisionIndex}/{session.decisionsPerSession}
+          <p className="text-muted text-sm">
+            {session.mode} - {session.decisionIndex}/{session.decisionsPerSession}
           </p>
         ) : null}
       </div>
 
       {errorMessage ? (
-        <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
-          {errorMessage}
-        </div>
+        <div className="alert-error text-sm">{errorMessage}</div>
       ) : null}
       {storageWarning ? (
-        <div className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
-          {storageWarning}
-        </div>
+        <div className="alert-warning text-sm">{storageWarning}</div>
       ) : null}
       {showDeleteMissingSeed ? (
         <button
@@ -262,14 +258,14 @@ export default function SessionPage() {
             deleteSessionRecord(sessionId);
             router.push("/");
           }}
-          className="rounded border border-stone-400 px-3 py-2 text-sm"
+          className="btn-secondary"
         >
           Delete this session
         </button>
       ) : null}
 
       {isLoading ? (
-        <p className="text-sm text-stone-600">Loading session...</p>
+        <p className="text-muted text-sm">Loading session...</p>
       ) : (
         <div className="flex flex-col gap-4 md:flex-row md:items-start">
           <div className="flex-1 space-y-4">
@@ -300,3 +296,4 @@ export default function SessionPage() {
     </main>
   );
 }
+

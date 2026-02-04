@@ -31,10 +31,10 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 p-6">
+    <main className="app-page mx-auto max-w-5xl space-y-6 p-6">
       <section className="space-y-2">
         <h1 className="text-3xl font-semibold">EV Trainer v2</h1>
-        <p className="text-stone-600">Choose a mode, then run a focused session.</p>
+        <p className="text-muted">Choose a mode, then run a focused session.</p>
       </section>
       <section className="grid gap-3 md:grid-cols-2">
         <ModeEntryCard
@@ -60,7 +60,7 @@ export default function Home() {
         }}
       />
       {storageWarning ? (
-        <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+        <p className="alert-warning text-sm">
           {storageWarning}
         </p>
       ) : null}

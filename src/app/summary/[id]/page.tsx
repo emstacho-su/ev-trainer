@@ -132,24 +132,24 @@ export default function SummaryPlaceholderPage() {
       : null);
 
   return (
-    <main className="mx-auto max-w-2xl space-y-4 p-6">
-      <Link href="/" className="text-sm underline">
+    <main className="app-page mx-auto max-w-2xl space-y-4 p-6">
+      <Link href="/" className="link-subtle text-sm">
         Back home
       </Link>
       <h1 className="text-2xl font-semibold">Session Summary</h1>
-      <p className="text-sm text-stone-600">
+      <p className="text-muted text-sm">
         sessionId: <span className="font-mono">{sessionId || "unknown"}</span>
       </p>
-      <p className="text-sm text-stone-600">mode: {mode}</p>
-      {loading ? <p className="text-sm text-stone-600">Loading summary...</p> : null}
+      <p className="text-muted text-sm">mode: {mode}</p>
+      {loading ? <p className="text-muted text-sm">Loading summary...</p> : null}
       {errorMessage ? (
-        <p className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <p className="alert-error text-sm">
           {errorMessage}
         </p>
       ) : null}
 
       {detail && !detail.session.isComplete ? (
-        <section className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+        <section className="alert-warning text-sm">
           Session not complete yet. Finish all decisions to unlock summary review.
         </section>
       ) : null}
@@ -163,7 +163,7 @@ export default function SummaryPlaceholderPage() {
           if (!seed) return;
           router.push(`/review/${sessionId}?seed=${encodeURIComponent(seed)}`);
         }}
-        className="rounded bg-stone-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         Review session
       </button>

@@ -19,64 +19,63 @@ export default function RecentSessionsList({
   onClearAll,
 }: RecentSessionsListProps) {
   return (
-    <section className="rounded-lg border border-stone-300 bg-white p-4">
+    <section className="surface-card p-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Recent Sessions</h2>
         <button
           type="button"
           onClick={onClearAll}
           disabled={sessions.length === 0}
-          className="rounded border border-stone-400 px-3 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn-secondary disabled:cursor-not-allowed disabled:opacity-50"
         >
           Clear all
         </button>
       </div>
       {sessions.length === 0 ? (
-        <p className="mt-3 text-sm text-stone-600">No saved sessions yet.</p>
+        <p className="text-muted mt-3 text-sm">No saved sessions yet.</p>
       ) : (
         <ul className="mt-3 space-y-2">
           {sessions.map((session) => (
             <li
               key={session.sessionId}
-              className="rounded border border-stone-200 p-3 text-sm"
+              className="rounded-md border border-borderSubtle bg-surfaceMuted p-3 text-sm"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="space-y-1">
                   <p>
-                    <strong>{session.mode}</strong> · {session.sessionId}
+                    <strong>{session.mode}</strong> - {session.sessionId}
                   </p>
-                  <p className="text-stone-600">
-                    pack: {session.packId} · {session.decisionIndex}/
-                    {session.decisionsPerSession}
+                  <p className="text-muted">
+                    pack: {session.packId} - {session.decisionIndex}/{session.decisionsPerSession}
                   </p>
                   {session.lastUpdated ? (
-                    <p className="text-stone-600">updated: {session.lastUpdated}</p>
+                    <p className="text-muted">updated: {session.lastUpdated}</p>
                   ) : null}
                 </div>
                 <div className="flex items-center gap-2">
                   {session.isComplete && session.seed ? (
                     <Link
                       href={`/summary/${session.sessionId}?seed=${encodeURIComponent(session.seed)}`}
-                      className="rounded bg-stone-900 px-3 py-1 text-white"
+                      className="btn-primary"
                     >
                       Summary
                     </Link>
                   ) : !session.isComplete && session.seed ? (
                     <Link
                       href={`/session/${session.sessionId}?seed=${encodeURIComponent(session.seed)}`}
-                      className="rounded bg-stone-900 px-3 py-1 text-white"
+                      className="btn-primary"
                     >
                       Resume
                     </Link>
                   ) : (
-                    <span className="text-xs text-stone-500">
+                    <span className="text-muted text-xs">
                       {session.isComplete ? "Complete" : "Missing seed"}
                     </span>
                   )}
                   <button
                     type="button"
                     onClick={() => onDelete(session.sessionId)}
-                    className="rounded border border-stone-400 px-3 py-1"
+                    className="btn-secondary"
                   >
                     Delete
                   </button>
@@ -89,3 +88,4 @@ export default function RecentSessionsList({
     </section>
   );
 }
+

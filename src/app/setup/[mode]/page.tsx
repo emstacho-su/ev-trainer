@@ -28,12 +28,12 @@ export default function SetupModePage() {
 
   if (!mode) {
     return (
-      <main className="mx-auto max-w-3xl space-y-4 p-6">
+      <main className="app-page mx-auto max-w-3xl space-y-4 p-6">
         <h1 className="text-2xl font-semibold">Setup</h1>
-        <p className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <p className="alert-error text-sm">
           Invalid mode.
         </p>
-        <Link href="/" className="text-sm underline">
+        <Link href="/" className="link-subtle text-sm">
           Back home
         </Link>
       </main>
@@ -41,8 +41,8 @@ export default function SetupModePage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-4 p-6">
-      <Link href="/" className="text-sm underline">
+    <main className="app-page mx-auto max-w-3xl space-y-4 p-6">
+      <Link href="/" className="link-subtle text-sm">
         Back home
       </Link>
       <SessionSetupForm
