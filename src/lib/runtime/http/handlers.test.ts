@@ -119,4 +119,15 @@ describe("runtime http handlers", () => {
     expect(detail.record?.id).toBe(spot.record.id);
     expect(detail.output?.actions.length).toBeGreaterThan(0);
   });
+
+  it("returns 400 for invalid canonical node payloads", () => {
+    const result = handleSpotQuiz({
+      ...baseSession,
+      node: { bad: "shape" },
+      userActionId: "CHECK",
+    });
+
+    expect(result.status).toBe(400);
+    expect(result.body).toEqual({ error: "node is invalid" });
+  });
 });

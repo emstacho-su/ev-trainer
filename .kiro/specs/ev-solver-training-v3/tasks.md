@@ -1,7 +1,7 @@
 # Tasks - ev-solver-training-v3 (Phase 2 only)
 
 Created: 2026-02-04T00:00:00Z
-Updated: 2026-02-04T00:00:00Z
+Updated: 2026-02-04T01:00:00Z
 
 ## Phase Context
 - This file is now scoped to **Phase 2 (UI Foundation)** from `overarching-phases.md`.
@@ -55,13 +55,29 @@ Tasking implications:
   - audit existing `src/app`, `src/components`, `src/lib/ui` boundaries
   - define component ownership and page composition map
   - lock naming and folder conventions for new UI primitives
-- Deliverables:
-  - architecture map doc for P2 UI component boundaries
-  - agreed folder/filename convention section in spec docs
-- DoD:
-  - architecture map covers setup/session/summary/review/train surfaces
-  - no runtime/engine contract changes required for P2 baseline
-  - migration notes identify any existing component debt to resolve in later tasks
+- Deliverables (strict):
+  - `.kiro/specs/ev-solver-training-v3/p2-t1-ui-architecture-map.md`
+    - per-surface page composition for setup/session/summary/review/train
+    - ownership matrix for `src/app`, `src/components`, `src/lib/ui`, `src/lib/runtime`, `src/lib/engine`, `src/lib/v2`
+    - migration-debt register with priority labels and follow-up task mapping
+  - updated convention contract in this tasks spec:
+    - folder + filename conventions for UI primitives and feature components
+    - dependency direction rules (UI -> API client/runtime boundary -> engine contracts only)
+    - client/server component placement rules for App Router
+  - setup-alignment code change(s) required to remove discovered baseline drift (if any)
+- DoD (strict / testable):
+  - coverage:
+    - architecture map includes all five required surfaces: setup, session, summary, review, train
+    - each surface includes route path, entry file path, major component list, and data/API boundary
+  - conventions:
+    - naming and folder rules are explicit, normative (MUST/SHOULD), and include at least 8 enforceable rules
+    - conventions include at least one accessibility-focused rule and one deterministic-contract protection rule
+  - code baseline:
+    - at least one concrete setup-alignment drift is fixed in code and referenced in architecture notes
+    - no runtime/engine behavior contract changes (no API shape drift for existing endpoints)
+  - verification evidence:
+    - `npm test`, `npx tsc --noEmit --pretty false`, and `npm run build` all pass
+    - tasks.md updated timestamp reflects P2.T1 completion edit
 
 ### P2.T2 - Design tokens and theme system (including dark theme)
 - Goal: define a reusable visual system before UI expansion.

@@ -45,6 +45,10 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
 function requireString(source: Record<string, unknown>, key: string): string | null {
   const value = source[key];
   if (typeof value !== "string" || value.trim().length === 0) return null;
@@ -70,7 +74,49 @@ function isHandlerError(value: SessionInput | HandlerError): value is HandlerErr
   return "status" in value && "body" in value;
 }
 
-function asCanonicalNode(value: Record<string, unknown>): CanonicalNode {
+function asCanonicalNode(value: Record<string, unknown>): CanonicalNode | null {
+  const publicState = value.publicState;
+  const history = value.history;
+  const abstraction = value.abstraction;
+
+  if (
+    typeof value.gameVersion !== "string" ||
+    typeof value.abstractionVersion !== "string" ||
+    typeof value.solverVersion !== "string" ||
+    typeof value.toAct !== "string"
+  ) {
+    return null;
+  }
+
+  if (!isObject(publicState) || !isObject(history) || !isObject(abstraction)) {
+    return null;
+  }
+
+  if (
+    typeof publicState.street !== "string" ||
+    typeof publicState.potBb !== "number" ||
+    typeof publicState.effectiveStackBb !== "number" ||
+    !isStringArray(publicState.board) ||
+    typeof publicState.toAct !== "string"
+  ) {
+    return null;
+  }
+
+  if (!isStringArray(history.actions)) {
+    return null;
+  }
+
+  if (
+    !Array.isArray(abstraction.betSizesBb) ||
+    !abstraction.betSizesBb.every((value) => typeof value === "number" && Number.isFinite(value)) ||
+    !Array.isArray(abstraction.raiseSizesBb) ||
+    !abstraction.raiseSizesBb.every((value) => typeof value === "number" && Number.isFinite(value)) ||
+    typeof abstraction.maxRaisesPerStreet !== "number" ||
+    !Number.isFinite(abstraction.maxRaisesPerStreet)
+  ) {
+    return null;
+  }
+
   return value as unknown as CanonicalNode;
 }
 
@@ -98,12 +144,14 @@ export function handleSpotQuiz(input: unknown): HandlerResult<SpotQuizResponse> 
 
   const node = body.node;
   if (!isObject(node)) return badRequest("node is required");
+  const canonicalNode = asCanonicalNode(node);
+  if (!canonicalNode) return badRequest("node is invalid");
   const userActionId = requireString(body, "userActionId");
   if (!userActionId) return badRequest("userActionId is required");
 
   const runtime = getRuntime(session.seed, session.sessionId);
   const result = runtime.trainingApi.spotQuiz({
-    node: asCanonicalNode(node),
+    node: canonicalNode,
     userActionId: userActionId as ActionId,
     sessionId: session.sessionId,
   });
@@ -118,6 +166,8 @@ export function handleHandPlay(input: unknown): HandlerResult<HandPlayResponse> 
 
   const node = body.node;
   if (!isObject(node)) return badRequest("node is required");
+  const canonicalNode = asCanonicalNode(node);
+  if (!canonicalNode) return badRequest("node is invalid");
   const userActionId = requireString(body, "userActionId");
   if (!userActionId) return badRequest("userActionId is required");
   const sequenceIndex = requireNumber(body, "sequenceIndex");
@@ -125,7 +175,7 @@ export function handleHandPlay(input: unknown): HandlerResult<HandPlayResponse> 
 
   const runtime = getRuntime(session.seed, session.sessionId);
   const result = runtime.trainingApi.handPlayStep({
-    node: asCanonicalNode(node),
+    node: canonicalNode,
     userActionId: userActionId as ActionId,
     sequenceIndex,
     sessionId: session.sessionId,
@@ -141,9 +191,17 @@ export function handleTargetedDrill(input: unknown): HandlerResult<TargetedDrill
 
   const candidatesValue = body.candidates;
   if (!Array.isArray(candidatesValue)) return badRequest("candidates is required");
-  const candidates = candidatesValue.filter((candidate) =>
-    isObject(candidate) && isObject((candidate as Record<string, unknown>).node)
-  ) as SpotCandidate[];
+  const candidates = candidatesValue
+    .map((candidate) => {
+      if (!isObject(candidate) || !isObject(candidate.node)) return null;
+      const node = asCanonicalNode(candidate.node);
+      if (!node) return null;
+      return {
+        ...candidate,
+        node,
+      } as SpotCandidate;
+    })
+    .filter((candidate): candidate is SpotCandidate => candidate !== null);
   if (candidates.length === 0) return badRequest("candidates must include nodes");
 
   const filtersValue = body.filters;
@@ -206,13 +264,18 @@ export function handleReviewDetail(input: unknown): HandlerResult<ReviewDetailRe
   const id = requireString(body, "id");
   if (!id) return badRequest("id is required");
 
-  const node = body.node;
-  if (node !== undefined && !isObject(node)) return badRequest("node must be an object");
+  let node: CanonicalNode | undefined;
+  if (body.node !== undefined) {
+    if (!isObject(body.node)) return badRequest("node must be an object");
+    const parsed = asCanonicalNode(body.node);
+    if (!parsed) return badRequest("node is invalid");
+    node = parsed;
+  }
 
   const runtime = getRuntime(session.seed, session.sessionId);
   const result = runtime.trainingApi.reviewDetail({
     id,
-    node: node ? asCanonicalNode(node) : undefined,
+    node,
   });
 
   return { status: 200, body: result };

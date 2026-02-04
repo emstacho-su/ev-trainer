@@ -219,7 +219,12 @@ export function createTrainingApi(deps: TrainingApiDeps) {
       };
 
       const items = deps.decisionStore.list(options);
-      return { items, total: items.length };
+      const total = deps.decisionStore.list({
+        ...options,
+        offset: undefined,
+        limit: undefined,
+      }).length;
+      return { items, total };
     },
 
     reviewDetail(request: ReviewDetailRequest): ReviewDetailResponse {

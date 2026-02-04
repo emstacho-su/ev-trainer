@@ -248,4 +248,30 @@ describe("trainingApi", () => {
     expect(detail.record?.id).toBe(decision.record.id);
     expect(detail.output?.actions.length).toBeGreaterThan(0);
   });
+
+  it("returns paginated review items with total equal to full filtered count", () => {
+    const cache = new MemoryNodeCache();
+    const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
+    const api = createTrainingApi({
+      cache,
+      solve: solveForPot,
+      decisionStore: decisions,
+      gradeDecision,
+      seed: "seed-6",
+      runtimeKey: "seed-6::session-6",
+      recordFactory,
+      configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-6",
+      now: createDeterministicNow(),
+    });
+
+    api.spotQuiz({ node: buildNode(10), userActionId: "CHECK" });
+    api.spotQuiz({ node: buildNode(11), userActionId: "CHECK" });
+    api.spotQuiz({ node: buildNode(12), userActionId: "CHECK" });
+
+    const paged = api.reviewList({ offset: 1, limit: 1 });
+    expect(paged.items).toHaveLength(1);
+    expect(paged.total).toBe(3);
+  });
 });
