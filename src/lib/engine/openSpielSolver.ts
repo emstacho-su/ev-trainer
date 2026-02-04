@@ -1,6 +1,7 @@
 // src/lib/engine/openSpielSolver.ts
 
-import { buildCanonicalNodeHash } from "./canonicalHash";
+import { createHash } from "node:crypto";
+import { __internal } from "./canonicalHash";
 import type { CanonicalNode } from "./nodeTypes";
 import { mockSolve } from "./mockSolver";
 import {
@@ -66,16 +67,15 @@ function parseAction(actionId: string, potBb: number): {
   return { action: "check" };
 }
 
-export function mapCanonicalNodeToOpenSpielRequest(
-  node: CanonicalNode,
-  nodeHash = buildCanonicalNodeHash(node)
-): SolverNodeRequestV2 {
+function normalizeRequestBoard(board: string[]): string[] {
+  return [...board].map((card) => card.trim()).sort();
+}
+
+function buildOpenSpielHashPayload(node: CanonicalNode): Omit<SolverNodeRequestV2, "nodeHash"> {
   const heroPosition = node.toAct;
   const villainPosition = inferVillainPosition(heroPosition);
-
   return {
     provider: "openspiel",
-    nodeHash,
     context: {
       gameVersion: node.gameVersion,
       abstractionVersion: node.abstractionVersion,
@@ -84,7 +84,7 @@ export function mapCanonicalNodeToOpenSpielRequest(
     },
     state: {
       street: mapStreet(node.publicState.street),
-      board: [...node.publicState.board],
+      board: normalizeRequestBoard(node.publicState.board),
       potBb: node.publicState.potBb,
       effectiveStackBb: node.publicState.effectiveStackBb,
       heroPosition,
@@ -96,9 +96,27 @@ export function mapCanonicalNodeToOpenSpielRequest(
       return {
         actor: index % 2 === 0 ? "hero" : "villain",
         action: parsed.action,
-        sizeBb: parsed.sizeBb,
+        ...(parsed.sizeBb === undefined ? {} : { sizeBb: parsed.sizeBb }),
       };
     }),
+  };
+}
+
+export function buildOpenSpielRequestNodeHash(node: CanonicalNode): string {
+  const payload = buildOpenSpielHashPayload(node);
+  const canonicalJson = __internal.stableStringify(payload);
+  return createHash("sha256").update(canonicalJson).digest("hex");
+}
+
+export function mapCanonicalNodeToOpenSpielRequest(
+  node: CanonicalNode,
+  nodeHash = buildOpenSpielRequestNodeHash(node)
+): SolverNodeRequestV2 {
+  const payload = buildOpenSpielHashPayload(node);
+
+  return {
+    nodeHash,
+    ...payload,
   };
 }
 
@@ -174,7 +192,7 @@ export function openSpielSolve(node: CanonicalNode, config: OpenSpielSolveConfig
     throw new Error("openSpiel timeoutMs must be a positive number");
   }
 
-  const nodeHash = buildCanonicalNodeHash(node);
+  const nodeHash = buildOpenSpielRequestNodeHash(node);
   const request = mapCanonicalNodeToOpenSpielRequest(node, nodeHash);
   const transport = config.transport ?? defaultOpenSpielTransport(node, now);
 

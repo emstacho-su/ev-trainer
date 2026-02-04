@@ -160,8 +160,16 @@ git push -u origin <phase-task-id>-<short-slug>
 - Deliverables:
   - cache implementation + tests
 - DoD:
-  - first request miss then subsequent hit for identical versioned node key
-  - cache invalidates on version change
+  - canonical OpenSpiel node hash is computed from normalized request payload and is deterministic across equivalent inputs (ordering/format differences do not change hash)
+  - versioned cache key includes at minimum `solverVersion`, `abstractionVersion`, and canonical node hash, with explicit test coverage
+  - runtime supports two-layer cache (`memory` primary + `persistent` secondary) with read-through backfill and write-through persistence
+  - first request is cache miss and subsequent identical request is cache hit within same runtime process
+  - persistent cache hit is observed across runtime re-creation using the same cache file path (without re-solving)
+  - version change (`solverVersion` or `abstractionVersion`) causes miss/recompute instead of stale hit
+  - cache-hit responses are surfaced with `meta.source = cache` and include diagnostic metadata (`provider`, `nodeHash`)
+  - persistent cache store enforces bounded size/eviction policy and remains readable after restart
+  - invalid solver outputs are never persisted and do not poison cache
+  - all cache/hash tests pass with gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
 
 ### P1.T9 - OpenSpiel-backed deterministic sampling + EV grading hookup
 - Goal: integrate solver outputs into deterministic opponent sampling and EV grading.

@@ -43,7 +43,9 @@ describe("resolveSolverNode", () => {
     const second = resolveSolverNode(baseNode, { cache, solve });
 
     expect(calls).toBe(1);
-    expect(second.output).toEqual(first.output);
+    expect(second.output.actions).toEqual(first.output.actions);
+    expect(second.output.meta?.source).toBe("cache");
+    expect(second.output.meta?.nodeHash).toBe(first.nodeHash);
   });
 
   it("produces stable keys for semantically identical nodes", () => {
@@ -152,5 +154,31 @@ describe("resolveSolverNode", () => {
       "miss",
       "recompute",
     ]);
+  });
+
+  it("invalidates cache key on openspiel version changes", () => {
+    const cache = new MemoryNodeCache(10);
+    let calls = 0;
+    const solve = (node: CanonicalNode): SolverNodeOutput => {
+      calls += 1;
+      return {
+        status: "ok",
+        units: "bb",
+        actions: [
+          { actionId: "CHECK", frequency: 0.5, ev: 1.0 },
+          { actionId: "BET_75PCT", frequency: 0.5, ev: 0.5 },
+        ],
+        meta: { provider: "openspiel", source: "live" },
+      };
+    };
+
+    const nodeA: CanonicalNode = { ...baseNode, solverVersion: "openspiel:1.0.0" };
+    const nodeB: CanonicalNode = { ...nodeA, abstractionVersion: "v2" };
+
+    resolveSolverNode(nodeA, { cache, solve });
+    resolveSolverNode(nodeA, { cache, solve });
+    resolveSolverNode(nodeB, { cache, solve });
+
+    expect(calls).toBe(2);
   });
 });

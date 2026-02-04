@@ -6,6 +6,7 @@ import { buildCacheKey } from "./nodeTypes";
 import type { SolverNodeOutput } from "./solverAdapter";
 import { validateSolverNodeOutput } from "./solverAdapter";
 import type { NodeCache } from "./nodeCache";
+import { buildOpenSpielRequestNodeHash } from "./openSpielSolver";
 
 export interface CacheEvent {
   type: "hit" | "miss" | "stale" | "recompute";
@@ -26,12 +27,29 @@ function assertNodeConsistency(node: CanonicalNode): void {
   }
 }
 
+function isOpenSpielNode(node: CanonicalNode): boolean {
+  return node.solverVersion.toLowerCase().startsWith("openspiel");
+}
+
+function withCacheSourceMeta(output: SolverNodeOutput, key: CacheKey, node: CanonicalNode): SolverNodeOutput {
+  const provider = isOpenSpielNode(node) ? "openspiel" : output.meta?.provider;
+  return {
+    ...output,
+    meta: {
+      ...output.meta,
+      source: "cache",
+      nodeHash: key.nodeHash,
+      provider,
+    },
+  };
+}
+
 export function resolveSolverNode(
   node: CanonicalNode,
   deps: SolverResolverDeps
 ): { nodeHash: string; output: SolverNodeOutput } {
   assertNodeConsistency(node);
-  const nodeHash = buildCanonicalNodeHash(node);
+  const nodeHash = isOpenSpielNode(node) ? buildOpenSpielRequestNodeHash(node) : buildCanonicalNodeHash(node);
   const key = buildCacheKey(nodeHash, node);
   const nowIso = deps.now ? deps.now() : new Date().toISOString();
   const nowMs = Date.parse(nowIso);
@@ -46,11 +64,11 @@ export function resolveSolverNode(
         deps.onCacheEvent?.({ type: "stale", key });
       } else {
         deps.onCacheEvent?.({ type: "hit", key });
-        return { nodeHash, output: cached.payload };
+        return { nodeHash, output: withCacheSourceMeta(cached.payload, key, node) };
       }
     } else {
       deps.onCacheEvent?.({ type: "hit", key });
-      return { nodeHash, output: cached.payload };
+      return { nodeHash, output: withCacheSourceMeta(cached.payload, key, node) };
     }
   }
 

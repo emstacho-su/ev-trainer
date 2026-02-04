@@ -3,7 +3,7 @@
 import type { SpotFilters } from "../engine/filters";
 import { validateSpotFilters } from "../engine/filters";
 import { MemoryDecisionStore } from "../engine/decisionStore";
-import { MemoryNodeCache } from "../engine/nodeCache";
+import { CompositeNodeCache, FileNodeCache, MemoryNodeCache, type NodeCache } from "../engine/nodeCache";
 import { createTrainingApi } from "../engine/trainingApi";
 import type { CanonicalNode } from "../engine/nodeTypes";
 import type { SolverNodeOutput, SolverProvider } from "../engine/solverAdapter";
@@ -31,10 +31,12 @@ export interface RuntimeConfig {
   openSpielMode?: OpenSpielIntegrationMode;
   openSpielTimeoutMs?: number;
   openSpielTransport?: OpenSpielTransport;
+  openSpielPersistentCachePath?: string;
+  openSpielPersistentMaxEntries?: number;
 }
 
 export interface Runtime {
-  cache: MemoryNodeCache;
+  cache: NodeCache;
   decisionStore: MemoryDecisionStore;
   trainingApi: ReturnType<typeof createTrainingApi>;
   solve: (node: CanonicalNode) => SolverNodeOutput;
@@ -80,6 +82,18 @@ export function demoSolve(node: CanonicalNode): SolverNodeOutput {
   return mockSolve(node);
 }
 
+function createNodeCache(config: RuntimeConfig, solverProvider: SolverProvider, cacheSize: number): NodeCache {
+  const memory = new MemoryNodeCache(cacheSize);
+  if (solverProvider !== "openspiel" || !config.openSpielPersistentCachePath) {
+    return memory;
+  }
+  const persistent = new FileNodeCache(
+    config.openSpielPersistentCachePath,
+    config.openSpielPersistentMaxEntries ?? 5000
+  );
+  return new CompositeNodeCache(memory, persistent);
+}
+
 export function createRuntime(config: RuntimeConfig): Runtime {
   assertSeed(config.seed);
   assertSessionId(config.sessionId);
@@ -92,7 +106,7 @@ export function createRuntime(config: RuntimeConfig): Runtime {
   assertCommercialSolverPolicy(solverProvider, { legalApproved: config.legalApproved });
 
   const configSnapshot = validateSpotFilters(config.configSnapshot ?? {});
-  const cache = new MemoryNodeCache(cacheSize);
+  const cache = createNodeCache(config, solverProvider, cacheSize);
   const decisionStore = new MemoryDecisionStore();
   const defaultSolve =
     solverProvider === "openspiel"

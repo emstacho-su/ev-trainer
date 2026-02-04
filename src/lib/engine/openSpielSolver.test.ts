@@ -2,7 +2,11 @@
 
 import { describe, expect, it } from "vitest";
 import type { CanonicalNode } from "./nodeTypes";
-import { mapCanonicalNodeToOpenSpielRequest, openSpielSolve } from "./openSpielSolver";
+import {
+  buildOpenSpielRequestNodeHash,
+  mapCanonicalNodeToOpenSpielRequest,
+  openSpielSolve,
+} from "./openSpielSolver";
 
 const node: CanonicalNode = {
   gameVersion: "HU-NLHE",
@@ -25,6 +29,15 @@ const node: CanonicalNode = {
 };
 
 describe("openSpielSolve", () => {
+  it("builds canonical openspiel hash from normalized request input", () => {
+    const hashA = buildOpenSpielRequestNodeHash(node);
+    const hashB = buildOpenSpielRequestNodeHash({
+      ...node,
+      publicState: { ...node.publicState, board: ["2c", "Ah", "7d"] },
+    });
+    expect(hashA).toBe(hashB);
+  });
+
   it("maps canonical node input to an OpenSpiel request fixture", () => {
     const req = mapCanonicalNodeToOpenSpielRequest(node, "node-hash-1");
     expect(req.provider).toBe("openspiel");
@@ -34,7 +47,6 @@ describe("openSpielSolve", () => {
     expect(req.actionHistory[0]).toEqual({
       actor: "hero",
       action: "check",
-      sizeBb: undefined,
     });
   });
 
