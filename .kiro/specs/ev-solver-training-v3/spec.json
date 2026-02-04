@@ -1,7 +1,7 @@
 ﻿{
   "feature_name": "ev-solver-training-v3",
   "created_at": "2026-02-03T00:00:00Z",
-  "updated_at": "2026-02-03T00:00:00Z",
+  "updated_at": "2026-02-04T00:00:00Z",
   "language": "en-US",
   "phase": "tasks",
   "approvals": {
@@ -18,5 +18,5 @@
       "approved": false
     }
   },
-  "project_description": "Define v3 tasks for Phase 1 only: commercialization solver gate, adapter/hash/cache determinism, EV grading contract, and range/scenario specs before implementation."
+  "project_description": "Phase 1 artifacts are archived and the active track now targets Phase 2 UI Foundation task execution with EV-first, deterministic, and non-copy constraints preserved."
 }

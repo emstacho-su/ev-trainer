@@ -1,9 +1,11 @@
 ﻿# ev-solver-training-v3 — Spec Init (v3)
 
 ## Status
-- Stage: spec-init
+- Stage: tasks (phase-2)
 - Spec ID: ev-solver-training-v3
 - Version: v3 (new track; v2 remains the active implementation baseline)
+- Updated: 2026-02-04
+- Transition State: Phase 1 deliverables are complete and archived; this spec now prepares Phase 2 planning and implementation.
 
 ## Background (from v2 snapshot)
 The repo currently contains a working Next.js App Router “runtime preview” with:
@@ -52,3 +54,15 @@ The current engine-driven training loop supports deterministic drills and gradin
 - v2 spec path: `.kiro/specs/ev-dev-app-v2/`
 - Current implemented flows: Home → Setup → Session → Summary → Review (gated for Practice)
 - Existing runtime principles: seeded determinism, thin API layer, unit-tested core modules
+- Phase 1 archive path: `.kiro/specs/ev-solver-training-v3/archive/phase-1/`
+
+## Phase 2 Preparation Summary
+1. Use archived Phase 1 specs/contracts as immutable baseline inputs for Phase 2 planning.
+2. Preserve binding constraints:
+   - EV-first grading remains primary
+   - deterministic replay/hash/cache behavior remains required
+   - non-copy policy remains required
+3. Start Phase 2 by generating a new requirements/design/tasks sequence focused on:
+   - operational hardening of OpenSpiel runtime path
+   - CI gate automation with local/CI parity
+   - UX/productization of preflop/postflop flows

@@ -1,281 +1,206 @@
-﻿# Tasks - ev-solver-training-v3 (Phase 1 only)
+# Tasks - ev-solver-training-v3 (Phase 2 only)
 
-Created: 2026-02-03T00:00:00Z
-Updated: 2026-02-03T00:00:00Z
+Created: 2026-02-04T00:00:00Z
+Updated: 2026-02-04T00:00:00Z
 
-## Tasking model
-- Overarching roadmap phases remain the product framework (P1..P5).
-- This file is intentionally scoped to **Phase 1 only**.
-- Task IDs use `P1.T<n>` for batch-friendly execution.
-- After Phase 1 completion, create a new tasks document for Phase 2.
+## Phase Context
+- This file is now scoped to **Phase 2 (UI Foundation)** from `overarching-phases.md`.
+- Phase 1 task history is archived at:
+  - `.kiro/specs/ev-solver-training-v3/archive/phase-1/tasks-phase-1.md`
+  - `.kiro/specs/ev-solver-training-v3/archive/phase-1/*-spec.md`
+- Binding constraints from Phase 1 remain active:
+  - EV-first grading remains primary.
+  - Deterministic behavior remains required.
+  - Non-copy policy remains required.
 
-## Global execution rules for each task
-- Pre-task research is required before implementation:
-  - gather background context
-  - review best practices and primary docs
-  - refine DoD/acceptance criteria where needed
-- A task is done only when:
-  - explicit task DoD is met
-  - gates pass (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
-- Push to GitHub only after DoD + gates pass.
+## Research Inputs (Phase 2 Tasking)
+Date of review: 2026-02-04
 
-## Consistent Git push syntax (per task)
-```bash
-git checkout -b <phase-task-id>-<short-slug>
-# implement scoped task
-npm test
-npx tsc --noEmit --pretty false
-npm run build
-git add -A
-git commit -m "<phase-task-id>: <deliverable> (DoD passed)"
-git push -u origin <phase-task-id>-<short-slug>
-```
+Primary references:
+- Next.js App Router architecture and route conventions:
+  - https://nextjs.org/docs/app
+- Next.js build/runtime behavior for production:
+  - https://nextjs.org/docs/app/api-reference/cli/next
+- WAI-ARIA Authoring Practices (grid, dialog, keyboard interaction patterns):
+  - https://www.w3.org/WAI/ARIA/apg/
+- WCAG 2.2 understanding docs (contrast/focus/interaction clarity):
+  - https://www.w3.org/WAI/WCAG22/Understanding/
+- Tailwind dark mode strategy:
+  - https://tailwindcss.com/docs/dark-mode
 
-## Phase 1 strategy update (OpenSpiel selected)
-- OpenSpiel is the selected solver path for Phase 1 execution.
-- Phase 1 now includes both:
-  - foundation specs (adapter/hash/cache/determinism/EV contracts)
-  - initial OpenSpiel integration implementation, if feasible within gate constraints.
-- Keep provider-agnostic adapter boundaries so fallback/in-house path remains viable.
+Tasking implications:
+1. Build UI foundations as reusable components with explicit contracts.
+2. Keep keyboard-first interactions and accessibility acceptance criteria in scope for every UI task.
+3. Preserve current runtime/API boundaries; UI work must not break deterministic engine behavior.
+4. Keep animation and styling choices original and non-proprietary.
 
-## Phase 1: Solver Foundation + OpenSpiel Implementation
+## Global Execution Rules (All P2 Tasks)
+- Follow protocol from `overarching-phases.md`:
+  1. Pre-task research
+  2. Refine DoD before implementation
+  3. Implement scoped task only
+  4. Run gates and verify DoD
+  5. Commit + push only after pass
+- Required gate sequence:
+  1. `npm test`
+  2. `npx tsc --noEmit --pretty false`
+  3. `npm run build`
+- Keep diffs focused; one task per branch/commit when possible.
 
-### P1.T1 - Commercial licensing decision memo
-- Goal: finalize whether an existing solver can be used in a sellable product.
+## Phase 2: UI Foundation (3-4 weeks)
+
+### P2.T1 - Next.js setup alignment and UI architecture map
+- Goal: baseline app structure for P2 UI work.
 - Scope:
-  - evaluate candidate solver licenses + key dependencies
-  - produce pass/fail decision with rationale
-  - define fallback trigger for in-house solver track
+  - audit existing `src/app`, `src/components`, `src/lib/ui` boundaries
+  - define component ownership and page composition map
+  - lock naming and folder conventions for new UI primitives
 - Deliverables:
-  - `docs/licensing/solver-license-memo.md` (or spec-linked memo path)
+  - architecture map doc for P2 UI component boundaries
+  - agreed folder/filename convention section in spec docs
 - DoD:
-  - explicit recommendation: approved solver OR fallback required
-  - legal/attribution obligations listed
+  - architecture map covers setup/session/summary/review/train surfaces
+  - no runtime/engine contract changes required for P2 baseline
+  - migration notes identify any existing component debt to resolve in later tasks
 
-### P1.T2 - Solver adapter interface spec
-- Goal: lock stable runtime-facing contract independent of provider.
+### P2.T2 - Design tokens and theme system (including dark theme)
+- Goal: define a reusable visual system before UI expansion.
 - Scope:
-  - define request/response types for node solve lookup
-  - define error model and source metadata fields
-  - define EV/frequency normalization rules
+  - color tokens, spacing, radius, typography scale, elevation
+  - dark-theme token mapping with contrast-safe defaults
+  - state tokens for EV semantics (good/warn/bad) with non-proprietary naming
 - Deliverables:
-  - interface spec section in design/docs
-  - typed contract draft (spec artifact only in this phase)
-  - `.kiro/specs/ev-solver-training-v3/p1-t2-adapter-spec.md` (OpenSpiel-first draft)
+  - token spec and implementation plan
+  - theme usage guide for components
 - DoD:
-  - covers hero/villain action sets, EV units, and version fields
+  - token set is centralized and referenced by components
+  - dark theme toggle strategy is documented and testable
+  - contrast constraints are defined for key text/background pairs
 
-### P1.T3 - Canonical node hash spec
-- Goal: deterministic hash strategy for cache keys.
+### P2.T3 - Poker table foundation component
+- Goal: introduce a reusable table surface component for training modes.
 - Scope:
-  - canonical serialization rules
-  - normalized numeric precision/units
-  - hash algorithm + output format
-  - cache key schema with version dimensions
+  - table canvas/frame primitives
+  - seat anchor points and pot/community-card zones
+  - responsive behavior rules for desktop-first and mobile fallback
 - Deliverables:
-  - canonical hash algorithm spec + examples
-  - explicit canonical input schema with field order and normalization table
-  - positive/negative equivalence examples (same hash vs different hash)
-  - `.kiro/specs/ev-solver-training-v3/p1-t3-canonical-node-hash-spec.md`
+  - `PokerTable` component contract and implementation
+  - layout spec with zone coordinates/constraints
 - DoD:
-  - Canonical input schema is frozen and documented with exact field order.
-  - Numeric normalization is explicit (precision, rounding mode, units) for all numeric fields.
-  - Action history canonicalization is explicit (token format, actor/action encoding, size encoding).
-  - Hash algorithm and output are fixed to `SHA-256` lowercase hex.
-  - Versioned cache key format is frozen as `<solverVersion>|<abstractionVersion>|<nodeHash>`.
-  - At least 10 example vectors are documented, including equivalence and non-equivalence cases.
-  - Semantically equivalent inputs are shown to map to identical hashes.
-  - A change-impact rule is documented: which field changes MUST produce a new hash.
+  - component renders stable layout across supported breakpoints
+  - seat/zone API is deterministic and reusable by setup/session screens
+  - no proprietary visual cloning or copied labels/assets
 
-### P1.T4 - Cache architecture + invalidation rules
-- Goal: define memory + persistent cache behavior.
+### P2.T4 - Position layout and seat-state model
+- Goal: standardize table position rendering and occupancy states.
 - Scope:
-  - lookup order and write-through policy
-  - TTL/eviction strategy
-  - stale entry prevention using version context
+  - position model (`BTN`, `SB`, `BB`, etc.) with seat metadata
+  - hero/villain highlighting states
+  - empty/active/acted/folded visual states
 - Deliverables:
-  - cache flow diagram + policy table
+  - position state contract + mapper utilities
+  - integrated seat rendering in table component
 - DoD:
-  - clear miss/hit/recompute behavior documented
+  - position ordering is deterministic for a given table size
+  - visual states are represented by explicit typed enums
+  - seat-state transitions are unit-tested for key flows
 
-### P1.T5 - Deterministic sampling design
-- Goal: reproducible opponent action sampling from mixed strategy.
+### P2.T5 - Card primitives and dealing animation system
+- Goal: establish card rendering and motion primitives for hand flow.
 - Scope:
-  - seeded RNG policy
-  - cumulative frequency traversal algorithm
-  - tie-breaking rules
+  - card face/back components and stack primitives
+  - dealing animation choreography for flop/turn/river and hole cards
+  - reduced-motion fallback behavior
 - Deliverables:
-  - deterministic sampling pseudocode with explicit input/output contract
-  - invariants list (seed/context determinism, probability normalization, zero-probability exclusion)
-  - canonical action ordering rule for tie-breaking and provider-order independence
-  - edge-case behavior table (invalid weights, all-zero weights, boundary roll handling)
+  - card component set + animation utility layer
+  - motion spec for timing/easing and reduced-motion behavior
 - DoD:
-  - same seed/config/history always yields same sampled sequence
-  - same weighted policy yields identical sample regardless of incoming action array order
-  - unit tests cover deterministic replay and tie-break behavior
+  - animation behavior is deterministic by event order
+  - reduced-motion path is available and documented
+  - no animation blocks interaction or causes layout shift regressions
 
-### P1.T6 - EV grading math spec
-- Goal: freeze EV-first grade calculations for MVP.
+### P2.T6 - Configuration panel redesign
+- Goal: improve setup UX while preserving existing config semantics.
 - Scope:
-  - `evBest`, `evMix`, `evLossVsMix`, `evLossVsBest`
-  - best-action epsilon rules
-  - review ordering tie-breakers
+  - mode/game/table/stack/villain/deal-only controls
+  - validation and inline error messaging
+  - persistence of last-used settings where appropriate
 - Deliverables:
-  - grading formula sheet with variable definitions and normalization rules
-  - worked examples for mixed-frequency node and near-tie best-action epsilon case
-  - review ordering rule table (`evLossVsMix DESC`, `createdSeq ASC`, `recordId ASC`)
+  - new config panel component(s)
+  - validation and error-state contract
 - DoD:
-  - formulas and ordering are unambiguous and testable
-  - grading implementation computes the documented formulas exactly
-  - unit tests cover normalization, epsilon best-action, and deterministic tie-break ordering
+  - all required config fields remain supported and mapped to runtime contracts
+  - invalid input paths show structured, actionable UI feedback
+  - panel remains keyboard navigable and screen-reader compatible
 
-### P1.T7 - OpenSpiel integration spike (runtime path)
-- Goal: verify end-to-end OpenSpiel adapter connectivity in runtime.
+### P2.T7 - Session action surface and EV display refinement
+- Goal: unify action controls with EV visibility in session flow.
 - Scope:
-  - choose integration mode for P1 (`service` preferred unless WASM is proven viable)
-  - implement minimal adapter call path and response normalization
-  - wire adapter through existing runtime boundary without UI coupling
+  - action button group with stateful affordances
+  - EV display hierarchy (primary vs secondary metrics)
+  - feedback panel alignment with EV-first policy
 - Deliverables:
-  - integration note + implementation PR
-  - runnable local setup instructions for adapter/service
+  - session action surface spec + implementation updates
+  - EV display formatting guide for session components
 - DoD:
-  - integration mode decision memo is committed with explicit `service vs WASM vs hybrid` trade-off table, chosen mode, and fallback trigger criteria
-  - OpenSpiel runtime dependency versions are pinned/documented (`OpenSpiel`, Python/runtime, transport library) with reproducible local startup steps and health-check command
-  - runtime path resolves at least one supported poker node through the OpenSpiel-backed adapter from existing training/runtime entrypoint (no UI coupling)
-  - adapter boundary remains provider-agnostic and compiles with `SolverNodeRequestV2`/`SolverNodeResponseV2` contract without widening types
-  - request mapping from canonical node input to OpenSpiel request is explicitly specified and covered by fixture tests (including action history and actor mapping)
-  - response normalization enforces deterministic ordering, finite EV/frequency values, non-negative frequencies, and normalized frequency sum within tolerance
-  - unsupported/invalid solver responses are mapped to typed error codes (`INVALID_REQUEST`, `UNSUPPORTED_NODE`, `SOLVER_TIMEOUT`, `SOLVER_UNAVAILABLE`, `INTERNAL_ERROR`) with retriable flag rules
-  - deadline/timeout behavior is implemented and tested for the live solver call path (no unbounded waits)
-  - at least one integration test proves miss -> live solve -> normalized response -> runtime grading flow completes without contract violation
-  - adapter source metadata (`source`, `solveMs`, `provider`, `nodeHash`) is emitted for runtime diagnostics and visible in test assertions
-  - all new/changed tests pass in gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
+  - EV loss vs mix remains primary visual metric in session UI
+  - action states (idle/loading/disabled/submitted) are explicit and testable
+  - formatting rules are consistent across session/preview/review components
 
-### P1.T8 - OpenSpiel cache + hash implementation
-- Goal: implement versioned cache keyed by canonical node hash for OpenSpiel responses.
+### P2.T8 - Range matrix UX polish and export UX integration
+- Goal: productize the P1 matrix contract for production-facing UX.
 - Scope:
-  - compute canonical hash from normalized request input
-  - implement memory cache + persistent cache layer
-  - include version dimensions (`solverVersion`, `abstractionVersion`)
+  - improve matrix readability and legend behavior
+  - integrate text export UX into relevant screen(s)
+  - define optional image export follow-up contract (not implementation)
 - Deliverables:
-  - cache implementation + tests
+  - matrix UX update spec + component refinements
+  - export UX contract and copy guidelines
 - DoD:
-  - canonical OpenSpiel node hash is computed from normalized request payload and is deterministic across equivalent inputs (ordering/format differences do not change hash)
-  - versioned cache key includes at minimum `solverVersion`, `abstractionVersion`, and canonical node hash, with explicit test coverage
-  - runtime supports two-layer cache (`memory` primary + `persistent` secondary) with read-through backfill and write-through persistence
-  - first request is cache miss and subsequent identical request is cache hit within same runtime process
-  - persistent cache hit is observed across runtime re-creation using the same cache file path (without re-solving)
-  - version change (`solverVersion` or `abstractionVersion`) causes miss/recompute instead of stale hit
-  - cache-hit responses are surfaced with `meta.source = cache` and include diagnostic metadata (`provider`, `nodeHash`)
-  - persistent cache store enforces bounded size/eviction policy and remains readable after restart
-  - invalid solver outputs are never persisted and do not poison cache
-  - all cache/hash tests pass with gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
+  - matrix remains contract-compatible with Phase 1 deterministic rules
+  - hover/focus parity remains intact after UX changes
+  - text export path is discoverable and deterministic in UI behavior
 
-### P1.T9 - OpenSpiel-backed deterministic sampling + EV grading hookup
-- Goal: integrate solver outputs into deterministic opponent sampling and EV grading.
+### P2.T9 - Accessibility hardening pass for core UI surfaces
+- Goal: enforce accessibility quality baseline across P2 UI.
 - Scope:
-  - use solver frequencies for opponent policy sampling
-  - apply EV-first grading fields from normalized solver output
-  - preserve deterministic replay behavior
+  - keyboard navigation paths for setup/session/review/table/matrix
+  - focus visibility and semantics (labels, roles, aria where required)
+  - contrast and readable state messaging checks
 - Deliverables:
-  - runtime integration changes + tests
+  - accessibility checklist + remediation changes
+  - documented known gaps (if any) with follow-up tasks
 - DoD:
-  - OpenSpiel normalized action frequencies are the direct input to opponent sampling (no alternate/random fallback policy on `status=ok`)
-  - deterministic sampling sequence is reproducible for identical `(seed, nodeHash, sequenceIndex, action history)` across repeated runs
-  - identical hand-play request replay yields same `opponentAction`, `opponentNodeHash`, and graded EV metrics
-  - grading uses EV-first fields derived from normalized solver output and persists required metrics on each record:
-    - `evUser`, `evBest`, `evMix`, `evLossVsMix`, `evLossVsBest`
-  - review ordering remains EV-primary (`evLossVsMix DESC`) with deterministic tie-break behavior unchanged
-  - OpenSpiel runtime metadata remains attached on graded outputs (`provider`, `source`, `nodeHash`) so decision provenance is auditable
-  - integration tests cover full flow: OpenSpiel solve -> normalization -> deterministic opponent sample -> EV grading -> record persistence
-  - all T9-related tests pass in gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
+  - critical user flows are fully keyboard operable
+  - focus states are visible and consistent
+  - documented a11y checks are reproducible and pass for core surfaces
 
-### P1.T10 - Preflop/postflop scenario contract
-- Goal: define minimal scenario payloads for both modes.
+### P2.T10 - Phase 2 gate automation and rollout checklist
+- Goal: operationalize P2 quality gates and release-readiness checks.
 - Scope:
-  - shared trainer config snapshot shape
-  - postflop fixed pool metadata
-  - `dealOnlyDecisions` filtering contract
+  - CI workflow for `test -> tsc -> build`
+  - artifact/log capture strategy for failed runs
+  - PR checklist updates for task DoD evidence
 - Deliverables:
-  - scenario schema spec + fixture examples
+  - CI workflow file(s)
+  - rollout checklist and PR template update
 - DoD:
-  - scenario contract is versioned and discriminated (`preflop` vs `postflop`) with explicit required/optional fields and validation rules
-  - shared config snapshot includes core dimensions needed for trainer parity goals (mode, game type, table size, stack depth, villain behavior, deal-only-decisions)
-  - preflop scenario contract supports practical line families used in modern trainers (`open-raise`, `vs-open`, `vs-3bet`, `vs-4bet`) with position/action-history context
-  - postflop scenario contract includes fixed-pool metadata (`poolId`, `poolVersion`, entry street, board cards/texture bucket, preflop context link) sufficient for deterministic spot regeneration
-  - deterministic scenario regeneration key/hash is defined and tested as stable across semantically equivalent payload ordering
-  - `dealOnlyDecisions=true` filtering behavior is formally defined and tested (forced/trivial decisions excluded, meaningful decisions retained)
-  - fixture set includes at least one valid preflop payload, one valid postflop payload, and representative invalid payloads for contract rejection
-  - all T10 schema/contract tests pass in gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
+  - CI runs required gates on push/PR with fail-fast behavior
+  - failure output is inspectable for fast triage
+  - task completion evidence is standardized across P2 PRs
 
-### P1.T11 - 13x13 range matrix interaction spec
-- Goal: define original range visualization behavior.
-- Scope:
-  - hero/villain view states
-  - hover/focus tooltip fields
-  - export format (text first; image optional)
-- Deliverables:
-  - component behavior spec (non-proprietary wording/labels)
-  - deterministic matrix contract (rank ordering, cell keys, tooltip schema, export schema/version)
-  - strict acceptance test matrix mapping behavior -> test file/case
-- DoD:
-  - matrix layout contract is explicit and testable: fixed rank order `A,K,Q,J,T,9..2`, fixed suited/offsuit placement, and deterministic cell key mapping
-  - both view states are fully specified with required fields:
-    - `hero-actions` includes exact per-cell fold/call/raise frequencies and EV summary fields
-    - `villain-range` includes exact occupancy frequency and optional combo/EV summary fields
-  - tooltip contract is strict and keyboard-accessible:
-    - same field set available on pointer hover and keyboard focus
-    - deterministic field order and numeric formatting rules are documented
-  - color/legend semantics are original (non-proprietary) and mapped to EV-first interpretation (no cloned labels/assets/wording)
-  - text export is versioned and deterministic:
-    - includes schema/version header, mode, and row ordering
-    - stable output for identical inputs across runs
-  - optional image export is explicitly marked out-of-scope for this task and captured as follow-up
-  - implementation exists in project code with unit tests covering:
-    - matrix layout mapping
-    - view-state tooltip payload generation
-    - deterministic tie-break behavior
-    - deterministic text export ordering/format
-  - gates pass for T11 changes: `npm test`, `npx tsc --noEmit --pretty false`, `npm run build`
-
-### P1.T12 - Test plan and gate mapping for Phase 1 outputs
-- Goal: ensure Phase 1 specs and integrations are implementation-ready.
-- Scope:
-  - unit-test matrix for hashing, caching, sampling, grading, adapter normalization
-  - gate checklist mapping (`npm test`, `tsc`, `build`)
-- Deliverables:
-  - phase test plan section with acceptance checks
-  - P1 traceability matrix (`task -> artifact -> verification -> evidence`)
-  - gate execution policy with failure handling and rerun rules
-  - CI-ready command contract (local and CI parity)
-- DoD:
-  - each P1 task (`P1.T1`..`P1.T12`) has at least one explicit, verifiable acceptance criterion with artifact path and objective pass condition
-  - deterministic-risk tasks (`T3`, `T5`, `T6`, `T8`, `T9`, `T10`, `T11`) have named replay/ordering/hash invariants mapped to concrete test cases
-  - adapter/solver integration tasks (`T2`, `T7`, `T8`, `T9`) include contract and failure-path verification criteria (typed errors, normalization constraints, metadata provenance)
-  - test matrix includes required minimum fields per row: `taskId`, `requirement`, `testType`, `testFileOrSuite`, `command`, `expectedEvidence`
-  - gate map is strict and ordered with stop-on-failure policy:
-    1. `npm test`
-    2. `npx tsc --noEmit --pretty false`
-    3. `npm run build`
-  - rerun policy is explicit: failed gate must pass from clean rerun before task is considered complete
-  - documentation includes PR evidence template for gate outputs (test summary, typecheck result, build result, commit SHA/date)
-  - plan is implementation-oriented (ready for CI wiring) without introducing proprietary assets, datasets, or copied third-party UX/text
-
-## Execution order
-1. P1.T1
-2. P1.T2
-3. P1.T3
-4. P1.T4
-5. P1.T5
-6. P1.T6
-7. P1.T7
-8. P1.T8
-9. P1.T9
-10. P1.T10
-11. P1.T11
-12. P1.T12
+## Execution Order
+1. P2.T1
+2. P2.T2
+3. P2.T3
+4. P2.T4
+5. P2.T5
+6. P2.T6
+7. P2.T7
+8. P2.T8
+9. P2.T9
+10. P2.T10
 
 ## Notes
-- Production code is allowed only for implementation tasks in this file after preceding design/spec dependencies are satisfied.
-- Move to Phase 2 task planning only after all P1 tasks are completed/accepted.
-
+- This Phase 2 task list supersedes the prior Phase 1 list in the active `tasks.md`.
+- If a task requires contract changes to engine/runtime determinism, update requirements/design first before implementation.

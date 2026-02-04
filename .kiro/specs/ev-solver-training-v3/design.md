@@ -1,7 +1,7 @@
 ﻿# Design - ev-solver-training-v3
 
 Created: 2026-02-03T00:00:00Z
-Updated: 2026-02-03T00:00:00Z
+Updated: 2026-02-04T00:00:00Z
 
 ## 1. Design Goals
 - Extend v2 architecture (Next.js App Router + deterministic runtime) without a rewrite.
@@ -163,3 +163,33 @@ Gate sequence remains:
 - OpenSpiel repository (license and project scope): https://github.com/google-deepmind/open_spiel
 - OpenCFR repository (license): https://github.com/stockhamrexa/openCFR
 - poker-cfr repository (license): https://github.com/b-inary/poker-cfr
+
+## 12. Phase 2 Preparation (Transition Plan)
+This design now includes Phase 2 preparation guidance following completion of Phase 1 task outputs.
+
+### 12.1 Entry Criteria to Start Phase 2
+- Phase 1 specs, contracts, and traceability artifacts are committed and archived under:
+  - `.kiro/specs/ev-solver-training-v3/archive/phase-1/`
+- Gate contract is fixed and remains required:
+  1. `npm test`
+  2. `npx tsc --noEmit --pretty false`
+  3. `npm run build`
+- EV-first grading, deterministic replay behavior, and non-copy policy remain binding constraints.
+
+### 12.2 Phase 2 Design Priorities
+- Productize runtime paths into stable user-facing flows for preflop/postflop study.
+- Harden OpenSpiel service operation (timeouts, retries, startup health-check, diagnostics).
+- Expand persistence robustness for cross-session reproducibility and review workflows.
+- Move test/gate contract into CI automation with local/CI parity.
+- Keep adapter boundary stable so solver provider changes do not break trainer UX behavior.
+
+### 12.3 Phase 2 Guardrails
+- Do not introduce proprietary third-party assets, datasets, or copied UX wording.
+- Preserve canonical hash/cache key compatibility unless a version bump is explicitly documented.
+- Preserve deterministic semantics for sampling, grading order, and review ordering.
+- Any intentional behavioral drift from Phase 1 contracts must include migration notes and updated acceptance tests.
+
+### 12.4 Deliverables Expected at Phase 2 Kickoff
+- Phase 2 task plan with strict DoD per task.
+- CI workflow that enforces the three required gates.
+- Runtime operational checklist (service startup, health, failure-mode handling, logs/metadata).
