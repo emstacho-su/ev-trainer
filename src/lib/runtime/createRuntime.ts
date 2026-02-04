@@ -13,6 +13,7 @@ import {
   type OpenSpielIntegrationMode,
   type OpenSpielTransport,
 } from "../engine/openSpielSolver";
+import { createOpenSpielServiceTransport } from "../engine/openSpielServiceTransport";
 import { assertCommercialSolverPolicy } from "../engine/solverPolicy";
 import type { Evaluator } from "../engine/evaluator";
 import { gradeDecision } from "./gradeDecision";
@@ -33,6 +34,9 @@ export interface RuntimeConfig {
   openSpielTransport?: OpenSpielTransport;
   openSpielPersistentCachePath?: string;
   openSpielPersistentMaxEntries?: number;
+  openSpielBridgeCommand?: string;
+  openSpielBridgeArgs?: string[];
+  openSpielServiceUrl?: string;
 }
 
 export interface Runtime {
@@ -94,6 +98,21 @@ function createNodeCache(config: RuntimeConfig, solverProvider: SolverProvider, 
   return new CompositeNodeCache(memory, persistent);
 }
 
+function createOpenSpielTransport(config: RuntimeConfig): OpenSpielTransport | undefined {
+  if (config.openSpielTransport) return config.openSpielTransport;
+  const command = config.openSpielBridgeCommand ?? process.env.OPENSPIEL_BRIDGE_COMMAND;
+  if (!command) return undefined;
+  const args = config.openSpielBridgeArgs ?? process.env.OPENSPIEL_BRIDGE_ARGS?.split(" ").filter(Boolean) ?? [];
+  const env = config.openSpielServiceUrl
+    ? { ...process.env, OPENSPIEL_SERVICE_URL: config.openSpielServiceUrl }
+    : undefined;
+  return createOpenSpielServiceTransport({
+    command,
+    args,
+    env,
+  });
+}
+
 export function createRuntime(config: RuntimeConfig): Runtime {
   assertSeed(config.seed);
   assertSessionId(config.sessionId);
@@ -108,6 +127,7 @@ export function createRuntime(config: RuntimeConfig): Runtime {
   const configSnapshot = validateSpotFilters(config.configSnapshot ?? {});
   const cache = createNodeCache(config, solverProvider, cacheSize);
   const decisionStore = new MemoryDecisionStore();
+  const openSpielTransport = createOpenSpielTransport(config);
   const defaultSolve =
     solverProvider === "openspiel"
       ? (node: CanonicalNode) =>
@@ -115,7 +135,7 @@ export function createRuntime(config: RuntimeConfig): Runtime {
             mode: config.openSpielMode,
             timeoutMs: config.openSpielTimeoutMs,
             now: config.now,
-            transport: config.openSpielTransport,
+            transport: openSpielTransport,
           })
       : (node: CanonicalNode) => mockSolve(node);
 

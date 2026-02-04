@@ -9,6 +9,8 @@ import { MemoryNodeCache } from "../engine/nodeCache";
 import { createTrainingApi } from "../engine/trainingApi";
 import type { DecisionGrade } from "../engine/trainingOrchestrator";
 import type { SpotCandidate } from "../engine/spotSelection";
+import { openSpielSolve } from "../engine/openSpielSolver";
+import { gradeDecision as runtimeGradeDecision } from "./gradeDecision";
 
 const baseNode: CanonicalNode = {
   gameVersion: "g1",
@@ -213,5 +215,72 @@ describe("runtime integration behavior", () => {
     });
 
     expect(solveCalls).toBe(1);
+  });
+
+  it("replays deterministic openspiel sampling and persists EV-first grading fields", () => {
+    const cache = new MemoryNodeCache();
+    const decisions = new MemoryDecisionStore();
+    const recordFactory = createRecordFactory();
+    const now = createDeterministicNow();
+    const solve = (node: CanonicalNode): SolverNodeOutput =>
+      openSpielSolve(node, {
+        now,
+        transport: {
+          solve: (request) => ({
+            provider: "openspiel",
+            nodeHash: request.nodeHash,
+            actions: [
+              { actionId: "BET_75PCT", action: "bet", sizeBb: 4.5, frequency: 2, ev: 0.2 },
+              { actionId: "CHECK", action: "check", frequency: 8, ev: 1.0 },
+            ],
+            meta: {
+              source: "live",
+              solveMs: 3,
+              solvedAt: "2026-02-04T00:00:00.000Z",
+            },
+          }),
+        },
+      });
+
+    const api = createTrainingApi({
+      cache,
+      solve,
+      decisionStore: decisions,
+      gradeDecision: runtimeGradeDecision,
+      seed: "seed-openspiel",
+      runtimeKey: "seed-openspiel::session-openspiel",
+      recordFactory,
+      configSnapshot: { streets: ["FLOP"] },
+      sessionId: "session-openspiel",
+      now,
+      resolveNextNode: (node, _actionId, actor) => {
+        if (actor === "user") {
+          return { ...node, toAct: "BB", publicState: { ...node.publicState, toAct: "BB" } };
+        }
+        return null;
+      },
+    });
+
+    const first = api.handPlayStep({
+      node: { ...baseNode, solverVersion: "openspiel:1.0.0" },
+      userActionId: "CHECK",
+      sequenceIndex: 4,
+    });
+    const replay = api.handPlayStep({
+      node: { ...baseNode, solverVersion: "openspiel:1.0.0" },
+      userActionId: "CHECK",
+      sequenceIndex: 4,
+    });
+
+    expect(first.opponentAction).toBeDefined();
+    expect(replay.opponentAction).toBe(first.opponentAction);
+    expect(replay.opponentNodeHash).toBe(first.opponentNodeHash);
+    expect(first.record.grade.evUser).toBeDefined();
+    expect(first.record.grade.evBest).toBeDefined();
+    expect(first.record.grade.evMix).toBeDefined();
+    expect(first.record.grade.evLossVsMix).toBeDefined();
+    expect(first.record.grade.evLossVsBest).toBeDefined();
+    expect(first.output.meta?.provider).toBe("openspiel");
+    expect(first.output.meta?.nodeHash).toBe(first.nodeHash);
   });
 });

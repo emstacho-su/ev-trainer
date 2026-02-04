@@ -180,8 +180,15 @@ git push -u origin <phase-task-id>-<short-slug>
 - Deliverables:
   - runtime integration changes + tests
 - DoD:
-  - same seed/config/action history yields reproducible outcomes
-  - grading records include `evUser`, `evBest`, `evMix`, `evLossVsMix`, `evLossVsBest`
+  - OpenSpiel normalized action frequencies are the direct input to opponent sampling (no alternate/random fallback policy on `status=ok`)
+  - deterministic sampling sequence is reproducible for identical `(seed, nodeHash, sequenceIndex, action history)` across repeated runs
+  - identical hand-play request replay yields same `opponentAction`, `opponentNodeHash`, and graded EV metrics
+  - grading uses EV-first fields derived from normalized solver output and persists required metrics on each record:
+    - `evUser`, `evBest`, `evMix`, `evLossVsMix`, `evLossVsBest`
+  - review ordering remains EV-primary (`evLossVsMix DESC`) with deterministic tie-break behavior unchanged
+  - OpenSpiel runtime metadata remains attached on graded outputs (`provider`, `source`, `nodeHash`) so decision provenance is auditable
+  - integration tests cover full flow: OpenSpiel solve -> normalization -> deterministic opponent sample -> EV grading -> record persistence
+  - all T9-related tests pass in gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
 
 ### P1.T10 - Preflop/postflop scenario contract
 - Goal: define minimal scenario payloads for both modes.
