@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import PokerTable from "../../components/PokerTable";
 import type { CanonicalNode } from "../../lib/engine/nodeTypes";
 import type { SolverActionOutput } from "../../lib/engine/solverAdapter";
 import type { SpotCandidate, TargetedDrillFilters } from "../../lib/engine/spotSelection";
@@ -81,6 +82,39 @@ const targetedFilters: TargetedDrillFilters = {
   },
 };
 
+const tableSeatsBySize = {
+  "heads-up": [
+    { id: "hero", label: "Hero (BTN)" },
+    { id: "villain", label: "Villain (BB)" },
+  ],
+  "6-max": [
+    { id: "s1", label: "Hero (BTN)" },
+    { id: "s2", label: "SB" },
+    { id: "s3", label: "BB" },
+    { id: "s4", label: "UTG" },
+    { id: "s5", label: "HJ" },
+    { id: "s6", label: "CO" },
+  ],
+  "9-max": [
+    { id: "s1", label: "Hero (BTN)" },
+    { id: "s2", label: "SB" },
+    { id: "s3", label: "BB" },
+    { id: "s4", label: "UTG" },
+    { id: "s5", label: "UTG+1" },
+    { id: "s6", label: "MP" },
+    { id: "s7", label: "LJ" },
+    { id: "s8", label: "HJ" },
+    { id: "s9", label: "CO" },
+  ],
+} as const;
+
+const tableZones = [
+  { id: "pot", label: "Pot" },
+  { id: "community", label: "Board" },
+  { id: "hero-cards", label: "Hero Cards" },
+  { id: "villain-cards", label: "Villain Cards" },
+] as const;
+
 const DEFAULT_ACTION_ID = "CHECK";
 
 function formatEv(value: number | undefined): string {
@@ -135,6 +169,7 @@ export default function TrainingPreview() {
   const [seed, setSeed] = useState("preview-seed");
   const [sessionId, setSessionId] = useState("preview-session");
   const [activeMode, setActiveMode] = useState<ActiveMode>("spot-quiz");
+  const [tableSize, setTableSize] = useState<"heads-up" | "6-max" | "9-max">("6-max");
 
   const [spotQuizResponse, setSpotQuizResponse] = useState<SpotQuizResponse | null>(
     null
@@ -460,6 +495,33 @@ export default function TrainingPreview() {
         {tabButton("hand-play", "Hand Play")}
         {tabButton("targeted-drill", "Targeted Drill")}
         {tabButton("review", "Review")}
+      </section>
+
+      <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold text-stone-900">Poker Table Preview (P2.T3)</h2>
+          <div className="flex gap-2">
+            {(["heads-up", "6-max", "9-max"] as const).map((size) => (
+              <button
+                key={size}
+                type="button"
+                onClick={() => setTableSize(size)}
+                className={`rounded border px-3 py-1 text-xs font-semibold ${
+                  tableSize === size
+                    ? "border-stone-900 bg-stone-900 text-white"
+                    : "border-stone-200 bg-stone-50 text-stone-700"
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+        <PokerTable
+          tableSize={tableSize}
+          seats={[...tableSeatsBySize[tableSize]]}
+          zones={[...tableZones]}
+        />
       </section>
 
       {activeMode === "spot-quiz" ? (

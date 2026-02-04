@@ -1,7 +1,7 @@
 # Tasks - ev-solver-training-v3 (Phase 2 only)
 
 Created: 2026-02-04T00:00:00Z
-Updated: 2026-02-04T02:00:00Z
+Updated: 2026-02-04T03:00:00Z
 
 ## Phase Context
 - This file is now scoped to **Phase 2 (UI Foundation)** from `overarching-phases.md`.
@@ -127,13 +127,40 @@ Tasking implications:
   - table canvas/frame primitives
   - seat anchor points and pot/community-card zones
   - responsive behavior rules for desktop-first and mobile fallback
-- Deliverables:
-  - `PokerTable` component contract and implementation
-  - layout spec with zone coordinates/constraints
-- DoD:
-  - component renders stable layout across supported breakpoints
-  - seat/zone API is deterministic and reusable by setup/session screens
-  - no proprietary visual cloning or copied labels/assets
+- Deliverables (strict):
+  - `.kiro/specs/ev-solver-training-v3/p2-t3-poker-table-layout-spec.md` with:
+    - canonical table coordinate system (0..1 normalized x/y for seats and zones)
+    - seat anchor map for supported table sizes (`heads-up`, `6-max`, `9-max`)
+    - pot/community/hole-card zone bounding rules and collision constraints
+    - responsive rules for narrow and wide containers with content-driven breakpoints
+  - `src/components/PokerTable.tsx` and supporting UI model files under `src/lib/ui/*` with:
+    - typed `PokerTableProps` contract
+    - deterministic rendering from pure input data
+    - explicit extension points for seat-state overlays in P2.T4
+  - usage examples integrated in at least one preview/test surface (without runtime contract changes)
+- DoD (strict / testable):
+  - contract strictness:
+    - `PokerTableProps` includes typed inputs for `tableSize`, `seats`, `zones`, and optional overlays
+    - invalid config paths fail fast via typed guards or runtime assertions with stable error messages
+  - deterministic geometry:
+    - same props always produce identical seat/zone coordinates and render order
+    - seat ordering is deterministic for each table size and documented in the spec
+    - geometry tests cover all supported table sizes and at least 2 responsive widths
+  - responsive stability:
+    - table container preserves declared aspect ratio across breakpoints (no layout jump)
+    - no overlap between seat anchors and required central zones under documented min width
+    - mobile fallback remains readable and operable without horizontal scroll traps
+  - accessibility + interaction baseline:
+    - non-interactive table markup remains semantic (no fake widget roles)
+    - if any seat/zone element is interactive, keyboard focus order and visible focus ring are defined and tested
+    - reduced-motion compatibility documented for future animated layers
+  - architecture guardrails:
+    - component stays in UI layer and does not import runtime/engine business logic
+    - no API contract changes to existing session/training endpoints
+    - no copied third-party proprietary table visuals, labels, or assets
+  - verification evidence:
+    - unit tests added for layout math/ordering and pass deterministically
+    - `npm test`, `npx tsc --noEmit --pretty false`, and `npm run build` pass
 
 ### P2.T4 - Position layout and seat-state model
 - Goal: standardize table position rendering and occupancy states.
