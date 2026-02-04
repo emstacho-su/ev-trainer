@@ -1,3 +1,4 @@
+import "./globals.css";
 import ThemeModeToggle from "../components/ThemeModeToggle";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,7 @@
 # Tasks - ev-solver-training-v3 (Phase 2 only)
 
 Created: 2026-02-04T00:00:00Z
-Updated: 2026-02-04T03:00:00Z
+Updated: 2026-02-04T04:00:00Z
 
 ## Phase Context
 - This file is now scoped to **Phase 2 (UI Foundation)** from `overarching-phases.md`.
@@ -168,13 +168,36 @@ Tasking implications:
   - position model (`BTN`, `SB`, `BB`, etc.) with seat metadata
   - hero/villain highlighting states
   - empty/active/acted/folded visual states
-- Deliverables:
-  - position state contract + mapper utilities
-  - integrated seat rendering in table component
-- DoD:
-  - position ordering is deterministic for a given table size
-  - visual states are represented by explicit typed enums
-  - seat-state transitions are unit-tested for key flows
+- Deliverables (strict):
+  - research artifact: `.kiro/specs/ev-solver-training-v3/p2-t4-position-seat-state-research.md`
+  - position/state specification doc: `.kiro/specs/ev-solver-training-v3/p2-t4-position-seat-state-spec.md` covering:
+    - canonical position sets per table size (`heads-up`, `6-max`, `9-max`)
+    - deterministic position index order and mapping rules
+    - seat-state contract with allowed transitions
+  - implementation artifacts:
+    - `src/lib/ui/seatPositions.ts` (canonical position constants + order maps)
+    - `src/lib/ui/seatState.ts` (typed state contract + guards)
+    - `src/lib/ui/seatModel.ts` (pure deterministic mapper)
+    - integration in `src/components/PokerTable.tsx` with explicit seat-state rendering hooks
+- DoD (strict / testable):
+  - contract strictness:
+    - seat state is represented by explicit discriminated union or equivalent exhaustive typed contract
+    - invalid transitions/configurations fail fast with stable error messages
+  - deterministic ordering:
+    - canonical position order is defined for each supported table size and used in all render mappers
+    - same input model yields identical ordered output and React keys on repeated runs
+  - state semantics:
+    - supports at minimum: `empty`, `active`, `acted`, `folded`, plus hero/villain role markers
+    - hero/villain highlighting is orthogonal to occupancy state and cannot create invalid combinations
+  - integration quality:
+    - `PokerTable` renders position labels and state styling via mapper output (no inline ad-hoc ordering)
+    - no runtime/engine API contract changes
+  - test evidence:
+    - unit tests cover ordering for all table sizes, transition guards, and deterministic replay equality
+    - `npm test`, `npx tsc --noEmit --pretty false`, and `npm run build` pass
+  - non-copy + accessibility guardrails:
+    - position labels and visuals remain original/non-proprietary
+    - non-interactive seat rendering preserves semantic markup; if interactive hooks are added, focus-visible behavior is documented
 
 ### P2.T5 - Card primitives and dealing animation system
 - Goal: establish card rendering and motion primitives for hand flow.
@@ -275,3 +298,4 @@ Tasking implications:
 ## Notes
 - This Phase 2 task list supersedes the prior Phase 1 list in the active `tasks.md`.
 - If a task requires contract changes to engine/runtime determinism, update requirements/design first before implementation.
+- For any new task work within a phase, follow `.kiro/specs/ev-solver-training-v3/task-research-methodology.md` as the required kickoff and execution methodology.

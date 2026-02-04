@@ -115,6 +115,32 @@ const tableZones = [
   { id: "villain-cards", label: "Villain Cards" },
 ] as const;
 
+const tableSeatStatesBySize = {
+  "heads-up": {
+    hero: { kind: "active", role: "hero" },
+    villain: { kind: "acted", role: "villain" },
+  },
+  "6-max": {
+    s1: { kind: "active", role: "hero" },
+    s2: { kind: "folded", role: "villain" },
+    s3: { kind: "acted", role: "villain" },
+    s4: { kind: "empty", role: "neutral" },
+    s5: { kind: "acted", role: "villain" },
+    s6: { kind: "empty", role: "neutral" },
+  },
+  "9-max": {
+    s1: { kind: "active", role: "hero" },
+    s2: { kind: "acted", role: "villain" },
+    s3: { kind: "folded", role: "villain" },
+    s4: { kind: "empty", role: "neutral" },
+    s5: { kind: "empty", role: "neutral" },
+    s6: { kind: "acted", role: "villain" },
+    s7: { kind: "empty", role: "neutral" },
+    s8: { kind: "acted", role: "villain" },
+    s9: { kind: "empty", role: "neutral" },
+  },
+} as const;
+
 const DEFAULT_ACTION_ID = "CHECK";
 
 function formatEv(value: number | undefined): string {
@@ -336,7 +362,7 @@ export default function TrainingPreview() {
     error: ApiError | null,
     content: ReactNode
   ) => (
-    <div className="rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-stone-200 bg-white p-3 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-base font-semibold text-stone-900">{title}</h3>
         {error ? (
@@ -445,7 +471,7 @@ export default function TrainingPreview() {
   }, [reviewDetail]);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-6 py-10">
+    <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl flex-col gap-4 px-4 py-4">
       <header className="space-y-2">
         <p className="text-xs uppercase tracking-[0.3em] text-stone-500">
           Manual runtime preview
@@ -458,7 +484,7 @@ export default function TrainingPreview() {
         </p>
       </header>
 
-      <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+      <section className="rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
         <div className="flex flex-wrap items-end gap-4">
           <div className="flex flex-col gap-1">
             <label className="text-xs font-semibold uppercase text-stone-500">
@@ -497,7 +523,7 @@ export default function TrainingPreview() {
         {tabButton("review", "Review")}
       </section>
 
-      <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+      <section className="rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
         <div className="mb-3 flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-stone-900">Poker Table Preview (P2.T3)</h2>
           <div className="flex gap-2">
@@ -521,12 +547,13 @@ export default function TrainingPreview() {
           tableSize={tableSize}
           seats={[...tableSeatsBySize[tableSize]]}
           zones={[...tableZones]}
+          seatStates={{ ...tableSeatStatesBySize[tableSize] }}
         />
       </section>
 
       {activeMode === "spot-quiz" ? (
-        <section className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+        <section className="grid gap-3 lg:grid-cols-[1.1fr_1fr]">
+          <div className="rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
             <h2 className="text-lg font-semibold text-stone-900">Spot Quiz</h2>
             <p className="mt-1 text-sm text-stone-600">
               Request a graded decision for the seed-specific node.
@@ -572,8 +599,8 @@ export default function TrainingPreview() {
       ) : null}
 
       {activeMode === "hand-play" ? (
-        <section className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+        <section className="grid gap-3 lg:grid-cols-[1.1fr_1fr]">
+          <div className="rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
             <h2 className="text-lg font-semibold text-stone-900">Hand Play</h2>
             <p className="mt-1 text-sm text-stone-600">
               Submit a step with explicit sequence index for determinism.
@@ -642,8 +669,8 @@ export default function TrainingPreview() {
       ) : null}
 
       {activeMode === "targeted-drill" ? (
-        <section className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+        <section className="grid gap-3 lg:grid-cols-[1.1fr_1fr]">
+          <div className="rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
             <h2 className="text-lg font-semibold text-stone-900">Targeted Drill</h2>
             <p className="mt-1 text-sm text-stone-600">
               Deterministic spot selection from the candidate pool.
@@ -714,8 +741,8 @@ export default function TrainingPreview() {
       ) : null}
 
       {activeMode === "review" ? (
-        <section className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+        <section className="grid gap-3 lg:grid-cols-[1.1fr_1fr]">
+          <div className="rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
             <h2 className="text-lg font-semibold text-stone-900">Review</h2>
             <p className="mt-1 text-sm text-stone-600">
               Fetch session decisions sorted by EV loss.
