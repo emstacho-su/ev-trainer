@@ -216,8 +216,27 @@ git push -u origin <phase-task-id>-<short-slug>
   - export format (text first; image optional)
 - Deliverables:
   - component behavior spec (non-proprietary wording/labels)
+  - deterministic matrix contract (rank ordering, cell keys, tooltip schema, export schema/version)
+  - strict acceptance test matrix mapping behavior -> test file/case
 - DoD:
-  - UX constraints satisfy non-copy policy and EV visibility needs
+  - matrix layout contract is explicit and testable: fixed rank order `A,K,Q,J,T,9..2`, fixed suited/offsuit placement, and deterministic cell key mapping
+  - both view states are fully specified with required fields:
+    - `hero-actions` includes exact per-cell fold/call/raise frequencies and EV summary fields
+    - `villain-range` includes exact occupancy frequency and optional combo/EV summary fields
+  - tooltip contract is strict and keyboard-accessible:
+    - same field set available on pointer hover and keyboard focus
+    - deterministic field order and numeric formatting rules are documented
+  - color/legend semantics are original (non-proprietary) and mapped to EV-first interpretation (no cloned labels/assets/wording)
+  - text export is versioned and deterministic:
+    - includes schema/version header, mode, and row ordering
+    - stable output for identical inputs across runs
+  - optional image export is explicitly marked out-of-scope for this task and captured as follow-up
+  - implementation exists in project code with unit tests covering:
+    - matrix layout mapping
+    - view-state tooltip payload generation
+    - deterministic tie-break behavior
+    - deterministic text export ordering/format
+  - gates pass for T11 changes: `npm test`, `npx tsc --noEmit --pretty false`, `npm run build`
 
 ### P1.T12 - Test plan and gate mapping for Phase 1 outputs
 - Goal: ensure Phase 1 specs and integrations are implementation-ready.
