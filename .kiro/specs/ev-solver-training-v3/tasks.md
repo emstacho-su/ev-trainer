@@ -121,9 +121,13 @@ git push -u origin <phase-task-id>-<short-slug>
   - best-action epsilon rules
   - review ordering tie-breakers
 - Deliverables:
-  - grading formulas + worked examples
+  - grading formula sheet with variable definitions and normalization rules
+  - worked examples for mixed-frequency node and near-tie best-action epsilon case
+  - review ordering rule table (`evLossVsMix DESC`, `createdSeq ASC`, `recordId ASC`)
 - DoD:
   - formulas and ordering are unambiguous and testable
+  - grading implementation computes the documented formulas exactly
+  - unit tests cover normalization, epsilon best-action, and deterministic tie-break ordering
 
 ### P1.T7 - OpenSpiel integration spike (runtime path)
 - Goal: verify end-to-end OpenSpiel adapter connectivity in runtime.

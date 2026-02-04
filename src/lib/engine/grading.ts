@@ -31,6 +31,36 @@ function computeGradeLabel(loss: number, thresholds: ScoringThresholds): string 
   return "D";
 }
 
+function kahanSum(values: readonly number[]): number {
+  let sum = 0;
+  let c = 0;
+  for (let i = 0; i < values.length; i++) {
+    const y = values[i] - c;
+    const t = sum + y;
+    c = t - sum - y;
+    sum = t;
+  }
+  return sum;
+}
+
+function normalizedFrequencies(actions: SolverNodeOutput["actions"]): number[] {
+  const raw: number[] = [];
+  for (let i = 0; i < actions.length; i++) {
+    const f = actions[i].frequency;
+    assertFiniteNumber(f, "action.frequency");
+    if (f < 0) {
+      throw new Error("action.frequency must be >= 0");
+    }
+    raw.push(f);
+  }
+
+  const total = kahanSum(raw);
+  if (!Number.isFinite(total) || total <= 0) {
+    throw new Error("action.frequency values must sum to > 0");
+  }
+  return raw.map((f) => f / total);
+}
+
 // Grades a decision using solver output and EV-based thresholds.
 export function gradeDecision(
   output: SolverNodeOutput,
@@ -49,25 +79,36 @@ export function gradeDecision(
     throw new Error("user action not in solver output");
   }
 
+  const epsilon = config.epsilon ?? DEFAULT_EPS;
+  assertFiniteNumber(epsilon, "epsilon");
+  if (epsilon < 0) {
+    throw new Error("epsilon must be >= 0");
+  }
+
+  const probabilities = normalizedFrequencies(output.actions);
   let evMix = 0;
   let evBest = -Infinity;
-  for (const action of output.actions) {
-    assertFiniteNumber(action.frequency, "action.frequency");
+  let userProbability = 0;
+  for (let i = 0; i < output.actions.length; i++) {
+    const action = output.actions[i];
+    const probability = probabilities[i];
     assertFiniteNumber(action.ev, "action.ev");
-    evMix += action.frequency * action.ev;
+    evMix += probability * action.ev;
     if (action.ev > evBest) evBest = action.ev;
+    if (action.actionId === userActionId) {
+      userProbability = probability;
+    }
   }
 
   assertFiniteNumber(evMix, "evMix");
   const evUser = user.ev;
   assertFiniteNumber(evUser, "evUser");
 
-  const evLossVsMix = evMix - evUser;
-  const evLossVsBest = evBest - evUser;
-  const epsilon = config.epsilon ?? DEFAULT_EPS;
+  const evLossVsMix = Math.max(0, evMix - evUser);
+  const evLossVsBest = Math.max(0, evBest - evUser);
   const isBestAction = evLossVsBest <= epsilon;
-  const pureMistake = evUser < evBest - epsilon;
-  const policyDivergence = Math.max(0, Math.min(1, 1 - user.frequency));
+  const pureMistake = evLossVsBest > epsilon;
+  const policyDivergence = Math.max(0, Math.min(1, 1 - userProbability));
 
   let gradeLabel: string | undefined;
   if (config.thresholds) {
