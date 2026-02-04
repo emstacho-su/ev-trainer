@@ -164,24 +164,94 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SOLV-* | TBD | Pending |
-| TRUI-* | TBD | Pending |
-| RANG-* | TBD | Pending |
-| CONF-* | TBD | Pending |
-| DRIL-* | TBD | Pending |
-| PREF-* | TBD | Pending |
-| POST-* | TBD | Pending |
-| BACK-* | TBD | Pending |
-| AUTH-* | TBD | Pending |
-| STAT-* | TBD | Pending |
-| VISU-* | TBD | Pending |
-| ANIM-* | TBD | Pending |
+| SOLV-01 | Phase 1 | Pending |
+| SOLV-02 | Phase 1 | Pending |
+| SOLV-03 | Phase 1 | Pending |
+| SOLV-04 | Phase 1 | Pending |
+| SOLV-05 | Phase 1 | Pending |
+| SOLV-06 | Phase 1 | Pending |
+| SOLV-07 | Phase 1 | Pending |
+| SOLV-08 | Phase 1 | Pending |
+| TRUI-01 | Phase 4 | Pending |
+| TRUI-02 | Phase 4 | Pending |
+| TRUI-03 | Phase 4 | Pending |
+| TRUI-04 | Phase 4 | Pending |
+| TRUI-05 | Phase 4 | Pending |
+| TRUI-06 | Phase 4 | Pending |
+| TRUI-07 | Phase 4 | Pending |
+| TRUI-08 | Phase 4 | Pending |
+| TRUI-09 | Phase 4 | Pending |
+| TRUI-10 | Phase 4 | Pending |
+| TRUI-11 | Phase 4 | Pending |
+| TRUI-12 | Phase 4 | Pending |
+| RANG-01 | Phase 7 | Pending |
+| RANG-02 | Phase 7 | Pending |
+| RANG-03 | Phase 7 | Pending |
+| RANG-04 | Phase 7 | Pending |
+| RANG-05 | Phase 7 | Pending |
+| CONF-01 | Phase 6 | Pending |
+| CONF-02 | Phase 6 | Pending |
+| CONF-03 | Phase 6 | Pending |
+| CONF-04 | Phase 6 | Pending |
+| CONF-05 | Phase 6 | Pending |
+| CONF-06 | Phase 6 | Pending |
+| CONF-07 | Phase 6 | Pending |
+| DRIL-01 | Phase 6 | Pending |
+| DRIL-02 | Phase 6 | Pending |
+| DRIL-03 | Phase 6 | Pending |
+| DRIL-04 | Phase 6 | Pending |
+| PREF-01 | Phase 5 | Pending |
+| PREF-02 | Phase 5 | Pending |
+| PREF-03 | Phase 5 | Pending |
+| PREF-04 | Phase 5 | Pending |
+| PREF-05 | Phase 5 | Pending |
+| POST-01 | Phase 10 | Pending |
+| POST-02 | Phase 10 | Pending |
+| POST-03 | Phase 10 | Pending |
+| POST-04 | Phase 10 | Pending |
+| POST-05 | Phase 10 | Pending |
+| POST-06 | Phase 10 | Pending |
+| BACK-01 | Phase 2 | Pending |
+| BACK-02 | Phase 2 | Pending |
+| BACK-03 | Phase 2 | Pending |
+| BACK-04 | Phase 2 | Pending |
+| BACK-05 | Phase 2 | Pending |
+| BACK-06 | Phase 2 | Pending |
+| BACK-07 | Phase 2 | Pending |
+| BACK-08 | Phase 2 | Pending |
+| AUTH-01 | Phase 3 | Pending |
+| AUTH-02 | Phase 3 | Pending |
+| AUTH-03 | Phase 3 | Pending |
+| AUTH-04 | Phase 3 | Pending |
+| AUTH-05 | Phase 3 | Pending |
+| AUTH-06 | Phase 3 | Pending |
+| AUTH-07 | Phase 3 | Pending |
+| STAT-01 | Phase 8 | Pending |
+| STAT-02 | Phase 8 | Pending |
+| STAT-03 | Phase 8 | Pending |
+| STAT-04 | Phase 8 | Pending |
+| STAT-05 | Phase 8 | Pending |
+| STAT-06 | Phase 8 | Pending |
+| STAT-07 | Phase 8 | Pending |
+| STAT-08 | Phase 8 | Pending |
+| VISU-01 | Phase 4 | Pending |
+| VISU-02 | Phase 4 | Pending |
+| VISU-03 | Phase 4 | Pending |
+| VISU-04 | Phase 4 | Pending |
+| VISU-05 | Phase 4 | Pending |
+| ANIM-01 | Phase 9 | Pending |
+| ANIM-02 | Phase 9 | Pending |
+| ANIM-03 | Phase 9 | Pending |
+| ANIM-04 | Phase 9 | Pending |
+| ANIM-05 | Phase 9 | Pending |
+| ANIM-06 | Phase 9 | Pending |
+| ANIM-07 | Phase 9 | Pending |
 
 **Coverage:**
 - v3 requirements: 74 total
-- Mapped to phases: 0
-- Unmapped: 74 ⚠️
+- Mapped to phases: 74
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-03*
-*Last updated: 2026-02-03 after initial definition*
+*Last updated: 2026-02-03 after roadmap creation*
