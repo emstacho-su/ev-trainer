@@ -109,7 +109,7 @@ describe("resolveSolverNode", () => {
 
   it("emits cache hit/miss events using the mock solver adapter", () => {
     const cache = new MemoryNodeCache(10);
-    const events: { type: "hit" | "miss"; key: { nodeHash: string } }[] = [];
+    const events: { type: "hit" | "miss" | "stale" | "recompute"; key: { nodeHash: string } }[] = [];
 
     const first = resolveSolverNode(baseNode, {
       cache,
@@ -123,8 +123,34 @@ describe("resolveSolverNode", () => {
     });
 
     expect(first.nodeHash).toBe(second.nodeHash);
-    expect(events.map((event) => event.type)).toEqual(["miss", "hit"]);
+    expect(events.map((event) => event.type)).toEqual(["miss", "recompute", "hit"]);
     expect(events[0]?.key.nodeHash).toBe(first.nodeHash);
     expect(events[1]?.key.nodeHash).toBe(first.nodeHash);
+    expect(events[2]?.key.nodeHash).toBe(first.nodeHash);
+  });
+
+  it("treats expired entries as stale and recomputes", () => {
+    const cache = new MemoryNodeCache(10);
+    let calls = 0;
+    const solve = (node: CanonicalNode) => {
+      calls += 1;
+      return mockSolve(node);
+    };
+    const events: { type: "hit" | "miss" | "stale" | "recompute" }[] = [];
+    const stamps = ["2026-01-01T00:00:00.000Z", "2026-01-01T00:00:02.500Z"];
+    let index = 0;
+    const now = () => stamps[Math.min(index++, stamps.length - 1)];
+
+    resolveSolverNode(baseNode, { cache, solve, now, ttlMs: 1000, onCacheEvent: (event) => events.push(event) });
+    resolveSolverNode(baseNode, { cache, solve, now, ttlMs: 1000, onCacheEvent: (event) => events.push(event) });
+
+    expect(calls).toBe(2);
+    expect(events.map((event) => event.type)).toEqual([
+      "miss",
+      "recompute",
+      "stale",
+      "miss",
+      "recompute",
+    ]);
   });
 });

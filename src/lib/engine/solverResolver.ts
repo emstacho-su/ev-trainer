@@ -8,7 +8,7 @@ import { validateSolverNodeOutput } from "./solverAdapter";
 import type { NodeCache } from "./nodeCache";
 
 export interface CacheEvent {
-  type: "hit" | "miss";
+  type: "hit" | "miss" | "stale" | "recompute";
   key: CacheKey;
 }
 
@@ -17,6 +17,7 @@ export interface SolverResolverDeps {
   solve: (node: CanonicalNode) => SolverNodeOutput;
   onCacheEvent?: (event: CacheEvent) => void;
   now?: () => string;
+  ttlMs?: number;
 }
 
 function assertNodeConsistency(node: CanonicalNode): void {
@@ -32,20 +33,35 @@ export function resolveSolverNode(
   assertNodeConsistency(node);
   const nodeHash = buildCanonicalNodeHash(node);
   const key = buildCacheKey(nodeHash, node);
+  const nowIso = deps.now ? deps.now() : new Date().toISOString();
+  const nowMs = Date.parse(nowIso);
 
   const cached = deps.cache.get(key);
   if (cached) {
-    deps.onCacheEvent?.({ type: "hit", key });
-    return { nodeHash, output: cached.payload };
+    if (deps.ttlMs !== undefined) {
+      const createdAtMs = Date.parse(cached.createdAt);
+      const isStale = Number.isFinite(createdAtMs) && nowMs - createdAtMs > deps.ttlMs;
+      if (isStale) {
+        deps.cache.delete?.(key);
+        deps.onCacheEvent?.({ type: "stale", key });
+      } else {
+        deps.onCacheEvent?.({ type: "hit", key });
+        return { nodeHash, output: cached.payload };
+      }
+    } else {
+      deps.onCacheEvent?.({ type: "hit", key });
+      return { nodeHash, output: cached.payload };
+    }
   }
 
   deps.onCacheEvent?.({ type: "miss", key });
+  deps.onCacheEvent?.({ type: "recompute", key });
   const output = validateSolverNodeOutput(deps.solve(node));
 
   deps.cache.set({
     key,
     payload: output,
-    createdAt: deps.now ? deps.now() : new Date().toISOString(),
+    createdAt: nowIso,
   });
 
   return { nodeHash, output };

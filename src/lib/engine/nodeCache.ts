@@ -15,6 +15,7 @@ export interface SolverCacheEntry {
 export interface NodeCache {
   get(key: CacheKey): SolverCacheEntry | undefined;
   set(entry: SolverCacheEntry): void;
+  delete?(key: CacheKey): void;
 }
 
 export class MemoryNodeCache implements NodeCache {
@@ -51,6 +52,10 @@ export class MemoryNodeCache implements NodeCache {
     }
   }
 
+  delete(key: CacheKey): void {
+    this.store.delete(cacheKeyId(key));
+  }
+
   size(): number {
     return this.store.size;
   }
@@ -62,13 +67,18 @@ export class MemoryNodeCache implements NodeCache {
 
 export class FileNodeCache implements NodeCache {
   private readonly filePath: string;
+  private readonly maxEntries: number;
   private store: Record<string, SolverCacheEntry> | null = null;
 
-  constructor(filePath: string) {
+  constructor(filePath: string, maxEntries = 5000) {
     if (typeof filePath !== "string" || filePath.length === 0) {
       throw new Error("filePath must be a non-empty string");
     }
+    if (!Number.isInteger(maxEntries) || maxEntries <= 0) {
+      throw new Error("maxEntries must be a positive integer");
+    }
     this.filePath = filePath;
+    this.maxEntries = maxEntries;
   }
 
   get(key: CacheKey): SolverCacheEntry | undefined {
@@ -81,6 +91,15 @@ export class FileNodeCache implements NodeCache {
     const id = cacheKeyId(entry.key);
     const store = this.loadStore();
     store[id] = entry;
+    this.pruneStore(store);
+    this.writeStore(store);
+  }
+
+  delete(key: CacheKey): void {
+    const id = cacheKeyId(key);
+    const store = this.loadStore();
+    if (!(id in store)) return;
+    delete store[id];
     this.writeStore(store);
   }
 
@@ -107,6 +126,17 @@ export class FileNodeCache implements NodeCache {
     }
     writeFileSync(this.filePath, JSON.stringify(store), "utf-8");
   }
+
+  private pruneStore(store: Record<string, SolverCacheEntry>): void {
+    const ids = Object.keys(store);
+    if (ids.length <= this.maxEntries) return;
+    ids
+      .sort((a, b) => Date.parse(store[a].createdAt) - Date.parse(store[b].createdAt))
+      .slice(0, ids.length - this.maxEntries)
+      .forEach((id) => {
+        delete store[id];
+      });
+  }
 }
 
 export class CompositeNodeCache implements NodeCache {
@@ -131,5 +161,10 @@ export class CompositeNodeCache implements NodeCache {
   set(entry: SolverCacheEntry): void {
     this.primary.set(entry);
     this.secondary.set(entry);
+  }
+
+  delete(key: CacheKey): void {
+    this.primary.delete?.(key);
+    this.secondary.delete?.(key);
   }
 }
