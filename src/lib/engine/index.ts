@@ -8,4 +8,12 @@ export { serializeSession, deserializeSession, type SessionRecord } from "./sess
 export { InMemorySpotSource, type SpotSource } from "./spotSource";
 export { actionToId, idToAction, validateAction, type Action } from "./action";
 export { computeSpotId, validateSpot, type Spot } from "./spot";
+export {
+  computeScenarioRegenerationKey,
+  shouldIncludeDecisionForDealOnly,
+  validateTrainerScenario,
+  validateTrainerScenarioConfig,
+  type TrainerScenarioConfigV1,
+  type TrainerScenarioV1,
+} from "./scenarioContract";
 export type { DecisionRecord } from "./trainingOrchestrator";

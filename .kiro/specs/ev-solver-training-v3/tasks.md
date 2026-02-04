@@ -199,7 +199,14 @@ git push -u origin <phase-task-id>-<short-slug>
 - Deliverables:
   - scenario schema spec + fixture examples
 - DoD:
-  - payloads are sufficient for deterministic regeneration
+  - scenario contract is versioned and discriminated (`preflop` vs `postflop`) with explicit required/optional fields and validation rules
+  - shared config snapshot includes core dimensions needed for trainer parity goals (mode, game type, table size, stack depth, villain behavior, deal-only-decisions)
+  - preflop scenario contract supports practical line families used in modern trainers (`open-raise`, `vs-open`, `vs-3bet`, `vs-4bet`) with position/action-history context
+  - postflop scenario contract includes fixed-pool metadata (`poolId`, `poolVersion`, entry street, board cards/texture bucket, preflop context link) sufficient for deterministic spot regeneration
+  - deterministic scenario regeneration key/hash is defined and tested as stable across semantically equivalent payload ordering
+  - `dealOnlyDecisions=true` filtering behavior is formally defined and tested (forced/trivial decisions excluded, meaningful decisions retained)
+  - fixture set includes at least one valid preflop payload, one valid postflop payload, and representative invalid payloads for contract rejection
+  - all T10 schema/contract tests pass in gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
 
 ### P1.T11 - 13x13 range matrix interaction spec
 - Goal: define original range visualization behavior.
