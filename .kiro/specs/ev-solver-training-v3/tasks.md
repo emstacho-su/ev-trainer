@@ -139,8 +139,17 @@ git push -u origin <phase-task-id>-<short-slug>
   - integration note + implementation PR
   - runnable local setup instructions for adapter/service
 - DoD:
-  - runtime can resolve at least one supported node via OpenSpiel path
-  - normalized response conforms to P1.T2 contract
+  - integration mode decision memo is committed with explicit `service vs WASM vs hybrid` trade-off table, chosen mode, and fallback trigger criteria
+  - OpenSpiel runtime dependency versions are pinned/documented (`OpenSpiel`, Python/runtime, transport library) with reproducible local startup steps and health-check command
+  - runtime path resolves at least one supported poker node through the OpenSpiel-backed adapter from existing training/runtime entrypoint (no UI coupling)
+  - adapter boundary remains provider-agnostic and compiles with `SolverNodeRequestV2`/`SolverNodeResponseV2` contract without widening types
+  - request mapping from canonical node input to OpenSpiel request is explicitly specified and covered by fixture tests (including action history and actor mapping)
+  - response normalization enforces deterministic ordering, finite EV/frequency values, non-negative frequencies, and normalized frequency sum within tolerance
+  - unsupported/invalid solver responses are mapped to typed error codes (`INVALID_REQUEST`, `UNSUPPORTED_NODE`, `SOLVER_TIMEOUT`, `SOLVER_UNAVAILABLE`, `INTERNAL_ERROR`) with retriable flag rules
+  - deadline/timeout behavior is implemented and tested for the live solver call path (no unbounded waits)
+  - at least one integration test proves miss -> live solve -> normalized response -> runtime grading flow completes without contract violation
+  - adapter source metadata (`source`, `solveMs`, `provider`, `nodeHash`) is emitted for runtime diagnostics and visible in test assertions
+  - all new/changed tests pass in gate sequence (`npm test`, `npx tsc --noEmit --pretty false`, `npm run build`)
 
 ### P1.T8 - OpenSpiel cache + hash implementation
 - Goal: implement versioned cache keyed by canonical node hash for OpenSpiel responses.

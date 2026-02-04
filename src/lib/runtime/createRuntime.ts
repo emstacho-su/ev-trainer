@@ -8,7 +8,11 @@ import { createTrainingApi } from "../engine/trainingApi";
 import type { CanonicalNode } from "../engine/nodeTypes";
 import type { SolverNodeOutput, SolverProvider } from "../engine/solverAdapter";
 import { mockSolve } from "../engine/mockSolver";
-import { openSpielSolve } from "../engine/openSpielSolver";
+import {
+  openSpielSolve,
+  type OpenSpielIntegrationMode,
+  type OpenSpielTransport,
+} from "../engine/openSpielSolver";
 import { assertCommercialSolverPolicy } from "../engine/solverPolicy";
 import type { Evaluator } from "../engine/evaluator";
 import { gradeDecision } from "./gradeDecision";
@@ -24,6 +28,9 @@ export interface RuntimeConfig {
   cacheSize?: number;
   solverProvider?: SolverProvider;
   legalApproved?: boolean;
+  openSpielMode?: OpenSpielIntegrationMode;
+  openSpielTimeoutMs?: number;
+  openSpielTransport?: OpenSpielTransport;
 }
 
 export interface Runtime {
@@ -88,7 +95,15 @@ export function createRuntime(config: RuntimeConfig): Runtime {
   const cache = new MemoryNodeCache(cacheSize);
   const decisionStore = new MemoryDecisionStore();
   const defaultSolve =
-    solverProvider === "openspiel" ? openSpielSolve : (node: CanonicalNode) => mockSolve(node);
+    solverProvider === "openspiel"
+      ? (node: CanonicalNode) =>
+          openSpielSolve(node, {
+            mode: config.openSpielMode,
+            timeoutMs: config.openSpielTimeoutMs,
+            now: config.now,
+            transport: config.openSpielTransport,
+          })
+      : (node: CanonicalNode) => mockSolve(node);
 
   const evaluator =
     config.evaluator ??

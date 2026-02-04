@@ -38,6 +38,43 @@ describe("createRuntime", () => {
 
     const out = runtime.solve(makeNode(10));
     expect(out.nodeId?.startsWith("openspiel:")).toBe(true);
+    expect(out.meta?.provider).toBe("openspiel");
+    expect(out.meta?.source).toBe("live");
+  });
+
+  it("routes spot-quiz through openspiel runtime boundary without UI coupling", () => {
+    const runtime = createRuntime({
+      seed: "seed:runtime",
+      sessionId: "session:runtime",
+      now: () => "2026-02-04T00:00:00.000Z",
+      openSpielTimeoutMs: 100,
+      openSpielTransport: {
+        solve: (request) => ({
+          provider: "openspiel",
+          nodeHash: request.nodeHash,
+          actions: [
+            { actionId: "CHECK", action: "check", frequency: 7, ev: 1.2 },
+            { actionId: "BET_75PCT", action: "bet", sizeBb: 7.5, frequency: 3, ev: 0.4 },
+          ],
+          meta: {
+            source: "live",
+            solveMs: 4,
+            solvedAt: "2026-02-04T00:00:00.000Z",
+          },
+        }),
+      },
+    });
+
+    const result = runtime.trainingApi.spotQuiz({
+      node: makeNode(10),
+      userActionId: "CHECK",
+    });
+
+    expect(result.output.status).toBe("ok");
+    expect(result.output.meta?.provider).toBe("openspiel");
+    expect(result.output.meta?.source).toBe("live");
+    expect(result.output.meta?.solveMs).toBe(4);
+    expect(result.output.meta?.nodeHash).toBe(result.nodeHash);
   });
 
   it("blocks runtime creation when legal approval is not granted", () => {

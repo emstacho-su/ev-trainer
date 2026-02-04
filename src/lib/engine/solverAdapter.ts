@@ -26,6 +26,16 @@ export interface SolverNodeOutput {
   status: "ok" | "unsolved" | "error";
   units: "bb" | "chips";
   exploitability?: number;
+  meta?: {
+    provider?: SolverProvider;
+    source?: "cache" | "live" | "precomputed" | "fallback";
+    nodeHash?: string;
+    solveMs?: number;
+    solvedAt?: string;
+    errorCode?: SolverErrorCodeV2;
+    retriable?: boolean;
+    errorMessage?: string;
+  };
 }
 
 export interface SolverRequest {
@@ -178,6 +188,61 @@ export function validateSolverNodeOutput(output: unknown): SolverNodeOutput {
 
   if (o.exploitability !== undefined) {
     assertFiniteNumber(o.exploitability, "exploitability");
+  }
+
+  if (o.meta !== undefined) {
+    if (o.meta === null || typeof o.meta !== "object") {
+      throw new Error("solver output meta must be an object if provided");
+    }
+    if (
+      o.meta.provider !== undefined &&
+      o.meta.provider !== "openspiel" &&
+      o.meta.provider !== "precomputed" &&
+      o.meta.provider !== "inhouse"
+    ) {
+      throw new Error("solver output meta.provider must be a supported provider");
+    }
+    if (
+      o.meta.source !== undefined &&
+      o.meta.source !== "cache" &&
+      o.meta.source !== "live" &&
+      o.meta.source !== "precomputed" &&
+      o.meta.source !== "fallback"
+    ) {
+      throw new Error("solver output meta.source must be a supported source");
+    }
+    if (o.meta.nodeHash !== undefined && (typeof o.meta.nodeHash !== "string" || o.meta.nodeHash.length === 0)) {
+      throw new Error("solver output meta.nodeHash must be a non-empty string if provided");
+    }
+    if (o.meta.solveMs !== undefined) {
+      assertFiniteNumber(o.meta.solveMs, "meta.solveMs");
+      if (o.meta.solveMs < 0) {
+        throw new Error("solver output meta.solveMs must be >= 0");
+      }
+    }
+    if (o.meta.solvedAt !== undefined && (typeof o.meta.solvedAt !== "string" || o.meta.solvedAt.length === 0)) {
+      throw new Error("solver output meta.solvedAt must be a non-empty string if provided");
+    }
+    if (
+      o.meta.errorCode !== undefined &&
+      o.meta.errorCode !== "INVALID_REQUEST" &&
+      o.meta.errorCode !== "UNSUPPORTED_NODE" &&
+      o.meta.errorCode !== "SOLVER_TIMEOUT" &&
+      o.meta.errorCode !== "SOLVER_UNAVAILABLE" &&
+      o.meta.errorCode !== "LICENSE_BLOCKED" &&
+      o.meta.errorCode !== "INTERNAL_ERROR"
+    ) {
+      throw new Error("solver output meta.errorCode must be a supported code");
+    }
+    if (o.meta.retriable !== undefined && typeof o.meta.retriable !== "boolean") {
+      throw new Error("solver output meta.retriable must be boolean if provided");
+    }
+    if (
+      o.meta.errorMessage !== undefined &&
+      (typeof o.meta.errorMessage !== "string" || o.meta.errorMessage.length === 0)
+    ) {
+      throw new Error("solver output meta.errorMessage must be a non-empty string if provided");
+    }
   }
 
   if (o.status === "ok" && o.actions.length === 0) {
