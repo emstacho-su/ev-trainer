@@ -15,6 +15,12 @@ export type {
   BetSizeConfig,
   ActionAbstractionConfig,
   AbstractedAction,
+  // CFR types
+  Player,
+  InfoSet,
+  ReachProbabilities,
+  CFRConfig,
+  CFRResult,
 } from './types';
 
 export { RANKS, SUITS } from './types';
@@ -37,3 +43,20 @@ export {
 // Card abstraction exports
 export { canonicalizePreflop, buildPreflopAbstraction, CANONICAL_HANDS } from './abstraction/cards';
 export { mapToCanonicalSuit, areIsomorphic, getSuitedStatus } from './abstraction/isomorphism';
+
+// InfoSet storage exports
+export {
+  InfoSetStore,
+  createInfoSet,
+  getAverageStrategy,
+  getCurrentStrategy,
+} from './infoSet';
+
+// CFR algorithm exports
+export {
+  regretMatching,
+  updateRegrets,
+  updateStrategySum,
+  validateStrategy,
+  DEFAULT_CFR_CONFIG,
+} from './cfr';
