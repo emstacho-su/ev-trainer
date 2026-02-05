@@ -21,6 +21,15 @@ export type {
   ReachProbabilities,
   CFRConfig,
   CFRResult,
+  // Game tree types
+  NodeType,
+  GameNode,
+  GameNodeBase,
+  DecisionNode,
+  ChanceNode,
+  TerminalNode,
+  TreeConfig,
+  PreflopTreeConfig,
 } from './types';
 
 export { RANKS, SUITS } from './types';
@@ -60,3 +69,20 @@ export {
   validateStrategy,
   DEFAULT_CFR_CONFIG,
 } from './cfr';
+
+// Game tree exports
+export {
+  buildInfoSetId,
+  buildNodeId,
+  isTerminal,
+  getAvailableActions,
+  computeTerminalUtility,
+  createDecisionNode,
+  createTerminalNode,
+  createPreflopTree,
+  createPreflopScenario,
+  getValidVillainHands,
+  countUnblockedCombos,
+  getNextPlayer,
+  PREFLOP_ACTIONS,
+} from './gameTree';
