@@ -1,10 +1,10 @@
 // src/lib/solver/types.ts
 // Core type definitions for the poker solver module.
 
-import type { Street } from '../engine/types';
+import type { Position, Street } from '../engine/types';
 
-// Re-export Street for convenience
-export type { Street } from '../engine/types';
+// Re-export for convenience
+export type { Position, Street } from '../engine/types';
 
 /**
  * Position relative to button for sizing decisions.
@@ -181,4 +181,109 @@ export interface CFRResult {
   readonly exploitability: number;
   /** Total training time in milliseconds */
   readonly elapsedMs: number;
+}
+
+// ========================================
+// Game Tree Types
+// ========================================
+
+/**
+ * Node type discriminator for game tree traversal.
+ * - DECISION: A player must choose an action
+ * - CHANCE: Random event (e.g., card deal)
+ * - TERMINAL: Game state with utility values
+ */
+export type NodeType = 'DECISION' | 'CHANCE' | 'TERMINAL';
+
+/**
+ * Base interface for all game tree nodes.
+ * Contains common fields shared by decision, chance, and terminal nodes.
+ */
+export interface GameNodeBase {
+  /** Unique identifier for this node (hash of history) */
+  readonly nodeId: string;
+  /** Discriminator for node type */
+  readonly nodeType: NodeType;
+  /** Depth in the game tree (root = 0) */
+  readonly depth: number;
+  /** Action sequence to reach this node from root */
+  readonly history: readonly string[];
+}
+
+/**
+ * Decision node where a player must choose an action.
+ * Contains lazy child generation to avoid memory explosion.
+ */
+export interface DecisionNode extends GameNodeBase {
+  readonly nodeType: 'DECISION';
+  /** Which player acts at this node (0 or 1) */
+  readonly player: Player;
+  /** Canonical information set identifier for CFR lookup */
+  readonly infoSetId: string;
+  /** Available action IDs (deterministically sorted) */
+  readonly actions: readonly string[];
+  /** Lazy child generation - creates child node on first access */
+  getChild(action: string): GameNode;
+}
+
+/**
+ * Chance node representing a random event (card deals).
+ * Outcomes have associated probabilities for EV calculation.
+ */
+export interface ChanceNode extends GameNodeBase {
+  readonly nodeType: 'CHANCE';
+  /** Possible outcomes (e.g., canonical hand combinations) */
+  readonly outcomes: readonly string[];
+  /** Probability of each outcome (must sum to 1) */
+  readonly probabilities: readonly number[];
+  /** Lazy child generation - creates child node on first access */
+  getChild(outcome: string): GameNode;
+}
+
+/**
+ * Terminal node with final utility values.
+ * Utilities are expressed in BB and are zero-sum (u0 = -u1).
+ */
+export interface TerminalNode extends GameNodeBase {
+  readonly nodeType: 'TERMINAL';
+  /** Utility values for [player 0, player 1] in BB */
+  readonly utilities: readonly [number, number];
+  /** Winner of the pot (undefined for chop) */
+  readonly winner?: Player;
+}
+
+/**
+ * Union type for all game tree nodes.
+ * Use nodeType discriminator for type narrowing.
+ */
+export type GameNode = DecisionNode | ChanceNode | TerminalNode;
+
+/**
+ * Configuration for building game trees.
+ * Defines stack sizes, blinds, positions, and action abstraction.
+ */
+export interface TreeConfig {
+  /** Starting effective stack size in big blinds */
+  readonly startingStackBb: number;
+  /** Small blind size in big blinds (typically 0.5) */
+  readonly smallBlindBb: number;
+  /** Big blind size in big blinds (always 1) */
+  readonly bigBlindBb: number;
+  /** Positions involved (e.g., ['SB', 'BB'] for heads-up) */
+  readonly positions: readonly Position[];
+  /** Action abstraction configuration for bet/raise sizes */
+  readonly actionAbstraction: ActionAbstractionConfig;
+}
+
+/**
+ * Extended configuration for preflop-specific tree generation.
+ * Adds hero/villain positions and prior action context.
+ */
+export interface PreflopTreeConfig extends TreeConfig {
+  /** Hero's position in the hand */
+  readonly heroPosition: Position;
+  /** Villain's position in the hand */
+  readonly villainPosition: Position;
+  /** Actions that occurred before the current decision point */
+  readonly priorActions: readonly string[];
 }
