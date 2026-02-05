@@ -112,3 +112,73 @@ export interface CanonicalizeResult {
   readonly category: HandCategory;
   readonly suitMapping: SuitMapping;
 }
+
+// ========================================
+// CFR (Counterfactual Regret Minimization) Types
+// ========================================
+
+/**
+ * Player index for two-player zero-sum games.
+ * 0 = first player (typically SB/BTN)
+ * 1 = second player (typically BB)
+ */
+export type Player = 0 | 1;
+
+/**
+ * Information set stores cumulative regrets and strategy sums for a decision point.
+ * This is the core data structure for CFR - it tracks learning progress at each
+ * information state where a player must make a decision.
+ */
+export interface InfoSet {
+  /** Unique identifier for this information set */
+  readonly infoSetId: string;
+  /** Number of available actions at this decision point */
+  readonly numActions: number;
+  /** Cumulative regrets per action (CFR+ floors these at 0 after accumulation) */
+  regretSum: Float64Array;
+  /** Accumulated strategy sums for computing average strategy */
+  strategySum: Float64Array;
+  /** Action identifiers corresponding to array indices */
+  readonly actions: readonly string[];
+}
+
+/**
+ * Reach probabilities for counterfactual value calculation.
+ * These track the probability of reaching a game state given each player's strategy.
+ */
+export interface ReachProbabilities {
+  /** Reach probability contributed by the current player's actions */
+  readonly current: number;
+  /** Reach probability contributed by opponent's actions */
+  readonly opponent: number;
+  /** Reach probability contributed by chance nodes (card deals) */
+  readonly chance: number;
+}
+
+/**
+ * Configuration for CFR training runs.
+ */
+export interface CFRConfig {
+  /** Maximum number of CFR iterations to run */
+  readonly maxIterations: number;
+  /** Target exploitability in mbb/game (stop when reached) */
+  readonly targetExploitability: number;
+  /** Callback for progress updates */
+  readonly progressCallback?: (iteration: number, exploitability: number) => void;
+  /** Check exploitability every N iterations (expensive operation) */
+  readonly checkConvergenceEvery: number;
+}
+
+/**
+ * Result of a CFR training run.
+ */
+export interface CFRResult {
+  /** Whether the target exploitability was reached */
+  readonly converged: boolean;
+  /** Number of iterations completed */
+  readonly iterations: number;
+  /** Final exploitability in mbb/game */
+  readonly exploitability: number;
+  /** Total training time in milliseconds */
+  readonly elapsedMs: number;
+}
