@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 1 of 10 (Solver Core)
-Plan: 0 of 3 in current phase
-Status: Ready to plan
-Last activity: 2026-02-03 -- Roadmap created with 10 phases covering 74 requirements
+Plan: 1 of 7 in current phase
+Status: In progress
+Last activity: 2026-02-05 -- Completed 01-01-PLAN.md (Preflop Card Abstraction)
 
-Progress: [----------] 0%
+Progress: [=---------] ~1%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: N/A
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: 5 min
+- Total execution time: 5 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-solver-core | 1/7 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: N/A
-- Trend: N/A
+- Last 5 plans: 01-01 (5 min)
+- Trend: N/A (insufficient data)
 
 *Updated after each plan completion*
 
@@ -45,6 +45,9 @@ Recent decisions affecting current work:
 - Roadmap: Solver core first (all training value depends on accurate GTO output)
 - Roadmap: Backend before UI (persistence required for stats and multi-device)
 - Roadmap: Preflop before postflop (simpler, proves patterns before complexity)
+- 01-01: Card type uses template literal `${Rank}${Suit}` for type safety
+- 01-01: Canonical suit form: high rank first, first card hearts, second hearts if suited else diamonds
+- 01-01: Rank values A=0 to 2=12 (lower = higher rank)
 
 ### Pending Todos
 
@@ -57,6 +60,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-03
-Stopped at: Roadmap and state files created
+Last session: 2026-02-05
+Stopped at: Completed 01-01-PLAN.md
 Resume file: None
