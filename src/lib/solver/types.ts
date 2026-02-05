@@ -1,6 +1,60 @@
 // src/lib/solver/types.ts
 // Core type definitions for the poker solver module.
 
+import type { Street } from '../engine/types';
+
+// Re-export Street for convenience
+export type { Street } from '../engine/types';
+
+/**
+ * Position relative to button for sizing decisions.
+ * IP = In Position (acts last postflop)
+ * OOP = Out of Position (acts first postflop)
+ */
+export type PositionRelative = 'IP' | 'OOP';
+
+/**
+ * Configuration for computing bet sizes at a specific decision point.
+ */
+export interface BetSizeConfig {
+  /** Current street */
+  readonly street: Street;
+  /** Player's relative position */
+  readonly position: PositionRelative;
+  /** Current pot size in big blinds */
+  readonly potBb: number;
+  /** Effective stack size in big blinds */
+  readonly stackBb: number;
+  /** Bet amount player is facing, for raise calculations */
+  readonly facingBetBb?: number;
+}
+
+/**
+ * Configuration for action abstraction across the game tree.
+ */
+export interface ActionAbstractionConfig {
+  /** Bet sizes as fractions of pot per street (e.g., 0.33, 0.50, 0.75, 1.0) */
+  readonly betSizes: Record<Street, number[]>;
+  /** Raise sizes as multiples of facing bet per street (e.g., 2.2, 2.5, 3.0) */
+  readonly raiseSizes: Record<Street, number[]>;
+  /** Whether to automatically include all-in when stack is shallow */
+  readonly includeAllIn: boolean;
+  /** Stack/pot ratio below which to add all-in as an option */
+  readonly allInThreshold: number;
+}
+
+/**
+ * Abstracted action representation for solver.
+ * Each action has a type and associated amount information.
+ */
+export type AbstractedAction =
+  | { readonly type: 'FOLD' }
+  | { readonly type: 'CHECK' }
+  | { readonly type: 'CALL'; readonly amountBb: number }
+  | { readonly type: 'BET'; readonly amountBb: number; readonly potFraction: number }
+  | { readonly type: 'RAISE'; readonly amountBb: number; readonly raiseMultiple: number }
+  | { readonly type: 'ALL_IN'; readonly amountBb: number };
+
 /**
  * Card ranks from highest to lowest.
  * A=Ace, K=King, Q=Queen, J=Jack, T=Ten, then 9-2.
