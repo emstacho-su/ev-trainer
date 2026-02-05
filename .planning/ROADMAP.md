@@ -38,9 +38,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01: Preflop card abstraction (169 canonical hands)
+- [ ] 01-02: Bet size abstraction
+- [ ] 01-03: InfoSet storage + CFR+ core
+- [ ] 01-04: Game tree builder (lazy generation)
+- [ ] 01-05: Preflop solver (CFR+ iteration loop)
+- [ ] 01-06: Postflop solver (E[HS] abstraction)
+- [ ] 01-07: Benchmark validation suite
 
 ### Phase 2: Backend Foundation
 **Goal**: Express API server with PostgreSQL persistence replaces localStorage-only architecture
@@ -195,7 +199,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Solver Core | 0/3 | Not started | - |
+| 1. Solver Core | 0/7 | Not started | - |
 | 2. Backend Foundation | 0/3 | Not started | - |
 | 3. Authentication | 0/2 | Not started | - |
 | 4. Table UI Foundation | 0/3 | Not started | - |
