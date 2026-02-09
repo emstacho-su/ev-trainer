@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 1 of 10 (Solver Core)
-Plan: 2 of 7 in current phase
+Plan: 3 of 7 in current phase
 Status: In progress
-Last activity: 2026-02-05 -- Completed 01-02-PLAN.md (Bet Size Abstraction)
+Last activity: 2026-02-08 -- Completed 01-03-PLAN.md (InfoSet Storage and CFR+ Core)
 
-Progress: [==---------] ~3%
+Progress: [===--------] ~4%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 6.5 min
-- Total execution time: 13 min
+- Total plans completed: 3
+- Average duration: 8.3 min
+- Total execution time: 25 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-solver-core | 2/7 | 13 min | 6.5 min |
+| 01-solver-core | 3/7 | 25 min | 8.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (8 min)
+- Last 5 plans: 01-01 (5 min), 01-02 (8 min), 01-03 (12 min)
 - Trend: N/A (insufficient data)
 
 *Updated after each plan completion*
@@ -51,6 +51,10 @@ Recent decisions affecting current work:
 - 01-02: Use 0.5 BB precision for rounding (standard solver practice)
 - 01-02: All-in threshold 2.0 for bets, 3.0 for raises
 - 01-02: Default bet sizes 33/50/75/100% pot; raise sizes 2.2/2.5/3.0x
+- 01-03: CFR+ regret floor applied AFTER accumulation (critical for convergence)
+- 01-03: Float64Array for numeric storage (memory efficient)
+- 01-03: Threshold 1e-9 for zero-sum detection (avoids NaN)
+- 01-03: InfoSetStore uses Map for O(1) lookup
 
 ### Pending Todos
 
@@ -63,6 +67,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-05
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-02-08
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
