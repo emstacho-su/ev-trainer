@@ -378,7 +378,7 @@ function cfrTraverse(
 
   // Get acting hand and compute E[HS]
   const actingHand = actingPlayer === 0 ? hand0 : hand1;
-  const ehs = calculateEHS(actingHand, board, 200); // Use lower iterations for speed
+  const ehs = calculateEHS(actingHand, board, 50); // Use lower iterations for speed
   const bucketId = assignBucket(ehs, buckets);
 
   // Build info set ID
@@ -446,7 +446,7 @@ function runCFRIteration(
   const validHands = getValidHands(config.board);
 
   // Sample subset for efficiency
-  const handsSample = sampleHands(validHands, 20);
+  const handsSample = sampleHands(validHands, 5);
 
   for (const traversingPlayer of [0, 1] as Player[]) {
     for (const hand0 of handsSample) {
@@ -611,7 +611,7 @@ export function toSolverNodeOutputPostflop(
   history: readonly string[] = []
 ): SolverNodeOutput {
   // Compute E[HS] for hand
-  const ehs = calculateEHS(hand, board, 200);
+  const ehs = calculateEHS(hand, board, 50);
   const bucketId = assignBucket(ehs, solution.buckets);
 
   // Determine player (this requires context - default to player 0)

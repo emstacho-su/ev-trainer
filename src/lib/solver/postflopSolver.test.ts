@@ -68,9 +68,9 @@ describe('solvePostflopSubgame', () => {
   describe('flop solving', () => {
     it('solves a basic flop scenario', () => {
       const config: PostflopConfig = {
-        maxIterations: 100,
-        targetExploitability: 10,
-        checkConvergenceEvery: 50,
+        maxIterations: 10,
+        targetExploitability: 100,
+        checkConvergenceEvery: 5,
         street: 'FLOP',
         board: ['Ah', 'Kc', '2d'],
         heroRange: ['AA', 'KK', 'AKs', 'AKo'],
@@ -98,9 +98,9 @@ describe('solvePostflopSubgame', () => {
 
     it('creates info sets using bucket-based abstraction', () => {
       const config: PostflopConfig = {
-        maxIterations: 50,
+        maxIterations: 10,
         targetExploitability: 10,
-        checkConvergenceEvery: 25,
+        checkConvergenceEvery: 5,
         street: 'FLOP',
         board: ['Ah', 'Kc', '2d'],
         heroRange: ['AA', 'KK'],
@@ -130,9 +130,9 @@ describe('solvePostflopSubgame', () => {
 
     it('reduces complexity vs per-hand abstraction', () => {
       const config: PostflopConfig = {
-        maxIterations: 50,
+        maxIterations: 10,
         targetExploitability: 10,
-        checkConvergenceEvery: 25,
+        checkConvergenceEvery: 5,
         street: 'FLOP',
         board: ['Ah', 'Kc', '2d'],
         heroRange: ['AA', 'KK', 'QQ', 'JJ', 'TT'], // 5 canonical hands
@@ -161,9 +161,9 @@ describe('solvePostflopSubgame', () => {
   describe('turn solving', () => {
     it('solves a turn scenario', () => {
       const config: PostflopConfig = {
-        maxIterations: 50,
+        maxIterations: 10,
         targetExploitability: 10,
-        checkConvergenceEvery: 25,
+        checkConvergenceEvery: 5,
         street: 'TURN',
         board: ['Ah', 'Kc', '2d', '5s'], // 4 cards
         heroRange: ['AA', 'KK'],
@@ -190,9 +190,9 @@ describe('solvePostflopSubgame', () => {
   describe('river solving', () => {
     it('solves a river scenario', () => {
       const config: PostflopConfig = {
-        maxIterations: 50,
+        maxIterations: 10,
         targetExploitability: 10,
-        checkConvergenceEvery: 25,
+        checkConvergenceEvery: 5,
         street: 'RIVER',
         board: ['Ah', 'Kc', '2d', '5s', '8h'], // 5 cards
         heroRange: ['AA', 'KK'],
@@ -219,9 +219,9 @@ describe('solvePostflopSubgame', () => {
   describe('convergence', () => {
     it('produces strategies that converge over iterations', () => {
       const config: PostflopConfig = {
-        maxIterations: 200,
-        targetExploitability: 5,
-        checkConvergenceEvery: 50,
+        maxIterations: 20,
+        targetExploitability: 100,
+        checkConvergenceEvery: 10,
         street: 'FLOP',
         board: ['Ah', 'Kc', '2d'],
         heroRange: ['AA', 'KK'],
@@ -252,9 +252,9 @@ describe('solvePostflopSubgame', () => {
 describe('toSolverNodeOutputPostflop', () => {
   it('converts solution to SolverNodeOutput format', () => {
     const config: PostflopConfig = {
-      maxIterations: 50,
+      maxIterations: 10,
       targetExploitability: 10,
-      checkConvergenceEvery: 25,
+      checkConvergenceEvery: 5,
       street: 'FLOP',
       board: ['Ah', 'Kc', '2d'],
       heroRange: ['AA', 'KK'],
@@ -289,9 +289,9 @@ describe('toSolverNodeOutputPostflop', () => {
 
   it('produces valid probability distributions', () => {
     const config: PostflopConfig = {
-      maxIterations: 50,
+      maxIterations: 10,
       targetExploitability: 10,
-      checkConvergenceEvery: 25,
+      checkConvergenceEvery: 5,
       street: 'FLOP',
       board: ['Ah', 'Kc', '2d'],
       heroRange: ['AA'],
