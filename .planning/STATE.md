@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 1 of 10 (Solver Core)
-Plan: 3 of 7 in current phase
+Plan: 4 of 7 in current phase
 Status: In progress
-Last activity: 2026-02-08 -- Completed 01-03-PLAN.md (InfoSet Storage and CFR+ Core)
+Last activity: 2026-02-09 -- Completed 01-04-PLAN.md (Game Tree Builder)
 
-Progress: [===--------] ~4%
+Progress: [====-------] ~6%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 8.3 min
-- Total execution time: 25 min
+- Total plans completed: 4
+- Average duration: 7.5 min
+- Total execution time: 30 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-solver-core | 3/7 | 25 min | 8.3 min |
+| 01-solver-core | 4/7 | 30 min | 7.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (8 min), 01-03 (12 min)
+- Last 5 plans: 01-01 (5 min), 01-02 (8 min), 01-03 (12 min), 01-04 (5 min)
 - Trend: N/A (insufficient data)
 
 *Updated after each plan completion*
@@ -55,6 +55,10 @@ Recent decisions affecting current work:
 - 01-03: Float64Array for numeric storage (memory efficient)
 - 01-03: Threshold 1e-9 for zero-sum detection (avoids NaN)
 - 01-03: InfoSetStore uses Map for O(1) lookup
+- 01-04: Lazy child generation using closures with Map cache
+- 01-04: Info set ID format: {player}:{hand}:{history}
+- 01-04: Actions deterministically sorted for consistent enumeration
+- 01-04: Standard preflop raise multiples: 2.2x, 2.5x, 3.0x
 
 ### Pending Todos
 
@@ -67,6 +71,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-08
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-02-09
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None
