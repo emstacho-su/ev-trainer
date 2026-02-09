@@ -56,12 +56,13 @@ Plans:
   3. Prisma ORM provides type-safe queries across all models
   4. AWS deployment (EC2 + RDS) serves production traffic
   5. V2 session handlers migrated to Express controllers without breaking determinism
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Prisma schema with PostgreSQL database and connection pooling
-- [ ] 02-02-PLAN.md — Express server with middleware, health checks, and session routes
-- [ ] 02-03-PLAN.md — Migrate SessionStore backend to Prisma-backed PostgreSQL persistence
+- [ ] 02-01-PLAN.md — Prisma schema with PostgreSQL database and connection pooling (+ Docker Compose)
+- [ ] 02-02-PLAN.md — Express server with middleware, health checks, and async session routes
+- [ ] 02-03-PLAN.md — Migrate SessionStore backend to async Prisma-backed PostgreSQL persistence
+- [ ] 02-04-PLAN.md — AWS deployment (EC2 + RDS + GitHub Actions CI/CD pipeline)
 
 ### Phase 3: Authentication
 **Goal**: Users can create accounts and access training history across devices
@@ -148,11 +149,11 @@ Plans:
 **Depends on**: Phase 2 (backend persistence), Phase 5 (training data)
 **Requirements**: STAT-01, STAT-02, STAT-03, STAT-04, STAT-05, STAT-06, STAT-07, STAT-08
 **Success Criteria** (what must be TRUE):
-  1. Performance graph displays EV accuracy trend with 7D/30D/90D/All Time filters
-  2. Per-spot type breakdown shows performance by position, pot type, street
-  3. Session history list with clickable entries opens detailed decision view
-  4. User can flag difficult hands and review flagged hands list
-  5. Weakness detection highlights consistently bad spots for targeted drilling
+  1. User can view daily performance graphs (decisions, accuracy, avg EV loss)
+  2. User can filter statistics by date range, position, pot type, street
+  3. User can see spot-level breakdown showing weakest areas
+  4. User can view session history with replay option
+  5. Heatmap visualization shows positional strengths and weaknesses
 **Plans**: TBD
 
 Plans:
@@ -160,57 +161,32 @@ Plans:
 - [ ] 08-02: TBD
 
 ### Phase 9: Animations
-**Goal**: Polished animated UI creates engaging training experience
-**Depends on**: Phase 4 (table UI must exist to animate)
-**Requirements**: ANIM-01, ANIM-02, ANIM-03, ANIM-04, ANIM-05, ANIM-06, ANIM-07
+**Goal**: GTO Nexus-style smooth animations enhance training experience
+**Depends on**: Phase 4 (table UI foundation)
+**Requirements**: ANIM-01, ANIM-02, ANIM-03, ANIM-04, ANIM-05
 **Success Criteria** (what must be TRUE):
-  1. Cards deal with smooth flip and slide animations
-  2. Chips move to pot with slide animation on bets
-  3. Action selection pulses with highlight animation
-  4. EV and grade fade in with reveal animation after decision
-  5. Animation skip option available for fast training
+  1. Cards deal smoothly from deck to positions with stagger timing
+  2. Chips slide from position to pot on bet/raise actions
+  3. EV reveal animates with slide-up and color transition
+  4. Action highlights pulse on selected button
+  5. Range grid modal opens/closes with smooth fade and scale
 **Plans**: TBD
 
 Plans:
 - [ ] 09-01: TBD
-- [ ] 09-02: TBD
 
 ### Phase 10: Postflop Training
-**Goal**: Users can train multi-street postflop decisions with solver grading
-**Depends on**: Phase 1 (solver postflop), Phase 5 (preflop patterns proven), Phase 7 (range modal)
+**Goal**: Users can practice flop/turn/river decisions with multi-street progression
+**Depends on**: Phase 1 (postflop solver), Phase 4 (table UI)
 **Requirements**: POST-01, POST-02, POST-03, POST-04, POST-05, POST-06
 **Success Criteria** (what must be TRUE):
-  1. User can train flop decision points with bet sizing options
-  2. User can train turn and river decision points continuing from earlier streets
-  3. Multi-street hand progression plays through entire hand
-  4. Spot context labels display correctly ("3b IP Aggressor", "SRP OOP Caller")
-  5. Last Raiser Indicator (LRI) token displays next to aggressor
+  1. User can train flop c-bet scenarios (IP and OOP)
+  2. User can train turn barrel/check-back/call scenarios
+  3. User can train river value-bet/bluff/check decisions
+  4. Multi-street training progresses from flop -> turn -> river
+  5. Postflop action history shows bet sizes and ranges
 **Plans**: TBD
 
 Plans:
 - [ ] 10-01: TBD
 - [ ] 10-02: TBD
-- [ ] 10-03: TBD
-
-## Progress
-
-**Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
-
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Solver Core | 7/7 | Complete | 2026-02-09 |
-| 2. Backend Foundation | 0/3 | Not started | - |
-| 3. Authentication | 0/2 | Not started | - |
-| 4. Table UI Foundation | 0/3 | Not started | - |
-| 5. Preflop Training | 0/2 | Not started | - |
-| 6. Trainer Configuration | 0/2 | Not started | - |
-| 7. Range Visualization | 0/1 | Not started | - |
-| 8. Statistics & Analytics | 0/2 | Not started | - |
-| 9. Animations | 0/2 | Not started | - |
-| 10. Postflop Training | 0/3 | Not started | - |
-
----
-*Roadmap created: 2026-02-03*
-*Depth: Comprehensive (10 phases)*
-*Coverage: 74/74 v3 requirements mapped*
