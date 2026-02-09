@@ -86,3 +86,35 @@ export {
   getNextPlayer,
   PREFLOP_ACTIONS,
 } from './gameTree';
+
+// Preflop solver exports
+export {
+  solvePreflopScenario,
+  toSolverNodeOutput,
+  getSolverOutput,
+  computeExploitability,
+  createDefaultSolverConfig,
+  type PreflopSolverConfig,
+  type PreflopSolution,
+  type SolverProgress,
+} from './preflopSolver';
+
+// Evaluation exports
+export {
+  NUM_CANONICAL_HANDS,
+  calculatePreflopEquityMonteCarlo,
+  calculatePreflopEquityFromTable,
+  calculateCanonicalEquity,
+  getEquityIndex,
+  setPreflopEquityTable,
+  isEquityTableLoaded,
+  clearEquityTable,
+  getEquityTable,
+  generatePreflopEquityTable,
+  savePreflopEquityTable,
+  loadPreflopEquityTable,
+  getDefaultEquityTablePath,
+  ensurePreflopEquityTable,
+  validateEquityTable,
+  type ProgressCallback,
+} from './evaluation';
