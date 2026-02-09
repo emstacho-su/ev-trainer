@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Bet sizing abstraction supports configurable discrete sizes (33%, 50%, 75%, 100%, all-in)
   4. Preflop ranges generated for all 6-max position matchups (UTG, HJ, CO, BTN, SB, BB)
   5. Benchmark suite validates solver output against PioSolver within 0.1% EV
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
 - [x] 01-01: Preflop card abstraction (169 canonical hands)
@@ -56,12 +56,12 @@ Plans:
   3. Prisma ORM provides type-safe queries across all models
   4. AWS deployment (EC2 + RDS) serves production traffic
   5. V2 session handlers migrated to Express controllers without breaking determinism
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md — Prisma schema with PostgreSQL database and connection pooling
+- [ ] 02-02-PLAN.md — Express server with middleware, health checks, and session routes
+- [ ] 02-03-PLAN.md — Migrate SessionStore backend to Prisma-backed PostgreSQL persistence
 
 ### Phase 3: Authentication
 **Goal**: Users can create accounts and access training history across devices
