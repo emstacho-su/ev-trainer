@@ -12,7 +12,7 @@ V3 transforms the EV Trainer from a dev-grade prototype (bundled spots, localSto
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Solver Core** - CFR+ algorithm with card/bet abstraction for preflop range generation
+- [x] **Phase 1: Solver Core** - CFR+ algorithm with card/bet abstraction for preflop range generation
 - [ ] **Phase 2: Backend Foundation** - Express API, PostgreSQL schema, Prisma ORM, AWS deployment
 - [ ] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
 - [ ] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
@@ -38,13 +38,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: Preflop card abstraction (169 canonical hands)
-- [ ] 01-02: Bet size abstraction
-- [ ] 01-03: InfoSet storage + CFR+ core
-- [ ] 01-04: Game tree builder (lazy generation)
-- [ ] 01-05: Preflop solver (CFR+ iteration loop)
-- [ ] 01-06: Postflop solver (E[HS] abstraction)
-- [ ] 01-07: Benchmark validation suite
+- [x] 01-01: Preflop card abstraction (169 canonical hands)
+- [x] 01-02: Bet size abstraction
+- [x] 01-03: InfoSet storage + CFR+ core
+- [x] 01-04: Game tree builder (lazy generation)
+- [x] 01-05: Preflop solver (CFR+ iteration loop)
+- [x] 01-06: Postflop solver (E[HS] abstraction)
+- [x] 01-07: Benchmark validation suite
 
 ### Phase 2: Backend Foundation
 **Goal**: Express API server with PostgreSQL persistence replaces localStorage-only architecture
@@ -199,7 +199,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Solver Core | 0/7 | Not started | - |
+| 1. Solver Core | 7/7 | Complete | 2026-02-09 |
 | 2. Backend Foundation | 0/3 | Not started | - |
 | 3. Authentication | 0/2 | Not started | - |
 | 4. Table UI Foundation | 0/3 | Not started | - |
