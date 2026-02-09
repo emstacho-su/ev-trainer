@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 1 of 10 (Solver Core)
-Plan: 5 of 7 in current phase
+Plan: 6 of 7 in current phase
 Status: In progress
-Last activity: 2026-02-09 -- Completed 01-05-PLAN.md (Preflop CFR+ Solver)
+Last activity: 2026-02-09 -- Completed 01-06-PLAN.md (Postflop Subgame Solver)
 
-Progress: [======-----] ~9%
+Progress: [=======----] ~10%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 6.4 min
-- Total execution time: 32 min
+- Total plans completed: 6
+- Average duration: 10.7 min
+- Total execution time: 64 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-solver-core | 5/7 | 32 min | 6.4 min |
+| 01-solver-core | 6/7 | 64 min | 10.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (8 min), 01-03 (12 min), 01-04 (5 min), 01-05 (6 min)
-- Trend: Stable (averaging ~7 min per plan)
+- Last 5 plans: 01-02 (8 min), 01-03 (12 min), 01-04 (5 min), 01-05 (6 min), 01-06 (32 min)
+- Trend: Variable (01-06 longer due to postflop complexity)
 
 *Updated after each plan completion*
 
@@ -64,6 +64,10 @@ Recent decisions affecting current work:
 - 01-05: Use simplified equity during iteration, precomputed table optional
 - 01-05: Exploitability approximation using sum of positive regrets
 - 01-05: Average strategies used for final output (converge to Nash)
+- 01-06: 50 iterations for E[HS] Monte Carlo (balance speed vs accuracy)
+- 01-06: 5 hand samples per CFR+ iteration for postflop (tractable complexity)
+- 01-06: 50 default buckets for E[HS] with uniform distribution (standard)
+- 01-06: Postflop info set ID: {player}:B{bucket}:{board}:{history}
 
 ### Pending Todos
 
@@ -77,5 +81,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-09
-Stopped at: Completed 01-05-PLAN.md
+Stopped at: Completed 01-06-PLAN.md
 Resume file: None
