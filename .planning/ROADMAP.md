@@ -13,7 +13,7 @@ V3 transforms the EV Trainer from a dev-grade prototype (bundled spots, localSto
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Solver Core** - CFR+ algorithm with card/bet abstraction for preflop range generation
-- [ ] **Phase 2: Backend Foundation** - Express API, PostgreSQL schema, Prisma ORM, AWS deployment
+- [x] **Phase 2: Backend Foundation** - Express API, PostgreSQL schema, Prisma ORM (AWS deployment deferred)
 - [ ] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
 - [ ] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
 - [ ] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading
@@ -59,10 +59,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Prisma schema with PostgreSQL database and connection pooling (+ Docker Compose)
-- [ ] 02-02-PLAN.md — Express server with middleware, health checks, and async session routes
-- [ ] 02-03-PLAN.md — Migrate SessionStore backend to async Prisma-backed PostgreSQL persistence
-- [ ] 02-04-PLAN.md — AWS deployment (EC2 + RDS + GitHub Actions CI/CD pipeline)
+- [x] 02-01-PLAN.md — Prisma schema with PostgreSQL database and connection pooling (+ Docker Compose)
+- [x] 02-02-PLAN.md — Express server with middleware, health checks, and async session routes
+- [x] 02-03-PLAN.md — Migrate SessionStore backend to async Prisma-backed PostgreSQL persistence
+- [x] 02-04-PLAN.md — AWS deployment files created (deployment deferred until product ready)
 
 ### Phase 3: Authentication
 **Goal**: Users can create accounts and access training history across devices
