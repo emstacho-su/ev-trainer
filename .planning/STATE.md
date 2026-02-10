@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 3 of 10 (Authentication)
-Plan: 2 of 4 in Phase 3
+Plan: 3 of 4 in Phase 3
 Status: In progress
-Last activity: 2026-02-10 -- Completed 03-02-PLAN.md
+Last activity: 2026-02-10 -- Completed 03-03-PLAN.md
 
-Progress: [======---------] ~24%
+Progress: [=======---------] ~28%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 9.7 min
-- Total execution time: 126 min
+- Total plans completed: 14
+- Average duration: 9.1 min
+- Total execution time: 128 min
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [======---------] ~24%
 |-------|-------|-------|----------|
 | 01-solver-core | 7/7 ✓ | 72 min | 10.3 min |
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
-| 03-authentication | 2/4 | 6 min | 3.0 min |
+| 03-authentication | 3/4 | 8 min | 2.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (18 min), 02-03 (12 min), 02-04 (12 min), 03-01 (3 min), 03-02 (3 min)
-- Trend: Auth plans running very fast (foundation + endpoints both 3 min each)
+- Last 5 plans: 02-03 (12 min), 02-04 (12 min), 03-01 (3 min), 03-02 (3 min), 03-03 (2 min)
+- Trend: Auth plans running very fast (3 of 4 complete, averaging under 3 min)
 
 *Updated after each plan completion*
 
@@ -98,6 +98,11 @@ Recent decisions affecting current work:
 - 03-02: Auth rate limiting 20 req/15min (stricter than general 100 req/15min)
 - 03-02: Email enumeration prevention (same error for no user vs wrong password)
 - 03-02: Email normalized to lowercase
+- 03-03: Resend for email with dev mode fallback (logs to console)
+- 03-03: Background email sending (doesn't block registration/password reset)
+- 03-03: 24h email verification tokens, 1h password reset tokens
+- 03-03: Password reset revokes all refresh tokens (force re-login)
+- 03-03: Atomic transactions for verification and password reset operations
 
 ### Pending Todos
 
@@ -111,6 +116,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-10
-Stopped at: Completed 03-02-PLAN.md
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None
-Next: /gsd:execute-phase 3 (Continue with 03-03)
+Next: /gsd:execute-phase 3 (Continue with 03-04 or complete phase)
