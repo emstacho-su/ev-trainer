@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 3 of 10 (Authentication)
-Plan: 3 of 4 in Phase 3
-Status: In progress
-Last activity: 2026-02-10 -- Completed 03-03-PLAN.md
+Plan: 4 of 4 in Phase 3
+Status: Phase complete
+Last activity: 2026-02-10 -- Completed 03-04-PLAN.md
 
-Progress: [=======---------] ~28%
+Progress: [========--------] ~32%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Average duration: 9.1 min
-- Total execution time: 128 min
+- Total plans completed: 15
+- Average duration: 8.9 min
+- Total execution time: 131 min
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [=======---------] ~28%
 |-------|-------|-------|----------|
 | 01-solver-core | 7/7 ✓ | 72 min | 10.3 min |
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
-| 03-authentication | 3/4 | 8 min | 2.7 min |
+| 03-authentication | 4/4 ✓ | 11 min | 2.8 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (12 min), 02-04 (12 min), 03-01 (3 min), 03-02 (3 min), 03-03 (2 min)
-- Trend: Auth plans running very fast (3 of 4 complete, averaging under 3 min)
+- Last 5 plans: 02-04 (12 min), 03-01 (3 min), 03-02 (3 min), 03-03 (2 min), 03-04 (3 min)
+- Trend: Auth phase complete, all plans under 3 min (foundation patterns well established)
 
 *Updated after each plan completion*
 
@@ -103,6 +103,11 @@ Recent decisions affecting current work:
 - 03-03: 24h email verification tokens, 1h password reset tokens
 - 03-03: Password reset revokes all refresh tokens (force re-login)
 - 03-03: Atomic transactions for verification and password reset operations
+- 03-04: Access token passed to frontend via URL fragment (# not sent to server)
+- 03-04: State parameter in httpOnly cookie for CSRF protection in OAuth
+- 03-04: OAuth users get emailVerified set automatically (provider verified)
+- 03-04: Account linking by email (OAuth links to existing user if email matches)
+- 03-04: No rate limiting on OAuth routes (external redirects, one-time callbacks)
 
 ### Pending Todos
 
@@ -116,6 +121,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-10
-Stopped at: Completed 03-03-PLAN.md
+Stopped at: Completed 03-04-PLAN.md (Phase 3 complete)
 Resume file: None
-Next: /gsd:execute-phase 3 (Continue with 03-04 or complete phase)
+Next: /gsd:execute-phase 4 (Begin Phase 4 - Frontend)
