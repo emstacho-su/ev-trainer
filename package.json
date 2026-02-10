@@ -24,7 +24,11 @@
     "start": "next start",
     "server:dev": "nodemon --watch src/server --ext ts --exec tsx src/server/index.ts",
     "server:build": "tsc --project tsconfig.server.json",
-    "server:start": "node dist/server/index.js"
+    "server:start": "node dist/server/index.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop ecosystem.config.js",
+    "pm2:restart": "pm2 restart ecosystem.config.js",
+    "pm2:logs": "pm2 logs ev-trainer-api"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
