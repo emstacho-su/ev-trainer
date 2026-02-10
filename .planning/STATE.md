@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 2 of 10 (Backend Foundation)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-09 -- Completed 02-01-PLAN.md (Database Schema & Prisma Client)
+Last activity: 2026-02-09 -- Completed 02-02-PLAN.md (Session API Routes)
 
-Progress: [===---------] ~15%
+Progress: [====---------] ~18%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 9.8 min
-- Total execution time: 78 min
+- Total plans completed: 9
+- Average duration: 10.7 min
+- Total execution time: 96 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-solver-core | 7/7 | 72 min | 10.3 min |
-| 02-backend-foundation | 1/4 | 6 min | 6.0 min |
+| 02-backend-foundation | 2/4 | 24 min | 12.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-04 (5 min), 01-05 (6 min), 01-06 (32 min), 01-07 (7 min), 02-01 (6 min)
-- Trend: Database setup faster than solver work
+- Last 5 plans: 01-05 (6 min), 01-06 (32 min), 01-07 (7 min), 02-01 (6 min), 02-02 (18 min)
+- Trend: API setup requires more dependency/async updates
 
 *Updated after each plan completion*
 
@@ -76,6 +76,10 @@ Recent decisions affecting current work:
 - 02-01: Connection pool max 20, 30s idle timeout, 2s connect timeout
 - 02-01: Singleton pattern with globalThis caching for development hot-reload
 - 02-01: JSON fields for Spot and DecisionGrade storage
+- 02-02: Express 5.x native async (no express-async-errors needed)
+- 02-02: SessionStoreBackend uses Promise for all methods (future Prisma swap)
+- 02-02: tsx instead of ts-node for TypeScript execution (ESM compatibility)
+- 02-02: Zod 4.x z.record(key, value) two-argument syntax
 
 ### Pending Todos
 
@@ -89,6 +93,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-09
-Stopped at: Completed 02-01-PLAN.md
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
-Next: Execute 02-02-PLAN.md (Session API Routes)
+Next: Execute 02-03-PLAN.md (Prisma Service Layer)
