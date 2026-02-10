@@ -1,14 +1,117 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema for EV Trainer database
+// PostgreSQL with connection pooling via @prisma/adapter-pg
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// User model for authentication and profile
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String?  // Nullable for OAuth users
+  oauthProvider   String?
+  oauthProviderId String?
+  subscriptionTier String  @default("FREE")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  sessions   Session[]
+  dailyStats DailyStat[]
+  spotStats  SpotStat[]
+
+  // Indexes
+  @@unique([oauthProvider, oauthProviderId])
+  @@index([email])
+}
+
+// Session model for training/practice sessions
+model Session {
+  id                  String   @id @default(cuid())
+  runtimeKey          String   @unique // hash(seed, sessionId) for deterministic lookup
+  sessionId           String
+  seed                String
+  userId              String?  // Nullable for guest sessions
+  mode                String   // TRAINING | PRACTICE
+  packId              String
+  filters             Json     // SpotFilterInput
+  decisionIndex       Int      @default(0)
+  decisionsPerSession Int      @default(10)
+  currentSpot         Json?    // Spot interface, nullable
+  isComplete          Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relations
+  user    User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  entries SessionEntry[]
+
+  // Indexes
+  @@unique([sessionId, seed])
+  @@index([userId, createdAt])
+  @@index([sessionId, seed])
+}
+
+// SessionEntry model for individual decisions within a session
+model SessionEntry {
+  id        String   @id @default(cuid())
+  sessionId String   // Foreign key to Session.id
+  index     Int
+  spotId    String
+  spot      Json     // Full Spot data
+  actionId  String
+  result    Json?    // DecisionGrade, nullable until graded
+  createdAt DateTime @default(now())
+
+  // Relations
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@unique([sessionId, index])
+  @@index([sessionId, index])
+}
+
+// SpotStat model for per-spot performance tracking
+model SpotStat {
+  id               String   @id @default(cuid())
+  userId           String
+  spotId           String
+  street           String   // preflop | flop | turn | river
+  heroPosition     String
+  villainPosition  String?
+  totalDecisions   Int      @default(0)
+  correctDecisions Int      @default(0)
+  avgEvLoss        Decimal  @db.Decimal(10, 4)
+  lastPracticed    DateTime
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@unique([userId, spotId])
+  @@index([userId, spotId])
+}
+
+// DailyStat model for daily aggregated statistics
+model DailyStat {
+  id                String   @id @default(cuid())
+  userId            String
+  date              DateTime @db.Date
+  totalDecisions    Int      @default(0)
+  correctDecisions  Int      @default(0)
+  avgEvLoss         Decimal  @db.Decimal(10, 4)
+  sessionsCompleted Int      @default(0)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@unique([userId, date])
+  @@index([userId, date])
 }

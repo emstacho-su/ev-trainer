@@ -17,3 +17,11 @@ yarn-error.log*
 
 # OS
 .DS_Store
+
+# environment variables (secrets)
+.env
+.env.local
+.env.*.local
+
+# Prisma generated client
+/src/generated/prisma
