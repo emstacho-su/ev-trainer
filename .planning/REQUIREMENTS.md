@@ -88,13 +88,13 @@ Requirements for v3 release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: User registration with email and password
-- [ ] **AUTH-02**: Email verification flow after registration
-- [ ] **AUTH-03**: Password reset via email link
-- [ ] **AUTH-04**: OAuth login with Google
-- [ ] **AUTH-05**: OAuth login with GitHub
-- [ ] **AUTH-06**: Session persistence across browser refresh
-- [ ] **AUTH-07**: Cross-device session sync via server
+- [x] **AUTH-01**: User registration with email and password
+- [x] **AUTH-02**: Email verification flow after registration
+- [x] **AUTH-03**: Password reset via email link
+- [x] **AUTH-04**: OAuth login with Google
+- [x] **AUTH-05**: OAuth login with GitHub
+- [x] **AUTH-06**: Session persistence across browser refresh
+- [x] **AUTH-07**: Cross-device session sync via server
 
 ### Statistics & Analytics
 
@@ -219,13 +219,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BACK-06 | Phase 2 | Pending |
 | BACK-07 | Phase 2 | Pending |
 | BACK-08 | Phase 2 | Pending |
-| AUTH-01 | Phase 3 | Pending |
-| AUTH-02 | Phase 3 | Pending |
-| AUTH-03 | Phase 3 | Pending |
-| AUTH-04 | Phase 3 | Pending |
-| AUTH-05 | Phase 3 | Pending |
-| AUTH-06 | Phase 3 | Pending |
-| AUTH-07 | Phase 3 | Pending |
+| AUTH-01 | Phase 3 | Complete |
+| AUTH-02 | Phase 3 | Complete |
+| AUTH-03 | Phase 3 | Complete |
+| AUTH-04 | Phase 3 | Complete |
+| AUTH-05 | Phase 3 | Complete |
+| AUTH-06 | Phase 3 | Complete |
+| AUTH-07 | Phase 3 | Complete |
 | STAT-01 | Phase 8 | Pending |
 | STAT-02 | Phase 8 | Pending |
 | STAT-03 | Phase 8 | Pending |

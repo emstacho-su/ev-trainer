@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Solver Core** - CFR+ algorithm with card/bet abstraction for preflop range generation
 - [x] **Phase 2: Backend Foundation** - Express API, PostgreSQL schema, Prisma ORM (AWS deployment deferred)
-- [ ] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
+- [x] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
 - [ ] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
 - [ ] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading
 - [ ] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
@@ -78,10 +78,10 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Schema updates (RefreshToken, VerificationToken) + auth service foundation (Argon2, JWT)
-- [ ] 03-02-PLAN.md — Email/password registration, login, logout, refresh endpoints
-- [ ] 03-03-PLAN.md — Email verification and password reset flows with Resend
-- [ ] 03-04-PLAN.md — OAuth login with Google and GitHub
-- [ ] 03-05-PLAN.md — Session route integration with auth middleware
+- [x] 03-02-PLAN.md — Email/password registration, login, logout, refresh endpoints
+- [x] 03-03-PLAN.md — Email verification and password reset flows with Resend
+- [x] 03-04-PLAN.md — OAuth login with Google and GitHub
+- [x] 03-05-PLAN.md — Session route integration with auth middleware
 
 ### Phase 4: Table UI Foundation
 **Goal**: GTO Nexus-style oval table with realistic poker visuals replaces prototype UI
