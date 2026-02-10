@@ -74,11 +74,14 @@ Plans:
   3. User can reset forgotten password via email link
   4. User can log in with Google or GitHub OAuth
   5. User's training history syncs across devices via server
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — Schema updates (RefreshToken, VerificationToken) + auth service foundation (Argon2, JWT)
+- [ ] 03-02-PLAN.md — Email/password registration, login, logout, refresh endpoints
+- [ ] 03-03-PLAN.md — Email verification and password reset flows with Resend
+- [ ] 03-04-PLAN.md — OAuth login with Google and GitHub
+- [ ] 03-05-PLAN.md — Session route integration with auth middleware
 
 ### Phase 4: Table UI Foundation
 **Goal**: GTO Nexus-style oval table with realistic poker visuals replaces prototype UI
