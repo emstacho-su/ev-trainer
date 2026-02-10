@@ -7,6 +7,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { validate } from "../middleware/validate.middleware";
+import { optionalAuth, requireAuth } from "../auth/auth.middleware";
 import {
   startSession,
   nextDecision,
@@ -77,9 +78,15 @@ const SubmitDecisionSchema = z.object({
 });
 
 // Routes
-router.post("/start", validate(StartSessionSchema), startSession);
-router.post("/next", validate(NextDecisionSchema), nextDecision);
-router.post("/submit", validate(SubmitDecisionSchema), submitDecision);
-router.get("/:sessionId", getSessionDetails);
+// Session lifecycle - optionalAuth (guests allowed, but attach userId if logged in)
+router.post("/start", optionalAuth, validate(StartSessionSchema), startSession);
+router.post("/next", optionalAuth, validate(NextDecisionSchema), nextDecision);
+router.post("/submit", optionalAuth, validate(SubmitDecisionSchema), submitDecision);
+router.get("/:sessionId", optionalAuth, getSessionDetails);
+
+// User-specific queries - requireAuth (must be logged in to view own history)
+router.get("/history", requireAuth, (req, res) => {
+  res.json({ message: 'Session history endpoint - to be implemented' });
+});
 
 export default router;
