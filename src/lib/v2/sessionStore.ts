@@ -33,6 +33,7 @@ export interface SessionRecord {
   decisionsPerSession: number;
   currentSpot: Spot | null;
   entries: SessionEntry[];
+  userId?: string | null; // Link to authenticated user
 }
 
 export interface SessionStoreBackend {
@@ -69,6 +70,7 @@ export async function createSessionRecord(input: {
   filters: SpotFilterInput;
   decisionIndex: number;
   decisionsPerSession: number;
+  userId?: string | null;
 }): Promise<SessionRecord> {
   const key = runtimeKeyFrom(input.seed, input.sessionId);
   const existing = await backend.get(key);
@@ -83,6 +85,7 @@ export async function createSessionRecord(input: {
     decisionsPerSession: input.decisionsPerSession,
     currentSpot: null,
     entries: [],
+    userId: input.userId ?? null,
   };
   await backend.set(key, record);
   return record;

@@ -126,6 +126,14 @@ function errorResult(status: number, code: string, message: string): ApiFailure 
   return { status, body: { error: { code, message } } };
 }
 
+function checkSessionOwnership(session: SessionRecord, userId?: string): ApiFailure | null {
+  // If session has a userId, verify it matches the authenticated user
+  if (session.userId && session.userId !== userId) {
+    return errorResult(403, 'FORBIDDEN', 'Cannot access another user\'s session');
+  }
+  return null;
+}
+
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -282,7 +290,7 @@ function gradeAction(spot: Spot, actionId: ActionId): DecisionGrade {
   return gradeDecision(output, actionId, { epsilon: 0.01, gradeBy: "evLossVsBest" });
 }
 
-export async function handleStart(input: unknown): Promise<ApiResult<StartResponse>> {
+export async function handleStart(input: unknown, userId?: string): Promise<ApiResult<StartResponse>> {
   if (!isObject(input)) return errorResult(400, "INVALID_ARGUMENT", "body must be an object");
   const seed = requireString(input, "seed");
   if (!seed) return errorResult(400, "INVALID_ARGUMENT", "seed is required");
@@ -334,6 +342,7 @@ export async function handleStart(input: unknown): Promise<ApiResult<StartRespon
     filters,
     decisionIndex: registrySnapshot.decisionIndex,
     decisionsPerSession: registrySnapshot.decisionsPerSession,
+    userId: userId ?? null,
   });
 
   const candidates = getFilteredSpots(pack, filters);
@@ -362,7 +371,7 @@ export async function handleStart(input: unknown): Promise<ApiResult<StartRespon
   };
 }
 
-export async function handleNext(input: unknown): Promise<ApiResult<NextResponse>> {
+export async function handleNext(input: unknown, userId?: string): Promise<ApiResult<NextResponse>> {
   if (!isObject(input)) return errorResult(400, "INVALID_ARGUMENT", "body must be an object");
   const seed = requireString(input, "seed");
   const sessionId = requireString(input, "sessionId");
@@ -371,6 +380,9 @@ export async function handleNext(input: unknown): Promise<ApiResult<NextResponse
 
   const record = await getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
+
+  const ownershipError = checkSessionOwnership(record, userId);
+  if (ownershipError) return ownershipError;
   const hasSubmissionForCurrentDecision = record.entries.some(
     (entry) => entry.index === record.decisionIndex
   );
@@ -426,7 +438,7 @@ export async function handleNext(input: unknown): Promise<ApiResult<NextResponse
   };
 }
 
-export async function handleSubmit(input: unknown): Promise<ApiResult<SubmitTrainingResponse | SubmitPracticeResponse>> {
+export async function handleSubmit(input: unknown, userId?: string): Promise<ApiResult<SubmitTrainingResponse | SubmitPracticeResponse>> {
   if (!isObject(input)) return errorResult(400, "INVALID_ARGUMENT", "body must be an object");
   const seed = requireString(input, "seed");
   const sessionId = requireString(input, "sessionId");
@@ -435,6 +447,9 @@ export async function handleSubmit(input: unknown): Promise<ApiResult<SubmitTrai
 
   const record = await getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
+
+  const ownershipError = checkSessionOwnership(record, userId);
+  if (ownershipError) return ownershipError;
 
   const spotValue = input.spot;
   if (!isObject(spotValue)) return errorResult(400, "INVALID_ARGUMENT", "spot is required");
@@ -489,12 +504,15 @@ export async function handleSubmit(input: unknown): Promise<ApiResult<SubmitTrai
   return { status: 200, body: { ok: true, result: grade } };
 }
 
-export async function handleGetSession(sessionId: string, seed?: string | null): Promise<ApiResult<SessionDetailResponse>> {
+export async function handleGetSession(sessionId: string, seed?: string | null, userId?: string): Promise<ApiResult<SessionDetailResponse>> {
   if (!seed || seed.trim().length === 0) {
     return errorResult(400, "INVALID_ARGUMENT", "seed is required");
   }
   const record = await getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
+
+  const ownershipError = checkSessionOwnership(record, userId);
+  if (ownershipError) return ownershipError;
 
   const registrySnapshot = getSession(record.sessionId, record.seed);
   if (!registrySnapshot) return errorResult(404, "NOT_FOUND", "session not found");

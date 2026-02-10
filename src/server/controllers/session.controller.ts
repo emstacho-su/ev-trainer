@@ -13,17 +13,17 @@ import {
 } from "../../lib/v2/api/sessionHandlers";
 
 export async function startSession(req: Request, res: Response): Promise<void> {
-  const result = await handleStart(req.body);
+  const result = await handleStart(req.body, req.user?.userId);
   res.status(result.status).json(result.body);
 }
 
 export async function nextDecision(req: Request, res: Response): Promise<void> {
-  const result = await handleNext(req.body);
+  const result = await handleNext(req.body, req.user?.userId);
   res.status(result.status).json(result.body);
 }
 
 export async function submitDecision(req: Request, res: Response): Promise<void> {
-  const result = await handleSubmit(req.body);
+  const result = await handleSubmit(req.body, req.user?.userId);
   res.status(result.status).json(result.body);
 }
 
@@ -32,6 +32,6 @@ export async function getSessionDetails(req: Request, res: Response): Promise<vo
   const sessionId = typeof sessionIdParam === "string" ? sessionIdParam : "";
   const seedParam = req.query.seed;
   const seed = typeof seedParam === "string" ? seedParam : null;
-  const result = await handleGetSession(sessionId, seed);
+  const result = await handleGetSession(sessionId, seed, req.user?.userId);
   res.status(result.status).json(result.body);
 }
