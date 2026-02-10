@@ -6,9 +6,16 @@
 
 import app from "./app";
 import sessionRoutes from "./routes/session.routes";
+import { setSessionStoreBackend } from "../lib/v2/sessionStore";
+import { PrismaSessionStoreBackend } from "../lib/v2/storage/prismaSessionStore";
 
 // Mount session routes
 app.use("/api/session", sessionRoutes);
+
+// Swap session store backend to Prisma
+const prismaBackend = new PrismaSessionStoreBackend();
+setSessionStoreBackend(prismaBackend);
+console.log("Session store backend: Prisma (PostgreSQL)");
 
 const PORT = process.env.PORT || 4000;
 
