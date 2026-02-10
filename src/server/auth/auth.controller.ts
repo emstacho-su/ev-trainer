@@ -12,8 +12,10 @@ import { hashPassword, verifyPassword } from './auth.service';
 import {
   createAccessToken,
   createRefreshToken,
+  createVerificationToken,
   hashToken,
 } from './token.service';
+import { sendVerificationEmail } from '../email/email.service';
 
 // Validation schemas
 const registerSchema = z.object({
@@ -59,6 +61,23 @@ export async function register(req: Request, res: Response): Promise<void> {
       passwordHash,
     },
     select: { id: true, email: true, emailVerified: true, subscriptionTier: true },
+  });
+
+  // Create verification token and send email (don't block registration on email send)
+  const { token: verifyToken, tokenHash: verifyHash, expires: verifyExpires } = createVerificationToken();
+
+  await prisma.verificationToken.create({
+    data: {
+      identifier: user.email,
+      token: verifyHash,
+      expires: verifyExpires,
+      type: 'email_verification',
+    },
+  });
+
+  // Send verification email in background (don't wait)
+  sendVerificationEmail(user.email, verifyToken).catch(err => {
+    console.error('Failed to send verification email:', err);
   });
 
   // Generate tokens
