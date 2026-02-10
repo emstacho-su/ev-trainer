@@ -77,7 +77,7 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Schema updates (RefreshToken, VerificationToken) + auth service foundation (Argon2, JWT)
+- [x] 03-01-PLAN.md — Schema updates (RefreshToken, VerificationToken) + auth service foundation (Argon2, JWT)
 - [ ] 03-02-PLAN.md — Email/password registration, login, logout, refresh endpoints
 - [ ] 03-03-PLAN.md — Email verification and password reset flows with Resend
 - [ ] 03-04-PLAN.md — OAuth login with Google and GitHub
