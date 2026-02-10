@@ -13,6 +13,7 @@ datasource db {
 model User {
   id              String   @id @default(cuid())
   email           String   @unique
+  emailVerified   DateTime? // Email verification timestamp
   passwordHash    String?  // Nullable for OAuth users
   oauthProvider   String?
   oauthProviderId String?
@@ -21,9 +22,10 @@ model User {
   updatedAt       DateTime @updatedAt
 
   // Relations
-  sessions   Session[]
-  dailyStats DailyStat[]
-  spotStats  SpotStat[]
+  sessions      Session[]
+  dailyStats    DailyStat[]
+  spotStats     SpotStat[]
+  refreshTokens RefreshToken[]
 
   // Indexes
   @@unique([oauthProvider, oauthProviderId])
@@ -114,4 +116,32 @@ model DailyStat {
   // Indexes
   @@unique([userId, date])
   @@index([userId, date])
+}
+
+// RefreshToken model for secure refresh token storage
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique // SHA-256 hash of the token
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+// VerificationToken model for email verification and password reset tokens
+model VerificationToken {
+  identifier String   // Email address
+  token      String   // SHA-256 hash
+  expires    DateTime
+  type       String   // 'email_verification' | 'password_reset'
+
+  // Indexes
+  @@unique([identifier, token])
+  @@index([identifier])
 }
