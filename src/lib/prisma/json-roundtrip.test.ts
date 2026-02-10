@@ -6,21 +6,32 @@ import { describe, it, expect } from 'vitest';
 import type { Spot } from '../engine/spot';
 import type { DecisionGrade } from '../engine/trainingOrchestrator';
 
+// Helper to create minimal valid Spot for testing JSON serialization
+// Note: In production, Spots come from spot packs and have full Position records
+function createTestSpot(overrides: Partial<Spot> = {}): Spot {
+  return {
+    schemaVersion: '1',
+    spotId: 'test-spot-id',
+    gameType: 'NLHE',
+    blinds: { sb: 0.5, bb: 1 },
+    positions: ['SB', 'BB', 'UTG', 'HJ', 'CO', 'BTN'],
+    stacksBb: { SB: 100, BB: 100, UTG: 100, HJ: 100, CO: 100, BTN: 100 },
+    potBb: 1.5,
+    board: [],
+    history: [],
+    heroToAct: 'BTN',
+    ...overrides,
+  };
+}
+
 describe('JSON round-trip serialization', () => {
   describe('Spot', () => {
     it('should serialize and deserialize correctly', () => {
-      const spot: Spot = {
-        schemaVersion: '1',
+      const spot = createTestSpot({
         spotId: 'abc123',
-        gameType: 'NLHE',
-        blinds: { sb: 0.5, bb: 1 },
-        positions: ['BTN', 'SB', 'BB'],
-        stacksBb: { BTN: 100, SB: 100, BB: 100 },
-        potBb: 1.5,
-        board: [],
         history: ['BTN:r2.5'],
         heroToAct: 'SB',
-      };
+      });
 
       // Simulate Prisma JSON field storage
       const serialized = JSON.stringify(spot);
@@ -29,23 +40,20 @@ describe('JSON round-trip serialization', () => {
       expect(deserialized).toEqual(spot);
       expect(deserialized.schemaVersion).toBe('1');
       expect(deserialized.blinds.sb).toBe(0.5);
-      expect(deserialized.positions).toEqual(['BTN', 'SB', 'BB']);
+      expect(deserialized.positions).toEqual(['SB', 'BB', 'UTG', 'HJ', 'CO', 'BTN']);
       expect(deserialized.stacksBb.BTN).toBe(100);
     });
 
     it('should handle postflop spot with board cards', () => {
-      const spot: Spot = {
-        schemaVersion: '1',
+      const spot = createTestSpot({
         spotId: 'def456',
-        gameType: 'NLHE',
         blinds: { sb: 0.5, bb: 1, ante: 0.1 },
-        positions: ['BTN', 'BB'],
-        stacksBb: { BTN: 50, BB: 50 },
+        stacksBb: { SB: 50, BB: 50, UTG: 50, HJ: 50, CO: 50, BTN: 50 },
         potBb: 6.5,
         board: ['As', 'Kh', 'Tc'],
         history: ['BTN:r2.5', 'BB:c'],
         heroToAct: 'BB',
-      };
+      });
 
       const serialized = JSON.stringify(spot);
       const deserialized = JSON.parse(serialized) as Spot;
@@ -55,23 +63,16 @@ describe('JSON round-trip serialization', () => {
     });
 
     it('should handle numeric edge cases', () => {
-      const spot: Spot = {
-        schemaVersion: '1',
+      const spot = createTestSpot({
         spotId: 'ghi789',
-        gameType: 'NLHE',
-        blinds: { sb: 0.5, bb: 1 },
-        positions: ['BTN', 'BB'],
-        stacksBb: { BTN: 0.123456789, BB: 99.999999 },
+        stacksBb: { SB: 0.123456789, BB: 99.999999, UTG: 100, HJ: 100, CO: 100, BTN: 100 },
         potBb: 0.0001,
-        board: [],
-        history: [],
-        heroToAct: 'BTN',
-      };
+      });
 
       const serialized = JSON.stringify(spot);
       const deserialized = JSON.parse(serialized) as Spot;
 
-      expect(deserialized.stacksBb.BTN).toBe(0.123456789);
+      expect(deserialized.stacksBb.SB).toBe(0.123456789);
       expect(deserialized.stacksBb.BB).toBe(99.999999);
       expect(deserialized.potBb).toBe(0.0001);
     });
