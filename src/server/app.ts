@@ -14,6 +14,7 @@ import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/error.middleware";
 import healthRoutes from "./routes/health.routes";
 import authRoutes from "./auth/auth.routes";
+import oauthRoutes from "./oauth/oauth.routes";
 
 const app = express();
 
@@ -70,6 +71,7 @@ const authLimiter = rateLimit({
 
 // Routes
 app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/oauth', oauthRoutes);
 app.use("/health", healthRoutes);
 
 // Error handler - must be last
