@@ -1,0 +1,184 @@
+# EV Trainer AWS Deployment Workflow
+# Automates build, test, infrastructure provisioning, and application deployment
+#
+# Required GitHub Secrets:
+#   AWS_ACCESS_KEY_ID      - AWS IAM user access key
+#   AWS_SECRET_ACCESS_KEY  - AWS IAM user secret key
+#   DB_PASSWORD            - PostgreSQL database password for RDS
+#   SSH_KEY_NAME           - Name of EC2 key pair in AWS
+#   SSH_PRIVATE_KEY        - Private key content for EC2 SSH access
+#   DATABASE_URL           - Full PostgreSQL connection string (set after first Terraform apply)
+#   ALLOWED_ORIGINS        - CORS allowed origins (comma-separated domains)
+
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  NODE_VERSION: "20.x"
+  AWS_REGION: "us-east-1"
+
+jobs:
+  # Build and test the application
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build server TypeScript
+        run: npm run server:build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-build
+          path: dist/
+          retention-days: 1
+
+  # Provision/update AWS infrastructure with Terraform
+  terraform:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    outputs:
+      ec2_ip: ${{ steps.tf-outputs.outputs.ec2_ip }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform validate
+        working-directory: ./terraform
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: ./terraform
+        run: terraform plan -out=tfplan
+        env:
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+          TF_VAR_ssh_key_name: ${{ secrets.SSH_KEY_NAME }}
+
+      - name: Terraform apply
+        working-directory: ./terraform
+        run: terraform apply -auto-approve tfplan
+
+      - name: Get Terraform outputs
+        id: tf-outputs
+        working-directory: ./terraform
+        run: |
+          echo "ec2_ip=$(terraform output -raw ec2_public_ip)" >> $GITHUB_OUTPUT
+
+  # Deploy application to EC2
+  deploy:
+    needs: [build-and-test, terraform]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: server-build
+          path: dist/
+
+      - name: Deploy application to EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ needs.terraform.outputs.ec2_ip }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            # Clone or update repository
+            if [ -d "/home/ubuntu/ev-trainer" ]; then
+              cd /home/ubuntu/ev-trainer
+              git fetch origin
+              git reset --hard origin/main
+            else
+              git clone https://github.com/${{ github.repository }} /home/ubuntu/ev-trainer
+              cd /home/ubuntu/ev-trainer
+            fi
+
+            # Install production dependencies
+            npm ci --omit=dev
+
+            # Build server (in case artifacts don't include all files)
+            npm run server:build
+
+            # Create environment file
+            cat > .env << 'ENVEOF'
+            NODE_ENV=production
+            PORT=4000
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}
+            ENVEOF
+
+            # Create logs directory if not exists
+            mkdir -p logs
+
+            # Run database migrations
+            npx prisma migrate deploy
+
+            # Restart or start PM2
+            pm2 describe ev-trainer-api > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+              npm run pm2:restart
+            else
+              npm run pm2:start
+            fi
+
+            # Save PM2 process list
+            pm2 save
+
+      - name: Wait for application startup
+        run: sleep 15
+
+      - name: Verify deployment health
+        run: |
+          for i in {1..5}; do
+            if curl -f -s "http://${{ needs.terraform.outputs.ec2_ip }}:4000/health" > /dev/null; then
+              echo "Health check passed!"
+              exit 0
+            fi
+            echo "Attempt $i failed, retrying in 5 seconds..."
+            sleep 5
+          done
+          echo "Health check failed after 5 attempts"
+          exit 1
+
+      - name: Deployment summary
+        run: |
+          echo "## Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **EC2 IP:** ${{ needs.terraform.outputs.ec2_ip }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Health Check:** http://${{ needs.terraform.outputs.ec2_ip }}:4000/health" >> $GITHUB_STEP_SUMMARY
+          echo "- **API Base:** http://${{ needs.terraform.outputs.ec2_ip }}:4000/api" >> $GITHUB_STEP_SUMMARY
