@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 3 of 10 (Authentication)
-Plan: 1 of 4 in Phase 3
+Plan: 2 of 4 in Phase 3
 Status: In progress
-Last activity: 2026-02-10 -- Completed 03-01-PLAN.md
+Last activity: 2026-02-10 -- Completed 03-02-PLAN.md
 
-Progress: [=====----------] ~21%
+Progress: [======---------] ~24%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 10.3 min
-- Total execution time: 123 min
+- Total plans completed: 13
+- Average duration: 9.7 min
+- Total execution time: 126 min
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [=====----------] ~21%
 |-------|-------|-------|----------|
 | 01-solver-core | 7/7 ✓ | 72 min | 10.3 min |
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
-| 03-authentication | 1/4 | 3 min | 3.0 min |
+| 03-authentication | 2/4 | 6 min | 3.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (6 min), 02-02 (18 min), 02-03 (12 min), 02-04 (12 min), 03-01 (3 min)
-- Trend: Auth foundation completed quickly (simple library integration)
+- Last 5 plans: 02-02 (18 min), 02-03 (12 min), 02-04 (12 min), 03-01 (3 min), 03-02 (3 min)
+- Trend: Auth plans running very fast (foundation + endpoints both 3 min each)
 
 *Updated after each plan completion*
 
@@ -92,6 +92,12 @@ Recent decisions affecting current work:
 - 03-01: 15-minute access tokens, 7-day refresh tokens
 - 03-01: SHA-256 hashing for all tokens before database storage
 - 03-01: Verification tokens 24h, password reset tokens 1h
+- 03-02: Refresh token rotation on every refresh (security)
+- 03-02: Multi-device support with multiple refresh tokens per user
+- 03-02: Cookie path restricted to /api/auth
+- 03-02: Auth rate limiting 20 req/15min (stricter than general 100 req/15min)
+- 03-02: Email enumeration prevention (same error for no user vs wrong password)
+- 03-02: Email normalized to lowercase
 
 ### Pending Todos
 
@@ -105,6 +111,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-10
-Stopped at: Completed 03-01-PLAN.md
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
-Next: /gsd:execute-phase 3 (Continue with 03-02)
+Next: /gsd:execute-phase 3 (Continue with 03-03)
