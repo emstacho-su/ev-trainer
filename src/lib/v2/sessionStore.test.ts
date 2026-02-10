@@ -13,16 +13,18 @@ import {
 class TestSessionStoreBackend implements SessionStoreBackend {
   private values = new Map<string, SessionRecord>();
 
-  get(key: string): SessionRecord | undefined {
-    return this.values.get(key);
+  async get(key: string): Promise<SessionRecord | undefined> {
+    return Promise.resolve(this.values.get(key));
   }
 
-  set(key: string, value: SessionRecord): void {
+  async set(key: string, value: SessionRecord): Promise<void> {
     this.values.set(key, value);
+    return Promise.resolve();
   }
 
-  clear(): void {
+  async clear(): Promise<void> {
     this.values.clear();
+    return Promise.resolve();
   }
 }
 
@@ -42,13 +44,13 @@ function buildSpot(): Spot {
 }
 
 describe("sessionStore backend seam", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     setSessionStoreBackend(new TestSessionStoreBackend());
-    clearSessionStore();
+    await clearSessionStore();
   });
 
-  it("persists and reads records through configured backend", () => {
-    const created = createSessionRecord({
+  it("persists and reads records through configured backend", async () => {
+    const created = await createSessionRecord({
       sessionId: "s1",
       seed: "seed-a",
       mode: "TRAINING",
@@ -59,7 +61,7 @@ describe("sessionStore backend seam", () => {
     });
     created.currentSpot = buildSpot();
 
-    const loaded = getSessionRecord("s1", "seed-a");
+    const loaded = await getSessionRecord("s1", "seed-a");
     expect(loaded).not.toBeNull();
     expect(loaded?.sessionId).toBe("s1");
     expect(loaded?.currentSpot?.spotId).toBe("spot-1");

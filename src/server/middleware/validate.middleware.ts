@@ -5,16 +5,15 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import type { ZodSchema, ZodError } from "zod";
+import { z } from "zod";
 import { AppError } from "./error.middleware";
 
-export function validate<T>(schema: ZodSchema<T>) {
+export function validate<T extends z.ZodType>(schema: T) {
   return (req: Request, res: Response, next: NextFunction): void => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      const zodError = result.error as ZodError;
-      const firstIssue = zodError.issues[0];
+      const firstIssue = result.error.issues[0];
       const message = firstIssue
         ? `${firstIssue.path.join(".")}: ${firstIssue.message}`
         : "Invalid request body";

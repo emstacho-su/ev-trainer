@@ -26,9 +26,9 @@ function toResponse(status: number, body: unknown): Response {
   });
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   clearSessionRegistry();
-  clearSessionStore();
+  await clearSessionStore();
   clearBundledPackCache();
 
   vi.stubGlobal(
@@ -46,21 +46,21 @@ beforeEach(() => {
         typeof init?.body === "string" ? JSON.parse(init.body) : undefined;
 
       if (path === "/api/session/start") {
-        const result = handleStart(payload);
+        const result = await handleStart(payload);
         return toResponse(result.status, result.body);
       }
       if (path === "/api/session/submit") {
-        const result = handleSubmit(payload);
+        const result = await handleSubmit(payload);
         return toResponse(result.status, result.body);
       }
       if (path === "/api/session/next") {
-        const result = handleNext(payload);
+        const result = await handleNext(payload);
         return toResponse(result.status, result.body);
       }
       if (path.startsWith("/api/session/")) {
         const sessionId = path.split("/").pop() ?? "";
         const seed = url.searchParams.get("seed");
-        const result = handleGetSession(sessionId, seed);
+        const result = await handleGetSession(sessionId, seed);
         return toResponse(result.status, result.body);
       }
 

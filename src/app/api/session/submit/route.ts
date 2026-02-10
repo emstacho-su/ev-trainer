@@ -18,6 +18,6 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = handleSubmit(payload);
+  const result = await handleSubmit(payload);
   return NextResponse.json(result.body, { status: result.status });
 }

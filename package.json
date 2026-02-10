@@ -11,6 +11,7 @@
     "nodemon": "^3.1.11",
     "prisma": "^7.3.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
@@ -21,7 +22,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "server:dev": "nodemon --watch src/server --exec ts-node src/server/index.ts",
+    "server:dev": "nodemon --watch src/server --ext ts --exec tsx src/server/index.ts",
     "server:build": "tsc --project tsconfig.server.json",
     "server:start": "node dist/server/index.js"
   },

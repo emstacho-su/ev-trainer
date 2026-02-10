@@ -18,9 +18,9 @@ import { clearBundledPackCache } from "../lib/v2/packs/loadBundledPack";
 import { clearSessionStore } from "../lib/v2/sessionStore";
 import { clearSessionRegistry } from "../lib/runtime/v2SessionRegistry";
 
-function resetState(): void {
+async function resetState(): Promise<void> {
   clearSessionRegistry();
-  clearSessionStore();
+  await clearSessionStore();
   clearBundledPackCache();
 }
 
@@ -31,8 +31,8 @@ function toResponse(status: number, body: unknown): Response {
   });
 }
 
-beforeEach(() => {
-  resetState();
+beforeEach(async () => {
+  await resetState();
 
   vi.stubGlobal(
     "fetch",
@@ -48,21 +48,21 @@ beforeEach(() => {
       const payload = typeof init?.body === "string" ? JSON.parse(init.body) : undefined;
 
       if (path === "/api/session/start") {
-        const result = handleStart(payload);
+        const result = await handleStart(payload);
         return toResponse(result.status, result.body);
       }
       if (path === "/api/session/submit") {
-        const result = handleSubmit(payload);
+        const result = await handleSubmit(payload);
         return toResponse(result.status, result.body);
       }
       if (path === "/api/session/next") {
-        const result = handleNext(payload);
+        const result = await handleNext(payload);
         return toResponse(result.status, result.body);
       }
       if (path.startsWith("/api/session/")) {
         const sessionId = path.split("/").pop() ?? "";
         const seed = url.searchParams.get("seed");
-        const result = handleGetSession(sessionId, seed);
+        const result = await handleGetSession(sessionId, seed);
         return toResponse(result.status, result.body);
       }
 

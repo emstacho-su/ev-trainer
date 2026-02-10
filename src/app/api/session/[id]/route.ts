@@ -15,6 +15,6 @@ export async function GET(
   const { id: sessionId } = await context.params;
   const url = new URL(request.url);
   const seed = url.searchParams.get("seed") ?? undefined;
-  const result = handleGetSession(sessionId, seed);
+  const result = await handleGetSession(sessionId, seed);
   return NextResponse.json(result.body, { status: result.status });
 }

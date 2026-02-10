@@ -14,9 +14,9 @@ import { clearBundledPackCache } from "../lib/v2/packs/loadBundledPack";
 import { clearSessionStore } from "../lib/v2/sessionStore";
 import { clearSessionRegistry } from "../lib/runtime/v2SessionRegistry";
 
-function resetState(): void {
+async function resetState(): Promise<void> {
   clearSessionRegistry();
-  clearSessionStore();
+  await clearSessionStore();
   clearBundledPackCache();
 }
 
@@ -28,14 +28,14 @@ function expectOk<T extends object>(result: ApiResult<T>): T {
   return result.body;
 }
 
-function collectDecisionSequence(input: {
+async function collectDecisionSequence(input: {
   mode: "TRAINING" | "PRACTICE";
   seed: string;
   filters: SpotFilterInput;
   limit: number;
-}): string[] {
+}): Promise<string[]> {
   const start = expectOk<StartResponse>(
-    handleStart({
+    await handleStart({
       seed: input.seed,
       mode: input.mode,
       packId: "ev-dev-pack-v1",
@@ -48,7 +48,7 @@ function collectDecisionSequence(input: {
   let currentSpot = start.spot;
 
   for (let step = 1; step < input.limit; step += 1) {
-    const submit = handleSubmit({
+    const submit = await handleSubmit({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
       spot: currentSpot,
@@ -56,7 +56,7 @@ function collectDecisionSequence(input: {
     });
     expect(submit.status).toBe(200);
 
-    const next = handleNext({
+    const next = await handleNext({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
     });
@@ -78,23 +78,23 @@ function collectDecisionSequence(input: {
 }
 
 describe("determinism replay (training vs practice)", () => {
-  beforeEach(() => {
-    resetState();
+  beforeEach(async () => {
+    await resetState();
   });
 
-  it("replays identical decision signatures for training and practice with matching seed/pack/filters", () => {
+  it("replays identical decision signatures for training and practice with matching seed/pack/filters", async () => {
     const runInput = {
       seed: "replay-seed",
       filters: { street: "FLOP" } satisfies SpotFilterInput,
       limit: 10,
     };
 
-    const training = collectDecisionSequence({
+    const training = await collectDecisionSequence({
       ...runInput,
       mode: "TRAINING",
     });
-    resetState();
-    const practice = collectDecisionSequence({
+    await resetState();
+    const practice = await collectDecisionSequence({
       ...runInput,
       mode: "PRACTICE",
     });
@@ -103,17 +103,17 @@ describe("determinism replay (training vs practice)", () => {
     expect(practice).toEqual(training);
   });
 
-  it("changes sequence when seed changes (negative control)", () => {
-    const base = collectDecisionSequence({
+  it("changes sequence when seed changes (negative control)", async () => {
+    const base = await collectDecisionSequence({
       mode: "TRAINING",
       seed: "seed-one",
       filters: {},
       limit: 8,
     });
 
-    resetState();
+    await resetState();
 
-    const differentSeed = collectDecisionSequence({
+    const differentSeed = await collectDecisionSequence({
       mode: "TRAINING",
       seed: "seed-two",
       filters: {},

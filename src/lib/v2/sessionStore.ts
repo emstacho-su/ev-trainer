@@ -2,6 +2,9 @@
  * Overview: In-memory app-layer session record store for current run state.
  * Interacts with: session handlers and runtime keying utilities.
  * Importance: Tracks current spot and submitted entries per session.
+ *
+ * NOTE: All methods are async to support future Prisma-based persistence.
+ * The InMemorySessionStoreBackend uses Promise.resolve() for compatibility.
  */
 
 import type { DecisionGrade } from "../engine/trainingOrchestrator";
@@ -33,30 +36,32 @@ export interface SessionRecord {
 }
 
 export interface SessionStoreBackend {
-  get(key: string): SessionRecord | undefined;
-  set(key: string, value: SessionRecord): void;
-  clear(): void;
+  get(key: string): Promise<SessionRecord | undefined>;
+  set(key: string, value: SessionRecord): Promise<void>;
+  clear(): Promise<void>;
 }
 
 class InMemorySessionStoreBackend implements SessionStoreBackend {
   private readonly store = new Map<string, SessionRecord>();
 
-  get(key: string): SessionRecord | undefined {
-    return this.store.get(key);
+  async get(key: string): Promise<SessionRecord | undefined> {
+    return Promise.resolve(this.store.get(key));
   }
 
-  set(key: string, value: SessionRecord): void {
+  async set(key: string, value: SessionRecord): Promise<void> {
     this.store.set(key, value);
+    return Promise.resolve();
   }
 
-  clear(): void {
+  async clear(): Promise<void> {
     this.store.clear();
+    return Promise.resolve();
   }
 }
 
 let backend: SessionStoreBackend = new InMemorySessionStoreBackend();
 
-export function createSessionRecord(input: {
+export async function createSessionRecord(input: {
   sessionId: string;
   seed: string;
   mode: SessionMode;
@@ -64,9 +69,9 @@ export function createSessionRecord(input: {
   filters: SpotFilterInput;
   decisionIndex: number;
   decisionsPerSession: number;
-}): SessionRecord {
+}): Promise<SessionRecord> {
   const key = runtimeKeyFrom(input.seed, input.sessionId);
-  const existing = backend.get(key);
+  const existing = await backend.get(key);
   if (existing) return existing;
   const record: SessionRecord = {
     sessionId: input.sessionId,
@@ -79,22 +84,23 @@ export function createSessionRecord(input: {
     currentSpot: null,
     entries: [],
   };
-  backend.set(key, record);
+  await backend.set(key, record);
   return record;
 }
 
-export function getSessionRecord(sessionId: string, seed: string): SessionRecord | null {
+export async function getSessionRecord(sessionId: string, seed: string): Promise<SessionRecord | null> {
   const key = runtimeKeyFrom(seed, sessionId);
-  return backend.get(key) ?? null;
+  const result = await backend.get(key);
+  return result ?? null;
 }
 
-export function updateSessionSpot(
+export async function updateSessionSpot(
   sessionId: string,
   seed: string,
   decisionIndex: number,
   spot: Spot
-): SessionRecord {
-  const record = getSessionRecord(sessionId, seed);
+): Promise<SessionRecord> {
+  const record = await getSessionRecord(sessionId, seed);
   if (!record) {
     throw new Error("session not found");
   }
@@ -103,12 +109,12 @@ export function updateSessionSpot(
   return record;
 }
 
-export function appendSessionEntry(
+export async function appendSessionEntry(
   sessionId: string,
   seed: string,
   entry: SessionEntry
-): SessionRecord {
-  const record = getSessionRecord(sessionId, seed);
+): Promise<SessionRecord> {
+  const record = await getSessionRecord(sessionId, seed);
   if (!record) {
     throw new Error("session not found");
   }
@@ -116,8 +122,8 @@ export function appendSessionEntry(
   return record;
 }
 
-export function clearSessionStore(): void {
-  backend.clear();
+export async function clearSessionStore(): Promise<void> {
+  await backend.clear();
 }
 
 export function setSessionStoreBackend(nextBackend: SessionStoreBackend): void {

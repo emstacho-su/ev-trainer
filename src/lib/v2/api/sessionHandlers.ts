@@ -2,6 +2,8 @@
  * Overview: Core session lifecycle business logic for start/submit/next/get.
  * Interacts with: pack/filter selection, runtime registry, in-memory session store, grading.
  * Importance: Central deterministic contract used by all session API routes.
+ *
+ * NOTE: All handler functions are async to support Prisma-based persistence.
  */
 
 import type { Spot } from "../../engine/spot";
@@ -29,6 +31,7 @@ import {
 } from "../sessionStore";
 import { getFilteredSpots, selectDeterministicSpot } from "../spotSource";
 import { Positions, Streets } from "../../engine/types";
+import { createHash } from "node:crypto";
 
 export interface ApiError {
   error: {
@@ -279,7 +282,7 @@ function gradeAction(spot: Spot, actionId: ActionId): DecisionGrade {
   return gradeDecision(output, actionId, { epsilon: 0.01, gradeBy: "evLossVsBest" });
 }
 
-export function handleStart(input: unknown): ApiResult<StartResponse> {
+export async function handleStart(input: unknown): Promise<ApiResult<StartResponse>> {
   if (!isObject(input)) return errorResult(400, "INVALID_ARGUMENT", "body must be an object");
   const seed = requireString(input, "seed");
   if (!seed) return errorResult(400, "INVALID_ARGUMENT", "seed is required");
@@ -323,7 +326,7 @@ export function handleStart(input: unknown): ApiResult<StartResponse> {
     decisionsPerSession,
   });
 
-  const record = createSessionRecord({
+  const record = await createSessionRecord({
     sessionId,
     seed,
     mode,
@@ -347,7 +350,7 @@ export function handleStart(input: unknown): ApiResult<StartResponse> {
     return errorResult(404, "NO_CANDIDATES", "no spots match filters");
   }
 
-  updateSessionSpot(sessionId, seed, registrySnapshot.decisionIndex, selected.spot);
+  await updateSessionSpot(sessionId, seed, registrySnapshot.decisionIndex, selected.spot);
 
   return {
     status: 200,
@@ -359,14 +362,14 @@ export function handleStart(input: unknown): ApiResult<StartResponse> {
   };
 }
 
-export function handleNext(input: unknown): ApiResult<NextResponse> {
+export async function handleNext(input: unknown): Promise<ApiResult<NextResponse>> {
   if (!isObject(input)) return errorResult(400, "INVALID_ARGUMENT", "body must be an object");
   const seed = requireString(input, "seed");
   const sessionId = requireString(input, "sessionId");
   if (!seed) return errorResult(400, "INVALID_ARGUMENT", "seed is required");
   if (!sessionId) return errorResult(400, "INVALID_ARGUMENT", "sessionId is required");
 
-  const record = getSessionRecord(sessionId, seed);
+  const record = await getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
   const hasSubmissionForCurrentDecision = record.entries.some(
     (entry) => entry.index === record.decisionIndex
@@ -411,7 +414,7 @@ export function handleNext(input: unknown): ApiResult<NextResponse> {
     return errorResult(404, "NO_CANDIDATES", "no spots match filters");
   }
 
-  updateSessionSpot(sessionId, seed, registrySnapshot.decisionIndex, selected.spot);
+  await updateSessionSpot(sessionId, seed, registrySnapshot.decisionIndex, selected.spot);
 
   return {
     status: 200,
@@ -423,14 +426,14 @@ export function handleNext(input: unknown): ApiResult<NextResponse> {
   };
 }
 
-export function handleSubmit(input: unknown): ApiResult<SubmitTrainingResponse | SubmitPracticeResponse> {
+export async function handleSubmit(input: unknown): Promise<ApiResult<SubmitTrainingResponse | SubmitPracticeResponse>> {
   if (!isObject(input)) return errorResult(400, "INVALID_ARGUMENT", "body must be an object");
   const seed = requireString(input, "seed");
   const sessionId = requireString(input, "sessionId");
   if (!seed) return errorResult(400, "INVALID_ARGUMENT", "seed is required");
   if (!sessionId) return errorResult(400, "INVALID_ARGUMENT", "sessionId is required");
 
-  const record = getSessionRecord(sessionId, seed);
+  const record = await getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
 
   const spotValue = input.spot;
@@ -472,7 +475,7 @@ export function handleSubmit(input: unknown): ApiResult<SubmitTrainingResponse |
   }
 
   const grade = gradeAction(spot, actionId as ActionId);
-  appendSessionEntry(sessionId, seed, {
+  await appendSessionEntry(sessionId, seed, {
     index: record.decisionIndex,
     spotId: spot.spotId,
     spot,
@@ -486,11 +489,11 @@ export function handleSubmit(input: unknown): ApiResult<SubmitTrainingResponse |
   return { status: 200, body: { ok: true, result: grade } };
 }
 
-export function handleGetSession(sessionId: string, seed?: string | null): ApiResult<SessionDetailResponse> {
+export async function handleGetSession(sessionId: string, seed?: string | null): Promise<ApiResult<SessionDetailResponse>> {
   if (!seed || seed.trim().length === 0) {
     return errorResult(400, "INVALID_ARGUMENT", "seed is required");
   }
-  const record = getSessionRecord(sessionId, seed);
+  const record = await getSessionRecord(sessionId, seed);
   if (!record) return errorResult(404, "NOT_FOUND", "session not found");
 
   const registrySnapshot = getSession(record.sessionId, record.seed);
@@ -558,4 +561,3 @@ export function handleGetSession(sessionId: string, seed?: string | null): ApiRe
     },
   };
 }
-import { createHash } from "node:crypto";

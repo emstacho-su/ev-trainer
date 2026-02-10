@@ -14,9 +14,9 @@ import { clearSessionRegistry } from "../../runtime/v2SessionRegistry";
 import { clearSessionStore, getSessionRecord } from "../sessionStore";
 import { clearBundledPackCache } from "../packs/loadBundledPack";
 
-function resetState() {
+async function resetState() {
   clearSessionRegistry();
-  clearSessionStore();
+  await clearSessionStore();
   clearBundledPackCache();
 }
 
@@ -32,13 +32,13 @@ function expectSuccess<T extends object>(result: {
 }
 
 describe("v2 session handlers", () => {
-  beforeEach(() => {
-    resetState();
+  beforeEach(async () => {
+    await resetState();
   });
 
-  it("starts training and practice sessions with spot payloads", () => {
+  it("starts training and practice sessions with spot payloads", async () => {
     const training = expectSuccess<StartResponse>(
-      handleStart({
+      await handleStart({
       seed: "seed-a",
       mode: "TRAINING",
       packId: "ev-dev-pack-v1",
@@ -51,7 +51,7 @@ describe("v2 session handlers", () => {
     expect(training.spot.spotId).toBeTruthy();
 
     const practice = expectSuccess<StartResponse>(
-      handleStart({
+      await handleStart({
       seed: "seed-b",
       mode: "PRACTICE",
       packId: "ev-dev-pack-v1",
@@ -62,17 +62,17 @@ describe("v2 session handlers", () => {
     expect(practice.spot.spotId).toBeTruthy();
   });
 
-  it("next is deterministic for the same inputs across runs", () => {
-    const run = () => {
-      resetState();
-      const start = handleStart({
+  it("next is deterministic for the same inputs across runs", async () => {
+    const run = async () => {
+      await resetState();
+      const start = await handleStart({
         seed: "seed-a",
         mode: "TRAINING",
         packId: "ev-dev-pack-v1",
         filters: {},
       });
       const startBody = expectSuccess<StartResponse>(start);
-      const submitBody = handleSubmit({
+      const submitBody = await handleSubmit({
         seed: startBody.session.seed,
         sessionId: startBody.session.sessionId,
         spot: startBody.spot,
@@ -80,27 +80,27 @@ describe("v2 session handlers", () => {
       });
       expect(submitBody.status).toBe(200);
       const nextBody = expectSuccess<NextResponse>(
-        handleNext({
+        await handleNext({
           seed: startBody.session.seed,
           sessionId: startBody.session.sessionId,
         })
       );
       return nextBody.spot.spotId;
     };
-    const first = run();
-    const second = run();
+    const first = await run();
+    const second = await run();
     expect(first).toBe(second);
   });
 
-  it("submit returns grading in training and recorded ack in practice", () => {
-    const trainingStart = expectSuccess<StartResponse>(handleStart({
+  it("submit returns grading in training and recorded ack in practice", async () => {
+    const trainingStart = expectSuccess<StartResponse>(await handleStart({
       seed: "seed-a",
       mode: "TRAINING",
       packId: "ev-dev-pack-v1",
       filters: {},
     }));
     const trainingSubmit = expectSuccess<SubmitTrainingResponse | SubmitPracticeResponse>(
-      handleSubmit({
+      await handleSubmit({
       seed: trainingStart.session.seed,
       sessionId: trainingStart.session.sessionId,
       spot: trainingStart.spot,
@@ -112,14 +112,14 @@ describe("v2 session handlers", () => {
       expect(trainingSubmit.result.evLossVsBest).toBeDefined();
     }
 
-    const practiceStart = expectSuccess<StartResponse>(handleStart({
+    const practiceStart = expectSuccess<StartResponse>(await handleStart({
       seed: "seed-b",
       mode: "PRACTICE",
       packId: "ev-dev-pack-v1",
       filters: {},
     }));
     const practiceSubmit = expectSuccess<SubmitTrainingResponse | SubmitPracticeResponse>(
-      handleSubmit({
+      await handleSubmit({
       seed: practiceStart.session.seed,
       sessionId: practiceStart.session.sessionId,
       spot: practiceStart.spot,
@@ -130,8 +130,8 @@ describe("v2 session handlers", () => {
     expect("result" in practiceSubmit).toBe(false);
   });
 
-  it("get session respects practice review gating", () => {
-    const start = expectSuccess<StartResponse>(handleStart({
+  it("get session respects practice review gating", async () => {
+    const start = expectSuccess<StartResponse>(await handleStart({
       seed: "seed-a",
       mode: "PRACTICE",
       packId: "ev-dev-pack-v1",
@@ -139,12 +139,12 @@ describe("v2 session handlers", () => {
       decisionsPerSession: 1,
     }));
     const preCompleteDetail = expectSuccess<SessionDetailResponse>(
-      handleGetSession(start.session.sessionId, start.session.seed)
+      await handleGetSession(start.session.sessionId, start.session.seed)
     );
     expect(preCompleteDetail.reviewAvailable).toBe(false);
     expect(preCompleteDetail.entries).toBeUndefined();
 
-    const submit = expectSuccess<SubmitPracticeResponse | SubmitTrainingResponse>(handleSubmit({
+    const submit = expectSuccess<SubmitPracticeResponse | SubmitTrainingResponse>(await handleSubmit({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
       spot: start.spot,
@@ -152,21 +152,21 @@ describe("v2 session handlers", () => {
     }));
     expect("recorded" in submit && submit.recorded).toBe(true);
 
-    const completionSignal = handleNext({
+    const completionSignal = await handleNext({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
     });
     expect(completionSignal.status).toBe(409);
     const complete = expectSuccess<SessionDetailResponse>(
-      handleGetSession(start.session.sessionId, start.session.seed)
+      await handleGetSession(start.session.sessionId, start.session.seed)
     );
     expect(complete.reviewAvailable).toBe(true);
       expect(complete.entries?.length).toBeGreaterThan(0);
   });
 
-  it("blocks training review before completion and unlocks after completion", () => {
+  it("blocks training review before completion and unlocks after completion", async () => {
     const start = expectSuccess<StartResponse>(
-      handleStart({
+      await handleStart({
         seed: "seed-training",
         mode: "TRAINING",
         packId: "ev-dev-pack-v1",
@@ -176,13 +176,13 @@ describe("v2 session handlers", () => {
     );
 
     const preCompleteDetail = expectSuccess<SessionDetailResponse>(
-      handleGetSession(start.session.sessionId, start.session.seed)
+      await handleGetSession(start.session.sessionId, start.session.seed)
     );
     expect(preCompleteDetail.reviewAvailable).toBe(false);
     expect(preCompleteDetail.entries).toBeUndefined();
 
     const submit = expectSuccess<SubmitPracticeResponse | SubmitTrainingResponse>(
-      handleSubmit({
+      await handleSubmit({
         seed: start.session.seed,
         sessionId: start.session.sessionId,
         spot: start.spot,
@@ -191,22 +191,22 @@ describe("v2 session handlers", () => {
     );
     expect("result" in submit).toBe(true);
 
-    const completionSignal = handleNext({
+    const completionSignal = await handleNext({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
     });
     expect(completionSignal.status).toBe(409);
 
     const complete = expectSuccess<SessionDetailResponse>(
-      handleGetSession(start.session.sessionId, start.session.seed)
+      await handleGetSession(start.session.sessionId, start.session.seed)
     );
     expect(complete.reviewAvailable).toBe(true);
     expect(complete.entries?.length).toBe(1);
   });
 
-  it("submit is idempotent for same decision/action and rejects conflicting duplicates", () => {
+  it("submit is idempotent for same decision/action and rejects conflicting duplicates", async () => {
     const start = expectSuccess<StartResponse>(
-      handleStart({
+      await handleStart({
         seed: "seed-idempotent",
         mode: "TRAINING",
         packId: "ev-dev-pack-v1",
@@ -216,7 +216,7 @@ describe("v2 session handlers", () => {
     );
 
     const first = expectSuccess<SubmitTrainingResponse | SubmitPracticeResponse>(
-      handleSubmit({
+      await handleSubmit({
         seed: start.session.seed,
         sessionId: start.session.sessionId,
         spot: start.spot,
@@ -224,7 +224,7 @@ describe("v2 session handlers", () => {
       })
     );
     const second = expectSuccess<SubmitTrainingResponse | SubmitPracticeResponse>(
-      handleSubmit({
+      await handleSubmit({
         seed: start.session.seed,
         sessionId: start.session.sessionId,
         spot: start.spot,
@@ -237,10 +237,10 @@ describe("v2 session handlers", () => {
       expect(second.result).toEqual(first.result);
     }
 
-    const record = getSessionRecord(start.session.sessionId, start.session.seed);
+    const record = await getSessionRecord(start.session.sessionId, start.session.seed);
     expect(record?.entries.length).toBe(1);
 
-    const conflicting = handleSubmit({
+    const conflicting = await handleSubmit({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
       spot: start.spot,
@@ -252,9 +252,9 @@ describe("v2 session handlers", () => {
     }
   });
 
-  it("requires submit before next", () => {
+  it("requires submit before next", async () => {
     const start = expectSuccess<StartResponse>(
-      handleStart({
+      await handleStart({
         seed: "seed-next",
         mode: "PRACTICE",
         packId: "ev-dev-pack-v1",
@@ -262,7 +262,7 @@ describe("v2 session handlers", () => {
       })
     );
 
-    const next = handleNext({
+    const next = await handleNext({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
     });
@@ -272,9 +272,9 @@ describe("v2 session handlers", () => {
     }
   });
 
-  it("requires seed for session reads", () => {
+  it("requires seed for session reads", async () => {
     const start = expectSuccess<StartResponse>(
-      handleStart({
+      await handleStart({
         seed: "seed-read",
         mode: "TRAINING",
         packId: "ev-dev-pack-v1",
@@ -282,21 +282,21 @@ describe("v2 session handlers", () => {
       })
     );
 
-    const missingSeed = handleGetSession(start.session.sessionId, null);
+    const missingSeed = await handleGetSession(start.session.sessionId, null);
     expect(missingSeed.status).toBe(400);
     if (missingSeed.status === 400 && "error" in missingSeed.body) {
       expect(missingSeed.body.error.code).toBe("INVALID_ARGUMENT");
     }
 
-    const wrongSeed = handleGetSession(start.session.sessionId, "seed-other");
+    const wrongSeed = await handleGetSession(start.session.sessionId, "seed-other");
     expect(wrongSeed.status).toBe(404);
     if (wrongSeed.status === 404 && "error" in wrongSeed.body) {
       expect(wrongSeed.body.error.code).toBe("NOT_FOUND");
     }
   });
 
-  it("invalid input returns stable error schema", () => {
-    const response = handleStart({ mode: "TRAINING" });
+  it("invalid input returns stable error schema", async () => {
+    const response = await handleStart({ mode: "TRAINING" });
     expect(response.status).toBe(400);
     if (response.status === 400) {
       expect("error" in response.body).toBe(true);
