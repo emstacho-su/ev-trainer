@@ -9,9 +9,11 @@ import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 
 import { errorHandler } from "./middleware/error.middleware";
 import healthRoutes from "./routes/health.routes";
+import authRoutes from "./auth/auth.routes";
 
 const app = express();
 
@@ -49,7 +51,25 @@ app.use(compression());
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
+// Cookie parsing for refresh tokens
+app.use(cookieParser());
+
+// Stricter rate limit for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // 20 requests per 15 min (stricter than general API)
+  message: {
+    error: {
+      code: 'AUTH_RATE_LIMIT_EXCEEDED',
+      message: 'Too many authentication attempts, please try again later',
+    },
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Routes
+app.use('/api/auth', authLimiter, authRoutes);
 app.use("/health", healthRoutes);
 
 // Error handler - must be last
