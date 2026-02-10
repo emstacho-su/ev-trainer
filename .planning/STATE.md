@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 3 of 10 (Authentication)
-Plan: 4 of 4 in Phase 3
+Plan: 5 of 5 in Phase 3
 Status: Phase complete
-Last activity: 2026-02-10 -- Completed 03-04-PLAN.md
+Last activity: 2026-02-10 -- Completed 03-05-PLAN.md
 
-Progress: [========--------] ~32%
+Progress: [█████████░░░░░░░] ~30% (3 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 8.9 min
-- Total execution time: 131 min
+- Total plans completed: 16
+- Average duration: 8.6 min
+- Total execution time: 135 min
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [========--------] ~32%
 |-------|-------|-------|----------|
 | 01-solver-core | 7/7 ✓ | 72 min | 10.3 min |
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
-| 03-authentication | 4/4 ✓ | 11 min | 2.8 min |
+| 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-04 (12 min), 03-01 (3 min), 03-02 (3 min), 03-03 (2 min), 03-04 (3 min)
-- Trend: Auth phase complete, all plans under 3 min (foundation patterns well established)
+- Last 5 plans: 03-01 (3 min), 03-02 (3 min), 03-03 (2 min), 03-04 (3 min), 03-05 (4 min)
+- Trend: Phase 3 complete, all plans under 4 min (foundation patterns well established)
 
 *Updated after each plan completion*
 
@@ -108,6 +108,10 @@ Recent decisions affecting current work:
 - 03-04: OAuth users get emailVerified set automatically (provider verified)
 - 03-04: Account linking by email (OAuth links to existing user if email matches)
 - 03-04: No rate limiting on OAuth routes (external redirects, one-time callbacks)
+- 03-05: optionalAuth for session lifecycle (guests allowed, userId attached if logged in)
+- 03-05: requireAuth for session history endpoint (401 without token)
+- 03-05: Session ownership enforcement (403 if userId mismatch)
+- 03-05: Sessions link to userId for cross-device sync, null for guest sessions
 
 ### Pending Todos
 
@@ -121,6 +125,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-10
-Stopped at: Completed 03-04-PLAN.md (Phase 3 complete)
+Stopped at: Completed 03-05-PLAN.md (Phase 3 complete - all 5 plans done)
 Resume file: None
-Next: /gsd:execute-phase 4 (Begin Phase 4 - Frontend)
+Next: /gsd:execute-phase 4 (Begin Phase 4 - Frontend Foundation)
