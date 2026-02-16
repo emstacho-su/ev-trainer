@@ -49,9 +49,9 @@ export default function TableUIDemo() {
   ];
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] flex flex-col">
+    <div className="h-screen bg-[hsl(var(--background))] flex flex-col overflow-hidden">
       {/* Top bar: info + controls */}
-      <div className="flex items-center justify-between px-6 py-3">
+      <div className="flex items-center justify-between px-6 py-2 shrink-0">
         <InfoBar potType="3BP" sessionInfo="Hand 5 / 20" />
         <div className="flex gap-3">
           <button
@@ -69,20 +69,20 @@ export default function TableUIDemo() {
         </div>
       </div>
 
-      {/* Table area - takes most of the screen */}
-      <div className="flex-1 px-6">
+      {/* Table area - fills available space */}
+      <div className="flex-1 min-h-0 px-4">
         <PokerTable
           players={players}
           communityCards={communityCards}
           pot={15.5}
           dealerPosition="BTN"
           tableSize={tableSize}
-          className="max-w-5xl mx-auto"
+          className="h-full max-h-full mx-auto"
         />
       </div>
 
       {/* Bottom area: session controls + action panel */}
-      <div className="px-6 pb-6 max-w-3xl mx-auto w-full flex flex-col gap-3">
+      <div className="px-6 pb-4 pt-2 max-w-3xl mx-auto w-full flex flex-col gap-2 shrink-0">
         {/* Session controls row */}
         <SessionControls className="justify-center" />
 

@@ -109,7 +109,9 @@ export function PokerTable({
   const dealerOffsets = tableSize === '9max' ? DEALER_OFFSET_9MAX : DEALER_OFFSET_6MAX;
 
   return (
-    <div className={cn('relative w-full aspect-[16/10]', className)}>
+    <div className={cn('relative aspect-[16/10] mx-auto', className)}
+      style={{ maxHeight: '100%', maxWidth: '100%', width: 'auto', height: '100%' }}
+    >
       {/* Oval table surface */}
       <div className="absolute inset-[12%] bg-[hsl(var(--table-surface))] rounded-[50%] border-[6px] border-[hsl(var(--table-border))] shadow-2xl" />
 
