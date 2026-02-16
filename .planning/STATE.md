@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 4 of 10 (Table UI Foundation)
-Plan: 4 of 6 in Phase 4
+Plan: 5 of 6 in Phase 4
 Status: In progress
-Last activity: 2026-02-16 -- Completed 04-04-PLAN.md
+Last activity: 2026-02-16 -- Completed 04-05-PLAN.md
 
-Progress: [█████████░░░░░░░] ~37% (20 plans complete)
+Progress: [█████████░░░░░░░] ~39% (21 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
-- Average duration: 7.1 min
-- Total execution time: 141 min
+- Total plans completed: 21
+- Average duration: 6.9 min
+- Total execution time: 146 min
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [█████████░░░░░░░] ~37% (20 plans comp
 | 01-solver-core | 7/7 ✓ | 72 min | 10.3 min |
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
-| 04-table-ui-foundation | 4/6 | 4 min | 1.0 min |
+| 04-table-ui-foundation | 5/6 | 5 min | 1.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-05 (4 min), 04-01 (1 min), 04-02 (1 min), 04-03 (1 min), 04-04 (1 min)
+- Last 5 plans: 04-01 (1 min), 04-02 (1 min), 04-03 (1 min), 04-04 (1 min), 04-05 (1 min)
 - Trend: Phase 4 component creation consistently fast (simple React components, no complex logic)
 
 *Updated after each plan completion*
@@ -130,6 +130,12 @@ Recent decisions affecting current work:
 - 04-04: EV feedback displays only in revealed states with BB format (+X.XX BB)
 - 04-04: Frequency bar as horizontal progress indicator with percentage label
 - 04-04: Button disabled in revealed states to prevent re-clicks after feedback
+- 04-05: PokerTable defaults to 6-max with optional 9-max via tableSize prop
+- 04-05: Seat positions percentage-based for responsive scaling
+- 04-05: Dealer button positioned with offset maps separate from seat positions
+- 04-05: Z-index layering: table surface < seats (z-10) < dealer button (z-20) < center content (z-30)
+- 04-05: ActionPanel conditionally shows raise sizing only when Raise action available
+- 04-05: Aspect ratio locked at 16:10 with max-w-6xl for responsive sizing
 
 ### Pending Todos
 
@@ -143,6 +149,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-16
-Stopped at: Completed 04-04-PLAN.md (Phase 4 in progress - 4 of 6 plans done)
+Stopped at: Completed 04-05-PLAN.md (Phase 4 in progress - 5 of 6 plans done)
 Resume file: None
-Next: Continue Phase 4 execution (04-05 and 04-06)
+Next: Complete Phase 4 execution (04-06)
