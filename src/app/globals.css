@@ -2,14 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
+@layer base {
+  :root {
+    /* Semantic tokens */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    /* Poker-specific tokens */
+    --table-surface: 150 50% 30%; /* Green felt */
+    --table-border: 30 60% 40%; /* Wood border */
+    --chip-stack: 220 70% 50%; /* Blue chips */
+    --dealer-button: 0 0% 100%; /* White dealer button */
+    --action-positive: 142 76% 36%; /* Green for correct actions */
+    --action-negative: 0 84% 60%; /* Red for incorrect actions */
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --table-surface: 150 40% 20%; /* Darker felt */
+    --table-border: 30 50% 30%; /* Darker wood */
+    --chip-stack: 220 60% 40%; /* Darker chips */
+    --dealer-button: 0 0% 95%; /* Off-white */
+    --action-positive: 142 71% 45%; /* Lighter green for dark mode */
+    --action-negative: 0 72% 51%; /* Softer red for dark mode */
+  }
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: #f5f5f4;
-  color: #1c1c1a;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
   font-family: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', sans-serif;
 }
