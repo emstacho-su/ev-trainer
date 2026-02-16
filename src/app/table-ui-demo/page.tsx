@@ -9,10 +9,11 @@ import { InfoBar } from '@/components/poker/organisms/InfoBar';
 
 export default function TableUIDemo() {
   const { theme, setTheme } = useTheme();
-  const [actionStates, setActionStates] = useState({
-    fold: 'idle' as const,
-    call: 'idle' as const,
-    raise: 'idle' as const,
+  type ActionState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
+  const [actionStates, setActionStates] = useState<Record<string, ActionState>>({
+    fold: 'idle',
+    call: 'idle',
+    raise: 'idle',
   });
 
   const [tableSize, setTableSize] = useState<'6max' | '9max'>('6max');
