@@ -1,13 +1,11 @@
 import { cn } from '@/lib/utils';
 import { Card } from '../atoms/Card';
 import { CardBack } from '../atoms/CardBack';
-import { Chip } from '../atoms/Chip';
 
 interface PlayerSeatProps {
   position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
   stackBB: number;
   cards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>;
-  bet?: number;
   isActive: boolean;
   isFolded: boolean;
   isHero?: boolean;
@@ -19,7 +17,6 @@ export function PlayerSeat({
   position,
   stackBB,
   cards,
-  bet,
   isActive,
   isFolded,
   isHero = false,
@@ -29,30 +26,14 @@ export function PlayerSeat({
   return (
     <div
       className={cn(
-        'flex flex-col items-center gap-2 transition-opacity',
+        'flex flex-col items-center gap-1 transition-opacity',
         isFolded && 'opacity-40',
-        isHero && 'relative',
         className
       )}
     >
-      {/* Hero highlight ring */}
-      {isHero && (
-        <div className="absolute inset-0 -m-2 rounded-lg border-2 border-blue-500 animate-pulse" />
-      )}
-
-      {/* Position label */}
-      <span
-        className={cn(
-          'text-xs font-bold px-2 py-1 rounded-md',
-          isActive ? 'bg-green-600 text-white' : 'bg-gray-600 text-gray-300'
-        )}
-      >
-        {position}
-      </span>
-
       {/* Cards */}
       {cards && cards.length > 0 && !isFolded && (
-        <div className="flex gap-1">
+        <div className="flex -space-x-2">
           {showCards ? (
             cards.map((card, i) => (
               <Card key={i} rank={card.rank} suit={card.suit} size="sm" />
@@ -66,20 +47,24 @@ export function PlayerSeat({
         </div>
       )}
 
-      {/* Bet chips */}
-      {bet !== undefined && bet > 0 && (
-        <Chip amount={bet} size="sm" />
-      )}
-
-      {/* Stack size */}
-      <span
+      {/* Player info box: position + stack */}
+      <div
         className={cn(
-          'text-xs font-semibold px-2 py-0.5 rounded-md',
-          isActive ? 'bg-gray-800 text-white' : 'bg-gray-600 text-gray-400'
+          'flex flex-col items-center rounded-md px-3 py-1 min-w-[60px]',
+          isHero
+            ? 'bg-blue-600 ring-2 ring-blue-400'
+            : isActive
+              ? 'bg-gray-700'
+              : 'bg-gray-800',
         )}
       >
-        {stackBB.toFixed(1)} BB
-      </span>
+        <span className="text-[10px] font-bold text-white uppercase tracking-wide">
+          {position}
+        </span>
+        <span className="text-xs font-semibold text-gray-300">
+          {stackBB.toFixed(1)} BB
+        </span>
+      </div>
     </div>
   );
 }

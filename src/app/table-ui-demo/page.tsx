@@ -7,9 +7,10 @@ import { ActionPanel } from '@/components/poker/organisms/ActionPanel';
 import { SessionControls } from '@/components/poker/organisms/SessionControls';
 import { InfoBar } from '@/components/poker/organisms/InfoBar';
 
+type ActionState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
+
 export default function TableUIDemo() {
   const { theme, setTheme } = useTheme();
-  type ActionState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
   const [actionStates, setActionStates] = useState<Record<string, ActionState>>({
     fold: 'idle',
     call: 'idle',
@@ -48,63 +49,68 @@ export default function TableUIDemo() {
   ];
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] p-8">
-      <div className="mb-4 flex justify-end gap-3">
-        <button
-          onClick={() => setTableSize(tableSize === '6max' ? '9max' : '6max')}
-          className="px-4 py-2 bg-blue-700 text-white rounded-md"
-        >
-          Table Size: {tableSize}
-        </button>
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="px-4 py-2 bg-gray-700 text-white rounded-md"
-        >
-          Toggle Theme ({theme})
-        </button>
-      </div>
-
-      <InfoBar potType="3BP" sessionInfo="Hand 5 / 20" className="mb-4" />
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <PokerTable
-            players={players}
-            communityCards={communityCards}
-            pot={15.5}
-            dealerPosition="BTN"
-            tableSize={tableSize}
-          />
-        </div>
-
-        <div>
-          <ActionPanel
-            actions={[
-              { action: 'fold', state: actionStates.fold },
-              { action: 'call', label: 'Call 5 BB', state: actionStates.call },
-              { action: 'raise', state: actionStates.raise },
-            ]}
-            onAction={(action) => {
-              setActionStates({ ...actionStates, [action]: 'selected' });
-              setTimeout(() => {
-                setActionStates({
-                  fold: action === 'fold' ? 'revealed-correct' : 'revealed-incorrect',
-                  call: action === 'call' ? 'revealed-incorrect' : 'revealed-incorrect',
-                  raise: action === 'raise' ? 'revealed-incorrect' : 'revealed-incorrect',
-                });
-              }, 1000);
-            }}
-          />
-          <SessionControls className="mt-4" />
+    <div className="min-h-screen bg-[hsl(var(--background))] flex flex-col">
+      {/* Top bar: info + controls */}
+      <div className="flex items-center justify-between px-6 py-3">
+        <InfoBar potType="3BP" sessionInfo="Hand 5 / 20" />
+        <div className="flex gap-3">
+          <button
+            onClick={() => setTableSize(tableSize === '6max' ? '9max' : '6max')}
+            className="px-3 py-1.5 bg-blue-700 text-white rounded-md text-sm"
+          >
+            {tableSize}
+          </button>
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="px-3 py-1.5 bg-gray-700 text-white rounded-md text-sm"
+          >
+            Theme
+          </button>
         </div>
       </div>
 
-      <div className="mt-8 text-center">
+      {/* Table area - takes most of the screen */}
+      <div className="flex-1 px-6">
+        <PokerTable
+          players={players}
+          communityCards={communityCards}
+          pot={15.5}
+          dealerPosition="BTN"
+          tableSize={tableSize}
+          className="max-w-5xl mx-auto"
+        />
+      </div>
+
+      {/* Bottom area: session controls + action panel */}
+      <div className="px-6 pb-6 max-w-3xl mx-auto w-full flex flex-col gap-3">
+        {/* Session controls row */}
+        <SessionControls className="justify-center" />
+
+        {/* Action panel below */}
+        <ActionPanel
+          actions={[
+            { action: 'fold', state: actionStates.fold },
+            { action: 'call', label: 'Call 5 BB', state: actionStates.call },
+            { action: 'raise', state: actionStates.raise },
+          ]}
+          onAction={(action) => {
+            setActionStates({ ...actionStates, [action]: 'selected' });
+            setTimeout(() => {
+              setActionStates({
+                fold: action === 'fold' ? 'revealed-correct' : 'revealed-incorrect',
+                call: action === 'call' ? 'revealed-incorrect' : 'revealed-incorrect',
+                raise: action === 'raise' ? 'revealed-incorrect' : 'revealed-incorrect',
+              });
+            }, 1000);
+          }}
+        />
+
+        {/* Reset for demo */}
         <button
           onClick={() => setActionStates({ fold: 'idle', call: 'idle', raise: 'idle' })}
-          className="px-6 py-3 bg-gray-700 text-white rounded-md"
+          className="px-4 py-2 bg-gray-700 text-white rounded-md text-sm mx-auto"
         >
-          Reset Action States
+          Reset Actions
         </button>
       </div>
     </div>

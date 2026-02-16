@@ -22,42 +22,43 @@ export function ActionPanel({
   onRaiseSize,
   className,
 }: ActionPanelProps) {
+  const hasRaise = actions.some((a) => a.action === 'raise' && a.state !== 'disabled');
+
   return (
-    <div className={cn('bg-gray-900 rounded-lg p-6 shadow-xl', className)}>
-      {/* Action buttons */}
-      <div className="flex flex-col gap-3">
+    <div className={cn('bg-gray-900 rounded-lg p-4 shadow-xl', className)}>
+      {/* Action buttons in a row */}
+      <div className="flex gap-3">
         {actions.map((actionData) => (
           <ActionButton
             key={actionData.action}
             {...actionData}
             onClick={() => onAction?.(actionData.action)}
+            className="flex-1"
           />
         ))}
       </div>
 
-      {/* Raise sizing (only show if Raise action is available) */}
-      {actions.some((a) => a.action === 'raise' && a.state !== 'disabled') && (
-        <div className="mt-4 pt-4 border-t border-gray-700">
-          <span className="text-xs font-semibold text-gray-400 uppercase mb-2 block">
-            Raise Size
+      {/* Raise sizing row */}
+      {hasRaise && (
+        <div className="mt-3 pt-3 border-t border-gray-700 flex items-center gap-2">
+          <span className="text-[10px] font-semibold text-gray-400 uppercase whitespace-nowrap">
+            Raise
           </span>
-          <div className="grid grid-cols-2 gap-2">
-            {raiseSizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => onRaiseSize?.(size)}
-                className="px-3 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors text-sm font-medium"
-              >
-                {size}% Pot
-              </button>
-            ))}
+          {raiseSizes.map((size) => (
             <button
-              onClick={() => onRaiseSize?.(0)}
-              className="px-3 py-2 bg-red-700 text-white rounded-md hover:bg-red-600 transition-colors text-sm font-medium col-span-2"
+              key={size}
+              onClick={() => onRaiseSize?.(size)}
+              className="flex-1 px-2 py-1.5 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors text-xs font-medium"
             >
-              All-in
+              {size}%
             </button>
-          </div>
+          ))}
+          <button
+            onClick={() => onRaiseSize?.(0)}
+            className="px-3 py-1.5 bg-red-700 text-white rounded-md hover:bg-red-600 transition-colors text-xs font-medium"
+          >
+            All-in
+          </button>
         </div>
       )}
     </div>
