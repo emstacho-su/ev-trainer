@@ -13,6 +13,27 @@ interface PlayerSeatProps {
   className?: string;
 }
 
+function PlayerAvatar() {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      className="w-8 h-8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Head circle */}
+      <circle cx="16" cy="11" r="6" stroke="#6b7280" strokeWidth="1.5" fill="#374151" />
+      {/* Body/shoulders arc */}
+      <path
+        d="M6 28c0-5.523 4.477-10 10-10s10 4.477 10 10"
+        stroke="#6b7280"
+        strokeWidth="1.5"
+        fill="#374151"
+      />
+    </svg>
+  );
+}
+
 export function PlayerSeat({
   position,
   stackBB,
@@ -23,6 +44,8 @@ export function PlayerSeat({
   showCards = false,
   className,
 }: PlayerSeatProps) {
+  const hasVisibleCards = cards && cards.length > 0 && !isFolded;
+
   return (
     <div
       className={cn(
@@ -31,26 +54,24 @@ export function PlayerSeat({
         className
       )}
     >
-      {/* Cards */}
-      {cards && cards.length > 0 && !isFolded && (
-        <div className="flex -space-x-2">
-          {showCards ? (
-            cards.map((card, i) => (
-              <Card key={i} rank={card.rank} suit={card.suit} size="sm" />
-            ))
-          ) : (
-            <>
-              <CardBack size="sm" />
-              <CardBack size="sm" />
-            </>
-          )}
+      {/* Hero: show cards above info box */}
+      {hasVisibleCards && showCards && (
+        <div className="flex gap-1">
+          {cards!.map((card, i) => (
+            <Card key={i} rank={card.rank} suit={card.suit} size="sm" />
+          ))}
         </div>
+      )}
+
+      {/* Villain: show avatar icon above info box, no card backs */}
+      {!isHero && (
+        <PlayerAvatar />
       )}
 
       {/* Player info box: position + stack */}
       <div
         className={cn(
-          'flex flex-col items-center rounded-md px-3 py-1 min-w-[60px]',
+          'flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px]',
           isHero
             ? 'bg-blue-600 ring-2 ring-blue-400'
             : isActive
@@ -58,10 +79,10 @@ export function PlayerSeat({
               : 'bg-gray-800',
         )}
       >
-        <span className="text-[10px] font-bold text-white uppercase tracking-wide">
+        <span className="text-xs font-bold text-white uppercase tracking-wide">
           {position}
         </span>
-        <span className="text-xs font-semibold text-gray-300">
+        <span className="text-sm font-semibold text-gray-300">
           {stackBB.toFixed(1)} BB
         </span>
       </div>

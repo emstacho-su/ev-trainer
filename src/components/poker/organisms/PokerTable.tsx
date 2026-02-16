@@ -27,73 +27,65 @@ interface PokerTableProps {
   className?: string;
 }
 
-// Outer ring: player seats (outside the table felt)
-// Positions are % of the container. Players sit around the perimeter.
-// Standard poker layout: hero (BB) at bottom center
-const SEAT_POSITIONS_6MAX: Record<string, { top: string; left: string }> = {
-  BB:  { top: '85%', left: '50%' },   // bottom center (hero)
-  SB:  { top: '75%', left: '82%' },   // bottom right
-  BTN: { top: '30%', left: '88%' },   // right
-  CO:  { top: '10%', left: '68%' },   // top right
-  HJ:  { top: '10%', left: '32%' },   // top left
-  UTG: { top: '30%', left: '12%' },   // left
-};
+// Elliptical seat placement for perfect symmetry.
+// Center at (50%, 50%). Semi-axes define the ring radius.
+// Angle 0 = right, counter-clockwise. BB starts at -90° (bottom).
+// Seats go clockwise: BB, SB, BTN, CO, HJ, UTG (6-max)
+// or BB, SB, BTN, CO, HJ, MP, UTG+2, UTG+1, UTG (9-max)
 
-const SEAT_POSITIONS_9MAX: Record<string, { top: string; left: string }> = {
-  BB:    { top: '85%', left: '50%' },   // bottom center
-  SB:    { top: '80%', left: '78%' },   // bottom right
-  BTN:   { top: '55%', left: '90%' },   // right
-  CO:    { top: '25%', left: '85%' },   // upper right
-  HJ:    { top: '8%',  left: '68%' },   // top right
-  MP:    { top: '8%',  left: '32%' },   // top left
-  'UTG+2': { top: '25%', left: '15%' }, // upper left
-  'UTG+1': { top: '55%', left: '10%' }, // left
-  UTG:   { top: '80%', left: '22%' },   // bottom left
-};
+function ellipsePos(angleDeg: number, rx: number, ry: number): { top: string; left: string } {
+  const rad = (angleDeg * Math.PI) / 180;
+  const x = 50 + rx * Math.cos(rad);
+  const y = 50 - ry * Math.sin(rad);
+  return { left: `${x.toFixed(1)}%`, top: `${y.toFixed(1)}%` };
+}
 
-// Inner ring: bet chips (close to players, just inside the felt edge)
-const BET_POSITIONS_6MAX: Record<string, { top: string; left: string }> = {
-  BB:  { top: '74%', left: '50%' },
-  SB:  { top: '66%', left: '74%' },
-  BTN: { top: '35%', left: '78%' },
-  CO:  { top: '18%', left: '64%' },
-  HJ:  { top: '18%', left: '36%' },
-  UTG: { top: '35%', left: '22%' },
-};
+// Seat order clockwise from BB (bottom)
+const SEAT_ORDER_6MAX = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'UTG'] as const;
+const SEAT_ORDER_9MAX = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'MP', 'UTG+2', 'UTG+1', 'UTG'] as const;
 
-const BET_POSITIONS_9MAX: Record<string, { top: string; left: string }> = {
-  BB:    { top: '74%', left: '50%' },
-  SB:    { top: '72%', left: '70%' },
-  BTN:   { top: '52%', left: '78%' },
-  CO:    { top: '30%', left: '76%' },
-  HJ:    { top: '16%', left: '62%' },
-  MP:    { top: '16%', left: '38%' },
-  'UTG+2': { top: '30%', left: '24%' },
-  'UTG+1': { top: '52%', left: '22%' },
-  UTG:   { top: '72%', left: '30%' },
-};
+// Outer ring: seats outside the felt
+const SEAT_RX = 42;
+const SEAT_RY = 40;
 
-// Dealer button: small offset from the player seat toward center
-const DEALER_OFFSET_6MAX: Record<string, { top: string; left: string }> = {
-  BB:  { top: '78%', left: '44%' },
-  SB:  { top: '70%', left: '76%' },
-  BTN: { top: '35%', left: '82%' },
-  CO:  { top: '15%', left: '62%' },
-  HJ:  { top: '15%', left: '38%' },
-  UTG: { top: '35%', left: '18%' },
-};
+// Inner ring: bet chips (between seats and center)
+const BET_RX = 30;
+const BET_RY = 28;
 
-const DEALER_OFFSET_9MAX: Record<string, { top: string; left: string }> = {
-  BB:    { top: '78%', left: '44%' },
-  SB:    { top: '74%', left: '72%' },
-  BTN:   { top: '50%', left: '84%' },
-  CO:    { top: '28%', left: '80%' },
-  HJ:    { top: '12%', left: '62%' },
-  MP:    { top: '12%', left: '38%' },
-  'UTG+2': { top: '28%', left: '20%' },
-  'UTG+1': { top: '50%', left: '16%' },
-  UTG:   { top: '74%', left: '28%' },
-};
+// Dealer button ring (between seats and bets)
+const DEALER_RX = 37;
+const DEALER_RY = 35;
+
+function buildPositions(seatOrder: readonly string[], rx: number, ry: number): Record<string, { top: string; left: string }> {
+  const count = seatOrder.length;
+  const result: Record<string, { top: string; left: string }> = {};
+  for (let i = 0; i < count; i++) {
+    // Start at -90° (bottom), go clockwise (subtract angle)
+    const angle = -90 - (i * 360) / count;
+    result[seatOrder[i]] = ellipsePos(angle, rx, ry);
+  }
+  return result;
+}
+
+// Dealer button is offset slightly clockwise from the seat position
+function buildDealerPositions(seatOrder: readonly string[]): Record<string, { top: string; left: string }> {
+  const count = seatOrder.length;
+  const result: Record<string, { top: string; left: string }> = {};
+  for (let i = 0; i < count; i++) {
+    const angle = -90 - (i * 360) / count + 8; // 8° offset toward previous seat
+    result[seatOrder[i]] = ellipsePos(angle, DEALER_RX, DEALER_RY);
+  }
+  return result;
+}
+
+const SEAT_POSITIONS_6MAX = buildPositions(SEAT_ORDER_6MAX, SEAT_RX, SEAT_RY);
+const SEAT_POSITIONS_9MAX = buildPositions(SEAT_ORDER_9MAX, SEAT_RX, SEAT_RY);
+
+const BET_POSITIONS_6MAX = buildPositions(SEAT_ORDER_6MAX, BET_RX, BET_RY);
+const BET_POSITIONS_9MAX = buildPositions(SEAT_ORDER_9MAX, BET_RX, BET_RY);
+
+const DEALER_OFFSET_6MAX = buildDealerPositions(SEAT_ORDER_6MAX);
+const DEALER_OFFSET_9MAX = buildDealerPositions(SEAT_ORDER_9MAX);
 
 export function PokerTable({
   players,
