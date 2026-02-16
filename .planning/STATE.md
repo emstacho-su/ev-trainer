@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 4 of 10 (Table UI Foundation)
-Plan: 3 of 6 in Phase 4
+Plan: 4 of 6 in Phase 4
 Status: In progress
-Last activity: 2026-02-16 -- Completed 04-03-PLAN.md
+Last activity: 2026-02-16 -- Completed 04-04-PLAN.md
 
-Progress: [█████████░░░░░░░] ~35% (19 plans complete)
+Progress: [█████████░░░░░░░] ~37% (20 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 19
-- Average duration: 7.3 min
-- Total execution time: 138 min
+- Total plans completed: 20
+- Average duration: 7.1 min
+- Total execution time: 141 min
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [█████████░░░░░░░] ~35% (19 plans comp
 | 01-solver-core | 7/7 ✓ | 72 min | 10.3 min |
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
-| 04-table-ui-foundation | 3/6 | 3 min | 1.0 min |
+| 04-table-ui-foundation | 4/6 | 4 min | 1.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-04 (3 min), 03-05 (4 min), 04-01 (1 min), 04-02 (1 min), 04-03 (1 min)
-- Trend: Phase 4 component creation very fast (simple React components, no complex logic)
+- Last 5 plans: 03-05 (4 min), 04-01 (1 min), 04-02 (1 min), 04-03 (1 min), 04-04 (1 min)
+- Trend: Phase 4 component creation consistently fast (simple React components, no complex logic)
 
 *Updated after each plan completion*
 
@@ -126,6 +126,10 @@ Recent decisions affecting current work:
 - 04-03: Folded seats dim with opacity-40 for clear visual state
 - 04-03: CommunityCards returns null when empty (preflop state)
 - 04-03: All BB amounts display with 1 decimal precision (toFixed(1))
+- 04-04: 5-state machine for ActionButton (idle, disabled, selected, revealed-correct, revealed-incorrect)
+- 04-04: EV feedback displays only in revealed states with BB format (+X.XX BB)
+- 04-04: Frequency bar as horizontal progress indicator with percentage label
+- 04-04: Button disabled in revealed states to prevent re-clicks after feedback
 
 ### Pending Todos
 
@@ -139,6 +143,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-16
-Stopped at: Completed 04-03-PLAN.md (Phase 4 in progress - 3 of 6 plans done)
+Stopped at: Completed 04-04-PLAN.md (Phase 4 in progress - 4 of 6 plans done)
 Resume file: None
-Next: Continue Phase 4 execution (04-04 through 04-06)
+Next: Continue Phase 4 execution (04-05 and 04-06)
