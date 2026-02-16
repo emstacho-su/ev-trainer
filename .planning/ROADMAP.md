@@ -93,12 +93,15 @@ Plans:
   3. Action buttons (Fold, Call, Raise) show EV and frequency after decision
   4. Dark theme with realistic card/chip designs renders at 1920x1080 and scales to 1280x720
   5. Control buttons (Start, Next, Restart, Stop, View Ranges) function correctly
-**Plans**: TBD
+**Plans**: 6 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
-- [ ] 04-03: TBD
+- [ ] 04-01-PLAN.md — Theme infrastructure with next-themes, CSS variables, and utility helpers
+- [ ] 04-02-PLAN.md — Atomic components (Card, CardBack, Chip, DealerButton)
+- [ ] 04-03-PLAN.md — Player seat molecules (PlayerSeat, CommunityCards, PotDisplay)
+- [ ] 04-04-PLAN.md — Action button molecule with EV feedback and frequency bar
+- [ ] 04-05-PLAN.md — Table organism with oval layout, action panel, session controls, info bar
+- [ ] 04-06-PLAN.md — Visual verification checkpoint (human confirms UI at multiple viewports)
 
 ### Phase 5: Preflop Training
 **Goal**: Users can practice preflop decisions (RFI, 3bet, 4bet, blind defense) with solver grading
