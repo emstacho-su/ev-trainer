@@ -51,27 +51,26 @@ const SEAT_POSITIONS_9MAX: Record<string, { top: string; left: string }> = {
   UTG:   { top: '80%', left: '22%' },   // bottom left
 };
 
-// Inner ring: bet chips (between player and table center)
-// Offset ~30-35% toward center from seat position
+// Inner ring: bet chips (close to players, just inside the felt edge)
 const BET_POSITIONS_6MAX: Record<string, { top: string; left: string }> = {
-  BB:  { top: '68%', left: '50%' },
-  SB:  { top: '62%', left: '68%' },
-  BTN: { top: '38%', left: '72%' },
-  CO:  { top: '25%', left: '62%' },
-  HJ:  { top: '25%', left: '38%' },
-  UTG: { top: '38%', left: '28%' },
+  BB:  { top: '74%', left: '50%' },
+  SB:  { top: '66%', left: '74%' },
+  BTN: { top: '35%', left: '78%' },
+  CO:  { top: '18%', left: '64%' },
+  HJ:  { top: '18%', left: '36%' },
+  UTG: { top: '35%', left: '22%' },
 };
 
 const BET_POSITIONS_9MAX: Record<string, { top: string; left: string }> = {
-  BB:    { top: '68%', left: '50%' },
-  SB:    { top: '65%', left: '65%' },
-  BTN:   { top: '50%', left: '72%' },
-  CO:    { top: '33%', left: '70%' },
-  HJ:    { top: '22%', left: '60%' },
-  MP:    { top: '22%', left: '40%' },
-  'UTG+2': { top: '33%', left: '30%' },
-  'UTG+1': { top: '50%', left: '28%' },
-  UTG:   { top: '65%', left: '35%' },
+  BB:    { top: '74%', left: '50%' },
+  SB:    { top: '72%', left: '70%' },
+  BTN:   { top: '52%', left: '78%' },
+  CO:    { top: '30%', left: '76%' },
+  HJ:    { top: '16%', left: '62%' },
+  MP:    { top: '16%', left: '38%' },
+  'UTG+2': { top: '30%', left: '24%' },
+  'UTG+1': { top: '52%', left: '22%' },
+  UTG:   { top: '72%', left: '30%' },
 };
 
 // Dealer button: small offset from the player seat toward center
