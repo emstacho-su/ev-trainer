@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 11 of 12 (Supabase Database Integration)
-Plan: 11-04 complete, 11-08 pending
+Plan: 11-06 complete, 11-08 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 11-04-PLAN.md (Login/signup pages and AppHeader auth)
+Last activity: 2026-02-17 -- Completed 11-06-PLAN.md (Stats data layer rewrite)
 
-Progress: [████████████████████░] ~99% (67 plans complete)
+Progress: [████████████████████░] ~99% (68 plans complete)
 
 ## Performance Metrics
 
@@ -276,6 +276,10 @@ Recent decisions affecting current work:
 - 11-04: OAuth buttons use dark stone-800 background with provider logos
 - 11-04: Display name truncated at 20 chars in AppHeader, hidden on mobile
 - 11-04: Sign Up button green-600 CTA, Log In text-only style in header
+- 11-06: Client-side position grouping for spot_stats (Supabase lacks server-side groupBy)
+- 11-06: Check-then-insert pattern for daily_stats/spot_stats upserts
+- 11-06: Cookie-based Supabase auth replaces Bearer token auth in stats routes
+- 11-06: Stats page components unchanged -- response shapes preserved exactly
 
 ### Pending Todos
 
@@ -298,6 +302,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 11-04-PLAN.md (Login/signup pages and AppHeader auth)
+Stopped at: Completed 11-06-PLAN.md (Stats data layer rewrite)
 Resume file: None
 Next: Execute 11-08-PLAN.md
