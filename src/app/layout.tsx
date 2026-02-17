@@ -1,4 +1,5 @@
 import { ThemeProvider } from './providers/ThemeProvider';
+import { AnimationProvider } from './providers/AnimationProvider';
 import { ToastProvider } from '@/lib/ui/toastContext';
 import ToastContainer from '@/lib/ui/ToastContainer';
 import './globals.css';
@@ -8,10 +9,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <ToastProvider>
-            {children}
-            <ToastContainer />
-          </ToastProvider>
+          <AnimationProvider>
+            <ToastProvider>
+              {children}
+              <ToastContainer />
+            </ToastProvider>
+          </AnimationProvider>
         </ThemeProvider>
       </body>
     </html>
