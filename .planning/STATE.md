@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 5 of 10 (Preflop Training)
-Plan: 5 of 7 in Phase 5
+Plan: 6 of 7 in Phase 5
 Status: In progress
-Last activity: 2026-02-17 -- Completed 05-05-PLAN.md (Gap closure)
+Last activity: 2026-02-17 -- Completed 05-06-PLAN.md (Gap closure - keyboard shortcuts)
 
-Progress: [██████████░░░░░░] ~47% (30 plans complete)
+Progress: [██████████░░░░░░] ~48% (31 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 30
-- Average duration: 7.2 min
-- Total execution time: 216 min
+- Total plans completed: 31
+- Average duration: 7.0 min
+- Total execution time: 217 min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [██████████░░░░░░] ~47% (30 plans comp
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
 | 04-table-ui-foundation | 6/6 ✓ | 65 min | 10.8 min |
-| 05-preflop-training | 5/7 | 12 min | 2.4 min |
+| 05-preflop-training | 6/7 | 13 min | 2.2 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-06 (1 min), 05-01 (7 min), 05-02 (0 min - skipped), 05-03 (4 min), 05-05 (1 min)
-- Trend: Phase 5 averaging 2.4 min (small bug fixes and gap closure plans)
+- Last 5 plans: 05-01 (7 min), 05-02 (0 min - skipped), 05-03 (4 min), 05-05 (1 min), 05-06 (1 min)
+- Trend: Phase 5 averaging 2.2 min (small bug fixes and gap closure plans)
 
 *Updated after each plan completion*
 
@@ -151,6 +151,8 @@ Recent decisions affecting current work:
 - 05-03: Guest limit 50 hands/day tracked in localStorage with daily reset
 - 05-05: isActive = !hasFolded (player still in hand, not based on action existence)
 - 05-05: Bet display shows blinds for SB/BB even when they haven't acted yet
+- 05-06: Empty dependency array for keyboard event handlers prevents listener detach/reattach
+- 05-06: Inline handler logic with ref-based state access for stable event listeners
 
 ### Pending Todos
 
@@ -163,7 +165,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:19 UTC
-Stopped at: Completed 05-05-PLAN.md (Fix villain seat display logic)
+Last session: 2026-02-17 02:23 UTC
+Stopped at: Completed 05-06-PLAN.md (Fix keyboard shortcuts)
 Resume file: None
-Next: Execute 05-06-PLAN.md (Next gap closure plan) or 05-UAT.md re-test
+Next: Execute 05-07-PLAN.md (Final gap closure plan) or 05-UAT.md re-test
