@@ -235,17 +235,25 @@ Plans:
 ### Phase 11: Supabase Database Integration
 **Goal**: Migrate from Express/PostgreSQL/Prisma backend to Supabase with user accounts, practice spot hand database, and fully rewritten data layer
 **Depends on**: Phase 2 (replaces backend foundation), Phase 3 (replaces auth)
-**Requirements**: TBD
+**Requirements**: SUPA-01 through SUPA-09
 **Success Criteria** (what must be TRUE):
   1. Supabase project configured with database schema for users, sessions, hands, and stats
   2. User account creation and authentication via Supabase Auth (replaces custom JWT/Argon2)
   3. Practice spot hand database stores and retrieves solver-generated training hands
   4. All existing data layer (SessionStore, Prisma queries, Express API routes) migrated to Supabase client
   5. Data layer rewrite provides same functionality with Supabase as backend
-**Plans**: 0 plans
+**Plans**: 9 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 11 to break down)
+- [ ] 11-01-PLAN.md — Supabase SDK install, three-client architecture, env config
+- [ ] 11-02-PLAN.md — Database schema migration (tables, RLS, triggers, type generation)
+- [ ] 11-03-PLAN.md — AuthProvider, middleware token refresh, OAuth callback route
+- [ ] 11-04-PLAN.md — Login/signup pages with Supabase Auth + AppHeader auth state
+- [ ] 11-05-PLAN.md — Session data layer rewrite (Supabase persistence for training sessions)
+- [ ] 11-06-PLAN.md — Stats data layer rewrite (Supabase queries for analytics)
+- [ ] 11-07-PLAN.md — Spot database (seed script, spot service, Supabase spot loading)
+- [ ] 11-08-PLAN.md — Cleanup: remove Express/Prisma/old auth, uninstall ~15 packages
+- [ ] 11-09-PLAN.md — Human verification checkpoint (all 5 success criteria)
 
 ### Phase 12: Dashboard & Training Config Popout
 **Goal**: Transform the lobby into a dashboard hub and the training config into a GTO-Wizard-style centered popout overlaying the poker table
