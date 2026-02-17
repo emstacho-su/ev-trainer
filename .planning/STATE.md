@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 10 of 10 (Postflop Training)
-Plan: 10-05 complete, 10-06 through 10-07 pending; 08-08 gap closure complete
+Plan: 10-06 complete, 10-07 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 08-08-PLAN.md (filter controls gap closure)
+Last activity: 2026-02-17 -- Completed 10-06-PLAN.md (HandSummaryModal + postflop training page)
 
-Progress: [███████████████████] ~97% (59 plans complete)
+Progress: [████████████████████] ~98% (60 plans complete)
 
 ## Performance Metrics
 
@@ -238,6 +238,9 @@ Recent decisions affecting current work:
 - 10-05: IP maps to BTN seat, OOP maps to BB seat for 2-player postflop table display
 - 10-05: Full 5-card board stored in ref, sliced per street (3 flop, 4 turn, 5 river)
 - 10-05: 500ms delay before villain action, 1000ms villain label display before street advance
+- 10-06: HandSummaryModal rendered inside PostflopTrainingSessionInner to stay within PostflopSessionProvider
+- 10-06: PostflopConfig/POSTFLOP_ACTIONS extracted to postflopTypes.ts to break Node.js import chain
+- 10-06: Postflop stubs added to cards.ts for missing exports (unblock build)
 
 ### Pending Todos
 
@@ -255,7 +258,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 06:19 UTC
-Stopped at: Completed 10-05-PLAN.md (PostflopTrainingSession main component)
+Last session: 2026-02-17 06:27 UTC
+Stopped at: Completed 10-06-PLAN.md (HandSummaryModal + postflop training page)
 Resume file: None
-Next: Continue Phase 10 (10-06 through 10-07)
+Next: Continue Phase 10 (10-07)
