@@ -8,6 +8,7 @@ import ModeToggle from './ModeToggle';
 import GameSetup from './GameSetup';
 import PositionFilters from './PositionFilters';
 import PotTypeFilters from './PotTypeFilters';
+import DrillSuggestions from './DrillSuggestions';
 
 /**
  * Lobby screen for trainer configuration.
@@ -88,27 +89,33 @@ export default function TrainerLobby() {
         </p>
       </div>
 
-      {/* Essentials Card */}
-      <ConfigCard title="Essentials" subtitle="Core training settings">
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
-              Training Mode
-            </label>
-            <ModeToggle
-              value={config.mode}
-              onChange={(mode) => updateConfig({ mode })}
+      {/* Essentials + Drill Suggestions */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ConfigCard title="Essentials" subtitle="Core training settings">
+          <div className="space-y-4">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+                Training Mode
+              </label>
+              <ModeToggle
+                value={config.mode}
+                onChange={(mode) => updateConfig({ mode })}
+              />
+            </div>
+            <GameSetup
+              gameType={config.gameType}
+              tableSize={config.tableSize}
+              stackDepth={config.stackDepth}
+              villainAlwaysRaise={config.villainAlwaysRaise}
+              onChange={(updates) => updateConfig(updates)}
             />
           </div>
-          <GameSetup
-            gameType={config.gameType}
-            tableSize={config.tableSize}
-            stackDepth={config.stackDepth}
-            villainAlwaysRaise={config.villainAlwaysRaise}
-            onChange={(updates) => updateConfig(updates)}
-          />
-        </div>
-      </ConfigCard>
+        </ConfigCard>
+
+        <ConfigCard title="Drill Suggestions" subtitle="Your weakest spots">
+          <DrillSuggestions onSelectDrill={(drill) => updateConfig(drill)} />
+        </ConfigCard>
+      </div>
 
       {/* Advanced Filters (collapsible) */}
       <details
