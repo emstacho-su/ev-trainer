@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 6 of 10 (Trainer Configuration)
-Plan: 2 of 6 in Phase 6
+Plan: 3 of 6 in Phase 6
 Status: In progress
-Last activity: 2026-02-17 -- Completed 06-01 config foundation
+Last activity: 2026-02-17 -- Completed 06-03 lobby screen
 
-Progress: [████████████░░░░] ~56% (35 plans complete)
+Progress: [████████████░░░░] ~58% (36 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 35
-- Average duration: 6.4 min
-- Total execution time: 225 min
+- Total plans completed: 36
+- Average duration: 6.3 min
+- Total execution time: 227 min
 
 **By Phase:**
 
@@ -34,7 +34,7 @@ Progress: [████████████░░░░] ~56% (35 plans comp
 | 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-05 (1 min), 05-06 (1 min), 05-07 (1 min), 06-02 (2 min), 06-01 (5 min)
+- Last 5 plans: 05-06 (1 min), 05-07 (1 min), 06-02 (2 min), 06-01 (5 min), 06-03 (2 min)
 - Trend: Phase 6 plans slightly longer (config + API + migration work)
 
 *Updated after each plan completion*
@@ -164,6 +164,9 @@ Recent decisions affecting current work:
 - 06-02: Toggle chips use Set-based selection with minimum-1 enforcement
 - 06-02: GameSetup uses partial onChange pattern for individual field updates
 - 06-02: Static preset arrays for position filters (domain-fixed)
+- 06-03: Native details/summary for collapsible advanced filters (no JS dependency)
+- 06-03: canStart = positions.length > 0 && potTypes.length > 0 (minimum validation)
+- 06-03: crypto.randomUUID() for session seed (browser-native, unique per session)
 
 ### Pending Todos
 
@@ -181,7 +184,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:48 UTC
-Stopped at: Completed 06-01-PLAN.md (config foundation)
+Last session: 2026-02-17 02:52 UTC
+Stopped at: Completed 06-03-PLAN.md (lobby screen)
 Resume file: None
-Next: Phase 6 — 06-03 through 06-06 remaining
+Next: Phase 6 — 06-04 through 06-06 remaining
