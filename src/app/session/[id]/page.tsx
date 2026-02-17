@@ -117,19 +117,25 @@ function formatActionLabel(actionId: string): string {
 
 function spotToPlayers(
   spot: Spot,
-  heroCards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>
+  heroCards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>,
+  villainPosition?: string
 ): Player[] {
   const actions = parseHistoryActions(spot);
   return spot.positions.map((position) => {
     const isHero = position === spot.heroToAct;
+    const isVillain = villainPosition ? position === villainPosition : false;
     const action = actions.get(position);
     const hasFolded = action?.actionId === 'FOLD';
+    // Non-hero, non-villain positions without history actions are implicitly folded
+    const isImplicitlyFolded = !isHero && !isVillain && !action;
+    const isFolded = hasFolded || isImplicitlyFolded;
 
     let bet: number | undefined;
-    if (action) {
+    if (isFolded) {
+      bet = undefined;
+    } else if (action) {
       bet = action.betBb > 0 ? action.betBb : undefined;
     } else if (spot.board.length === 0) {
-      // Only show blind bets preflop for players who haven't acted
       if (position === 'SB') bet = 0.5;
       else if (position === 'BB') bet = 1.0;
     }
@@ -138,12 +144,12 @@ function spotToPlayers(
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
       cards: isHero ? heroCards : undefined,
-      isActive: !hasFolded,
-      isFolded: hasFolded,
+      isActive: !isFolded,
+      isFolded,
       isHero,
       showCards: isHero,
       bet,
-      actionLabel: action ? formatActionLabel(action.actionId) : undefined,
+      actionLabel: action && !isFolded ? formatActionLabel(action.actionId) : undefined,
     };
   });
 }
@@ -338,6 +344,7 @@ export default function SessionPage() {
   const [heroRange, setHeroRange] = useState<RangeData | null>(null);
   const [villainRange, setVillainRange] = useState<RangeData | null>(null);
   const [rangeModalOpen, setRangeModalOpen] = useState(false);
+  const [currentVillainPosition, setCurrentVillainPosition] = useState<string | null>(null);
   const { config, updateConfig } = useTrainerConfig();
 
   // Refs for stable keyboard handler access
@@ -380,6 +387,7 @@ export default function SessionPage() {
               const data = await res.json();
               setSession(data.session);
               setCurrentSpot(data.spot);
+              setCurrentVillainPosition(data.villainPosition ?? null);
               return null;
             }
           }
@@ -515,6 +523,7 @@ export default function SessionPage() {
       });
       setSession(response.session);
       setCurrentSpot(response.spot);
+      setCurrentVillainPosition(response.villainPosition ?? null);
 
       updateSessionRecord(response.session.sessionId, (previous) => ({
         session: response.session,
@@ -634,7 +643,7 @@ export default function SessionPage() {
     () => (currentSpot && seed ? dealHeroCards(currentSpot, seed) : undefined),
     [currentSpot, seed]
   );
-  const players = currentSpot ? spotToPlayers(currentSpot, heroCards) : [];
+  const players = currentSpot ? spotToPlayers(currentSpot, heroCards, currentVillainPosition ?? undefined) : [];
   const communityCards = currentSpot
     ? currentSpot.board.map(parseCardString)
     : [];

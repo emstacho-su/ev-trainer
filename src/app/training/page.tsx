@@ -118,16 +118,23 @@ function formatActionLabel(actionId: string): string {
 
 function spotToPlayers(
   spot: Spot,
-  heroCards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>
+  heroCards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>,
+  villainPosition?: string
 ): Player[] {
   const actions = parseHistoryActions(spot);
   return spot.positions.map((position) => {
     const isHero = position === spot.heroToAct;
+    const isVillain = villainPosition ? position === villainPosition : false;
     const action = actions.get(position);
     const hasFolded = action?.actionId === 'FOLD';
+    // Non-hero, non-villain positions without history actions are implicitly folded
+    const isImplicitlyFolded = !isHero && !isVillain && !action;
+    const isFolded = hasFolded || isImplicitlyFolded;
 
     let bet: number | undefined;
-    if (action) {
+    if (isFolded) {
+      bet = undefined;
+    } else if (action) {
       bet = action.betBb > 0 ? action.betBb : undefined;
     } else if (spot.board.length === 0) {
       if (position === 'SB') bet = 0.5;
@@ -138,12 +145,12 @@ function spotToPlayers(
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
       cards: isHero ? heroCards : undefined,
-      isActive: !hasFolded,
-      isFolded: hasFolded,
+      isActive: !isFolded,
+      isFolded,
       isHero,
       showCards: isHero,
       bet,
-      actionLabel: action ? formatActionLabel(action.actionId) : undefined,
+      actionLabel: action && !isFolded ? formatActionLabel(action.actionId) : undefined,
     };
   });
 }
@@ -328,6 +335,7 @@ function TrainingPage() {
   const [heroRange, setHeroRange] = useState<RangeData | null>(null);
   const [villainRange, setVillainRange] = useState<RangeData | null>(null);
   const [rangeModalOpen, setRangeModalOpen] = useState(false);
+  const [villainPosition, setVillainPosition] = useState<string | null>(null);
 
   // Refs for stable keyboard handler access
   const uiStateRef = useRef(uiState);
@@ -423,6 +431,7 @@ function TrainingPage() {
         setSeed(newSeed);
         setSession(data.session);
         setCurrentSpot(data.spot);
+        setVillainPosition(data.villainPosition ?? null);
         setHandCount(0);
         setCorrectCount(0);
         setUiState('idle');
@@ -519,6 +528,7 @@ function TrainingPage() {
       });
       setSession(response.session);
       setCurrentSpot(response.spot);
+      setVillainPosition(response.villainPosition ?? null);
 
       updateSessionRecord(response.session.sessionId, (previous) => ({
         session: response.session,
@@ -631,7 +641,7 @@ function TrainingPage() {
     () => (currentSpot && seed ? dealHeroCards(currentSpot, seed) : undefined),
     [currentSpot, seed]
   );
-  const players = currentSpot ? spotToPlayers(currentSpot, heroCards) : [];
+  const players = currentSpot ? spotToPlayers(currentSpot, heroCards, villainPosition ?? undefined) : [];
   const communityCards = currentSpot
     ? currentSpot.board.map(parseCardString)
     : [];

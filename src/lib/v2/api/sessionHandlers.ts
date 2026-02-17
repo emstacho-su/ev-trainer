@@ -57,12 +57,14 @@ export interface StartResponse {
   ok: true;
   session: SessionSnapshot;
   spot: Spot;
+  villainPosition?: string;
 }
 
 export interface NextResponse {
   ok: true;
   session: SessionSnapshot;
   spot: Spot;
+  villainPosition?: string;
 }
 
 export interface SubmitTrainingResponse {
@@ -446,6 +448,7 @@ export async function handleStart(input: unknown, userId?: string): Promise<ApiR
       ok: true,
       session: buildSessionSnapshot(record),
       spot: selected.spot,
+      villainPosition: selected.meta.villainPosition,
     },
   };
 }
@@ -513,6 +516,7 @@ export async function handleNext(input: unknown, userId?: string): Promise<ApiRe
       ok: true,
       session: buildSessionSnapshot(record),
       spot: selected.spot,
+      villainPosition: selected.meta.villainPosition,
     },
   };
 }

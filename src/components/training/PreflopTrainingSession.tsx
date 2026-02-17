@@ -98,18 +98,25 @@ function formatActionLabel(actionId: string): string {
 }
 
 // Convert Spot to PokerTable players format
-function spotToPlayers(spot: Spot): Player[] {
+function spotToPlayers(spot: Spot, villainPosition?: string): Player[] {
   const players: Player[] = [];
   const actions = parseHistoryActions(spot);
 
   for (const position of spot.positions) {
     const isHero = position === spot.heroToAct;
+    const isVillain = villainPosition ? position === villainPosition : false;
     const action = actions.get(position);
     const hasFolded = action?.actionId === 'FOLD';
+    // Non-hero, non-villain positions without history actions are implicitly folded
+    // (they folded before the tracked action history began)
+    const isImplicitlyFolded = !isHero && !isVillain && !action;
+    const isFolded = hasFolded || isImplicitlyFolded;
 
     // Determine bet to show as chip
     let bet: number | undefined;
-    if (action) {
+    if (isFolded) {
+      bet = undefined;
+    } else if (action) {
       // Player acted: show their current bet (0 for fold/check means no chip display)
       bet = action.betBb > 0 ? action.betBb : undefined;
     } else {
@@ -121,8 +128,8 @@ function spotToPlayers(spot: Spot): Player[] {
     players.push({
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
-      isActive: !hasFolded,
-      isFolded: hasFolded,
+      isActive: !isFolded,
+      isFolded,
       isHero,
       showCards: isHero,
       bet,
@@ -159,6 +166,7 @@ export default function PreflopTrainingSession() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [seed, setSeed] = useState<string>('');
   const [currentSpot, setCurrentSpot] = useState<Spot | null>(null);
+  const [currentVillainPosition, setCurrentVillainPosition] = useState<string | null>(null);
   const [uiState, setUiState] = useState<UIState>('idle');
   const [grade, setGrade] = useState<DecisionGrade | null>(null);
   const [handCount, setHandCount] = useState(0);
@@ -210,6 +218,7 @@ export default function PreflopTrainingSession() {
       const data = await response.json();
       setSessionId(data.session.sessionId);
       setCurrentSpot(data.spot);
+      setCurrentVillainPosition(data.villainPosition ?? null);
       playSound('card-deal');
       setHandCount(0);
       setCorrectCount(0);
@@ -303,6 +312,7 @@ export default function PreflopTrainingSession() {
 
       const data = await response.json();
       setCurrentSpot(data.spot);
+      setCurrentVillainPosition(data.villainPosition ?? null);
       playSound('card-deal');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -350,6 +360,7 @@ export default function PreflopTrainingSession() {
 
           const data = await response.json();
           setCurrentSpot(data.spot);
+          setCurrentVillainPosition(data.villainPosition ?? null);
           playSoundRef.current('card-deal');
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Unknown error');
@@ -562,7 +573,7 @@ export default function PreflopTrainingSession() {
     );
   }
 
-  const players = spotToPlayers(currentSpot);
+  const players = spotToPlayers(currentSpot, currentVillainPosition ?? undefined);
   const potType = derivePotType(currentSpot.history);
   const dealerPosition = currentSpot.positions.includes('BTN') ? 'BTN' : currentSpot.positions[0] as Player['position'];
 
