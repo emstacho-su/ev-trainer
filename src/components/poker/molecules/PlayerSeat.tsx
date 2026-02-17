@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
-import { Card } from '../atoms/Card';
-import { CardBack } from '../atoms/CardBack';
+import { AnimatedCard } from '../atoms/AnimatedCard';
+import { ANIM } from '@/lib/ui/animationTiming';
 
 interface PlayerSeatProps {
   position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
@@ -58,7 +58,15 @@ export function PlayerSeat({
       {isHero && showCards && cards && cards.length > 0 && (
         <div className="flex gap-1">
           {cards.map((card, i) => (
-            <Card key={i} rank={card.rank} suit={card.suit} size="md" />
+            <AnimatedCard
+              key={i}
+              rank={card.rank}
+              suit={card.suit}
+              size="md"
+              faceUp={true}
+              dealDelay={i * ANIM.CARD_STAGGER}
+              isMucking={isFolded}
+            />
           ))}
         </div>
       )}
@@ -71,8 +79,8 @@ export function PlayerSeat({
             {/* Card backs centered over the text box */}
             {inHand && (
               <div className="flex gap-0.5">
-                <CardBack size="sm" />
-                <CardBack size="sm" />
+                <AnimatedCard rank="A" suit="s" size="sm" faceUp={false} dealDelay={0} isMucking={isFolded} />
+                <AnimatedCard rank="A" suit="s" size="sm" faceUp={false} dealDelay={ANIM.CARD_STAGGER} isMucking={isFolded} />
               </div>
             )}
             <div
