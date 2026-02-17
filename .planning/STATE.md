@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
-Plan: 09-05 complete, Phase 8 (08-01/04/05 done) and Phase 9 in progress
+Plan: 08-02 complete, Phase 8 (08-01/02/04/05 done) and Phase 9 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 09-05 chip animation & sound effects
+Last activity: 2026-02-17 -- Completed 08-02 stats dashboard layout
 
-Progress: [███████████████░] ~87% (52 plans complete)
+Progress: [███████████████░] ~88% (53 plans complete)
 
 ## Performance Metrics
 
@@ -214,6 +214,10 @@ Recent decisions affecting current work:
 - 09-05: Chip animate in with scale+opacity (CHIP_SLIDE 250ms), exit with CHIP_COLLECT 300ms
 - 09-05: playSoundRef pattern for stable sound calls in keyboard event handlers with empty deps
 - 09-05: playSound added to useCallback dependency arrays for handler functions
+- 08-02: shadcn/ui initialized with Tailwind v4 for reusable UI primitives (calendar, popover, button)
+- 08-02: URL search params (startDate, endDate) for filter state persistence
+- 08-02: First-half vs second-half comparison for trend calculation in metric cards
+- 08-02: oklch color format from shadcn merged with existing poker HSL tokens in globals.css
 
 ### Pending Todos
 
@@ -231,7 +235,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:34 UTC
-Stopped at: Completed 09-05-PLAN.md (chip animation & sound effects)
+Last session: 2026-02-17 05:36 UTC
+Stopped at: Completed 08-02-PLAN.md (stats dashboard layout)
 Resume file: None
-Next: Continue Phase 9 (09-07) and Phase 8 remaining plans
+Next: Continue Phase 8 (08-03, 08-06, 08-07) and Phase 9 remaining plans
