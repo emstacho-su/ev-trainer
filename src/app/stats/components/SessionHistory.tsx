@@ -6,7 +6,7 @@
  * Importance: Enables review of past training sessions and identification of patterns and mistakes.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import type {
@@ -502,20 +502,17 @@ export default function SessionHistory() {
               const isExpanded = expandedId === session.id;
 
               return (
-                <tr key={session.id} className="group">
-                  {/* Main row */}
-                  <td
-                    colSpan={6}
-                    className="p-0"
+                <React.Fragment key={session.id}>
+                  {/* Data row with proper td cells matching th columns */}
+                  <tr
+                    className={`cursor-pointer border-b border-slate-800 transition-colors hover:bg-slate-800/50 ${
+                      recent ? "border-l-2 border-l-blue-500" : ""
+                    } ${isExpanded ? "bg-slate-800/30" : ""}`}
+                    onClick={() => handleExpand(session.id)}
                   >
-                    <div
-                      className={`flex cursor-pointer items-center border-b border-slate-800 transition-colors hover:bg-slate-800/50 ${
-                        recent ? "border-l-2 border-l-blue-500" : ""
-                      } ${isExpanded ? "bg-slate-800/30" : ""}`}
-                      onClick={() => handleExpand(session.id)}
-                    >
-                      {/* Date */}
-                      <div className="flex min-w-[160px] items-center gap-2 px-4 py-3">
+                    {/* Date */}
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
                         <span className="text-slate-200">
                           {format(
                             new Date(session.createdAt),
@@ -528,39 +525,41 @@ export default function SessionHistory() {
                           </span>
                         )}
                       </div>
+                    </td>
 
-                      {/* Hands */}
-                      <div className="min-w-[80px] px-4 py-3 text-slate-300">
-                        {session.decisionsCompleted}/{session.decisionsPerSession}
-                      </div>
+                    {/* Hands */}
+                    <td className="px-4 py-3 text-slate-300">
+                      {session.decisionsCompleted}/{session.decisionsPerSession}
+                    </td>
 
-                      {/* Accuracy */}
-                      <div className="min-w-[100px] px-4 py-3">
-                        <span
-                          className={
-                            session.accuracy >= 70
-                              ? "text-green-400"
-                              : session.accuracy >= 50
-                                ? "text-yellow-400"
-                                : "text-red-400"
-                          }
-                        >
-                          {session.accuracy.toFixed(1)}%
-                        </span>
-                      </div>
+                    {/* Accuracy */}
+                    <td className="px-4 py-3">
+                      <span
+                        className={
+                          session.accuracy >= 70
+                            ? "text-green-400"
+                            : session.accuracy >= 50
+                              ? "text-yellow-400"
+                              : "text-red-400"
+                        }
+                      >
+                        {session.accuracy.toFixed(1)}%
+                      </span>
+                    </td>
 
-                      {/* Avg EV Loss */}
-                      <div className="min-w-[110px] px-4 py-3 font-mono text-slate-300">
-                        {session.avgEVLoss.toFixed(3)} BB
-                      </div>
+                    {/* Avg EV Loss */}
+                    <td className="px-4 py-3 font-mono text-slate-300">
+                      {session.avgEVLoss.toFixed(3)} BB
+                    </td>
 
-                      {/* Duration */}
-                      <div className="min-w-[100px] px-4 py-3 text-slate-400">
-                        {formatDuration(session.duration)}
-                      </div>
+                    {/* Duration */}
+                    <td className="px-4 py-3 text-slate-400">
+                      {formatDuration(session.duration)}
+                    </td>
 
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 px-4 py-3">
+                    {/* Actions */}
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
                         <button
                           className="rounded px-2 py-1 text-xs text-slate-400 transition-colors hover:bg-slate-700 hover:text-slate-200"
                           onClick={(e) => {
@@ -589,11 +588,13 @@ export default function SessionHistory() {
                           Delete
                         </button>
                       </div>
-                    </div>
+                    </td>
+                  </tr>
 
-                    {/* Expanded detail */}
-                    {isExpanded && (
-                      <div className="border-b border-slate-700 bg-slate-850 px-6 py-4">
+                  {/* Expanded detail row */}
+                  {isExpanded && (
+                    <tr>
+                      <td colSpan={6} className="border-b border-slate-700 bg-slate-850 px-6 py-4">
                         {detailLoading ? (
                           <p className="text-sm text-slate-400">
                             Loading details...
@@ -652,10 +653,10 @@ export default function SessionHistory() {
                             Could not load session details.
                           </p>
                         )}
-                      </div>
-                    )}
-                  </td>
-                </tr>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               );
             })}
           </tbody>
