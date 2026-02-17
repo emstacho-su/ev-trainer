@@ -45,7 +45,17 @@ class InMemoryV2SessionRegistryBackend implements V2SessionRegistryBackend {
   }
 }
 
-let backend: V2SessionRegistryBackend = new InMemoryV2SessionRegistryBackend();
+// Use globalThis to survive Next.js HMR in dev mode
+const globalForRegistry = globalThis as unknown as {
+  __v2SessionRegistryBackend?: V2SessionRegistryBackend;
+};
+
+let backend: V2SessionRegistryBackend =
+  globalForRegistry.__v2SessionRegistryBackend ??
+  new InMemoryV2SessionRegistryBackend();
+
+globalForRegistry.__v2SessionRegistryBackend = backend;
+
 const DEFAULT_DECISIONS_PER_SESSION = 10;
 
 function assertNonEmptyString(value: unknown, name: string): asserts value is string {
@@ -128,4 +138,5 @@ export function getDefaultDecisionsPerSession(): number {
 
 export function setV2SessionRegistryBackend(nextBackend: V2SessionRegistryBackend): void {
   backend = nextBackend;
+  globalForRegistry.__v2SessionRegistryBackend = nextBackend;
 }

@@ -60,7 +60,16 @@ class InMemorySessionStoreBackend implements SessionStoreBackend {
   }
 }
 
-let backend: SessionStoreBackend = new InMemorySessionStoreBackend();
+// Use globalThis to survive Next.js HMR in dev mode
+const globalForSessionStore = globalThis as unknown as {
+  __sessionStoreBackend?: SessionStoreBackend;
+};
+
+let backend: SessionStoreBackend =
+  globalForSessionStore.__sessionStoreBackend ??
+  new InMemorySessionStoreBackend();
+
+globalForSessionStore.__sessionStoreBackend = backend;
 
 export async function createSessionRecord(input: {
   sessionId: string;
@@ -131,4 +140,5 @@ export async function clearSessionStore(): Promise<void> {
 
 export function setSessionStoreBackend(nextBackend: SessionStoreBackend): void {
   backend = nextBackend;
+  globalForSessionStore.__sessionStoreBackend = nextBackend;
 }
