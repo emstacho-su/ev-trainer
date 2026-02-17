@@ -12,6 +12,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "nodemon": "^3.1.11",
     "prisma": "^7.3.0",
+    "supabase": "^2.76.9",
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
@@ -31,13 +32,16 @@
     "pm2:start": "pm2 start ecosystem.config.js",
     "pm2:stop": "pm2 stop ecosystem.config.js",
     "pm2:restart": "pm2 restart ecosystem.config.js",
-    "pm2:logs": "pm2 logs ev-trainer-api"
+    "pm2:logs": "pm2 logs ev-trainer-api",
+    "gen:types": "npx supabase gen types --lang=typescript --project-id \"$PROJECT_REF\" > src/lib/supabase.types.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.4",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.96.0",
     "@tailwindcss/postcss": "^4.1.18",
     "argon2": "^0.44.0",
     "autoprefixer": "^10.4.24",
