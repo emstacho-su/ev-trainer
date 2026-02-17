@@ -227,12 +227,8 @@ export default function StatsPage() {
         </div>
       )}
 
-      {/* Sessions tab (placeholder for 08-02/08-05) */}
-      {activeTab === "sessions" && (
-        <p className="py-8 text-center text-sm text-slate-400">
-          Session history coming soon.
-        </p>
-      )}
+      {/* Sessions tab */}
+      {activeTab === "sessions" && <SessionHistory />}
     </main>
   );
 }
