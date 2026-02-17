@@ -3,6 +3,9 @@
 import { useRef, useEffect } from 'react';
 import type { TrainerConfig } from '@/lib/v2/config/types';
 import { useToast } from '@/lib/ui/toastContext';
+import { useAnimationPreferences } from '@/hooks/useAnimationPreferences';
+import { useAudio } from '@/hooks/useAudio';
+import { cn } from '@/lib/utils';
 import PositionFilters from './PositionFilters';
 import PotTypeFilters from './PotTypeFilters';
 
@@ -21,6 +24,8 @@ export default function SessionSidebar({
 }: SessionSidebarProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
+  const { animationsEnabled, toggleAnimations } = useAnimationPreferences();
+  const { audioEnabled, toggleAudio } = useAudio();
 
   // Close on click outside sidebar
   useEffect(() => {
@@ -137,6 +142,51 @@ export default function SessionSidebar({
                 placeholder="No limit"
                 className="w-full rounded border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-100"
               />
+            </div>
+          </div>
+
+          {/* Settings (animation & audio toggles) */}
+          <div className="space-y-2">
+            <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-wider">Settings</h3>
+
+            <div className="flex items-center justify-between py-2">
+              <span className="text-sm text-stone-700 dark:text-stone-300">Animations</span>
+              <button
+                onClick={toggleAnimations}
+                className={cn(
+                  'relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors duration-200',
+                  animationsEnabled ? 'bg-blue-600' : 'bg-gray-600'
+                )}
+                role="switch"
+                aria-checked={animationsEnabled}
+              >
+                <span
+                  className={cn(
+                    'pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow ring-0 transition-transform duration-200 mt-0.5',
+                    animationsEnabled ? 'translate-x-4.5' : 'translate-x-0.5'
+                  )}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between py-2">
+              <span className="text-sm text-stone-700 dark:text-stone-300">Sound Effects</span>
+              <button
+                onClick={toggleAudio}
+                className={cn(
+                  'relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors duration-200',
+                  audioEnabled ? 'bg-blue-600' : 'bg-gray-600'
+                )}
+                role="switch"
+                aria-checked={audioEnabled}
+              >
+                <span
+                  className={cn(
+                    'pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow ring-0 transition-transform duration-200 mt-0.5',
+                    audioEnabled ? 'translate-x-4.5' : 'translate-x-0.5'
+                  )}
+                />
+              </button>
             </div>
           </div>
         </div>

@@ -4,6 +4,9 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTrainerConfig } from '@/lib/v2/hooks/useTrainerConfig';
 import { writeSessionRecord } from '@/lib/v2/storage/sessionStorage';
+import { useAnimationPreferences } from '@/hooks/useAnimationPreferences';
+import { useAudio } from '@/hooks/useAudio';
+import { cn } from '@/lib/utils';
 import ConfigCard from './ConfigCard';
 import ModeToggle from './ModeToggle';
 import GameSetup from './GameSetup';
@@ -20,6 +23,8 @@ import DrillSuggestions from './DrillSuggestions';
 export default function TrainerLobby() {
   const { config, updateConfig, isLoading } = useTrainerConfig();
   const router = useRouter();
+  const { animationsEnabled, toggleAnimations } = useAnimationPreferences();
+  const { audioEnabled, toggleAudio } = useAudio();
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -166,6 +171,51 @@ export default function TrainerLobby() {
       {/* Drill Suggestions (horizontal, below Parameters) */}
       <ConfigCard title="Drill Suggestions" subtitle="Your weakest spots">
         <DrillSuggestions onSelectDrill={(drill) => updateConfig(drill)} />
+      </ConfigCard>
+
+      {/* Settings (animation & audio toggles) */}
+      <ConfigCard title="Settings" subtitle="Preferences">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between py-2">
+            <span className="text-sm text-stone-700 dark:text-stone-300">Animations</span>
+            <button
+              onClick={toggleAnimations}
+              className={cn(
+                'relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors duration-200',
+                animationsEnabled ? 'bg-blue-600' : 'bg-gray-600'
+              )}
+              role="switch"
+              aria-checked={animationsEnabled}
+            >
+              <span
+                className={cn(
+                  'pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow ring-0 transition-transform duration-200 mt-0.5',
+                  animationsEnabled ? 'translate-x-4.5' : 'translate-x-0.5'
+                )}
+              />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between py-2">
+            <span className="text-sm text-stone-700 dark:text-stone-300">Sound Effects</span>
+            <button
+              onClick={toggleAudio}
+              className={cn(
+                'relative inline-flex h-5 w-9 shrink-0 rounded-full transition-colors duration-200',
+                audioEnabled ? 'bg-blue-600' : 'bg-gray-600'
+              )}
+              role="switch"
+              aria-checked={audioEnabled}
+            >
+              <span
+                className={cn(
+                  'pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow ring-0 transition-transform duration-200 mt-0.5',
+                  audioEnabled ? 'translate-x-4.5' : 'translate-x-0.5'
+                )}
+              />
+            </button>
+          </div>
+        </div>
       </ConfigCard>
 
       {/* Start Training */}
