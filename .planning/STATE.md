@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 5 of 10 (Preflop Training)
-Plan: 2 of 4 in Phase 5
+Plan: 1 of 4 in Phase 5
 Status: In progress
-Last activity: 2026-02-17 -- Completed 05-02-PLAN.md
+Last activity: 2026-02-17 -- Completed 05-01-PLAN.md
 
-Progress: [█████████████░░░] ~85% (23 plans complete)
+Progress: [██████████░░░░░░] ~44% (28 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 23
-- Average duration: 5.6 min
-- Total execution time: 128 min
+- Total plans completed: 28
+- Average duration: 7.5 min
+- Total execution time: 211 min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [█████████████░░░] ~85% (23 plans comp
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
 | 04-table-ui-foundation | 6/6 ✓ | 65 min | 10.8 min |
-| 05-preflop-training | 2/4 | 2 min | 1.0 min |
+| 05-preflop-training | 1/4 | 7 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-03 (1 min), 04-04 (1 min), 04-05 (1 min), 05-01 (1 min), 05-02 (1 min)
-- Trend: UI component work extremely fast (simple React extensions, no complex logic)
+- Last 5 plans: 04-04 (1 min), 04-05 (1 min), 04-06 (1 min), 05-01 (7 min)
+- Trend: 05-01 returned to normal duration (backend logic + tests)
 
 *Updated after each plan completion*
 
@@ -137,10 +137,11 @@ Recent decisions affecting current work:
 - 04-05: Z-index layering: table surface < seats (z-10) < dealer button (z-20) < center content (z-30)
 - 04-05: ActionPanel conditionally shows raise sizing only when Raise action available
 - 04-05: Aspect ratio locked at 16:10 with max-w-6xl for responsive sizing
-- 05-02: Action history displays "First to act" when empty for clear default state
-- 05-02: Frequency color coding only applied in revealed states to avoid confusion
-- 05-02: User choice gets blue ring highlight regardless of solver frequency
-- 05-02: Frequency coloring thresholds: >=60% green, >0% yellow, 0% red
+- 05-01: Four preflop scenario types (RFI, FacingOpen, 3Bet, BlindDefense)
+- 05-01: BlindDefense takes priority over other classifications (most specific)
+- 05-01: Scenario classification at pack load time (deterministic, performance)
+- 05-01: Scenario type stored in SpotMeta (optional field, preflop only)
+- 05-01: SpotFilterInput supports scenarioType filter (specific type or 'ANY')
 
 ### Pending Todos
 
@@ -154,6 +155,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 05-02-PLAN.md (UI feedback enhancement)
+Stopped at: Completed 05-01-PLAN.md (Scenario classification and filtering)
 Resume file: None
-Next: Execute 05-03-PLAN.md (Preflop training loop integration)
+Next: Execute 05-02-PLAN.md (UI feedback enhancement)
