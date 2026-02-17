@@ -15,6 +15,7 @@ import type {
   SessionDetail,
   SessionEntryDetail,
 } from "../../../lib/stats/types";
+import SessionReplay from "./SessionReplay";
 
 type SortField = "createdAt" | "accuracy" | "avgEVLoss";
 type SortDirection = "asc" | "desc";
@@ -263,6 +264,9 @@ export default function SessionHistory() {
   );
   const [detailLoading, setDetailLoading] = useState(false);
 
+  // Replay mode
+  const [replaySessionId, setReplaySessionId] = useState<string | null>(null);
+
   // Read date range and filter params from search params
   const startDate = searchParams.get("startDate") ?? "";
   const endDate = searchParams.get("endDate") ?? "";
@@ -326,6 +330,7 @@ export default function SessionHistory() {
     if (expandedId === sessionId) {
       setExpandedId(null);
       setExpandedDetail(null);
+      setReplaySessionId(null);
       return;
     }
 
@@ -583,22 +588,54 @@ export default function SessionHistory() {
                             Loading details...
                           </p>
                         ) : expandedDetail ? (
-                          <SessionEntries
-                            detail={expandedDetail}
-                            onFlagToggle={(entryIndex, isFlagged) => {
-                              setExpandedDetail((prev) => {
-                                if (!prev) return prev;
-                                return {
-                                  ...prev,
-                                  entries: prev.entries.map((e) =>
-                                    e.index === entryIndex
-                                      ? { ...e, isFlagged }
-                                      : e
-                                  ),
-                                };
-                              });
-                            }}
-                          />
+                          <>
+                            {/* Header with replay toggle */}
+                            <div className="mb-3 flex items-center justify-between">
+                              <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                {replaySessionId === session.id
+                                  ? "Replay Mode"
+                                  : "Session Detail"}
+                              </h4>
+                              <button
+                                onClick={() =>
+                                  setReplaySessionId(
+                                    replaySessionId === session.id
+                                      ? null
+                                      : session.id
+                                  )
+                                }
+                                className="rounded bg-blue-600 px-3 py-1.5 text-xs text-white hover:bg-blue-500"
+                              >
+                                {replaySessionId === session.id
+                                  ? "View Summary"
+                                  : "Replay Hands"}
+                              </button>
+                            </div>
+                            {/* Content */}
+                            {replaySessionId === session.id ? (
+                              <SessionReplay
+                                entries={expandedDetail.entries}
+                                onClose={() => setReplaySessionId(null)}
+                              />
+                            ) : (
+                              <SessionEntries
+                                detail={expandedDetail}
+                                onFlagToggle={(entryIndex, isFlagged) => {
+                                  setExpandedDetail((prev) => {
+                                    if (!prev) return prev;
+                                    return {
+                                      ...prev,
+                                      entries: prev.entries.map((e) =>
+                                        e.index === entryIndex
+                                          ? { ...e, isFlagged }
+                                          : e
+                                      ),
+                                    };
+                                  });
+                                }}
+                              />
+                            )}
+                          </>
                         ) : (
                           <p className="text-sm text-slate-500">
                             Could not load session details.
