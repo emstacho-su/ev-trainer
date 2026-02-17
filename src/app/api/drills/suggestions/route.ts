@@ -1,34 +1,32 @@
 /**
- * Overview: GET route for drill suggestions based on user's weakest spots.
- * Interacts with: verifyAccessToken for auth, computeDrillSuggestions for data.
- * Importance: Surfaces personalized drill recommendations in the lobby.
+ * GET /api/drills/suggestions
+ * Returns drill suggestions based on user's weakest spots.
+ * Requires authentication. Uses Supabase spot_stats table.
  */
 
-import { NextResponse } from "next/server";
-import { verifyAccessToken } from "../../../../server/auth/token.service";
-import { computeDrillSuggestions } from "../../../../lib/v2/api/drillSuggestions";
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { getDrillSuggestions } from '@/lib/supabase/statsService'
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const authHeader = request.headers.get("authorization");
-    const token = authHeader?.startsWith("Bearer ")
-      ? authHeader.slice(7)
-      : null;
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!token) {
+    if (!user) {
       return NextResponse.json(
-        { error: { code: "UNAUTHORIZED", message: "Authentication required" } },
+        { error: { code: 'UNAUTHORIZED', message: 'Authentication required' } },
         { status: 401 }
-      );
+      )
     }
 
-    const payload = await verifyAccessToken(token);
-    const suggestions = await computeDrillSuggestions(payload.sub);
-    return NextResponse.json(suggestions);
-  } catch {
+    const suggestions = await getDrillSuggestions(supabase, user.id)
+    return NextResponse.json(suggestions)
+  } catch (error) {
+    console.error('Error fetching drill suggestions:', error)
     return NextResponse.json(
-      { error: { code: "UNAUTHORIZED", message: "Invalid or expired token" } },
-      { status: 401 }
-    );
+      { error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch drill suggestions' } },
+      { status: 500 }
+    )
   }
 }

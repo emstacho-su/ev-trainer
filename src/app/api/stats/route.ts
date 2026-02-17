@@ -1,59 +1,35 @@
 /**
- * Overview: GET route that computes global stats from encoded persisted records.
- * Interacts with: global aggregate calculator and header-based record transport.
- * Importance: Server boundary for normalized cross-session analytics.
+ * GET /api/stats
+ * Returns overview stats (lifetime totals with trend data) for the authenticated user.
+ * Requires authentication. Uses Supabase daily_stats table.
  */
 
-import { NextResponse, type NextRequest } from "next/server";
-import { computeGlobalStats, createZeroGlobalStats } from "../../../lib/aggregates/globalStats";
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { getOverviewStats } from '@/lib/supabase/statsService'
 
-const SESSIONS_HEADER = "x-ev-trainer-sessions";
-
-interface StatsErrorResponse {
-  error: string;
-  totals: ReturnType<typeof createZeroGlobalStats>["totals"];
-  breakdowns: ReturnType<typeof createZeroGlobalStats>["breakdowns"];
-}
-
-function errorResponse(status: number, message: string): NextResponse<StatsErrorResponse> {
-  const zero = createZeroGlobalStats();
-  return NextResponse.json(
-    {
-      error: message,
-      totals: zero.totals,
-      breakdowns: zero.breakdowns,
-    },
-    {
-      status,
-      headers: { "Cache-Control": "no-store" },
-    }
-  );
-}
-
-function decodeRecordsHeader(value: string): unknown[] | null {
+export async function GET() {
   try {
-    const decoded = Buffer.from(value, "base64").toString("utf8");
-    const parsed = JSON.parse(decoded) as unknown;
-    if (!Array.isArray(parsed)) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-}
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
-export async function GET(request: NextRequest) {
-  const encoded = request.headers.get(SESSIONS_HEADER);
-  if (!encoded || encoded.trim().length === 0) {
-    return errorResponse(400, `${SESSIONS_HEADER} header is required`);
-  }
+    if (!user) {
+      return NextResponse.json(
+        { error: { code: 'UNAUTHORIZED', message: 'Authentication required' } },
+        { status: 401 }
+      )
+    }
 
-  const records = decodeRecordsHeader(encoded);
-  if (records === null) {
-    return errorResponse(400, `${SESSIONS_HEADER} must be base64-encoded JSON array`);
-  }
+    const overview = await getOverviewStats(supabase, user.id)
 
-  return NextResponse.json(computeGlobalStats(records), {
-    status: 200,
-    headers: { "Cache-Control": "no-store" },
-  });
+    return NextResponse.json(overview, {
+      headers: { 'Cache-Control': 'no-store' },
+    })
+  } catch (error) {
+    console.error('Error fetching overview stats:', error)
+    return NextResponse.json(
+      { error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch overview stats' } },
+      { status: 500 }
+    )
+  }
 }
