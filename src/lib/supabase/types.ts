@@ -1,12 +1,31 @@
 /**
- * Placeholder Database type for Supabase client generic parameter.
- *
- * Run `npm run gen:types` after schema migration to replace this placeholder
- * with auto-generated types from your Supabase project schema.
- *
- * The generated file will be at src/lib/supabase.types.ts and this file
- * will re-export the Database type from there.
+ * Re-exports auto-generated Database types from Supabase schema.
+ * Run `npm run gen:types` to regenerate after schema changes.
  */
+export type { Database } from '@/lib/supabase.types'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type Database = Record<string, never>
+import type { Database } from '@/lib/supabase.types'
+
+// Convenience table row type aliases
+export type Profile = Database['public']['Tables']['profiles']['Row']
+export type Spot = Database['public']['Tables']['spots']['Row']
+export type TrainingSession = Database['public']['Tables']['training_sessions']['Row']
+export type SessionEntry = Database['public']['Tables']['session_entries']['Row']
+export type DailyStat = Database['public']['Tables']['daily_stats']['Row']
+export type SpotStat = Database['public']['Tables']['spot_stats']['Row']
+
+// Insert types
+export type ProfileInsert = Database['public']['Tables']['profiles']['Insert']
+export type SpotInsert = Database['public']['Tables']['spots']['Insert']
+export type TrainingSessionInsert = Database['public']['Tables']['training_sessions']['Insert']
+export type SessionEntryInsert = Database['public']['Tables']['session_entries']['Insert']
+export type DailyStatInsert = Database['public']['Tables']['daily_stats']['Insert']
+export type SpotStatInsert = Database['public']['Tables']['spot_stats']['Insert']
+
+// Update types
+export type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
+export type SpotUpdate = Database['public']['Tables']['spots']['Update']
+export type TrainingSessionUpdate = Database['public']['Tables']['training_sessions']['Update']
+export type SessionEntryUpdate = Database['public']['Tables']['session_entries']['Update']
+export type DailyStatUpdate = Database['public']['Tables']['daily_stats']['Update']
+export type SpotStatUpdate = Database['public']['Tables']['spot_stats']['Update']
