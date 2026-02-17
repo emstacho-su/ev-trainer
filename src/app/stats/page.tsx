@@ -15,6 +15,7 @@ import { MetricCardsSkeleton, ChartSkeleton, HeatmapSkeleton, TableSkeleton } fr
 import PositionHeatmap from "./components/PositionHeatmap";
 import WeaknessBreakdown from "./components/WeaknessBreakdown";
 import SessionHistory from "./components/SessionHistory";
+import PerformanceChart from "./components/PerformanceChart";
 
 type Tab = "performance" | "positions" | "sessions";
 
@@ -77,11 +78,7 @@ export default function StatsPage() {
         {/* Performance tab */}
         {activeTab === "performance" && (
           <Suspense fallback={<ChartSkeleton />}>
-            <div className="rounded-lg border border-slate-700 bg-slate-900 p-6">
-              <p className="text-sm text-slate-400">
-                Performance charts will be added in a future update.
-              </p>
-            </div>
+            <PerformanceChart />
           </Suspense>
         )}
 
