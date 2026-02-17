@@ -20,18 +20,18 @@ Requirements for v3 release. Each maps to roadmap phases.
 
 ### Training UI (GTO Nexus Style)
 
-- [ ] **TRUI-01**: Oval table layout with 6 position nodes (UTG, HJ, CO, BTN, SB, BB) around perimeter
-- [ ] **TRUI-02**: Hero cards displayed at hero position with realistic card design
-- [ ] **TRUI-03**: Villain cards shown as face-down (hatched pattern) until revealed
-- [ ] **TRUI-04**: Community cards displayed in center with street indicator
-- [ ] **TRUI-05**: Pot size and pot type label displayed (SRP, 3BP, 4BP)
-- [ ] **TRUI-06**: Stack sizes shown at each position, updating on actions
-- [ ] **TRUI-07**: Action buttons below table (Fold, Call, Raise with bet sizes)
-- [ ] **TRUI-08**: Pre-action buttons are neutral/gray; post-action shows green (correct) or red (incorrect)
-- [ ] **TRUI-09**: EV and GTO frequency displayed on action buttons after decision
-- [ ] **TRUI-10**: Control buttons: Start, Next, Restart, Stop
-- [ ] **TRUI-11**: View Ranges button (postflop) opens range comparison modal
-- [ ] **TRUI-12**: 9-max table support (UTG, UTG+1, MP, HJ, CO, BTN, SB, BB, UTG+2)
+- [x] **TRUI-01**: Oval table layout with 6 position nodes (UTG, HJ, CO, BTN, SB, BB) around perimeter
+- [x] **TRUI-02**: Hero cards displayed at hero position with realistic card design
+- [x] **TRUI-03**: Villain cards shown as face-down (hatched pattern) until revealed
+- [x] **TRUI-04**: Community cards displayed in center with street indicator
+- [x] **TRUI-05**: Pot size and pot type label displayed (SRP, 3BP, 4BP)
+- [x] **TRUI-06**: Stack sizes shown at each position, updating on actions
+- [x] **TRUI-07**: Action buttons below table (Fold, Call, Raise with bet sizes)
+- [x] **TRUI-08**: Pre-action buttons are neutral/gray; post-action shows green (correct) or red (incorrect)
+- [x] **TRUI-09**: EV and GTO frequency displayed on action buttons after decision
+- [x] **TRUI-10**: Control buttons: Start, Next, Restart, Stop
+- [x] **TRUI-11**: View Ranges button (postflop) opens range comparison modal
+- [x] **TRUI-12**: 9-max table support (UTG, UTG+1, MP, HJ, CO, BTN, SB, BB, UTG+2)
 
 ### View Ranges Modal
 
@@ -109,11 +109,11 @@ Requirements for v3 release. Each maps to roadmap phases.
 
 ### UI Visual Design
 
-- [ ] **VISU-01**: Dark theme with poker felt aesthetic (dark blue/green)
-- [ ] **VISU-02**: Realistic card designs with suit colors
-- [ ] **VISU-03**: Chip stack visualization with denominations
-- [ ] **VISU-04**: Position labels clearly readable
-- [ ] **VISU-05**: Responsive layout (1920x1080 base, scales to 1280x720)
+- [x] **VISU-01**: Dark theme with poker felt aesthetic (dark blue/green)
+- [x] **VISU-02**: Realistic card designs with suit colors
+- [x] **VISU-03**: Chip stack visualization with denominations
+- [x] **VISU-04**: Position labels clearly readable
+- [x] **VISU-05**: Responsive layout (1920x1080 base, scales to 1280x720)
 
 ### Animations
 
@@ -172,18 +172,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SOLV-06 | Phase 1 | Pending |
 | SOLV-07 | Phase 1 | Pending |
 | SOLV-08 | Phase 1 | Pending |
-| TRUI-01 | Phase 4 | Pending |
-| TRUI-02 | Phase 4 | Pending |
-| TRUI-03 | Phase 4 | Pending |
-| TRUI-04 | Phase 4 | Pending |
-| TRUI-05 | Phase 4 | Pending |
-| TRUI-06 | Phase 4 | Pending |
-| TRUI-07 | Phase 4 | Pending |
-| TRUI-08 | Phase 4 | Pending |
-| TRUI-09 | Phase 4 | Pending |
-| TRUI-10 | Phase 4 | Pending |
-| TRUI-11 | Phase 4 | Pending |
-| TRUI-12 | Phase 4 | Pending |
+| TRUI-01 | Phase 4 | Complete |
+| TRUI-02 | Phase 4 | Complete |
+| TRUI-03 | Phase 4 | Complete |
+| TRUI-04 | Phase 4 | Complete |
+| TRUI-05 | Phase 4 | Complete |
+| TRUI-06 | Phase 4 | Complete |
+| TRUI-07 | Phase 4 | Complete |
+| TRUI-08 | Phase 4 | Complete |
+| TRUI-09 | Phase 4 | Complete |
+| TRUI-10 | Phase 4 | Complete |
+| TRUI-11 | Phase 4 | Complete |
+| TRUI-12 | Phase 4 | Complete |
 | RANG-01 | Phase 7 | Pending |
 | RANG-02 | Phase 7 | Pending |
 | RANG-03 | Phase 7 | Pending |
@@ -234,11 +234,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STAT-06 | Phase 8 | Pending |
 | STAT-07 | Phase 8 | Pending |
 | STAT-08 | Phase 8 | Pending |
-| VISU-01 | Phase 4 | Pending |
-| VISU-02 | Phase 4 | Pending |
-| VISU-03 | Phase 4 | Pending |
-| VISU-04 | Phase 4 | Pending |
-| VISU-05 | Phase 4 | Pending |
+| VISU-01 | Phase 4 | Complete |
+| VISU-02 | Phase 4 | Complete |
+| VISU-03 | Phase 4 | Complete |
+| VISU-04 | Phase 4 | Complete |
+| VISU-05 | Phase 4 | Complete |
 | ANIM-01 | Phase 9 | Pending |
 | ANIM-02 | Phase 9 | Pending |
 | ANIM-03 | Phase 9 | Pending |

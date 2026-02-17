@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Solver Core** - CFR+ algorithm with card/bet abstraction for preflop range generation
 - [x] **Phase 2: Backend Foundation** - Express API, PostgreSQL schema, Prisma ORM (AWS deployment deferred)
 - [x] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
-- [ ] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
+- [x] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
 - [ ] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading
 - [ ] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
 - [ ] **Phase 7: Range Visualization** - 13x13 range grid modal with action frequencies and equity breakdown
@@ -96,12 +96,12 @@ Plans:
 **Plans**: 6 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Theme infrastructure with next-themes, CSS variables, and utility helpers
-- [ ] 04-02-PLAN.md — Atomic components (Card, CardBack, Chip, DealerButton)
-- [ ] 04-03-PLAN.md — Player seat molecules (PlayerSeat, CommunityCards, PotDisplay)
-- [ ] 04-04-PLAN.md — Action button molecule with EV feedback and frequency bar
-- [ ] 04-05-PLAN.md — Table organism with oval layout, action panel, session controls, info bar
-- [ ] 04-06-PLAN.md — Visual verification checkpoint (human confirms UI at multiple viewports)
+- [x] 04-01-PLAN.md — Theme infrastructure with next-themes, CSS variables, and utility helpers
+- [x] 04-02-PLAN.md — Atomic components (Card, CardBack, Chip, DealerButton)
+- [x] 04-03-PLAN.md — Player seat molecules (PlayerSeat, CommunityCards, PotDisplay)
+- [x] 04-04-PLAN.md — Action button molecule with EV feedback and frequency bar
+- [x] 04-05-PLAN.md — Table organism with oval layout, action panel, session controls, info bar
+- [x] 04-06-PLAN.md — Visual verification checkpoint (human confirms UI at multiple viewports)
 
 ### Phase 5: Preflop Training
 **Goal**: Users can practice preflop decisions (RFI, 3bet, 4bet, blind defense) with solver grading
