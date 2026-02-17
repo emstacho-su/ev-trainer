@@ -11,6 +11,7 @@ import {
   type Position,
   type Street,
 } from "../../engine/types";
+import { classifyPreflopScenario, type PreflopScenarioType } from "./scenarioClassifier";
 
 export const SpotPackSchemaVersion = "1" as const;
 export type SpotPackSchemaVersion = typeof SpotPackSchemaVersion;
@@ -24,6 +25,7 @@ export interface SpotMeta {
   villainPosition: Position;
   effectiveStackBb: number;
   potType: PotType;
+  scenarioType?: PreflopScenarioType;
 }
 
 export interface SpotEntry {
@@ -126,6 +128,23 @@ function validateSpotMeta(meta: unknown, spot: Spot): SpotMeta {
   };
 }
 
+/**
+ * Enriches a spot entry with scenario type classification for preflop spots.
+ * Classification happens at pack load time for deterministic filtering.
+ */
+function enrichSpotWithScenario(entry: SpotEntry): SpotEntry {
+  const scenarioType = classifyPreflopScenario(entry.spot);
+  if (!scenarioType) return entry;
+
+  return {
+    ...entry,
+    meta: {
+      ...entry.meta,
+      scenarioType,
+    },
+  };
+}
+
 function validateSpotEntry(entry: unknown): SpotEntry {
   assertObject(entry, "spot entry");
   const raw = entry as Record<string, unknown>;
@@ -140,7 +159,10 @@ function validateSpotEntry(entry: unknown): SpotEntry {
   }
 
   const meta = validateSpotMeta(raw.meta, spot);
-  return { spot, meta };
+  const baseEntry: SpotEntry = { spot, meta };
+
+  // Enrich with scenario type for preflop spots
+  return enrichSpotWithScenario(baseEntry);
 }
 
 export function parseSpotPack(input: unknown): SpotPack {

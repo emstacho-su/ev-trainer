@@ -6,11 +6,13 @@
 
 import type { Position, Street } from "../../engine/types";
 import type { PotType, SpotEntry } from "../packs/spotPack";
+import type { PreflopScenarioType } from "../packs/scenarioClassifier";
 
 export const EffectiveStackBuckets = ["20", "40", "60", "100", "150+"] as const;
 export type EffectiveStackBucket = (typeof EffectiveStackBuckets)[number];
 
 export type PotTypeFilter = PotType | "ANY";
+export type ScenarioTypeFilter = PreflopScenarioType | "ANY";
 
 export interface SpotFilterInput {
   street?: Street;
@@ -18,6 +20,7 @@ export interface SpotFilterInput {
   villainPosition?: Position;
   effectiveStackBbBucket?: EffectiveStackBucket;
   potType?: PotTypeFilter;
+  scenarioType?: ScenarioTypeFilter;
 }
 
 export function bucketEffectiveStackBb(value: number): EffectiveStackBucket {
@@ -38,6 +41,11 @@ export function matchesSpotFilters(entry: SpotEntry, filters: SpotFilterInput): 
   if (filters.effectiveStackBbBucket) {
     const bucket = bucketEffectiveStackBb(entry.meta.effectiveStackBb);
     if (bucket !== filters.effectiveStackBbBucket) return false;
+  }
+  if (filters.scenarioType && filters.scenarioType !== "ANY") {
+    if (!entry.meta.scenarioType || entry.meta.scenarioType !== filters.scenarioType) {
+      return false;
+    }
   }
   return true;
 }

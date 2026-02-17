@@ -83,4 +83,97 @@ describe("spot filters", () => {
     });
     expect(filtered).toEqual([entry]);
   });
+
+  it("matches scenario type filter for preflop spots", () => {
+    const rfiEntry = buildEntry({
+      spot: buildSpot({ board: [], history: [] }),
+      meta: {
+        street: "PREFLOP",
+        heroPosition: "BTN",
+        villainPosition: "SB",
+        effectiveStackBb: 100,
+        potType: "SRP",
+        scenarioType: "RFI",
+      },
+    });
+
+    const facingOpenEntry = buildEntry({
+      spot: buildSpot({ board: [], history: ["RAISE"] }),
+      meta: {
+        street: "PREFLOP",
+        heroPosition: "BTN",
+        villainPosition: "CO",
+        effectiveStackBb: 100,
+        potType: "SRP",
+        scenarioType: "FacingOpen",
+      },
+    });
+
+    expect(matchesSpotFilters(rfiEntry, { scenarioType: "RFI" })).toBe(true);
+    expect(matchesSpotFilters(rfiEntry, { scenarioType: "FacingOpen" })).toBe(false);
+    expect(matchesSpotFilters(rfiEntry, { scenarioType: "ANY" })).toBe(true);
+
+    expect(matchesSpotFilters(facingOpenEntry, { scenarioType: "FacingOpen" })).toBe(true);
+    expect(matchesSpotFilters(facingOpenEntry, { scenarioType: "RFI" })).toBe(false);
+  });
+
+  it("filters by scenario type exclude entries without scenarioType", () => {
+    const preflopEntry = buildEntry({
+      spot: buildSpot({ board: [], history: [] }),
+      meta: {
+        street: "PREFLOP",
+        heroPosition: "BTN",
+        villainPosition: "SB",
+        effectiveStackBb: 100,
+        potType: "SRP",
+        scenarioType: "RFI",
+      },
+    });
+
+    const postflopEntry = buildEntry({
+      spot: buildSpot({ board: ["Ah", "Kd", "Qc"], history: ["CHECK"] }),
+      meta: {
+        street: "FLOP",
+        heroPosition: "BTN",
+        villainPosition: "BB",
+        effectiveStackBb: 100,
+        potType: "SRP",
+        // No scenarioType for postflop spots
+      },
+    });
+
+    const filtered = filterSpotEntries([preflopEntry, postflopEntry], {
+      scenarioType: "RFI",
+    });
+
+    expect(filtered).toEqual([preflopEntry]);
+  });
+
+  it("scenario type ANY filter includes all spots", () => {
+    const rfiEntry = buildEntry({
+      spot: buildSpot({ board: [], history: [] }),
+      meta: {
+        street: "PREFLOP",
+        heroPosition: "BTN",
+        villainPosition: "SB",
+        effectiveStackBb: 100,
+        potType: "SRP",
+        scenarioType: "RFI",
+      },
+    });
+
+    const postflopEntry = buildEntry({
+      spot: buildSpot({ board: ["Ah", "Kd", "Qc"], history: ["CHECK"] }),
+      meta: {
+        street: "FLOP",
+        heroPosition: "BTN",
+        villainPosition: "BB",
+        effectiveStackBb: 100,
+        potType: "SRP",
+      },
+    });
+
+    expect(matchesSpotFilters(rfiEntry, { scenarioType: "ANY" })).toBe(true);
+    expect(matchesSpotFilters(postflopEntry, { scenarioType: "ANY" })).toBe(true);
+  });
 });
