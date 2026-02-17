@@ -10,6 +10,7 @@ interface PlayerSeatProps {
   isFolded: boolean;
   isHero?: boolean;
   showCards?: boolean;
+  actionLabel?: string;
   className?: string;
 }
 
@@ -40,6 +41,7 @@ export function PlayerSeat({
   isFolded,
   isHero = false,
   showCards = false,
+  actionLabel,
   className,
 }: PlayerSeatProps) {
   const inHand = isActive && !isFolded;
@@ -86,6 +88,14 @@ export function PlayerSeat({
                 {stackBB.toFixed(1)} BB
               </span>
             </div>
+            {actionLabel && (
+              <span className={cn(
+                'text-[10px] font-semibold uppercase tracking-wide',
+                isFolded ? 'text-red-400' : 'text-gray-400',
+              )}>
+                {actionLabel}
+              </span>
+            )}
           </div>
         </div>
       ) : (

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Spot } from '@/lib/engine/spot';
-import type { ActionId } from '@/lib/engine/types';
+import type { ActionId, Position } from '@/lib/engine/types';
 import type { DecisionGrade } from '@/lib/engine/trainingOrchestrator';
 import { PokerTable } from '@/components/poker/organisms/PokerTable';
 import { ActionPanel } from '@/components/poker/organisms/ActionPanel';
@@ -22,22 +22,111 @@ interface Player {
   isFolded: boolean;
   isHero?: boolean;
   showCards?: boolean;
+  actionLabel?: string;
+}
+
+// Preflop action order (first to act → last)
+const PREFLOP_ORDER = ['UTG', 'UTG+1', 'UTG+2', 'MP', 'HJ', 'CO', 'BTN', 'SB', 'BB'] as const;
+
+// Parse action history to map each position's latest action and bet
+function parseHistoryActions(spot: Spot): Map<string, { actionId: string; betBb: number }> {
+  // Build acting order: positions in this hand (preflop order), excluding hero
+  const actingOrder = PREFLOP_ORDER.filter(
+    p => spot.positions.includes(p as Position) && p !== spot.heroToAct
+  );
+
+  const result = new Map<string, { actionId: string; betBb: number }>();
+  const folded = new Set<string>();
+
+  // Track current bet per position (blinds are initial)
+  const bets = new Map<string, number>();
+  for (const pos of spot.positions) {
+    if (pos === 'SB') bets.set(pos, 0.5);
+    else if (pos === 'BB') bets.set(pos, 1.0);
+    else bets.set(pos, 0);
+  }
+
+  let highBet = 1.0;
+  let posIdx = 0;
+
+  for (let hIdx = 0; hIdx < spot.history.length; hIdx++) {
+    // Find next eligible position (skip folded)
+    let found = false;
+    for (let attempts = 0; attempts < actingOrder.length; attempts++) {
+      const pos = actingOrder[posIdx % actingOrder.length];
+      posIdx++;
+
+      if (folded.has(pos)) continue;
+
+      const actionId = spot.history[hIdx];
+
+      if (actionId === 'FOLD') {
+        folded.add(pos);
+        result.set(pos, { actionId, betBb: 0 });
+      } else if (actionId === 'CHECK') {
+        result.set(pos, { actionId, betBb: bets.get(pos) ?? 0 });
+      } else if (actionId === 'CALL') {
+        bets.set(pos, highBet);
+        result.set(pos, { actionId, betBb: highBet });
+      } else {
+        // RAISE_X or BET_X
+        const size = parseFloat(actionId.split('_')[1]) || 0;
+        bets.set(pos, size);
+        highBet = Math.max(highBet, size);
+        result.set(pos, { actionId, betBb: size });
+      }
+
+      found = true;
+      break;
+    }
+
+    if (!found) break;
+  }
+
+  return result;
+}
+
+// Format action label for display
+function formatActionLabel(actionId: string): string {
+  if (actionId === 'FOLD') return 'Fold';
+  if (actionId === 'CHECK') return 'Check';
+  if (actionId === 'CALL') return 'Call';
+  if (actionId.startsWith('RAISE_')) return 'Raise';
+  if (actionId.startsWith('BET_')) return 'Bet';
+  return actionId;
 }
 
 // Convert Spot to PokerTable players format
 function spotToPlayers(spot: Spot): Player[] {
   const players: Player[] = [];
+  const actions = parseHistoryActions(spot);
 
   for (const position of spot.positions) {
     const isHero = position === spot.heroToAct;
+    const action = actions.get(position);
+    const hasFolded = action?.actionId === 'FOLD';
+
+    // Determine bet to show as chip
+    // For positions that haven't acted yet, show blind bets
+    let bet: number | undefined;
+    if (action) {
+      // Player acted: show their current bet (0 for fold/check)
+      bet = action.betBb > 0 ? action.betBb : undefined;
+    } else if (!isHero) {
+      // Player hasn't acted yet: show blind bets
+      if (position === 'SB') bet = 0.5;
+      else if (position === 'BB') bet = 1.0;
+    }
 
     players.push({
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
-      isActive: !isHero, // Villains are "in hand" (show card backs), hero shows face-up cards
-      isFolded: false,
+      isActive: !isHero && !hasFolded,
+      isFolded: hasFolded,
       isHero,
       showCards: isHero,
+      bet,
+      actionLabel: action ? formatActionLabel(action.actionId) : undefined,
     });
   }
 
@@ -415,7 +504,6 @@ export default function PreflopTrainingSession() {
             potType={potType}
             dealerPosition={dealerPosition}
             tableSize="6max"
-            actionHistory={currentSpot.history}
           />
         </div>
       </div>
