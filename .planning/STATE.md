@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 7 of 10 (Range Visualization)
-Plan: 3 of 5 in Phase 7
+Plan: 4 of 5 in Phase 7
 Status: In progress
-Last activity: 2026-02-17 -- Completed 07-03 action legend and equity breakdown
+Last activity: 2026-02-17 -- Completed 07-04 range grid modal and PokerTable integration
 
-Progress: [█████████████░░░] ~67% (41 plans complete)
+Progress: [█████████████░░░] ~69% (42 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 40
-- Average duration: 6.1 min
-- Total execution time: 242 min
+- Total plans completed: 42
+- Average duration: 5.9 min
+- Total execution time: 244 min
 
 **By Phase:**
 
@@ -34,8 +34,8 @@ Progress: [█████████████░░░] ~67% (41 plans comp
 | 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 06-02 (2 min), 06-01 (5 min), 06-03 (2 min), 06-04 (2 min), 06-05 (5 min)
-- Trend: Phase 6 plans slightly longer (config + API + migration work)
+- Last 5 plans: 06-03 (2 min), 06-04 (2 min), 06-05 (5 min), 07-03 (2 min), 07-04 (2 min)
+- Trend: Phase 7 plans fast (component composition, no new infrastructure)
 
 *Updated after each plan completion*
 
@@ -183,6 +183,10 @@ Recent decisions affecting current work:
 - 07-03: 5% frequency threshold for action group classification (filters noise)
 - 07-03: RangeContext pattern for cross-component filter state sharing
 - 07-03: EquityCategory click filtering only in hand-strength view mode
+- 07-04: Native HTML <dialog> instead of react-modal (zero dependency, built-in WCAG 2.1 accessibility)
+- 07-04: View Ranges button on PokerTable (bottom-right, z-30) disabled when range data unavailable
+- 07-04: Filter state reset to null on modal close for clean slate each open
+- 07-04: useEffect sync pattern for imperative dialog API (showModal/close)
 
 ### Pending Todos
 
@@ -200,7 +204,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 06:06 UTC
-Stopped at: Completed 07-03-PLAN.md (action legend and equity breakdown)
+Last session: 2026-02-17 04:10 UTC
+Stopped at: Completed 07-04-PLAN.md (range grid modal and PokerTable integration)
 Resume file: None
-Next: Phase 7 — 07-04
+Next: Phase 7 — 07-05
