@@ -11,13 +11,16 @@ function OAuthButtons({ loading }: { loading: boolean }) {
   async function handleOAuth(provider: 'google' | 'github') {
     setOauthLoading(provider);
     const supabase = createClient();
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    console.log('[OAuth] redirectTo:', redirectTo);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo,
       },
     });
     if (error) {
+      console.error('[OAuth] signInWithOAuth error:', error);
       setOauthLoading(null);
     }
   }
@@ -71,12 +74,19 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') ?? '/';
   const errorParam = searchParams.get('error');
+  const errorMessage = searchParams.get('message');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(
-    errorParam === 'auth_callback_failed' ? 'Authentication failed. Please try again.' : null
-  );
+  const [error, setError] = useState<string | null>(() => {
+    if (errorParam === 'auth_callback_failed') {
+      const detail = errorMessage ? decodeURIComponent(errorMessage) : null;
+      return detail
+        ? `Authentication failed: ${detail}`
+        : 'Authentication failed. Please try again.';
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent) {

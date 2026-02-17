@@ -11,13 +11,16 @@ function OAuthButtons({ loading }: { loading: boolean }) {
   async function handleOAuth(provider: 'google' | 'github') {
     setOauthLoading(provider);
     const supabase = createClient();
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    console.log('[OAuth] redirectTo:', redirectTo);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo,
       },
     });
     if (error) {
+      console.error('[OAuth] signInWithOAuth error:', error);
       setOauthLoading(null);
     }
   }
