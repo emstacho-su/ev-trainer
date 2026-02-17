@@ -293,19 +293,43 @@ function makeMockSolverOutput(spot: Spot, actionId: ActionId): SolverNodeOutput 
     };
   }
 
-  // Fallback for postflop (original logic)
-  const frequency = 0.2 + rng.next() * 0.6;
-  const otherFrequency = 1 - frequency;
-  const evBase = Math.round((rng.next() * 4 - 2) * 100) / 100;
-  const evOther = Math.round((evBase - 0.5 + rng.next()) * 100) / 100;
-  const otherActionId = actionId === "ALT" ? "ALT_2" : "ALT";
+  // Postflop: determine if hero faces a bet
+  const facesBet = spot.history.some(
+    (a) => a.startsWith("BET_") || a.startsWith("RAISE_") || a === "CALL"
+  );
+
+  if (facesBet) {
+    // Facing bet: Fold/Call/Raise
+    const foldFreq = 0.1 + rng.next() * 0.3;
+    const callFreq = 0.2 + rng.next() * 0.4;
+    const raiseFreq = 1.0 - foldFreq - callFreq;
+    const raiseEv = Math.round((rng.next() * 2 + 1) * 100) / 100;
+    const callEv = Math.round((raiseEv - 0.5 - rng.next() * 0.5) * 100) / 100;
+    const foldEv = Math.round((callEv - 0.5 - rng.next() * 0.5) * 100) / 100;
+
+    return {
+      status: "ok",
+      units: "bb",
+      actions: [
+        { actionId: "FOLD", frequency: foldFreq, ev: foldEv },
+        { actionId: "CALL", frequency: callFreq, ev: callEv },
+        { actionId: "RAISE_2.5BB", frequency: raiseFreq, ev: raiseEv },
+      ],
+    };
+  }
+
+  // Not facing bet: Check/Bet
+  const checkFreq = 0.3 + rng.next() * 0.4;
+  const betFreq = 1.0 - checkFreq;
+  const checkEv = Math.round((rng.next() * 2 - 0.5) * 100) / 100;
+  const betEv = Math.round((checkEv + rng.next() * 1.5) * 100) / 100;
 
   return {
     status: "ok",
     units: "bb",
     actions: [
-      { actionId, frequency, ev: evBase },
-      { actionId: otherActionId, frequency: otherFrequency, ev: evOther },
+      { actionId: "CHECK", frequency: checkFreq, ev: checkEv },
+      { actionId: "BET_75PCT", frequency: betFreq, ev: betEv },
     ],
   };
 }

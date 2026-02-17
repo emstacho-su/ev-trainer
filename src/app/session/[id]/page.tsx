@@ -59,14 +59,15 @@ function parseHistoryActions(spot: Spot): Map<string, { actionId: string; betBb:
   const result = new Map<string, { actionId: string; betBb: number }>();
   const folded = new Set<string>();
   const bets = new Map<string, number>();
+  const isPreflop = spot.board.length === 0;
 
   for (const pos of spot.positions) {
-    if (pos === 'SB') bets.set(pos, 0.5);
-    else if (pos === 'BB') bets.set(pos, 1.0);
+    if (isPreflop && pos === 'SB') bets.set(pos, 0.5);
+    else if (isPreflop && pos === 'BB') bets.set(pos, 1.0);
     else bets.set(pos, 0);
   }
 
-  let highBet = 1.0;
+  let highBet = isPreflop ? 1.0 : 0;
   let posIdx = 0;
 
   for (let hIdx = 0; hIdx < spot.history.length; hIdx++) {
@@ -82,7 +83,7 @@ function parseHistoryActions(spot: Spot): Map<string, { actionId: string; betBb:
         folded.add(pos);
         result.set(pos, { actionId, betBb: 0 });
       } else if (actionId === 'CHECK') {
-        result.set(pos, { actionId, betBb: bets.get(pos) ?? 0 });
+        result.set(pos, { actionId, betBb: 0 });
       } else if (actionId === 'CALL') {
         bets.set(pos, highBet);
         result.set(pos, { actionId, betBb: highBet });
@@ -124,7 +125,8 @@ function spotToPlayers(
     let bet: number | undefined;
     if (action) {
       bet = action.betBb > 0 ? action.betBb : undefined;
-    } else {
+    } else if (spot.board.length === 0) {
+      // Only show blind bets preflop for players who haven't acted
       if (position === 'SB') bet = 0.5;
       else if (position === 'BB') bet = 1.0;
     }
@@ -192,6 +194,27 @@ function mapSimpleAction(actionId: ActionId): 'fold' | 'call' | 'raise' {
   if (actionId === 'FOLD') return 'fold';
   if (actionId === 'CALL' || actionId === 'CHECK') return 'call';
   return 'raise';
+}
+
+/**
+ * Determine if hero faces an outstanding bet.
+ * Postflop: if all prior actions in history are CHECKs (or history is empty), no bet facing.
+ * Preflop: always facing at least the BB.
+ */
+function heroFacesBet(spot: Spot): boolean {
+  if (spot.board.length === 0) return true; // preflop always faces BB
+  // Postflop: check if any action in history is a bet/raise
+  return spot.history.some(
+    a => a.startsWith('BET_') || a.startsWith('RAISE_') || a === 'CALL'
+  );
+}
+
+/** Get the action IDs appropriate for the current spot context. */
+function getAvailableActions(spot: Spot): ActionId[] {
+  if (heroFacesBet(spot)) {
+    return ['FOLD', 'CALL', 'RAISE_2.5BB'];
+  }
+  return ['CHECK', 'BET_75PCT'];
 }
 
 // ---------- Page component ----------
@@ -420,10 +443,11 @@ export default function SessionPage() {
 
       if (uiStateRef.current !== 'idle' || !currentSpotRef.current) return;
 
+      const actions = getAvailableActions(currentSpotRef.current);
       let actionId: ActionId | null = null;
-      if (e.key === '1' || e.key.toLowerCase() === 'f') actionId = 'FOLD';
-      else if (e.key === '2' || e.key.toLowerCase() === 'c') actionId = 'CALL';
-      else if (e.key === '3' || e.key.toLowerCase() === 'r') actionId = 'RAISE_2.5BB';
+      if (e.key === '1' || e.key.toLowerCase() === 'f') actionId = actions[0]; // Fold or Check
+      else if (e.key === '2' || e.key.toLowerCase() === 'c') actionId = actions[1]; // Call or Bet
+      else if (e.key === '3' || e.key.toLowerCase() === 'r') actionId = actions[2] ?? null; // Raise (if available)
 
       if (actionId) {
         e.preventDefault();
@@ -435,13 +459,23 @@ export default function SessionPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handleSubmitAction]);
 
+  // Determine available actions based on spot context
+  const availableActions = useMemo(
+    () => (currentSpot ? getAvailableActions(currentSpot) : ['FOLD', 'CALL', 'RAISE_2.5BB'] as ActionId[]),
+    [currentSpot]
+  );
+
   // Build action data for ActionPanel
   const actionPanelData = useMemo(() => {
-    const baseActions: ActionId[] = ['FOLD', 'CALL', 'RAISE_2.5BB'];
-
-    return baseActions.map((actionId) => {
+    return availableActions.map((actionId) => {
       const simpleAction = mapSimpleAction(actionId);
       const isUserChoice = selectedActionId === actionId;
+
+      // Label mapping for display
+      let label: string | undefined;
+      if (actionId === 'CHECK') label = 'Check';
+      else if (actionId === 'BET_75PCT') label = 'Bet';
+      else if (actionId.startsWith('RAISE_')) label = 'Raise';
 
       let state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect' = 'idle';
       let ev: number | undefined;
@@ -450,7 +484,9 @@ export default function SessionPage() {
       if (uiState === 'submitted') {
         state = isUserChoice ? 'selected' : 'disabled';
       } else if (uiState === 'revealed' && grade) {
-        const actionData = grade.allActions?.find(a => mapSimpleAction(a.actionId) === simpleAction);
+        // Match by exact actionId first, then by simple action type
+        const actionData = grade.allActions?.find(a => a.actionId === actionId)
+          ?? grade.allActions?.find(a => mapSimpleAction(a.actionId) === simpleAction);
         if (actionData) {
           ev = actionData.ev;
           frequency = actionData.frequency;
@@ -464,14 +500,14 @@ export default function SessionPage() {
 
       return {
         action: simpleAction,
-        label: simpleAction === 'raise' ? 'Raise' : undefined,
+        label,
         state,
         ev,
         frequency,
         isUserChoice,
       };
     });
-  }, [grade, selectedActionId, uiState]);
+  }, [availableActions, grade, selectedActionId, uiState]);
 
   const showDeleteMissingSeed =
     !seed && !isLoading && errorMessage?.includes("Missing seed") === true;
@@ -580,12 +616,9 @@ export default function SessionPage() {
             <ActionPanel
               actions={actionPanelData}
               onAction={(action) => {
-                const actionMap: Record<string, ActionId> = {
-                  fold: 'FOLD',
-                  call: 'CALL',
-                  raise: 'RAISE_2.5BB',
-                };
-                void handleSubmitAction(actionMap[action]);
+                // Find the actual actionId that maps to this simple action
+                const actionId = availableActions.find(a => mapSimpleAction(a) === action);
+                if (actionId) void handleSubmitAction(actionId);
               }}
             />
           </div>
