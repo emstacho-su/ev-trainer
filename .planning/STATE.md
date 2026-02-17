@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 5 of 10 (Preflop Training)
-Plan: 1 of 4 in Phase 5
+Plan: 3 of 4 in Phase 5
 Status: In progress
-Last activity: 2026-02-17 -- Completed 05-01-PLAN.md
+Last activity: 2026-02-17 -- Completed 05-03-PLAN.md
 
-Progress: [██████████░░░░░░] ~44% (28 plans complete)
+Progress: [██████████░░░░░░] ~46% (29 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 28
-- Average duration: 7.5 min
-- Total execution time: 211 min
+- Total plans completed: 29
+- Average duration: 7.4 min
+- Total execution time: 215 min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [██████████░░░░░░] ~44% (28 plans comp
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
 | 04-table-ui-foundation | 6/6 ✓ | 65 min | 10.8 min |
-| 05-preflop-training | 1/4 | 7 min | 7.0 min |
+| 05-preflop-training | 3/4 | 11 min | 3.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-04 (1 min), 04-05 (1 min), 04-06 (1 min), 05-01 (7 min)
-- Trend: 05-01 returned to normal duration (backend logic + tests)
+- Last 5 plans: 04-05 (1 min), 04-06 (1 min), 05-01 (7 min), 05-02 (0 min - skipped), 05-03 (4 min)
+- Trend: Phase 5 averaging 3.7 min (React components faster than solver work)
 
 *Updated after each plan completion*
 
@@ -142,6 +142,13 @@ Recent decisions affecting current work:
 - 05-01: Scenario classification at pack load time (deterministic, performance)
 - 05-01: Scenario type stored in SpotMeta (optional field, preflop only)
 - 05-01: SpotFilterInput supports scenarioType filter (specific type or 'ANY')
+- 05-03: DecisionGrade includes allActions array for UI feedback display
+- 05-03: Mock solver detects preflop (board.length === 0) and returns Fold/Call/Raise
+- 05-03: Guest limiting enforced after hand submission (not before session start)
+- 05-03: 500ms reveal delay for training feedback timing
+- 05-03: Training session state machine: idle → submitted → revealed
+- 05-03: Keyboard shortcuts: Space/Enter (next), 1/F (fold), 2/C (call), 3/R (raise)
+- 05-03: Guest limit 50 hands/day tracked in localStorage with daily reset
 
 ### Pending Todos
 
@@ -154,7 +161,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17
-Stopped at: Completed 05-01-PLAN.md (Scenario classification and filtering)
+Last session: 2026-02-17 01:05 UTC
+Stopped at: Completed 05-03-PLAN.md (Interactive training session orchestrator)
 Resume file: None
-Next: Execute 05-02-PLAN.md (UI feedback enhancement)
+Next: Execute 05-04-PLAN.md (Scenario filter UI integration)
