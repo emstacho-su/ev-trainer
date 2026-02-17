@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTrainerConfig } from '@/lib/v2/hooks/useTrainerConfig';
+import { writeSessionRecord } from '@/lib/v2/storage/sessionStorage';
 import ConfigCard from './ConfigCard';
 import ModeToggle from './ModeToggle';
 import GameSetup from './GameSetup';
@@ -53,6 +54,16 @@ export default function TrainerLobby() {
         const data = await res.json();
         const sessionId = data.session?.sessionId ?? data.sessionId;
         const seed = data.session?.seed ?? data.seed ?? '';
+
+        // Persist initial session + spot so the session page can load it
+        if (data.session && data.spot) {
+          writeSessionRecord({
+            session: data.session,
+            currentSpot: data.spot,
+            startedAt: new Date().toISOString(),
+          });
+        }
+
         router.push(`/session/${sessionId}?seed=${seed}`);
       } else {
         const data = await res.json().catch(() => null);
