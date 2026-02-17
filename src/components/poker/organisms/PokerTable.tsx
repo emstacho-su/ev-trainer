@@ -1,9 +1,14 @@
+'use client';
+
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { PlayerSeat } from '../molecules/PlayerSeat';
 import { CommunityCards } from '../molecules/CommunityCards';
 import { PotDisplay } from '../molecules/PotDisplay';
 import { DealerButton } from '../atoms/DealerButton';
 import { Chip } from '../atoms/Chip';
+import { RangeGridModal } from '@/components/range';
+import type { RangeData } from '@/lib/range/types';
 
 interface Player {
   position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
@@ -27,6 +32,8 @@ interface PokerTableProps {
   dealerPosition: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
   heroPosition?: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
   tableSize?: TableSize;
+  heroRange?: RangeData;
+  villainRange?: RangeData;
   className?: string;
 }
 
@@ -107,8 +114,11 @@ export function PokerTable({
   dealerPosition,
   heroPosition,
   tableSize = '6max',
+  heroRange,
+  villainRange,
   className,
 }: PokerTableProps) {
+  const [rangeModalOpen, setRangeModalOpen] = useState(false);
   const seatOrder = tableSize === '9max' ? SEAT_ORDER_9MAX : SEAT_ORDER_6MAX;
   const seatPositions = buildPositions(seatOrder, SEAT_RX, SEAT_RY, heroPosition);
   const betPositions = buildPositions(seatOrder, BET_RX, BET_RY, heroPosition);
@@ -195,6 +205,26 @@ export function PokerTable({
         <CommunityCards cards={communityCards} />
         <PotDisplay amount={pot} />
       </div>
+
+      {/* View Ranges button */}
+      <button
+        type="button"
+        onClick={() => setRangeModalOpen(true)}
+        disabled={!heroRange || !villainRange}
+        className="absolute bottom-2 right-2 z-30 px-3 py-1.5 bg-purple-600 text-white text-xs font-medium rounded-md hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
+        aria-label="View Ranges"
+      >
+        View Ranges
+      </button>
+
+      {/* Range visualization modal */}
+      <RangeGridModal
+        isOpen={rangeModalOpen}
+        onClose={() => setRangeModalOpen(false)}
+        heroRange={heroRange ?? { hands: [], totalCombos: 0 }}
+        villainRange={villainRange ?? { hands: [], totalCombos: 0 }}
+        currentBoard={communityCards.map((c) => `${c.rank}${c.suit}`)}
+      />
     </div>
   );
 }
