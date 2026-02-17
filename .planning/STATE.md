@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 11 of 12 (Supabase Database Integration)
-Plan: 11-03 complete, 11-04 pending
+Plan: 11-07 complete, 11-08 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 11-03-PLAN.md (AuthProvider and middleware)
+Last activity: 2026-02-17 -- Completed 11-07-PLAN.md (Spot service & seed script)
 
-Progress: [████████████████████░] ~99% (65 plans complete)
+Progress: [████████████████████░] ~99% (66 plans complete)
 
 ## Performance Metrics
 
@@ -262,6 +262,12 @@ Recent decisions affecting current work:
 - 11-03: Protected routes: /stats, /review, /summary -- all training routes remain guest-accessible
 - 11-03: OAuth callback redirects to next param or / on success, /login?error on failure
 - 11-03: Email confirmation uses verifyOtp with token_hash and type params
+- 11-07: Deterministic shuffle using mulberry32 seeded PRNG for reproducible training
+- 11-07: Tag generation includes street, position, pot type, scenario, stack depth, board texture
+- 11-07: Seed script uses SUPABASE_SERVICE_ROLE_KEY to bypass RLS
+- 11-07: Unified loader tries Supabase first, falls back to bundled packs silently
+- 11-07: Stack bucket filter converted to min/max range for Supabase query
+- 11-07: Default is_system=true filter on Supabase queries
 
 ### Pending Todos
 
@@ -284,6 +290,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 11-03-PLAN.md (AuthProvider and middleware)
+Stopped at: Completed 11-07-PLAN.md (Spot service & seed script)
 Resume file: None
-Next: Execute 11-04-PLAN.md (Login/signup pages with Supabase Auth)
+Next: Execute 11-08-PLAN.md
