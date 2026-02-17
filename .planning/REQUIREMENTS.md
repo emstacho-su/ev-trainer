@@ -60,11 +60,11 @@ Requirements for v3 release. Each maps to roadmap phases.
 
 ### Preflop Training Mode
 
-- [ ] **PREF-01**: Opening range scenarios (first to act)
-- [ ] **PREF-02**: Facing open scenarios (call, 3bet, fold)
-- [ ] **PREF-03**: 3bet pot scenarios (4bet, call, fold)
-- [ ] **PREF-04**: Blind defense scenarios (BB vs positions, SB vs BB)
-- [ ] **PREF-05**: Preflop action history displayed on table
+- [x] **PREF-01**: Opening range scenarios (first to act)
+- [x] **PREF-02**: Facing open scenarios (call, 3bet, fold)
+- [x] **PREF-03**: 3bet pot scenarios (4bet, call, fold)
+- [x] **PREF-04**: Blind defense scenarios (BB vs positions, SB vs BB)
+- [x] **PREF-05**: Preflop action history displayed on table
 
 ### Postflop Training Mode
 
@@ -200,11 +200,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DRIL-02 | Phase 6 | Pending |
 | DRIL-03 | Phase 6 | Pending |
 | DRIL-04 | Phase 6 | Pending |
-| PREF-01 | Phase 5 | Pending |
-| PREF-02 | Phase 5 | Pending |
-| PREF-03 | Phase 5 | Pending |
-| PREF-04 | Phase 5 | Pending |
-| PREF-05 | Phase 5 | Pending |
+| PREF-01 | Phase 5 | Complete |
+| PREF-02 | Phase 5 | Complete |
+| PREF-03 | Phase 5 | Complete |
+| PREF-04 | Phase 5 | Complete |
+| PREF-05 | Phase 5 | Complete |
 | POST-01 | Phase 10 | Pending |
 | POST-02 | Phase 10 | Pending |
 | POST-03 | Phase 10 | Pending |

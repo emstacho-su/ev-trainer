@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 5 - Preflop Training
+**Current focus:** Phase 6 - Trainer Configuration
 
 ## Current Position
 
-Phase: 5 of 10 (Preflop Training)
-Plan: 7 of 7 in Phase 5
-Status: Phase complete - ready for UAT re-test
-Last activity: 2026-02-17 -- Completed 05-07-PLAN.md (Gap closure - info bar visibility)
+Phase: 6 of 10 (Trainer Configuration)
+Plan: 0 of 6 in Phase 6
+Status: Ready to discuss/plan
+Last activity: 2026-02-17 -- Completed Phase 5 (2 issues deferred)
 
-Progress: [██████████░░░░░░] ~50% (32 plans complete)
+Progress: [███████████░░░░░] ~51% (32 plans complete)
 
 ## Performance Metrics
 
@@ -162,6 +162,11 @@ Recent decisions affecting current work:
 
 None yet.
 
+### Known Issues (Deferred)
+
+- Phase 5: Keyboard shortcuts not working (Tests 11, 12) — needs deeper investigation
+- Phase 5: Info bar metrics not visible (Test 13) — defer until hand logic complete
+
 ### Blockers/Concerns
 
 - Research flag: Phase 1 may need targeted research on optimal abstraction bucket counts
@@ -169,7 +174,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:26 UTC
-Stopped at: Completed 05-07-PLAN.md (Info bar visibility enhancement)
+Last session: 2026-02-17 03:35 UTC
+Stopped at: Completed Phase 5 (gap closure, 2 issues deferred per user)
 Resume file: None
-Next: 05-UAT.md re-test (verify Test 13 and all other tests pass)
+Next: Phase 6 — Trainer Configuration (discuss or plan)

@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Backend Foundation** - Express API, PostgreSQL schema, Prisma ORM (AWS deployment deferred)
 - [x] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
 - [x] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
-- [ ] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading
+- [x] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading (2 minor issues deferred)
 - [ ] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
 - [ ] **Phase 7: Range Visualization** - 13x13 range grid modal with action frequencies and equity breakdown
 - [ ] **Phase 8: Statistics & Analytics** - Performance graphs, session history, weakness detection
@@ -113,13 +113,17 @@ Plans:
   3. User can train 3bet pot scenarios (4bet, call, fold)
   4. User can train blind defense scenarios (BB vs positions, SB vs BB)
   5. Preflop action history displays correctly on table
-**Plans**: 4 plans
+**Plans**: 7 plans
+**Known issues deferred:** Keyboard shortcuts (Tests 11, 12), info bar metrics (Test 13)
 
 Plans:
-- [ ] 05-01-PLAN.md — Scenario classification and filter extension
-- [ ] 05-02-PLAN.md — Table and ActionButton UI extensions
-- [ ] 05-03-PLAN.md — Training session orchestrator and guest limiting
-- [ ] 05-04-PLAN.md — Human verification checkpoint
+- [x] 05-01-PLAN.md — Scenario classification and filter extension
+- [x] 05-02-PLAN.md — Table and ActionButton UI extensions
+- [x] 05-03-PLAN.md — Training session orchestrator and guest limiting
+- [x] 05-04-PLAN.md — Human verification checkpoint (UAT)
+- [x] 05-05-PLAN.md — Gap closure: villain seat display fix
+- [x] 05-06-PLAN.md — Gap closure: keyboard shortcuts fix (still failing)
+- [x] 05-07-PLAN.md — Gap closure: info bar metrics fix (still failing)
 
 ### Phase 6: Trainer Configuration
 **Goal**: Users can customize training mode, filters, and drill specific weak spots
