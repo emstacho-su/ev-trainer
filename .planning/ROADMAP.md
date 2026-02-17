@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Authentication** - User accounts, email verification, OAuth, session persistence
 - [x] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
 - [x] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading (2 minor issues deferred)
-- [ ] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
+- [x] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
 - [ ] **Phase 7: Range Visualization** - 13x13 range grid modal with action frequencies and equity breakdown
 - [ ] **Phase 8: Statistics & Analytics** - Performance graphs, session history, weakness detection
 - [ ] **Phase 9: Animations** - Card dealing, chip movement, EV reveal, action highlights
@@ -138,12 +138,12 @@ Plans:
 **Plans**: 6 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Config types, validation, localStorage persistence, database sync
-- [ ] 06-02-PLAN.md — Filter components (PositionFilters, PotTypeFilters, ModeToggle, GameSetup, ConfigCard)
-- [ ] 06-03-PLAN.md — Lobby screen with config cards and Start Training
-- [ ] 06-04-PLAN.md — Session sidebar drawer with mid-session filters and toast notifications
-- [ ] 06-05-PLAN.md — Drill suggestions and session summary screen
-- [ ] 06-06-PLAN.md — Visual verification checkpoint
+- [x] 06-01-PLAN.md — Config types, validation, localStorage persistence, database sync
+- [x] 06-02-PLAN.md — Filter components (PositionFilters, PotTypeFilters, ModeToggle, GameSetup, ConfigCard)
+- [x] 06-03-PLAN.md — Lobby screen with config cards and Start Training
+- [x] 06-04-PLAN.md — Session sidebar drawer with mid-session filters and toast notifications
+- [x] 06-05-PLAN.md — Drill suggestions and session summary screen
+- [x] 06-06-PLAN.md — Visual verification checkpoint
 
 ### Phase 7: Range Visualization
 **Goal**: Users can view detailed range analysis with hero/villain comparison during training
@@ -162,7 +162,7 @@ Plans:
 - [ ] 07-02-PLAN.md — RangeGridCell and RangeGridView components with stacked bars
 - [ ] 07-03-PLAN.md — ActionLegend and EquityBreakdown with tabbed views
 - [ ] 07-04-PLAN.md — RangeGridModal integration with PokerTable View Ranges button
-- [ ] 07-05-PLAN.md — Human verification checkpoint
+- [ ] 07-05-PLAN.md — Gap closure: wire heroRange/villainRange from session page to PokerTable
 
 ### Phase 8: Statistics & Analytics
 **Goal**: Users can track performance trends and identify weaknesses over time
