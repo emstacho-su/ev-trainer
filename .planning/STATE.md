@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
-Plan: 08-03 complete, Phase 8 (08-01/02/03/04/05 done) and Phase 9 in progress
+Plan: 08-07 complete, Phase 8 (08-01/02/03/04/05/07 done, 08-06 pending) and Phase 9 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 08-03 performance chart
+Last activity: 2026-02-17 -- Completed 08-07 flagged hands feature
 
-Progress: [███████████████░] ~88% (53 plans complete)
+Progress: [████████████████] ~90% (54 plans complete)
 
 ## Performance Metrics
 
@@ -218,6 +218,8 @@ Recent decisions affecting current work:
 - 08-02: URL search params (startDate, endDate) for filter state persistence
 - 08-02: First-half vs second-half comparison for trend calculation in metric cards
 - 08-02: oklch color format from shadcn merged with existing poker HSL tokens in globals.css
+- 08-07: Toggle API pattern for flag (PATCH toggles, not separate PUT true/false)
+- 08-07: Optimistic local state removal on unflag in FlaggedHandsList
 
 ### Pending Todos
 
@@ -235,7 +237,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:41 UTC
-Stopped at: Completed 08-03-PLAN.md (performance chart)
+Last session: 2026-02-17 05:43 UTC
+Stopped at: Completed 08-07-PLAN.md (flagged hands feature)
 Resume file: None
-Next: Continue Phase 8 (08-06, 08-07) and Phase 9 remaining plans
+Next: Continue Phase 8 (08-06) and Phase 9 remaining plans
