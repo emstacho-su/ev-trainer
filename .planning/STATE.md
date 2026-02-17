@@ -209,6 +209,8 @@ Recent decisions affecting current work:
 - 08-04: 6-level color scale for heatmap (green-600 to red-600 with opacity)
 - 08-04: Tab navigation on stats page (Performance/Positions/Sessions)
 - 08-04: Dark theme applied to existing BreakdownTable for consistency
+- 08-05: Client-side sorting on current page with server-side pagination
+- 08-05: Optimistic local state removal on delete (instant UI feedback)
 
 ### Pending Todos
 
@@ -227,6 +229,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17 05:35 UTC
-Stopped at: Completed 09-06-PLAN.md (dealer button slide & modal transition)
+Stopped at: Completed 08-05-PLAN.md (session history component)
 Resume file: None
-Next: Continue Phase 9 (09-07) and Phase 8 remaining plans
+Next: Continue Phase 8 remaining plans (08-02, 08-03, 08-06, 08-07) and Phase 9
