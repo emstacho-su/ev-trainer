@@ -36,6 +36,7 @@ import {
 } from "../../../lib/v2/storage/sessionStorage";
 import type { RangeData } from "../../../lib/range/types";
 import { getHandAtPosition } from "../../../lib/range/gridLayout";
+import { RangeGridModal } from "../../../components/range";
 
 // ---------- Spot → PokerTable conversion ----------
 
@@ -328,6 +329,7 @@ export default function SessionPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [heroRange, setHeroRange] = useState<RangeData | null>(null);
   const [villainRange, setVillainRange] = useState<RangeData | null>(null);
+  const [rangeModalOpen, setRangeModalOpen] = useState(false);
   const { config, updateConfig } = useTrainerConfig();
 
   // Refs for stable keyboard handler access
@@ -682,8 +684,6 @@ export default function SessionPage() {
                 dealerPosition={dealerPosition}
                 heroPosition={currentSpot.heroToAct as Player['position']}
                 tableSize="6max"
-                heroRange={heroRange ?? undefined}
-                villainRange={villainRange ?? undefined}
               />
             </div>
           </div>
@@ -696,17 +696,34 @@ export default function SessionPage() {
             />
           </div>
 
-          {/* Next button (only in revealed state) */}
+          {/* Next button + View Ranges (only in revealed state) */}
           {uiState === 'revealed' && (
-            <div className="p-4 bg-gray-900">
+            <div className="p-4 bg-gray-900 flex gap-3">
               <button
                 onClick={() => void handleNext()}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
               >
                 Next Hand (Space/Enter)
               </button>
+              {heroRange && villainRange && (
+                <button
+                  onClick={() => setRangeModalOpen(true)}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                  View Ranges
+                </button>
+              )}
             </div>
           )}
+
+          {/* Range modal */}
+          <RangeGridModal
+            isOpen={rangeModalOpen}
+            onClose={() => setRangeModalOpen(false)}
+            heroRange={heroRange ?? { hands: [], totalCombos: 0 }}
+            villainRange={villainRange ?? { hands: [], totalCombos: 0 }}
+            currentBoard={communityCards.map((c) => `${c.rank}${c.suit}`)}
+          />
         </>
       ) : (
         <div className="flex-1 flex items-center justify-center">
