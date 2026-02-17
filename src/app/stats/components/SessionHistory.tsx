@@ -69,72 +69,172 @@ function SortArrow({
   );
 }
 
-/** Expanded detail showing biggest mistakes for a session. */
-function SessionMistakes({ detail }: { detail: SessionDetail }) {
-  if (detail.biggestMistakes.length === 0) {
-    return (
-      <p className="py-2 text-sm text-slate-400">
-        No mistakes found in this session.
-      </p>
+/** Toggle flag for a session entry via API. */
+async function toggleFlag(
+  sessionId: string,
+  entryIndex: number
+): Promise<{ isFlagged: boolean } | null> {
+  try {
+    const res = await fetch(
+      `/api/stats/sessions/${sessionId}/entries/${entryIndex}/flag`,
+      {
+        method: "PATCH",
+        headers: authHeaders(),
+      }
     );
+    if (!res.ok) return null;
+    return (await res.json()) as { isFlagged: boolean };
+  } catch {
+    return null;
+  }
+}
+
+/** Expanded detail showing all entries with flag buttons and biggest mistakes. */
+function SessionEntries({
+  detail,
+  onFlagToggle,
+}: {
+  detail: SessionDetail;
+  onFlagToggle: (entryIndex: number, isFlagged: boolean) => void;
+}) {
+  const [togglingIndex, setTogglingIndex] = useState<number | null>(null);
+
+  async function handleToggleFlag(sessionId: string, entry: SessionEntryDetail) {
+    setTogglingIndex(entry.index);
+    const result = await toggleFlag(sessionId, entry.index);
+    if (result !== null) {
+      onFlagToggle(entry.index, result.isFlagged);
+    }
+    setTogglingIndex(null);
   }
 
   return (
-    <div className="space-y-2">
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-        Biggest Mistakes
-      </h4>
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
-          <thead className="text-xs text-slate-500">
-            <tr>
-              <th className="pb-1 pr-4">Hand #</th>
-              <th className="pb-1 pr-4">Spot</th>
-              <th className="pb-1 pr-4">Your Action</th>
-              <th className="pb-1 pr-4">EV Loss</th>
-              <th className="pb-1">Optimal Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {detail.biggestMistakes.map((entry: SessionEntryDetail) => {
-              const evDiff = entry.result?.evDiff ?? 0;
-              const allActions = entry.result?.allActions ?? [];
+    <div className="space-y-4">
+      {/* All entries */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          All Hands
+        </h4>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-left text-sm">
+            <thead className="text-xs text-slate-500">
+              <tr>
+                <th className="pb-1 pr-3">Flag</th>
+                <th className="pb-1 pr-4">Hand #</th>
+                <th className="pb-1 pr-4">Spot</th>
+                <th className="pb-1 pr-4">Your Action</th>
+                <th className="pb-1 pr-4">Result</th>
+                <th className="pb-1">EV Diff</th>
+              </tr>
+            </thead>
+            <tbody>
+              {detail.entries.map((entry) => {
+                const evDiff = entry.result?.evDiff ?? 0;
+                const grade = entry.result?.grade ?? "PENDING";
+                const isCorrect = grade === "CORRECT" || grade === "OPTIMAL";
+                const isFlagged = entry.isFlagged ?? false;
 
-              return (
-                <tr
-                  key={entry.id}
-                  className="border-t border-slate-700/50"
-                >
-                  <td className="py-1.5 pr-4 text-slate-300">
-                    #{entry.index + 1}
-                  </td>
-                  <td className="py-1.5 pr-4 text-slate-300">
-                    {entry.spotId.slice(0, 8)}
-                  </td>
-                  <td className="py-1.5 pr-4 text-slate-300">
-                    {entry.actionId}
-                  </td>
-                  <td className="py-1.5 pr-4 font-mono text-red-400">
-                    {Math.abs(evDiff).toFixed(3)} BB
-                  </td>
-                  <td className="py-1.5 text-slate-400">
-                    {allActions.length > 0
-                      ? allActions
-                          .sort((a, b) => b.ev - a.ev)
-                          .slice(0, 3)
-                          .map(
-                            (a) =>
-                              `${a.actionId} (${(a.frequency * 100).toFixed(0)}%)`
-                          )
-                          .join(", ")
-                      : "-"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                return (
+                  <tr
+                    key={entry.id}
+                    className="border-t border-slate-700/50"
+                  >
+                    <td className="py-1.5 pr-3">
+                      <button
+                        className={`rounded px-1.5 py-0.5 text-sm transition-colors ${
+                          isFlagged
+                            ? "bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30"
+                            : "bg-slate-700/50 text-slate-500 hover:bg-slate-700 hover:text-slate-300"
+                        }`}
+                        onClick={() => handleToggleFlag(detail.id, entry)}
+                        disabled={togglingIndex === entry.index}
+                        title={isFlagged ? "Unflag hand" : "Flag hand"}
+                      >
+                        {isFlagged ? "\u2605" : "\u2606"}
+                      </button>
+                    </td>
+                    <td className="py-1.5 pr-4 text-slate-300">
+                      #{entry.index + 1}
+                    </td>
+                    <td className="py-1.5 pr-4 text-slate-300">
+                      {entry.spotId.slice(0, 8)}
+                    </td>
+                    <td className="py-1.5 pr-4 text-slate-300">
+                      {entry.actionId}
+                    </td>
+                    <td className={`py-1.5 pr-4 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
+                      {grade}
+                    </td>
+                    <td className="py-1.5 font-mono text-slate-300">
+                      {evDiff === 0 ? "-" : `${Math.abs(evDiff).toFixed(3)} BB`}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Biggest mistakes section */}
+      {detail.biggestMistakes.length > 0 && (
+        <div className="space-y-2 border-t border-slate-700 pt-4">
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+            Biggest Mistakes
+          </h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="text-xs text-slate-500">
+                <tr>
+                  <th className="pb-1 pr-4">Hand #</th>
+                  <th className="pb-1 pr-4">Spot</th>
+                  <th className="pb-1 pr-4">Your Action</th>
+                  <th className="pb-1 pr-4">EV Loss</th>
+                  <th className="pb-1">Optimal Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {detail.biggestMistakes.map((entry: SessionEntryDetail) => {
+                  const evDiff = entry.result?.evDiff ?? 0;
+                  const allActions = entry.result?.allActions ?? [];
+
+                  return (
+                    <tr
+                      key={entry.id}
+                      className="border-t border-slate-700/50"
+                    >
+                      <td className="py-1.5 pr-4 text-slate-300">
+                        #{entry.index + 1}
+                      </td>
+                      <td className="py-1.5 pr-4 text-slate-300">
+                        {entry.spotId.slice(0, 8)}
+                      </td>
+                      <td className="py-1.5 pr-4 text-slate-300">
+                        {entry.actionId}
+                      </td>
+                      <td className="py-1.5 pr-4 font-mono text-red-400">
+                        {Math.abs(evDiff).toFixed(3)} BB
+                      </td>
+                      <td className="py-1.5 text-slate-400">
+                        {allActions.length > 0
+                          ? allActions
+                              .sort((a, b) => b.ev - a.ev)
+                              .slice(0, 3)
+                              .map(
+                                (a) =>
+                                  `${a.actionId} (${(a.frequency * 100).toFixed(0)}%)`
+                              )
+                              .join(", ")
+                          : "-"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -477,7 +577,22 @@ export default function SessionHistory() {
                             Loading details...
                           </p>
                         ) : expandedDetail ? (
-                          <SessionMistakes detail={expandedDetail} />
+                          <SessionEntries
+                            detail={expandedDetail}
+                            onFlagToggle={(entryIndex, isFlagged) => {
+                              setExpandedDetail((prev) => {
+                                if (!prev) return prev;
+                                return {
+                                  ...prev,
+                                  entries: prev.entries.map((e) =>
+                                    e.index === entryIndex
+                                      ? { ...e, isFlagged }
+                                      : e
+                                  ),
+                                };
+                              });
+                            }}
+                          />
                         ) : (
                           <p className="text-sm text-slate-500">
                             Could not load session details.
