@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 10 - Postflop Training (starting)
+**Current focus:** Phase 10 - Postflop Training (continuing)
 
 ## Current Position
 
 Phase: 10 of 10 (Postflop Training)
-Plan: 10-06 complete, 10-07 pending; 08-09 gap closure complete
+Plan: 10-05 complete, 10-06 through 10-07 pending; Phase 8 gap closure complete (verified)
 Status: In progress
-Last activity: 2026-02-17 -- Completed 08-09-PLAN.md (session replay gap closure)
+Last activity: 2026-02-17 -- Phase 8 gap closure verified (6/6 must-haves passed)
 
 Progress: [████████████████████] ~98% (61 plans complete)
 
@@ -241,6 +241,10 @@ Recent decisions affecting current work:
 - 10-06: HandSummaryModal rendered inside PostflopTrainingSessionInner to stay within PostflopSessionProvider
 - 10-06: PostflopConfig/POSTFLOP_ACTIONS extracted to postflopTypes.ts to break Node.js import chain
 - 10-06: Postflop stubs added to cards.ts for missing exports (unblock build)
+- 08-08: Toggle-chip pattern for position/scenario/street filters (Set-based, URL search params)
+- 08-08: Clear filters button removes non-date params only
+- 08-09: SessionReplay keyboard navigation: ArrowLeft/p (prev), ArrowRight/n (next), Escape (close)
+- 08-09: Replay toggle in SessionHistory expanded detail (replaySessionId state)
 
 ### Pending Todos
 
@@ -258,7 +262,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 06:28 UTC
-Stopped at: Completed 08-09-PLAN.md (session replay gap closure)
+Last session: 2026-02-17
+Stopped at: Phase 8 gap closure verified (6/6 passed)
 Resume file: None
-Next: Continue Phase 10 (10-07)
+Next: Continue Phase 10 (10-06 through 10-07)

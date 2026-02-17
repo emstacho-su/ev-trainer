@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading (2 minor issues deferred)
 - [x] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
 - [x] **Phase 7: Range Visualization** - 13x13 range grid modal with action frequencies and equity breakdown
-- [ ] **Phase 8: Statistics & Analytics** - Performance graphs, session history, weakness detection
+- [x] **Phase 8: Statistics & Analytics** - Performance graphs, session history, weakness detection
 - [ ] **Phase 9: Animations** - Card dealing, chip movement, EV reveal, action highlights
 - [ ] **Phase 10: Postflop Training** - Flop/turn/river decision points with multi-street progression
 
@@ -185,8 +185,8 @@ Plans:
 - [x] 08-05-PLAN.md — Session history with pagination, sorting, and deletion (integrated into Sessions tab)
 - [x] 08-06-PLAN.md — Human verification checkpoint
 - [x] 08-07-PLAN.md — Flagged hands feature with flag/unflag API and review list
-- [ ] 08-08-PLAN.md — Gap closure: position, scenario, and street filter controls + auth token fix
-- [ ] 08-09-PLAN.md — Gap closure: session replay mode with hand-by-hand review cards
+- [x] 08-08-PLAN.md — Gap closure: position, scenario, and street filter controls + auth token fix
+- [x] 08-09-PLAN.md — Gap closure: session replay mode with hand-by-hand review cards
 
 ### Phase 9: Animations
 **Goal**: GTO Nexus-style smooth animations enhance training experience
