@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 8 - Statistics & Analytics
+**Current focus:** Phase 9 - Animations
 
 ## Current Position
 
-Phase: 7 of 10 (Range Visualization)
-Plan: 5 of 5 in Phase 7
-Status: Phase complete
-Last activity: 2026-02-17 -- Completed 07-05 range data wire-up (View Ranges button functional)
+Phase: 9 of 10 (Animations)
+Plan: 4 of 7 in Phase 9
+Status: In progress
+Last activity: 2026-02-17 -- Completed 09-04 audio infrastructure (AudioManager, useAudio hook)
 
-Progress: [█████████████░░░] ~72% (43 plans complete)
+Progress: [██████████████░░] ~74% (44 plans complete)
 
 ## Performance Metrics
 
@@ -190,6 +190,10 @@ Recent decisions affecting current work:
 - 07-05: generateMockRangeData co-located in session page as module-level utility until solver integration
 - 07-05: Range state cleared on handleNext to reset button disabled state for next hand
 - 07-05: heroRange ?? undefined coercion bridges RangeData | null state to RangeData | undefined prop
+- 09-04: Web Audio API with AudioContext singleton for low-latency sound playback
+- 09-04: Lazy audio init on first playSound call to comply with browser autoplay policy
+- 09-04: Separate localStorage key (ev-trainer-audio-enabled) from animation toggle
+- 09-04: Promise.allSettled for sound loading so one missing file does not block others
 
 ### Pending Todos
 
@@ -207,7 +211,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:05 UTC
-Stopped at: Completed 07-05-PLAN.md (range data wire-up — View Ranges button functional)
+Last session: 2026-02-17 05:15 UTC
+Stopped at: Completed 09-04-PLAN.md (audio infrastructure — AudioManager, useAudio hook)
 Resume file: None
-Next: Phase 8
+Next: Continue Phase 9 plans
