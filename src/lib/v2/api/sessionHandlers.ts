@@ -269,6 +269,31 @@ function buildSessionSnapshot(record: SessionRecord): SessionSnapshot {
 
 function makeMockSolverOutput(spot: Spot, actionId: ActionId): SolverNodeOutput {
   const rng = createSeededRng(combineSeed([spot.spotId, actionId]));
+
+  // For preflop spots (no board cards), generate Fold/Call/Raise actions
+  if (spot.board.length === 0) {
+    // Generate frequencies that sum to 1.0
+    const foldFreq = 0.1 + rng.next() * 0.3;  // 10-40%
+    const callFreq = 0.2 + rng.next() * 0.4;  // 20-60%
+    const raiseFreq = 1.0 - foldFreq - callFreq;
+
+    // Generate EVs with raise typically highest, fold lowest
+    const raiseEv = Math.round((rng.next() * 2 + 1) * 100) / 100;  // 1.00 to 3.00 BB
+    const callEv = Math.round((raiseEv - 0.5 - rng.next() * 0.5) * 100) / 100;
+    const foldEv = Math.round((callEv - 0.5 - rng.next() * 0.5) * 100) / 100;
+
+    return {
+      status: "ok",
+      units: "bb",
+      actions: [
+        { actionId: "FOLD", frequency: foldFreq, ev: foldEv },
+        { actionId: "CALL", frequency: callFreq, ev: callEv },
+        { actionId: "RAISE_2.5BB", frequency: raiseFreq, ev: raiseEv },
+      ],
+    };
+  }
+
+  // Fallback for postflop (original logic)
   const frequency = 0.2 + rng.next() * 0.6;
   const otherFrequency = 1 - frequency;
   const evBase = Math.round((rng.next() * 4 - 2) * 100) / 100;

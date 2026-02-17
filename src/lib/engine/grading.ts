@@ -75,6 +75,13 @@ export function gradeDecision(
     gradeLabel = computeGradeLabel(loss, config.thresholds);
   }
 
+  // Include all actions for UI feedback display
+  const allActions = output.actions.map(action => ({
+    actionId: action.actionId,
+    frequency: action.frequency,
+    ev: action.ev,
+  }));
+
   return {
     evUser,
     evMix,
@@ -85,5 +92,6 @@ export function gradeDecision(
     policyDivergence,
     isBestAction,
     gradeLabel,
+    allActions,
   };
 }

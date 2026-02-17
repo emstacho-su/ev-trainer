@@ -20,6 +20,7 @@ export interface DecisionGrade {
   policyDivergence: number;
   isBestAction: boolean;
   gradeLabel?: string;
+  allActions?: Array<{ actionId: ActionId; frequency: number; ev: number }>;
 }
 
 export interface DecisionMetrics {
