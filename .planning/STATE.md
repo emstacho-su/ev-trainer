@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 5 of 10 (Preflop Training)
-Plan: 0 of TBD in Phase 5
-Status: Not started
-Last activity: 2026-02-16 -- Completed Phase 4 (Table UI Foundation)
+Plan: 2 of 4 in Phase 5
+Status: In progress
+Last activity: 2026-02-17 -- Completed 05-02-PLAN.md
 
-Progress: [██████████░░░░░░] ~44% (27 plans complete)
+Progress: [█████████████░░░] ~85% (23 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 27
-- Average duration: 7.8 min
-- Total execution time: 211 min
+- Total plans completed: 23
+- Average duration: 5.6 min
+- Total execution time: 128 min
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [██████████░░░░░░] ~44% (27 plans comp
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
 | 04-table-ui-foundation | 6/6 ✓ | 65 min | 10.8 min |
+| 05-preflop-training | 2/4 | 2 min | 1.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (1 min), 04-02 (1 min), 04-03 (1 min), 04-04 (1 min), 04-05 (1 min)
-- Trend: Phase 4 component creation consistently fast (simple React components, no complex logic)
+- Last 5 plans: 04-03 (1 min), 04-04 (1 min), 04-05 (1 min), 05-01 (1 min), 05-02 (1 min)
+- Trend: UI component work extremely fast (simple React extensions, no complex logic)
 
 *Updated after each plan completion*
 
@@ -136,6 +137,10 @@ Recent decisions affecting current work:
 - 04-05: Z-index layering: table surface < seats (z-10) < dealer button (z-20) < center content (z-30)
 - 04-05: ActionPanel conditionally shows raise sizing only when Raise action available
 - 04-05: Aspect ratio locked at 16:10 with max-w-6xl for responsive sizing
+- 05-02: Action history displays "First to act" when empty for clear default state
+- 05-02: Frequency color coding only applied in revealed states to avoid confusion
+- 05-02: User choice gets blue ring highlight regardless of solver frequency
+- 05-02: Frequency coloring thresholds: >=60% green, >0% yellow, 0% red
 
 ### Pending Todos
 
@@ -148,7 +153,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-16
-Stopped at: Phase 4 complete, all 23 UAT tests passed
+Last session: 2026-02-17
+Stopped at: Completed 05-02-PLAN.md (UI feedback enhancement)
 Resume file: None
-Next: Plan and execute Phase 5 (Preflop Training)
+Next: Execute 05-03-PLAN.md (Preflop training loop integration)
