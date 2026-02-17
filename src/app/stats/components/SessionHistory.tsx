@@ -263,9 +263,12 @@ export default function SessionHistory() {
   );
   const [detailLoading, setDetailLoading] = useState(false);
 
-  // Read date range from search params
+  // Read date range and filter params from search params
   const startDate = searchParams.get("startDate") ?? "";
   const endDate = searchParams.get("endDate") ?? "";
+  const positions = searchParams.get("positions") ?? "";
+  const scenarios = searchParams.get("scenarios") ?? "";
+  const streets = searchParams.get("streets") ?? "";
 
   const fetchSessions = useCallback(
     async (pageNum: number) => {
@@ -276,6 +279,9 @@ export default function SessionHistory() {
         const params = new URLSearchParams();
         if (startDate) params.set("startDate", startDate);
         if (endDate) params.set("endDate", endDate);
+        if (positions) params.set("positions", positions);
+        if (scenarios) params.set("scenarios", scenarios);
+        if (streets) params.set("streets", streets);
         params.set("page", String(pageNum));
         params.set("pageSize", String(PAGE_SIZE));
 
@@ -307,7 +313,7 @@ export default function SessionHistory() {
         setLoading(false);
       }
     },
-    [startDate, endDate]
+    [startDate, endDate, positions, scenarios, streets]
   );
 
   // Fetch sessions on mount and when date range changes

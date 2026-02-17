@@ -54,6 +54,13 @@ export default function WeaknessBreakdown() {
         if (startDate) params.set("startDate", startDate);
         if (endDate) params.set("endDate", endDate);
 
+        const positions = searchParams.get("positions");
+        const scenarios = searchParams.get("scenarios");
+        const streets = searchParams.get("streets");
+        if (positions) params.set("positions", positions);
+        if (scenarios) params.set("scenarios", scenarios);
+        if (streets) params.set("streets", streets);
+
         const url = `/api/stats/positions${params.toString() ? `?${params.toString()}` : ""}`;
         const res = await fetch(url, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},

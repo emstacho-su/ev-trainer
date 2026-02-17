@@ -73,7 +73,11 @@ function parseDateFilters(query: Record<string, unknown>): StatsFilters {
     ? query.scenarios.split(",").filter(Boolean)
     : undefined;
 
-  return { startDate, endDate, positions, scenarios };
+  const streets = typeof query.streets === "string"
+    ? query.streets.split(",").filter(Boolean)
+    : undefined;
+
+  return { startDate, endDate, positions, scenarios, streets };
 }
 
 /**

@@ -7,6 +7,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import type { FlaggedEntry } from "../../../lib/stats/types";
 
@@ -21,6 +22,7 @@ function authHeaders(): Record<string, string> {
 }
 
 export default function FlaggedHandsList() {
+  const searchParams = useSearchParams();
   const [entries, setEntries] = useState<FlaggedEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +33,21 @@ export default function FlaggedHandsList() {
     setError(null);
 
     try {
-      const res = await fetch("/api/stats/flagged", {
+      const params = new URLSearchParams();
+      const startDate = searchParams.get("startDate");
+      const endDate = searchParams.get("endDate");
+      if (startDate) params.set("startDate", startDate);
+      if (endDate) params.set("endDate", endDate);
+
+      const positions = searchParams.get("positions");
+      const scenarios = searchParams.get("scenarios");
+      const streets = searchParams.get("streets");
+      if (positions) params.set("positions", positions);
+      if (scenarios) params.set("scenarios", scenarios);
+      if (streets) params.set("streets", streets);
+
+      const queryStr = params.toString();
+      const res = await fetch(`/api/stats/flagged${queryStr ? `?${queryStr}` : ""}`, {
         headers: authHeaders(),
         cache: "no-store",
       });
@@ -54,7 +70,7 @@ export default function FlaggedHandsList() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     void fetchFlagged();

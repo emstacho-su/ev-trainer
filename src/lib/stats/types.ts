@@ -44,6 +44,7 @@ export interface StatsFilters {
   endDate: Date;
   positions?: string[];      // Filter by position
   scenarios?: string[];      // Filter by scenario type
+  streets?: string[];        // Filter by street (preflop/flop/turn/river)
 }
 
 // API response types
