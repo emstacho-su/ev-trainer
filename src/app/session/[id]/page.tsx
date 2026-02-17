@@ -1,24 +1,22 @@
 "use client";
 
 /**
- * Overview: Core in-session loop (load spot, submit action, advance decision).
- * Interacts with: session API client, feedback/status components, local session storage.
- * Importance: Main training/practice workflow where decisions are executed and tracked.
+ * Overview: Core in-session loop with PokerTable UI.
+ * Interacts with: session API client, PokerTable/ActionPanel, local session storage.
+ * Importance: Main training workflow where decisions are executed and tracked.
  */
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import ActionInput from "../../../components/ActionInput";
-import PracticeRecordedStatus from "../../../components/PracticeRecordedStatus";
-import SpotView from "../../../components/SpotView";
-import TrainingFeedbackPanel from "../../../components/TrainingFeedbackPanel";
+import { PokerTable } from "../../../components/poker/organisms/PokerTable";
+import { ActionPanel } from "../../../components/poker/organisms/ActionPanel";
 import type { Spot } from "../../../lib/engine/spot";
-import type { ActionId } from "../../../lib/engine/types";
+import type { ActionId, Position } from "../../../lib/engine/types";
+import type { DecisionGrade } from "../../../lib/engine/trainingOrchestrator";
 import type {
   SessionDetailResponse,
   SessionSnapshot,
-  SubmitTrainingResponse,
 } from "../../../lib/v2/api/sessionHandlers";
 import {
   SessionApiError,
@@ -34,11 +32,140 @@ import {
   updateFromSessionDetail,
 } from "../../../lib/v2/storage/sessionStorage";
 
+// ---------- Spot → PokerTable conversion ----------
+
+interface Player {
+  position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
+  stackBB: number;
+  cards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>;
+  bet?: number;
+  isActive: boolean;
+  isFolded: boolean;
+  isHero?: boolean;
+  showCards?: boolean;
+  actionLabel?: string;
+}
+
+const PREFLOP_ORDER = ['UTG', 'UTG+1', 'UTG+2', 'MP', 'HJ', 'CO', 'BTN', 'SB', 'BB'] as const;
+
+function parseHistoryActions(spot: Spot): Map<string, { actionId: string; betBb: number }> {
+  const actingOrder = PREFLOP_ORDER.filter(
+    p => spot.positions.includes(p as Position) && p !== spot.heroToAct
+  );
+
+  const result = new Map<string, { actionId: string; betBb: number }>();
+  const folded = new Set<string>();
+  const bets = new Map<string, number>();
+
+  for (const pos of spot.positions) {
+    if (pos === 'SB') bets.set(pos, 0.5);
+    else if (pos === 'BB') bets.set(pos, 1.0);
+    else bets.set(pos, 0);
+  }
+
+  let highBet = 1.0;
+  let posIdx = 0;
+
+  for (let hIdx = 0; hIdx < spot.history.length; hIdx++) {
+    let found = false;
+    for (let attempts = 0; attempts < actingOrder.length; attempts++) {
+      const pos = actingOrder[posIdx % actingOrder.length];
+      posIdx++;
+      if (folded.has(pos)) continue;
+
+      const actionId = spot.history[hIdx];
+
+      if (actionId === 'FOLD') {
+        folded.add(pos);
+        result.set(pos, { actionId, betBb: 0 });
+      } else if (actionId === 'CHECK') {
+        result.set(pos, { actionId, betBb: bets.get(pos) ?? 0 });
+      } else if (actionId === 'CALL') {
+        bets.set(pos, highBet);
+        result.set(pos, { actionId, betBb: highBet });
+      } else {
+        const size = parseFloat(actionId.split('_')[1]) || 0;
+        bets.set(pos, size);
+        highBet = Math.max(highBet, size);
+        result.set(pos, { actionId, betBb: size });
+      }
+
+      found = true;
+      break;
+    }
+    if (!found) break;
+  }
+
+  return result;
+}
+
+function formatActionLabel(actionId: string): string {
+  if (actionId === 'FOLD') return 'Fold';
+  if (actionId === 'CHECK') return 'Check';
+  if (actionId === 'CALL') return 'Call';
+  if (actionId.startsWith('RAISE_')) return 'Raise';
+  if (actionId.startsWith('BET_')) return 'Bet';
+  return actionId;
+}
+
+function spotToPlayers(spot: Spot): Player[] {
+  const actions = parseHistoryActions(spot);
+  return spot.positions.map((position) => {
+    const isHero = position === spot.heroToAct;
+    const action = actions.get(position);
+    const hasFolded = action?.actionId === 'FOLD';
+
+    let bet: number | undefined;
+    if (action) {
+      bet = action.betBb > 0 ? action.betBb : undefined;
+    } else {
+      if (position === 'SB') bet = 0.5;
+      else if (position === 'BB') bet = 1.0;
+    }
+
+    return {
+      position: position as Player['position'],
+      stackBB: spot.stacksBb[position],
+      isActive: !hasFolded,
+      isFolded: hasFolded,
+      isHero,
+      showCards: isHero,
+      bet,
+      actionLabel: action ? formatActionLabel(action.actionId) : undefined,
+    };
+  });
+}
+
+function derivePotType(history: ActionId[]): 'SRP' | '3BP' | '4BP' | undefined {
+  const raiseCount = history.filter(a => a.startsWith('RAISE_') || a.startsWith('BET_')).length;
+  if (raiseCount <= 1) return 'SRP';
+  if (raiseCount === 2) return '3BP';
+  if (raiseCount >= 3) return '4BP';
+  return undefined;
+}
+
+function parseCardString(card: string): { rank: string; suit: 'h' | 'd' | 'c' | 's' } {
+  return {
+    rank: card.slice(0, -1),
+    suit: card.slice(-1) as 'h' | 'd' | 'c' | 's',
+  };
+}
+
+function mapSimpleAction(actionId: ActionId): 'fold' | 'call' | 'raise' {
+  if (actionId === 'FOLD') return 'fold';
+  if (actionId === 'CALL' || actionId === 'CHECK') return 'call';
+  return 'raise';
+}
+
+// ---------- Page component ----------
+
 function toSummaryHref(detail: SessionDetailResponse): string {
   return `/summary/${detail.session.sessionId}?seed=${encodeURIComponent(
     detail.session.seed
   )}&mode=${detail.session.mode}&reviewAvailable=${detail.reviewAvailable ? "1" : "0"}`;
 }
+
+type UIState = 'idle' | 'submitted' | 'revealed';
 
 export default function SessionPage() {
   const router = useRouter();
@@ -52,16 +179,22 @@ export default function SessionPage() {
   const [seed, setSeed] = useState<string | null>(null);
   const [session, setSession] = useState<SessionSnapshot | null>(null);
   const [currentSpot, setCurrentSpot] = useState<Spot | null>(null);
-  const [selectedActionId, setSelectedActionId] = useState<ActionId>("CHECK");
-  const [trainingFeedback, setTrainingFeedback] =
-    useState<SubmitTrainingResponse | null>(null);
-  const [practiceRecorded, setPracticeRecorded] = useState(false);
-  const [mobileFeedbackOpen, setMobileFeedbackOpen] = useState(false);
+  const [uiState, setUiState] = useState<UIState>('idle');
+  const [selectedActionId, setSelectedActionId] = useState<ActionId | null>(null);
+  const [grade, setGrade] = useState<DecisionGrade | null>(null);
+  const [handCount, setHandCount] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoadingNext, setIsLoadingNext] = useState(false);
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
+
+  // Refs for stable keyboard handler access
+  const uiStateRef = useRef(uiState);
+  const currentSpotRef = useRef(currentSpot);
+  uiStateRef.current = uiState;
+  currentSpotRef.current = currentSpot;
+
+  const accuracy = handCount > 0 ? (correctCount / handCount) * 100 : 0;
 
   const loadSession = useCallback(
     async (sessionSeed: string) => {
@@ -77,6 +210,7 @@ export default function SessionPage() {
     [router, sessionId]
   );
 
+  // Bootstrap: load session from localStorage + server
   useEffect(() => {
     let mounted = true;
 
@@ -93,22 +227,20 @@ export default function SessionPage() {
       setSeed(resolvedSeed);
 
       if (!resolvedSeed) {
-        setErrorMessage("Missing seed for this session. Delete it from recent sessions.");
+        setErrorMessage("Missing seed for this session.");
         setSession(stored?.session ?? null);
         setCurrentSpot(stored?.currentSpot ?? null);
         setIsLoading(false);
         return;
       }
 
+      // Load spot from localStorage first
       setSession(stored?.session ?? null);
       setCurrentSpot(stored?.currentSpot ?? null);
 
       try {
-        const detail = await loadSession(resolvedSeed);
+        await loadSession(resolvedSeed);
         if (!mounted) return;
-        if (!stored?.currentSpot && !detail.session.isComplete) {
-          setErrorMessage("Session loaded but no saved spot is available to submit.");
-        }
       } catch (error) {
         if (!mounted) return;
         if (error instanceof SessionApiError) {
@@ -133,25 +265,33 @@ export default function SessionPage() {
     };
   }, [loadSession, searchParams, sessionId]);
 
-  const handleSubmit = useCallback(async () => {
-    if (!seed || !session || !currentSpot) return;
-    setIsSubmitting(true);
+  const handleSubmitAction = useCallback(async (actionId: ActionId) => {
+    if (!seed || !session || !currentSpot || uiState !== 'idle') return;
+
+    setUiState('submitted');
+    setSelectedActionId(actionId);
     setErrorMessage(null);
+
     try {
       const response = await submitAction({
         seed,
         sessionId: session.sessionId,
         spot: currentSpot,
-        actionId: selectedActionId,
+        actionId,
       });
-      if (session.mode === "TRAINING" && "result" in response) {
-        setTrainingFeedback(response);
-        setPracticeRecorded(false);
-        setMobileFeedbackOpen(true);
-      } else {
-        setTrainingFeedback(null);
-        setPracticeRecorded(true);
+
+      // 500ms reveal delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      if ('result' in response) {
+        setGrade(response.result);
+        if (response.result.isBestAction) {
+          setCorrectCount(prev => prev + 1);
+        }
       }
+
+      setHandCount(prev => prev + 1);
+      setUiState('revealed');
 
       updateSessionRecord(session.sessionId, (previous) => ({
         session,
@@ -169,15 +309,18 @@ export default function SessionPage() {
       } else {
         setErrorMessage("Failed to submit action.");
       }
-    } finally {
-      setIsSubmitting(false);
+      setUiState('idle');
     }
-  }, [currentSpot, seed, selectedActionId, session]);
+  }, [currentSpot, seed, session, uiState]);
 
   const handleNext = useCallback(async () => {
-    if (!seed || !session) return;
-    setIsLoadingNext(true);
+    if (!seed || !session || uiState !== 'revealed') return;
+
+    setUiState('idle');
+    setGrade(null);
+    setSelectedActionId(null);
     setErrorMessage(null);
+
     try {
       const response = await nextDecision({
         seed,
@@ -185,10 +328,7 @@ export default function SessionPage() {
       });
       setSession(response.session);
       setCurrentSpot(response.spot);
-      setTrainingFeedback(null);
-      setPracticeRecorded(false);
-      setMobileFeedbackOpen(false);
-      setSelectedActionId("CHECK");
+
       updateSessionRecord(response.session.sessionId, (previous) => ({
         session: response.session,
         currentSpot: response.spot,
@@ -202,6 +342,7 @@ export default function SessionPage() {
         aggregates: previous?.aggregates,
       }));
       setStorageWarning(consumeStorageWarning());
+
       if (response.session.isComplete) {
         router.replace(
           `/summary/${response.session.sessionId}?seed=${encodeURIComponent(
@@ -224,79 +365,202 @@ export default function SessionPage() {
       } else {
         setErrorMessage("Failed to load next decision.");
       }
-    } finally {
-      setIsLoadingNext(false);
     }
-  }, [loadSession, router, seed, session]);
+  }, [loadSession, router, seed, session, uiState]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if ((e.key === ' ' || e.key === 'Enter') && uiStateRef.current === 'revealed') {
+        e.preventDefault();
+        void handleNext();
+        return;
+      }
+
+      if (uiStateRef.current !== 'idle' || !currentSpotRef.current) return;
+
+      let actionId: ActionId | null = null;
+      if (e.key === '1' || e.key.toLowerCase() === 'f') actionId = 'FOLD';
+      else if (e.key === '2' || e.key.toLowerCase() === 'c') actionId = 'CALL';
+      else if (e.key === '3' || e.key.toLowerCase() === 'r') actionId = 'RAISE_2.5BB';
+
+      if (actionId) {
+        e.preventDefault();
+        void handleSubmitAction(actionId);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNext, handleSubmitAction]);
+
+  // Build action data for ActionPanel
+  const actionPanelData = useMemo(() => {
+    const baseActions: ActionId[] = ['FOLD', 'CALL', 'RAISE_2.5BB'];
+
+    return baseActions.map((actionId) => {
+      const simpleAction = mapSimpleAction(actionId);
+      const isUserChoice = selectedActionId === actionId;
+
+      let state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect' = 'idle';
+      let ev: number | undefined;
+      let frequency: number | undefined;
+
+      if (uiState === 'submitted') {
+        state = isUserChoice ? 'selected' : 'disabled';
+      } else if (uiState === 'revealed' && grade) {
+        const actionData = grade.allActions?.find(a => mapSimpleAction(a.actionId) === simpleAction);
+        if (actionData) {
+          ev = actionData.ev;
+          frequency = actionData.frequency;
+        }
+        if (isUserChoice) {
+          state = grade.isBestAction ? 'revealed-correct' : 'revealed-incorrect';
+        } else {
+          state = 'revealed-correct';
+        }
+      }
+
+      return {
+        action: simpleAction,
+        label: simpleAction === 'raise' ? 'Raise' : undefined,
+        state,
+        ev,
+        frequency,
+        isUserChoice,
+      };
+    });
+  }, [grade, selectedActionId, uiState]);
 
   const showDeleteMissingSeed =
     !seed && !isLoading && errorMessage?.includes("Missing seed") === true;
 
+  // Build PokerTable data from current spot
+  const players = currentSpot ? spotToPlayers(currentSpot) : [];
+  const communityCards = currentSpot
+    ? currentSpot.board.map(parseCardString)
+    : [];
+  const potType = currentSpot ? derivePotType(currentSpot.history) : undefined;
+  const dealerPosition = currentSpot
+    ? (currentSpot.positions.includes('BTN') ? 'BTN' : currentSpot.positions[0]) as Player['position']
+    : 'BTN';
+
   return (
-    <main className="mx-auto max-w-6xl space-y-4 p-6">
-      <div className="flex items-center justify-between gap-2">
-        <Link href="/" className="text-sm underline">
-          Back home
-        </Link>
-        {session ? (
-          <p className="text-sm text-stone-600">
-            {session.mode} · {session.decisionIndex}/{session.decisionsPerSession}
-          </p>
-        ) : null}
+    <div className="flex flex-col h-screen bg-gray-950">
+      {/* Info bar */}
+      <div className="p-4 bg-gray-800 border-b border-gray-700">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <Link href="/lobby" className="text-sm text-gray-400 hover:text-white transition-colors">
+              &larr; Lobby
+            </Link>
+            <div className="flex gap-8">
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-400 uppercase tracking-wide">Hand</span>
+                <span className="text-lg font-bold text-white">#{handCount + 1}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-400 uppercase tracking-wide">Accuracy</span>
+                <span className="text-lg font-bold text-blue-400">{accuracy.toFixed(1)}%</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-400 uppercase tracking-wide">Correct</span>
+                <span className="text-lg font-bold text-green-400">{correctCount}/{handCount}</span>
+              </div>
+            </div>
+          </div>
+          {session && (
+            <div className="flex flex-col items-end">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">Session</span>
+              <span className="text-sm font-semibold text-gray-300">
+                {session.mode} · {session.decisionIndex}/{session.decisionsPerSession}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
-      {errorMessage ? (
-        <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+      {/* Errors/warnings */}
+      {errorMessage && (
+        <div className="mx-4 mt-2 rounded border border-red-500/50 bg-red-900/30 p-3 text-sm text-red-200">
           {errorMessage}
         </div>
-      ) : null}
-      {storageWarning ? (
-        <div className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+      )}
+      {storageWarning && (
+        <div className="mx-4 mt-2 rounded border border-amber-500/50 bg-amber-900/30 p-3 text-sm text-amber-200">
           {storageWarning}
         </div>
-      ) : null}
-      {showDeleteMissingSeed ? (
-        <button
-          type="button"
-          onClick={() => {
-            deleteSessionRecord(sessionId);
-            router.push("/");
-          }}
-          className="rounded border border-stone-400 px-3 py-2 text-sm"
-        >
-          Delete this session
-        </button>
-      ) : null}
-
-      {isLoading ? (
-        <p className="text-sm text-stone-600">Loading session...</p>
-      ) : (
-        <div className="flex flex-col gap-4 md:flex-row md:items-start">
-          <div className="flex-1 space-y-4">
-            <SpotView spot={currentSpot} />
-            <ActionInput
-              selectedActionId={selectedActionId}
-              onSelect={setSelectedActionId}
-              onSubmit={handleSubmit}
-              onNext={handleNext}
-              canSubmit={Boolean(session && currentSpot) && !isSubmitting && !isLoadingNext}
-              canNext={Boolean(session && seed) && !isSubmitting && !isLoadingNext}
-              isSubmitting={isSubmitting}
-              isLoadingNext={isLoadingNext}
-            />
-            {session?.mode === "PRACTICE" ? (
-              <PracticeRecordedStatus visible={practiceRecorded} />
-            ) : null}
-          </div>
-          {session?.mode === "TRAINING" ? (
-            <TrainingFeedbackPanel
-              response={trainingFeedback}
-              mobileOpen={mobileFeedbackOpen}
-              onCloseMobile={() => setMobileFeedbackOpen(false)}
-            />
-          ) : null}
+      )}
+      {showDeleteMissingSeed && (
+        <div className="mx-4 mt-2">
+          <button
+            type="button"
+            onClick={() => {
+              deleteSessionRecord(sessionId);
+              router.push("/lobby");
+            }}
+            className="rounded border border-gray-600 px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
+          >
+            Delete this session
+          </button>
         </div>
       )}
-    </main>
+
+      {/* Main content */}
+      {isLoading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-gray-400">Loading session...</p>
+        </div>
+      ) : currentSpot ? (
+        <>
+          {/* Table display */}
+          <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">
+            <div className="w-full max-w-6xl">
+              <PokerTable
+                players={players}
+                communityCards={communityCards}
+                pot={currentSpot.potBb}
+                potType={potType}
+                dealerPosition={dealerPosition}
+                tableSize="6max"
+              />
+            </div>
+          </div>
+
+          {/* Action panel */}
+          <div className="p-4">
+            <ActionPanel
+              actions={actionPanelData}
+              onAction={(action) => {
+                const actionMap: Record<string, ActionId> = {
+                  fold: 'FOLD',
+                  call: 'CALL',
+                  raise: 'RAISE_2.5BB',
+                };
+                void handleSubmitAction(actionMap[action]);
+              }}
+            />
+          </div>
+
+          {/* Next button (only in revealed state) */}
+          {uiState === 'revealed' && (
+            <div className="p-4 bg-gray-900">
+              <button
+                onClick={() => void handleNext()}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              >
+                Next Hand (Space/Enter)
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-gray-400">No spot available.</p>
+        </div>
+      )}
+    </div>
   );
 }
