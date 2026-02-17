@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 12 of 12 (Dashboard & Training Config Popout)
-Plan: 12-02 complete, 12-03 through 12-04 pending
+Plan: 12-03 complete, 12-04 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 12-02-PLAN.md (Training page with embedded session loop)
+Last activity: 2026-02-17 -- Completed 12-03-PLAN.md (Lobby reference migration & AppHeader nav update)
 
-Progress: [████████████████████░] ~99% (63 plans complete)
+Progress: [████████████████████░] ~99% (64 plans complete)
 
 ## Performance Metrics
 
@@ -253,6 +253,10 @@ Recent decisions affecting current work:
 - 12-02: Postflop mode redirects to /postflop-training (stays separate this phase)
 - 12-02: Back arrow links to / (dashboard) not /lobby
 - 12-02: ActionPanel shown in both idle/submitted and revealed states (separate render blocks)
+- 12-03: AppHeader hides on /training in addition to /session/ pages
+- 12-03: Root path isActive uses exact match (pathname === '/') to avoid false positives
+- 12-03: WeaknessBreakdown drill navigation goes to /training (not /) since it starts a training session
+- 12-03: Summary page 'New session' links to /training, 'Back' links to / (different intents)
 
 ### Pending Todos
 
@@ -275,6 +279,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 12-02-PLAN.md (Training page with embedded session loop)
+Stopped at: Completed 12-03-PLAN.md (Lobby reference migration & AppHeader nav update)
 Resume file: .planning/phases/12-dashboard-training-popout/12-RESUME.md
-Next: `/gsd:execute-phase 12` — will auto-skip 12-01, 12-02 and resume from 12-03
+Next: `/gsd:execute-phase 12` — will auto-skip 12-01, 12-02, 12-03 and resume from 12-04
