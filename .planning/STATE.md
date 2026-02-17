@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 6 - Trainer Configuration
+**Current focus:** Phase 7 - Range Visualization
 
 ## Current Position
 
-Phase: 6 of 10 (Trainer Configuration)
-Plan: 5 of 6 in Phase 6
+Phase: 7 of 10 (Range Visualization)
+Plan: 1 of 5 in Phase 7
 Status: In progress
-Last activity: 2026-02-17 -- Completed 06-05 drill suggestions
+Last activity: 2026-02-17 -- Completed 07-01 range visualization foundation
 
-Progress: [████████████░░░░] ~62% (38 plans complete)
+Progress: [█████████████░░░] ~64% (39 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 38
-- Average duration: 6.2 min
-- Total execution time: 234 min
+- Total plans completed: 39
+- Average duration: 6.1 min
+- Total execution time: 238 min
 
 **By Phase:**
 
@@ -173,6 +173,10 @@ Recent decisions affecting current work:
 - 06-05: Minimum 10 decisions threshold for drill suggestion eligibility
 - 06-05: Sort by avgEvLoss descending for worst-first drill suggestions
 - 06-05: DrillSuggestions beside Essentials card in lg:grid-cols-2 layout
+- 07-01: RangeActionType separate from engine ActionType (lowercase solver output vs uppercase engine)
+- 07-01: oklch color space for action colors (better perceptual uniformity than HSL)
+- 07-01: @theme block for Tailwind v4 custom property registration
+- 07-01: Grid layout: pairs on diagonal, suited above diagonal, offsuit below diagonal
 
 ### Pending Todos
 
@@ -190,7 +194,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:59 UTC
-Stopped at: Completed 06-05-PLAN.md (drill suggestions)
+Last session: 2026-02-17 04:43 UTC
+Stopped at: Completed 07-01-PLAN.md (range visualization foundation)
 Resume file: None
-Next: Phase 6 — 06-06 remaining
+Next: Phase 7 — 07-02 range grid component
