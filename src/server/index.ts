@@ -6,11 +6,13 @@
 
 import app from "./app";
 import sessionRoutes from "./routes/session.routes";
+import configRoutes from "./routes/config.routes";
 import { setSessionStoreBackend } from "../lib/v2/sessionStore";
 import { PrismaSessionStoreBackend } from "../lib/v2/storage/prismaSessionStore";
 
-// Mount session routes
+// Mount routes
 app.use("/api/session", sessionRoutes);
+app.use("/api/config", configRoutes);
 
 // Swap session store backend to Prisma
 const prismaBackend = new PrismaSessionStoreBackend();

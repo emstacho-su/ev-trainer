@@ -17,9 +17,10 @@ model User {
   passwordHash    String?  // Nullable for OAuth users
   oauthProvider   String?
   oauthProviderId String?
-  subscriptionTier String  @default("FREE")
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  subscriptionTier    String  @default("FREE")
+  trainerPreferences  Json?   // TrainerConfig stored as JSON, nullable
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   // Relations
   sessions      Session[]
