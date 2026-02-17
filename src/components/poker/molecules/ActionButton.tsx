@@ -2,22 +2,38 @@ import { cn } from '@/lib/utils';
 
 type ActionButtonState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
 
+function getFrequencyColor(frequency: number | undefined, isUserChoice: boolean, state: ActionButtonState): string {
+  // Only apply frequency coloring in revealed states
+  if (!state.startsWith('revealed')) return '';
+
+  if (isUserChoice) return 'ring-2 ring-blue-500';  // User's choice highlighted
+  if (frequency === undefined) return '';             // No coloring pre-reveal
+
+  // Frequency-weighted coloring
+  if (frequency >= 0.6) return 'bg-green-600';       // Highest-frequency solver action
+  if (frequency > 0.0) return 'bg-yellow-600';        // Lower-frequency solver action
+  return 'bg-red-600';                                // Non-solver action (0% frequency)
+}
+
 interface ActionButtonProps {
   action: 'fold' | 'call' | 'raise';
   label?: string;
   state: ActionButtonState;
   ev?: number;
   frequency?: number;
+  isUserChoice?: boolean;
   onClick?: () => void;
   className?: string;
 }
 
-export function ActionButton({ action, label, state, ev, frequency, onClick, className }: ActionButtonProps) {
+export function ActionButton({ action, label, state, ev, frequency, isUserChoice, onClick, className }: ActionButtonProps) {
   const defaultLabel = action.charAt(0).toUpperCase() + action.slice(1);
   const displayLabel = label ?? defaultLabel;
   const isRevealed = state.startsWith('revealed');
   const isCorrect = state === 'revealed-correct';
   const isIncorrect = state === 'revealed-incorrect';
+
+  const frequencyColor = getFrequencyColor(frequency, isUserChoice ?? false, state);
 
   return (
     <div className={cn('flex flex-col gap-1', className)}>
@@ -25,13 +41,15 @@ export function ActionButton({ action, label, state, ev, frequency, onClick, cla
         onClick={onClick}
         disabled={state === 'disabled' || isRevealed}
         className={cn(
-          'relative px-6 py-3 rounded-lg font-bold text-lg transition-all',
+          'relative px-6 py-3 rounded-lg font-bold text-lg transition-all text-white',
           'focus:outline-none focus:ring-2 focus:ring-offset-2',
-          state === 'idle' && 'bg-gray-700 text-white hover:bg-gray-600 focus:ring-gray-500',
+          state === 'idle' && 'bg-gray-700 hover:bg-gray-600 focus:ring-gray-500',
           state === 'disabled' && 'bg-gray-800 text-gray-500 cursor-not-allowed',
-          state === 'selected' && 'bg-blue-600 text-white ring-2 ring-blue-400',
-          isCorrect && 'bg-[hsl(var(--action-positive))] text-white ring-2 ring-green-400',
-          isIncorrect && 'bg-[hsl(var(--action-negative))] text-white ring-2 ring-red-400'
+          state === 'selected' && 'bg-blue-600 ring-2 ring-blue-400',
+          // Frequency-based coloring in revealed states (overrides default revealed colors)
+          isRevealed && !frequencyColor && isCorrect && 'bg-[hsl(var(--action-positive))] ring-2 ring-green-400',
+          isRevealed && !frequencyColor && isIncorrect && 'bg-[hsl(var(--action-negative))] ring-2 ring-red-400',
+          frequencyColor
         )}
       >
         <span>{displayLabel}</span>
