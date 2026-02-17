@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 11 of 12 (Supabase Database Integration)
-Plan: 11-05 complete, 11-08 pending
+Plan: 11-04 complete, 11-08 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 11-05-PLAN.md (Session data layer rewrite)
+Last activity: 2026-02-17 -- Completed 11-04-PLAN.md (Login/signup pages and AppHeader auth)
 
 Progress: [████████████████████░] ~99% (67 plans complete)
 
@@ -272,6 +272,10 @@ Recent decisions affecting current work:
 - 11-05: Idempotent session creation using session_id + seed lookup before insert
 - 11-05: GET [id] falls back to Supabase for historical sessions not in memory
 - 11-05: DELETE route added for authenticated session removal
+- 11-04: Login/signup use green accent for primary actions (poker theme consistency)
+- 11-04: OAuth buttons use dark stone-800 background with provider logos
+- 11-04: Display name truncated at 20 chars in AppHeader, hidden on mobile
+- 11-04: Sign Up button green-600 CTA, Log In text-only style in header
 
 ### Pending Todos
 
@@ -294,6 +298,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 11-05-PLAN.md (Session data layer rewrite)
+Stopped at: Completed 11-04-PLAN.md (Login/signup pages and AppHeader auth)
 Resume file: None
 Next: Execute 11-08-PLAN.md
