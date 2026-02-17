@@ -22,6 +22,7 @@ interface PokerTableProps {
   players: Player[];
   communityCards: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>;
   pot: number;
+  potType?: 'SRP' | '3BP' | '4BP';
   dealerPosition: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
   tableSize?: TableSize;
   className?: string;
@@ -91,6 +92,7 @@ export function PokerTable({
   players,
   communityCards,
   pot,
+  potType,
   dealerPosition,
   tableSize = '6max',
   className,
@@ -169,8 +171,13 @@ export function PokerTable({
         </div>
       )}
 
-      {/* Center: Community cards + Pot */}
-      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-3 z-30">
+      {/* Center: pot type label, community cards, pot amount */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 z-30">
+        {potType && (
+          <span className="px-2.5 py-0.5 bg-gray-900/70 text-gray-300 rounded text-[10px] font-semibold uppercase tracking-wider">
+            {potType}
+          </span>
+        )}
         <CommunityCards cards={communityCards} />
         <PotDisplay amount={pot} />
       </div>

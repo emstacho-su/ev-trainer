@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Card } from '../atoms/Card';
+import { CardBack } from '../atoms/CardBack';
 
 interface PlayerSeatProps {
   position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
@@ -41,7 +42,7 @@ export function PlayerSeat({
   showCards = false,
   className,
 }: PlayerSeatProps) {
-  const hasVisibleCards = cards && cards.length > 0 && !isFolded;
+  const inHand = isActive && !isFolded;
 
   return (
     <div
@@ -51,16 +52,24 @@ export function PlayerSeat({
         className
       )}
     >
-      {/* Hero: show cards above info box */}
-      {isHero && hasVisibleCards && showCards && (
+      {/* Cards above info box */}
+      {isHero && showCards && cards && cards.length > 0 && (
         <div className="flex gap-1">
-          {cards!.map((card, i) => (
-            <Card key={i} rank={card.rank} suit={card.suit} size="sm" />
+          {cards.map((card, i) => (
+            <Card key={i} rank={card.rank} suit={card.suit} size="md" />
           ))}
         </div>
       )}
 
-      {/* Villain: avatar to the left of info box */}
+      {/* Villain card backs above info box when in hand */}
+      {!isHero && inHand && (
+        <div className="flex gap-0.5">
+          <CardBack size="sm" />
+          <CardBack size="sm" />
+        </div>
+      )}
+
+      {/* Info box: avatar (villain only) + position/stack */}
       {!isHero ? (
         <div className="flex items-center gap-1.5">
           <PlayerAvatar />
@@ -79,9 +88,7 @@ export function PlayerSeat({
           </div>
         </div>
       ) : (
-        <div
-          className="flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px] bg-blue-600 ring-2 ring-blue-400"
-        >
+        <div className="flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px] bg-blue-600 ring-2 ring-blue-400">
           <span className="text-xs font-bold text-white uppercase tracking-wide">
             {position}
           </span>

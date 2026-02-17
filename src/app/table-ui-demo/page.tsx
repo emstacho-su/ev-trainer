@@ -5,7 +5,6 @@ import { useTheme } from 'next-themes';
 import { PokerTable } from '@/components/poker/organisms/PokerTable';
 import { ActionPanel } from '@/components/poker/organisms/ActionPanel';
 import { SessionControls } from '@/components/poker/organisms/SessionControls';
-import { InfoBar } from '@/components/poker/organisms/InfoBar';
 
 type ActionState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
 
@@ -165,26 +164,20 @@ export default function TableUIDemo() {
 
   return (
     <div className="h-screen bg-[hsl(var(--background))] flex flex-col overflow-hidden">
-      {/* Top bar: info bar + demo controls */}
-      <div className="flex items-center justify-between px-6 py-2 shrink-0">
-        <InfoBar
-          potType={sessionActive ? hand.potType : 'SRP'}
-          sessionInfo={sessionActive ? `Hand ${handNumber} / ${MOCK_HANDS.length}` : 'Press Start'}
-        />
-        <div className="flex gap-3">
-          <button
-            onClick={() => setTableSize(tableSize === '6max' ? '9max' : '6max')}
-            className="px-3 py-1.5 bg-blue-700 text-white rounded-md text-sm"
-          >
-            {tableSize}
-          </button>
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="px-3 py-1.5 bg-gray-700 text-white rounded-md text-sm"
-          >
-            Theme
-          </button>
-        </div>
+      {/* Top bar: demo controls only */}
+      <div className="flex items-center justify-end px-6 py-2 shrink-0 gap-3">
+        <button
+          onClick={() => setTableSize(tableSize === '6max' ? '9max' : '6max')}
+          className="px-3 py-1.5 bg-blue-700 text-white rounded-md text-sm"
+        >
+          {tableSize}
+        </button>
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="px-3 py-1.5 bg-gray-700 text-white rounded-md text-sm"
+        >
+          Theme
+        </button>
       </div>
 
       {/* Table area */}
@@ -193,11 +186,18 @@ export default function TableUIDemo() {
           players={players}
           communityCards={sessionActive ? hand.communityCards : []}
           pot={sessionActive ? hand.pot : 0}
+          potType={sessionActive ? hand.potType : undefined}
           dealerPosition="BTN"
           tableSize={tableSize}
           className="h-full max-h-full mx-auto"
         />
 
+        {/* Seed / hand info bottom-left */}
+        <div className="absolute bottom-2 left-2 text-[10px] text-gray-500 font-mono">
+          {sessionActive
+            ? `Hand ${handNumber}/${MOCK_HANDS.length} · seed:${handIndex + 1000}`
+            : ''}
+        </div>
       </div>
 
       {/* Bottom area: session controls + action panel */}
