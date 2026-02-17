@@ -75,10 +75,10 @@ export function ActionButton({ actionId: _actionId, label, state, ev, frequency,
               <motion.span
                 key="ev-value"
                 className="text-sm font-normal"
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: ANIM.EV_REVEAL, ease: EASE.OUT }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ duration: ANIM.EV_REVEAL, ease: EASE.OUT, delay: ANIM.BUTTON_COLOR * 0.6 }}
               >
                 {ev > 0 ? '+' : ''}{ev.toFixed(2)} BB
               </motion.span>

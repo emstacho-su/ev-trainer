@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react';
 import type { TrainerConfig } from '@/lib/v2/config/types';
 import { useToast } from '@/lib/ui/toastContext';
-import { useAnimationPreferences } from '@/hooks/useAnimationPreferences';
+import { useAnimationPreferences } from '@/app/providers/AnimationProvider';
 import { useAudio } from '@/hooks/useAudio';
 import { cn } from '@/lib/utils';
 import PositionFilters from './PositionFilters';

@@ -162,7 +162,7 @@ export function PokerTable({
           if (!pos) return null;
 
           return (
-            <motion.div
+            <div
               key={`bet-${player.position}`}
               className="absolute z-20"
               style={{
@@ -170,13 +170,16 @@ export function PokerTable({
                 left: pos.left,
                 transform: 'translate(-50%, -50%)',
               }}
-              initial={{ opacity: 0, scale: 0.3 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.3, transition: { duration: ANIM.CHIP_COLLECT, ease: EASE.OUT } }}
-              transition={{ duration: ANIM.CHIP_SLIDE, ease: EASE.OUT }}
             >
-              <Chip amount={player.bet} size="sm" />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.3, transition: { duration: ANIM.CHIP_COLLECT, ease: EASE.OUT } }}
+                transition={{ duration: ANIM.CHIP_SLIDE, ease: EASE.OUT }}
+              >
+                <Chip amount={player.bet} size="sm" />
+              </motion.div>
+            </div>
           );
         })}
       </AnimatePresence>

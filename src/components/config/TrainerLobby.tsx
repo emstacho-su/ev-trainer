@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTrainerConfig } from '@/lib/v2/hooks/useTrainerConfig';
 import { writeSessionRecord } from '@/lib/v2/storage/sessionStorage';
-import { useAnimationPreferences } from '@/hooks/useAnimationPreferences';
+import { useAnimationPreferences } from '@/app/providers/AnimationProvider';
 import { useAudio } from '@/hooks/useAudio';
 import { cn } from '@/lib/utils';
 import ConfigCard from './ConfigCard';
