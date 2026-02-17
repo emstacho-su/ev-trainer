@@ -14,6 +14,7 @@ import { ActionPanel } from "../../../components/poker/organisms/ActionPanel";
 import type { Spot } from "../../../lib/engine/spot";
 import type { ActionId, Position } from "../../../lib/engine/types";
 import type { DecisionGrade } from "../../../lib/engine/trainingOrchestrator";
+import { createSeededRng, combineSeed } from "../../../lib/engine/rng";
 import type {
   SessionDetailResponse,
   SessionSnapshot,
@@ -108,7 +109,10 @@ function formatActionLabel(actionId: string): string {
   return actionId;
 }
 
-function spotToPlayers(spot: Spot): Player[] {
+function spotToPlayers(
+  spot: Spot,
+  heroCards?: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>
+): Player[] {
   const actions = parseHistoryActions(spot);
   return spot.positions.map((position) => {
     const isHero = position === spot.heroToAct;
@@ -126,6 +130,7 @@ function spotToPlayers(spot: Spot): Player[] {
     return {
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
+      cards: isHero ? heroCards : undefined,
       isActive: !hasFolded,
       isFolded: hasFolded,
       isHero,
@@ -149,6 +154,36 @@ function parseCardString(card: string): { rank: string; suit: 'h' | 'd' | 'c' | 
     rank: card.slice(0, -1),
     suit: card.slice(-1) as 'h' | 'd' | 'c' | 's',
   };
+}
+
+const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const;
+const SUITS: Array<'h' | 'd' | 'c' | 's'> = ['h', 'd', 'c', 's'];
+
+/** Deal two hero hole cards deterministically, avoiding board cards. */
+function dealHeroCards(
+  spot: Spot,
+  seed: string
+): Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }> {
+  const boardSet = new Set(spot.board.map(c => c.toLowerCase()));
+  const deck: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }> = [];
+  for (const rank of RANKS) {
+    for (const suit of SUITS) {
+      const key = `${rank}${suit}`.toLowerCase();
+      if (!boardSet.has(key)) {
+        deck.push({ rank, suit });
+      }
+    }
+  }
+
+  const rng = createSeededRng(combineSeed([seed, spot.spotId, 'hero-cards']));
+  // Fisher-Yates partial shuffle for 2 cards
+  const i1 = Math.floor(rng.next() * deck.length);
+  const card1 = deck[i1];
+  deck[i1] = deck[deck.length - 1];
+  const i2 = Math.floor(rng.next() * (deck.length - 1));
+  const card2 = deck[i2];
+
+  return [card1, card2];
 }
 
 function mapSimpleAction(actionId: ActionId): 'fold' | 'call' | 'raise' {
@@ -438,7 +473,11 @@ export default function SessionPage() {
     !seed && !isLoading && errorMessage?.includes("Missing seed") === true;
 
   // Build PokerTable data from current spot
-  const players = currentSpot ? spotToPlayers(currentSpot) : [];
+  const heroCards = useMemo(
+    () => (currentSpot && seed ? dealHeroCards(currentSpot, seed) : undefined),
+    [currentSpot, seed]
+  );
+  const players = currentSpot ? spotToPlayers(currentSpot, heroCards) : [];
   const communityCards = currentSpot
     ? currentSpot.board.map(parseCardString)
     : [];
