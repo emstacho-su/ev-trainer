@@ -99,6 +99,8 @@ model SpotStat {
   // Indexes
   @@unique([userId, spotId])
   @@index([userId, spotId])
+  @@index([userId, lastPracticed]) // For date range filtering in stats aggregation
+  @@index([userId, heroPosition])  // For position-based stats groupBy
 }
 
 // DailyStat model for daily aggregated statistics
