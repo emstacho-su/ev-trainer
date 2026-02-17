@@ -12,9 +12,9 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
 Plan: 1 of 7 in Phase 8 complete, Phase 9 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 08-01 stats API with Prisma aggregation
+Last activity: 2026-02-17 -- Completed 09-03 ActionButton EV reveal animations
 
-Progress: [██████████████░░] ~77% (46 plans complete)
+Progress: [██████████████░░] ~78% (47 plans complete)
 
 ## Performance Metrics
 
@@ -201,6 +201,8 @@ Recent decisions affecting current work:
 - 08-01: 20-hand confidence threshold for position stat confidence flag
 - 08-01: Auto granularity: session (<7d), day (<90d), week (>90d)
 - 08-01: Top 5 biggest mistakes by absolute EV diff descending
+- 09-03: AnimatePresence overlay pattern for background color transitions (motion.div absolute z-0)
+- 09-03: Removed getFrequencyBg — Motion overlay handles all reveal colors uniformly
 
 ### Pending Todos
 
@@ -218,7 +220,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:28 UTC
-Stopped at: Completed 08-01-PLAN.md (stats API with Prisma aggregation)
+Last session: 2026-02-17 05:31 UTC
+Stopped at: Completed 09-03-PLAN.md (ActionButton EV reveal animations)
 Resume file: None
-Next: Continue Phase 8 plans (08-02+) and Phase 9 plans
+Next: Continue Phase 9 wave 2 plans (09-02, 09-05, 09-06) and Phase 8 plans
