@@ -205,26 +205,34 @@ function heroFacesBet(spot: Spot): boolean {
   );
 }
 
+/** Check if this is a preflop RFI (raise first in) spot. */
+function isPreflopRfi(spot: Spot): boolean {
+  return spot.board.length === 0 && spot.history.every(a => a === 'FOLD');
+}
+
 /** Get the action IDs appropriate for the current spot context. */
 function getAvailableActions(spot: Spot): { actionId: ActionId; label: string }[] {
+  // Preflop RFI: simplified Fold / Raise 3x
+  if (isPreflopRfi(spot)) {
+    return [
+      { actionId: 'FOLD', label: 'Fold' },
+      { actionId: 'RAISE_3.0X', label: 'Raise 3x' },
+    ];
+  }
   if (heroFacesBet(spot)) {
     if (spot.board.length === 0) {
-      // Preflop: Fold, Call, multiple raise sizes
+      // Preflop facing a raise: Fold, Call, Raise
       return [
         { actionId: 'FOLD', label: 'Fold' },
         { actionId: 'CALL', label: 'Call' },
-        { actionId: 'RAISE_2.2X', label: 'Raise 2.2x' },
-        { actionId: 'RAISE_2.5X', label: 'Raise 2.5x' },
-        { actionId: 'RAISE_3.0X', label: 'Raise 3.0x' },
+        { actionId: 'RAISE_3.0X', label: 'Raise 3x' },
       ];
     }
     // Postflop facing bet
     return [
       { actionId: 'FOLD', label: 'Fold' },
       { actionId: 'CALL', label: 'Call' },
-      { actionId: 'RAISE_2.2X', label: 'Raise 2.2x' },
-      { actionId: 'RAISE_2.5X', label: 'Raise 2.5x' },
-      { actionId: 'RAISE_3.0X', label: 'Raise 3.0x' },
+      { actionId: 'RAISE_3.0X', label: 'Raise 3x' },
     ];
   }
   // Postflop not facing bet: Check + multiple bet sizes
@@ -342,14 +350,42 @@ export default function SessionPage() {
 
   const loadSession = useCallback(
     async (sessionSeed: string) => {
-      const detail = await getSession(sessionId, sessionSeed);
-      updateFromSessionDetail(detail);
-      setStorageWarning(consumeStorageWarning());
-      setSession(detail.session);
-      if (detail.session.isComplete) {
-        router.replace(toSummaryHref(detail));
+      try {
+        const detail = await getSession(sessionId, sessionSeed);
+        updateFromSessionDetail(detail);
+        setStorageWarning(consumeStorageWarning());
+        setSession(detail.session);
+        if (detail.session.isComplete) {
+          router.replace(toSummaryHref(detail));
+        }
+        return detail;
+      } catch (error) {
+        // If server lost the in-memory session (dev HMR, restart), re-create it
+        if (error instanceof SessionApiError && error.code === "NOT_FOUND") {
+          const stored = readSessionRecord(sessionId);
+          if (stored?.session) {
+            const res = await fetch("/api/session/start", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                seed: stored.session.seed,
+                sessionId: stored.session.sessionId,
+                mode: stored.session.mode,
+                packId: stored.session.packId,
+                filters: stored.session.filters,
+                decisionsPerSession: stored.session.decisionsPerSession,
+              }),
+            });
+            if (res.ok) {
+              const data = await res.json();
+              setSession(data.session);
+              setCurrentSpot(data.spot);
+              return null;
+            }
+          }
+        }
+        throw error;
       }
-      return detail;
     },
     [router, sessionId]
   );
@@ -507,7 +543,11 @@ export default function SessionPage() {
       if (error instanceof SessionApiError && error.code === "SESSION_COMPLETE") {
         try {
           const detail = await loadSession(seed);
-          router.replace(toSummaryHref(detail));
+          if (detail) {
+            router.replace(toSummaryHref(detail));
+          } else {
+            router.replace(`/summary/${session.sessionId}?mode=${session.mode}`);
+          }
         } catch {
           router.replace(`/summary/${session.sessionId}?mode=${session.mode}`);
         }
