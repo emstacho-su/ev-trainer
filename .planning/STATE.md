@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 10 of 10 (Postflop Training)
-Plan: 10-03 complete, 10-04 through 10-07 pending
+Plan: 10-04 complete, 10-05 through 10-07 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 10-03-PLAN.md (multi-street session reducer)
+Last activity: 2026-02-17 -- Completed 10-04-PLAN.md (street action UI components)
 
 Progress: [██████████████████] ~95% (57 plans complete)
 
@@ -230,6 +230,9 @@ Recent decisions affecting current work:
 - 10-03: Frequency threshold 0.01 for solver line matching (actions at or below not in strategy)
 - 10-03: deviatedStreet tracks only FIRST deviation street; subsequent streets check deviatedStreet !== null
 - 10-03: PostflopSession uses .tsx extension for JSX in React context Provider
+- 10-04: PostflopActionButton uses static Tailwind (no motion animations) unlike preflop ActionButton
+- 10-04: actionId label mapping supports BET_XX and RAISE_X.X patterns with bb amount calculation
+- 10-04: SpotContextLabel formats pot type: 3BP->3b, 4BP->4b, SRP->SRP
 
 ### Pending Todos
 
@@ -247,7 +250,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 06:12 UTC
-Stopped at: Completed 10-03-PLAN.md (multi-street session reducer)
+Last session: 2026-02-17 06:14 UTC
+Stopped at: Completed 10-04-PLAN.md (street action UI components)
 Resume file: None
-Next: Continue Phase 10 (10-04 through 10-07)
+Next: Continue Phase 10 (10-05 through 10-07)
