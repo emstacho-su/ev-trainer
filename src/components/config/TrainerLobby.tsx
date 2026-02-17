@@ -41,7 +41,6 @@ export default function TrainerLobby() {
         body: JSON.stringify({
           seed: crypto.randomUUID(),
           mode: 'TRAINING',
-          packId: 'default',
           filters: {
             street: config.mode === 'PREFLOP' ? 'PREFLOP' : 'FLOP',
             positions: config.positions,
