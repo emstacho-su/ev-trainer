@@ -15,6 +15,7 @@ import { errorHandler } from "./middleware/error.middleware";
 import healthRoutes from "./routes/health.routes";
 import authRoutes from "./auth/auth.routes";
 import oauthRoutes from "./oauth/oauth.routes";
+import postflopRoutes from "./routes/postflop.routes";
 
 const app = express();
 
@@ -73,6 +74,7 @@ const authLimiter = rateLimit({
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/oauth', oauthRoutes);
 app.use("/health", healthRoutes);
+app.use('/api/postflop', postflopRoutes);
 
 // Error handler - must be last
 app.use(errorHandler);
