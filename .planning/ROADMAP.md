@@ -196,10 +196,16 @@ Plans:
   3. EV reveal animates with slide-up and color transition
   4. Action highlights pulse on selected button
   5. Range grid modal opens/closes with smooth fade and scale
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
-- [ ] 09-01: TBD
+- [ ] 09-01-PLAN.md — Foundation: install Motion, animationTiming constants, useAnimationPreferences hook, MotionConfig at root layout
+- [ ] 09-02-PLAN.md — Card flip 3D animation (AnimatedCard component) + folded card muck in PlayerSeat
+- [ ] 09-03-PLAN.md — EV reveal animations: ActionButton pulse on selection, EV slide-up, background color transition
+- [ ] 09-04-PLAN.md — Audio infrastructure: AudioManager, sound name constants, useAudio hook
+- [ ] 09-05-PLAN.md — Card deal entry animation + chip bet slide-in/collect-out in PokerTable
+- [ ] 09-06-PLAN.md — Dealer button layoutId slide + modal transition utility for Phase 7
+- [ ] 09-07-PLAN.md — Animation/audio settings toggles + human verification checkpoint
 
 ### Phase 10: Postflop Training
 **Goal**: Users can practice flop/turn/river decisions with multi-street progression
