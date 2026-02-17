@@ -25,6 +25,7 @@ interface PokerTableProps {
   pot: number;
   potType?: 'SRP' | '3BP' | '4BP';
   dealerPosition: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
+  heroPosition?: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
   tableSize?: TableSize;
   className?: string;
 }
@@ -58,36 +59,45 @@ const BET_RY = 28;
 const DEALER_RX = 33;
 const DEALER_RY = 31;
 
-function buildPositions(seatOrder: readonly string[], rx: number, ry: number): Record<string, { top: string; left: string }> {
+/**
+ * Build position map with optional rotation so `heroPos` sits at the bottom.
+ * When heroPos is provided, the seat angles are shifted so that position
+ * lands at -90° (visual bottom), keeping relative order intact.
+ */
+function buildPositions(
+  seatOrder: readonly string[],
+  rx: number,
+  ry: number,
+  heroPos?: string,
+): Record<string, { top: string; left: string }> {
   const count = seatOrder.length;
+  // How many slots to rotate so hero ends up at index 0 (bottom)
+  const heroIdx = heroPos ? seatOrder.indexOf(heroPos) : 0;
+  const rotationOffset = heroIdx > 0 ? heroIdx * (360 / count) : 0;
+
   const result: Record<string, { top: string; left: string }> = {};
   for (let i = 0; i < count; i++) {
-    // Start at -90° (bottom), go clockwise (subtract angle)
-    const angle = -90 - (i * 360) / count;
+    const angle = -90 - (i * 360) / count + rotationOffset;
     result[seatOrder[i]] = ellipsePos(angle, rx, ry);
   }
   return result;
 }
 
-// Dealer button is offset slightly clockwise from the seat position
-function buildDealerPositions(seatOrder: readonly string[]): Record<string, { top: string; left: string }> {
+function buildDealerPositions(
+  seatOrder: readonly string[],
+  heroPos?: string,
+): Record<string, { top: string; left: string }> {
   const count = seatOrder.length;
+  const heroIdx = heroPos ? seatOrder.indexOf(heroPos) : 0;
+  const rotationOffset = heroIdx > 0 ? heroIdx * (360 / count) : 0;
+
   const result: Record<string, { top: string; left: string }> = {};
   for (let i = 0; i < count; i++) {
-    const angle = -90 - (i * 360) / count + 15; // 15° offset toward previous seat
+    const angle = -90 - (i * 360) / count + rotationOffset + 15;
     result[seatOrder[i]] = ellipsePos(angle, DEALER_RX, DEALER_RY);
   }
   return result;
 }
-
-const SEAT_POSITIONS_6MAX = buildPositions(SEAT_ORDER_6MAX, SEAT_RX, SEAT_RY);
-const SEAT_POSITIONS_9MAX = buildPositions(SEAT_ORDER_9MAX, SEAT_RX, SEAT_RY);
-
-const BET_POSITIONS_6MAX = buildPositions(SEAT_ORDER_6MAX, BET_RX, BET_RY);
-const BET_POSITIONS_9MAX = buildPositions(SEAT_ORDER_9MAX, BET_RX, BET_RY);
-
-const DEALER_OFFSET_6MAX = buildDealerPositions(SEAT_ORDER_6MAX);
-const DEALER_OFFSET_9MAX = buildDealerPositions(SEAT_ORDER_9MAX);
 
 export function PokerTable({
   players,
@@ -95,12 +105,14 @@ export function PokerTable({
   pot,
   potType,
   dealerPosition,
+  heroPosition,
   tableSize = '6max',
   className,
 }: PokerTableProps) {
-  const seatPositions = tableSize === '9max' ? SEAT_POSITIONS_9MAX : SEAT_POSITIONS_6MAX;
-  const betPositions = tableSize === '9max' ? BET_POSITIONS_9MAX : BET_POSITIONS_6MAX;
-  const dealerOffsets = tableSize === '9max' ? DEALER_OFFSET_9MAX : DEALER_OFFSET_6MAX;
+  const seatOrder = tableSize === '9max' ? SEAT_ORDER_9MAX : SEAT_ORDER_6MAX;
+  const seatPositions = buildPositions(seatOrder, SEAT_RX, SEAT_RY, heroPosition);
+  const betPositions = buildPositions(seatOrder, BET_RX, BET_RY, heroPosition);
+  const dealerOffsets = buildDealerPositions(seatOrder, heroPosition);
 
   return (
     <div className={cn('relative aspect-[16/10] mx-auto', className)}

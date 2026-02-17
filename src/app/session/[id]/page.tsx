@@ -11,6 +11,8 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { PokerTable } from "../../../components/poker/organisms/PokerTable";
 import { ActionPanel } from "../../../components/poker/organisms/ActionPanel";
+import SessionSidebar from "../../../components/config/SessionSidebar";
+import { useTrainerConfig } from "../../../lib/v2/hooks/useTrainerConfig";
 import type { Spot } from "../../../lib/engine/spot";
 import type { ActionId, Position } from "../../../lib/engine/types";
 import type { DecisionGrade } from "../../../lib/engine/trainingOrchestrator";
@@ -222,6 +224,8 @@ export default function SessionPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { config, updateConfig } = useTrainerConfig();
 
   // Refs for stable keyboard handler access
   const uiStateRef = useRef(uiState);
@@ -510,14 +514,16 @@ export default function SessionPage() {
               </div>
             </div>
           </div>
-          {session && (
-            <div className="flex flex-col items-end">
-              <span className="text-xs text-gray-400 uppercase tracking-wide">Session</span>
-              <span className="text-sm font-semibold text-gray-300">
-                {session.mode} · {session.decisionIndex}/{session.decisionsPerSession}
-              </span>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-2 text-gray-400 hover:text-white transition-colors rounded hover:bg-gray-700"
+            aria-label="Open settings"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+              <path fillRule="evenodd" d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -563,6 +569,7 @@ export default function SessionPage() {
                 pot={currentSpot.potBb}
                 potType={potType}
                 dealerPosition={dealerPosition}
+                heroPosition={currentSpot.heroToAct as Player['position']}
                 tableSize="6max"
               />
             </div>
@@ -599,6 +606,16 @@ export default function SessionPage() {
         <div className="flex-1 flex items-center justify-center">
           <p className="text-gray-400">No spot available.</p>
         </div>
+      )}
+
+      {/* Settings sidebar */}
+      {config && (
+        <SessionSidebar
+          isOpen={isSidebarOpen}
+          config={config}
+          onConfigChange={updateConfig}
+          onClose={() => setIsSidebarOpen(false)}
+        />
       )}
     </div>
   );
