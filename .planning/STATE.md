@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 5 of 10 (Preflop Training)
-Plan: 6 of 7 in Phase 5
-Status: In progress
-Last activity: 2026-02-17 -- Completed 05-06-PLAN.md (Gap closure - keyboard shortcuts)
+Plan: 7 of 7 in Phase 5
+Status: Phase complete - ready for UAT re-test
+Last activity: 2026-02-17 -- Completed 05-07-PLAN.md (Gap closure - info bar visibility)
 
-Progress: [██████████░░░░░░] ~48% (31 plans complete)
+Progress: [██████████░░░░░░] ~50% (32 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 31
-- Average duration: 7.0 min
-- Total execution time: 217 min
+- Total plans completed: 32
+- Average duration: 6.8 min
+- Total execution time: 218 min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [██████████░░░░░░] ~48% (31 plans comp
 | 02-backend-foundation | 4/4 ✓ | 48 min | 12.0 min |
 | 03-authentication | 5/5 ✓ | 15 min | 3.0 min |
 | 04-table-ui-foundation | 6/6 ✓ | 65 min | 10.8 min |
-| 05-preflop-training | 6/7 | 13 min | 2.2 min |
+| 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (7 min), 05-02 (0 min - skipped), 05-03 (4 min), 05-05 (1 min), 05-06 (1 min)
-- Trend: Phase 5 averaging 2.2 min (small bug fixes and gap closure plans)
+- Last 5 plans: 05-02 (0 min - skipped), 05-03 (4 min), 05-05 (1 min), 05-06 (1 min), 05-07 (1 min)
+- Trend: Phase 5 averaging 2.0 min (small bug fixes and gap closure plans)
 
 *Updated after each plan completion*
 
@@ -153,6 +153,10 @@ Recent decisions affecting current work:
 - 05-05: Bet display shows blinds for SB/BB even when they haven't acted yet
 - 05-06: Empty dependency array for keyboard event handlers prevents listener detach/reattach
 - 05-06: Inline handler logic with ref-based state access for stable event listeners
+- 05-07: Vertical label/value layout (label above value) for better metric visibility
+- 05-07: Color coding for metrics: white for Hand #, blue-400 for Accuracy %, green-400 for Correct count
+- 05-07: Info bar styling: bg-gray-800 with border-b border-gray-700 for visual separation
+- 05-07: Metric display pattern: uppercase text-xs labels above text-lg bold values
 
 ### Pending Todos
 
@@ -165,7 +169,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:23 UTC
-Stopped at: Completed 05-06-PLAN.md (Fix keyboard shortcuts)
+Last session: 2026-02-17 02:26 UTC
+Stopped at: Completed 05-07-PLAN.md (Info bar visibility enhancement)
 Resume file: None
-Next: Execute 05-07-PLAN.md (Final gap closure plan) or 05-UAT.md re-test
+Next: 05-UAT.md re-test (verify Test 13 and all other tests pass)
