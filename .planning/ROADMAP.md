@@ -217,8 +217,13 @@ Plans:
   3. User can train river value-bet/bluff/check decisions
   4. Multi-street training progresses from flop -> turn -> river
   5. Postflop action history shows bet sizes and ranges
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
-- [ ] 10-01: TBD
-- [ ] 10-02: TBD
+- [ ] 10-01-PLAN.md — PostflopSpot types, board texture classification (TDD)
+- [ ] 10-02-PLAN.md — Postflop solver bridge + mock solver + /api/postflop/solve route
+- [ ] 10-03-PLAN.md — Multi-street state machine with off-solver-line tracking (TDD)
+- [ ] 10-04-PLAN.md — Street action UI: bet size buttons, off-solver-line badge, context label, LRI token
+- [ ] 10-05-PLAN.md — PostflopTrainingSession main component + postflop API client
+- [ ] 10-06-PLAN.md — Hand summary screen + /postflop-training page with training loop
+- [ ] 10-07-PLAN.md — Human verification checkpoint (POST-01 through POST-06)
