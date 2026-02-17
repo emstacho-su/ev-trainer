@@ -41,10 +41,10 @@ export default function StatsPage() {
           </p>
         </div>
         <Link
-          href="/lobby"
+          href="/"
           className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm text-slate-300 hover:bg-slate-700"
         >
-          Back to Lobby
+          Back to Dashboard
         </Link>
       </div>
 

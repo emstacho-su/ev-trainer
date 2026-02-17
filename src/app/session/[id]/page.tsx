@@ -649,8 +649,8 @@ export default function SessionPage() {
       <div className="p-4 bg-gray-800 border-b border-gray-700">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
-            <Link href="/lobby" className="text-sm text-gray-400 hover:text-white transition-colors">
-              &larr; Lobby
+            <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">
+              &larr; Dashboard
             </Link>
             <div className="flex gap-8">
               <div className="flex flex-col">
@@ -697,7 +697,7 @@ export default function SessionPage() {
             type="button"
             onClick={() => {
               deleteSessionRecord(sessionId);
-              router.push("/lobby");
+              router.push("/");
             }}
             className="rounded border border-gray-600 px-3 py-2 text-sm text-gray-300 hover:bg-gray-800"
           >

@@ -76,8 +76,8 @@ export default function ReviewPage() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-4 p-6">
-      <Link href="/lobby" className="text-sm text-gray-400 underline hover:text-gray-200">
-        Back to lobby
+      <Link href="/" className="text-sm text-gray-400 underline hover:text-gray-200">
+        Back to dashboard
       </Link>
       <h1 className="text-2xl font-semibold text-gray-100">Session Review</h1>
       <p className="text-sm text-gray-400">

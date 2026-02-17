@@ -47,7 +47,7 @@ export default function SignupPage() {
         document.cookie = `access_token=${data.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
       }
 
-      router.push('/lobby');
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {

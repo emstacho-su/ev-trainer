@@ -133,8 +133,8 @@ export default function SummaryPlaceholderPage() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-4 p-6">
-      <Link href="/lobby" className="text-sm text-gray-400 underline hover:text-gray-200">
-        Back to lobby
+      <Link href="/" className="text-sm text-gray-400 underline hover:text-gray-200">
+        Back to dashboard
       </Link>
       <h1 className="text-2xl font-semibold text-gray-100">Session Summary</h1>
       <p className="text-sm text-gray-400">
@@ -169,7 +169,7 @@ export default function SummaryPlaceholderPage() {
           Review session
         </button>
         <Link
-          href="/lobby"
+          href="/training"
           className="rounded border border-gray-600 px-4 py-2 text-gray-300 hover:bg-gray-800"
         >
           New session

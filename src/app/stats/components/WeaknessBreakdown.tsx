@@ -2,7 +2,7 @@
 
 /**
  * Overview: Table showing top 10 weakest position matchups with drill buttons.
- * Interacts with: /api/stats/positions endpoint, navigates to /lobby for targeted training.
+ * Interacts with: /api/stats/positions endpoint, navigates to /training for targeted training.
  * Importance: Bridges insight to action by surfacing weakest spots and enabling drill navigation.
  */
 
@@ -93,7 +93,7 @@ export default function WeaknessBreakdown() {
     const params = new URLSearchParams();
     params.set("heroPosition", heroPosition);
     params.set("villainPosition", villainPosition);
-    router.push(`/lobby?${params.toString()}`);
+    router.push(`/training?${params.toString()}`);
   }
 
   return (
