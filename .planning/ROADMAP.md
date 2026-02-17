@@ -242,18 +242,21 @@ Plans:
   3. Practice spot hand database stores and retrieves solver-generated training hands
   4. All existing data layer (SessionStore, Prisma queries, Express API routes) migrated to Supabase client
   5. Data layer rewrite provides same functionality with Supabase as backend
-**Plans**: 9 plans
+**Plans**: 12 plans
 
 Plans:
-- [ ] 11-01-PLAN.md — Supabase SDK install, three-client architecture, env config
-- [ ] 11-02-PLAN.md — Database schema migration (tables, RLS, triggers, type generation)
-- [ ] 11-03-PLAN.md — AuthProvider, middleware token refresh, OAuth callback route
-- [ ] 11-04-PLAN.md — Login/signup pages with Supabase Auth + AppHeader auth state
-- [ ] 11-05-PLAN.md — Session data layer rewrite (Supabase persistence for training sessions)
-- [ ] 11-06-PLAN.md — Stats data layer rewrite (Supabase queries for analytics)
-- [ ] 11-07-PLAN.md — Spot database (seed script, spot service, Supabase spot loading)
-- [ ] 11-08-PLAN.md — Cleanup: remove Express/Prisma/old auth, uninstall ~15 packages
-- [ ] 11-09-PLAN.md — Human verification checkpoint (all 5 success criteria)
+- [x] 11-01-PLAN.md — Supabase SDK install, three-client architecture, env config
+- [x] 11-02-PLAN.md — Database schema migration (tables, RLS, triggers, type generation)
+- [x] 11-03-PLAN.md — AuthProvider, middleware token refresh, OAuth callback route
+- [x] 11-04-PLAN.md — Login/signup pages with Supabase Auth + AppHeader auth state
+- [x] 11-05-PLAN.md — Session data layer rewrite (Supabase persistence for training sessions)
+- [x] 11-06-PLAN.md — Stats data layer rewrite (Supabase queries for analytics)
+- [x] 11-07-PLAN.md — Spot database (seed script, spot service, Supabase spot loading)
+- [x] 11-08-PLAN.md — Cleanup: remove Express/Prisma/old auth, uninstall ~15 packages
+- [x] 11-09-PLAN.md — Human verification checkpoint (all 5 success criteria)
+- [ ] 11-10-PLAN.md — Gap closure: OAuth flow diagnostics + seed script env setup (G1, G2)
+- [ ] 11-11-PLAN.md — Gap closure: Include folded positions in 6-max spot data (G3)
+- [ ] 11-12-PLAN.md — Gap closure: Fix session summary error + stats table alignment (G4, G5)
 
 ### Phase 12: Dashboard & Training Config Popout
 **Goal**: Transform the lobby into a dashboard hub and the training config into a GTO-Wizard-style centered popout overlaying the poker table
