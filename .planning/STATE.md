@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 7 of 10 (Range Visualization)
-Plan: 4 of 5 in Phase 7
-Status: In progress
-Last activity: 2026-02-17 -- Completed 07-04 range grid modal and PokerTable integration
+Plan: 5 of 5 in Phase 7
+Status: Phase complete
+Last activity: 2026-02-17 -- Completed 07-05 range data wire-up (View Ranges button functional)
 
-Progress: [█████████████░░░] ~69% (42 plans complete)
+Progress: [█████████████░░░] ~72% (43 plans complete)
 
 ## Performance Metrics
 
@@ -34,7 +34,7 @@ Progress: [█████████████░░░] ~69% (42 plans comp
 | 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 06-03 (2 min), 06-04 (2 min), 06-05 (5 min), 07-03 (2 min), 07-04 (2 min)
+- Last 5 plans: 06-04 (2 min), 06-05 (5 min), 07-03 (2 min), 07-04 (2 min), 07-05 (2 min)
 - Trend: Phase 7 plans fast (component composition, no new infrastructure)
 
 *Updated after each plan completion*
@@ -187,6 +187,9 @@ Recent decisions affecting current work:
 - 07-04: View Ranges button on PokerTable (bottom-right, z-30) disabled when range data unavailable
 - 07-04: Filter state reset to null on modal close for clean slate each open
 - 07-04: useEffect sync pattern for imperative dialog API (showModal/close)
+- 07-05: generateMockRangeData co-located in session page as module-level utility until solver integration
+- 07-05: Range state cleared on handleNext to reset button disabled state for next hand
+- 07-05: heroRange ?? undefined coercion bridges RangeData | null state to RangeData | undefined prop
 
 ### Pending Todos
 
@@ -204,7 +207,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 04:10 UTC
-Stopped at: Completed 07-04-PLAN.md (range grid modal and PokerTable integration)
+Last session: 2026-02-17 05:05 UTC
+Stopped at: Completed 07-05-PLAN.md (range data wire-up — View Ranges button functional)
 Resume file: None
-Next: Phase 7 — 07-05
+Next: Phase 8
