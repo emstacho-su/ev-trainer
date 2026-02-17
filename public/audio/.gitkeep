@@ -1,0 +1,5 @@
+# Sound effect files go here.
+# Source from freesound.org (CC0 license) or equivalent.
+# Expected files:
+#   card-deal.mp3, card-flip.mp3, chip-slide.mp3,
+#   chip-collect.mp3, ev-correct.mp3, ev-incorrect.mp3
