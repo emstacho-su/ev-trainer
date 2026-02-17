@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 Phase: 11 of 12 (Supabase Database Integration)
 Plan: 11-12 complete (gap closure done), verification pending
 Status: Gap closure complete, needs re-verification
-Last activity: 2026-02-17 -- Completed gap closure plans 11-10, 11-11, 11-12
+Last activity: 2026-02-17 -- Re-executed 11-11-PLAN.md with full commit tracking
 
 Progress: [████████████████████░] ~99% (72 plans complete)
 
@@ -283,6 +283,9 @@ Recent decisions affecting current work:
 - 11-08: Inline Zod validation in postflop route rather than keeping middleware directory for one function
 - 11-08: Delete aggregation.ts and drillSuggestions.ts (only consumed by deleted controllers, replaced by Supabase statsService)
 - 11-08: Keep @types/express and @types/cors since Express solver route still uses them
+- 11-11: All 6 positions in pack JSON with equal stacks for folded seats
+- 11-11: villainPosition added to API StartResponse/NextResponse for fold determination
+- 11-11: Non-hero, non-villain positions without history actions are implicitly folded
 
 ### Pending Todos
 
@@ -305,6 +308,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed gap closure plans 11-10, 11-11, 11-12
+Stopped at: Re-executed 11-11-PLAN.md with proper commit tracking
 Resume file: None
 Next: Re-verify phase 11 (human testing of gap closures)
