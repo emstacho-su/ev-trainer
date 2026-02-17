@@ -1,5 +1,6 @@
 import { ThemeProvider } from './providers/ThemeProvider';
 import { AnimationProvider } from './providers/AnimationProvider';
+import { AuthProvider } from './providers/AuthProvider';
 import { ToastProvider } from '@/lib/ui/toastContext';
 import ToastContainer from '@/lib/ui/ToastContainer';
 import AppHeader from '@/components/AppHeader';
@@ -11,11 +12,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <AnimationProvider>
-            <ToastProvider>
-              <AppHeader />
-              {children}
-              <ToastContainer />
-            </ToastProvider>
+            <AuthProvider>
+              <ToastProvider>
+                <AppHeader />
+                {children}
+                <ToastContainer />
+              </ToastProvider>
+            </AuthProvider>
           </AnimationProvider>
         </ThemeProvider>
       </body>
