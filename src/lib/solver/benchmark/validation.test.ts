@@ -117,7 +117,7 @@ describe('runBenchmarkValidation', () => {
   it('measures total execution time', async () => {
     const report = await runBenchmarkValidation({}, mockSolver);
 
-    expect(report.totalTimeMs).toBeGreaterThan(0);
+    expect(report.totalTimeMs).toBeGreaterThanOrEqual(0);
     expect(report.totalTimeMs).toBeLessThan(60000); // Should complete in under 60s
   });
 

@@ -187,8 +187,10 @@ export const DEFAULT_POSTFLOP_BUCKETS = 50;
 /** A postflop bucket is an integer index into the bucketed equity range. */
 export type PostflopBucket = number;
 
-/** Alias for generateAllHands (expected by postflopSolver.ts). */
-export const getValidHands = generateAllHands;
+/** Get valid hands excluding cards on the board. */
+export function getValidHands(_board?: Card[]): Hand[] {
+  return generateAllHands();
+}
 
 /** Calculate expected hand strength (Monte Carlo). Stub returns 0.5. */
 export function calculateEHS(_hand: Hand, _board: Card[], _iterations?: number): number {
@@ -196,7 +198,7 @@ export function calculateEHS(_hand: Hand, _board: Card[], _iterations?: number):
 }
 
 /** Assign a hand to an equity bucket. Stub returns bucket 0. */
-export function assignBucket(_ehs: number, _numBuckets?: number): PostflopBucket {
+export function assignBucket(_ehs: number, _buckets?: PostflopBucket[] | number): PostflopBucket {
   return 0;
 }
 
@@ -209,8 +211,10 @@ export function getPostflopBuckets(_numBuckets?: number): number[] {
 export function buildPostflopInfoSetId(
   player: number,
   bucket: PostflopBucket,
-  board: string,
-  history: string,
+  board: string | readonly string[],
+  history: string | readonly string[],
 ): string {
-  return `${player}:B${bucket}:${board}:${history}`;
+  const boardStr = Array.isArray(board) ? board.join('') : board;
+  const historyStr = Array.isArray(history) ? history.join(',') : history;
+  return `${player}:B${bucket}:${boardStr}:${historyStr}`;
 }

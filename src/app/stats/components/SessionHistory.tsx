@@ -7,7 +7,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import type {
   SessionSummary,
@@ -241,6 +241,7 @@ function SessionEntries({
 }
 
 export default function SessionHistory() {
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   // Pagination
@@ -569,6 +570,16 @@ export default function SessionHistory() {
                           title={isExpanded ? "Collapse" : "Expand"}
                         >
                           {isExpanded ? "Collapse" : "Expand"}
+                        </button>
+                        <button
+                          className="rounded px-2 py-1 text-xs text-blue-400/70 transition-colors hover:bg-blue-950/50 hover:text-blue-400"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/review/${session.id}`);
+                          }}
+                          title="Review session"
+                        >
+                          Review
                         </button>
                         <button
                           className="rounded px-2 py-1 text-xs text-red-400/70 transition-colors hover:bg-red-950/50 hover:text-red-400"

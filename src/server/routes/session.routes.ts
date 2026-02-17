@@ -78,15 +78,16 @@ const SubmitDecisionSchema = z.object({
 });
 
 // Routes
+// User-specific queries - requireAuth (must be logged in to view own history)
+// NOTE: This must be BEFORE /:sessionId to avoid being caught by the wildcard
+router.get("/history", requireAuth, (req, res) => {
+  res.json({ message: 'Session history endpoint - to be implemented', sessions: [] });
+});
+
 // Session lifecycle - optionalAuth (guests allowed, but attach userId if logged in)
 router.post("/start", optionalAuth, validate(StartSessionSchema), startSession);
 router.post("/next", optionalAuth, validate(NextDecisionSchema), nextDecision);
 router.post("/submit", optionalAuth, validate(SubmitDecisionSchema), submitDecision);
 router.get("/:sessionId", optionalAuth, getSessionDetails);
-
-// User-specific queries - requireAuth (must be logged in to view own history)
-router.get("/history", requireAuth, (req, res) => {
-  res.json({ message: 'Session history endpoint - to be implemented' });
-});
 
 export default router;

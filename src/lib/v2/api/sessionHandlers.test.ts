@@ -20,6 +20,15 @@ async function resetState() {
   clearBundledPackCache();
 }
 
+/** Pick an action that the mock solver will accept for this spot. */
+function getValidAction(spot: { board: string[]; history: string[] }): string {
+  if (spot.board.length === 0) return "FOLD";
+  const facesBet = spot.history.some(
+    (a: string) => a.startsWith("BET_") || a.startsWith("RAISE_") || a === "CALL"
+  );
+  return facesBet ? "FOLD" : "CHECK";
+}
+
 function expectSuccess<T extends object>(result: {
   status: number;
   body: T | { error: unknown };
@@ -76,7 +85,7 @@ describe("v2 session handlers", () => {
         seed: startBody.session.seed,
         sessionId: startBody.session.sessionId,
         spot: startBody.spot,
-        actionId: "CHECK",
+        actionId: getValidAction(startBody.spot),
       });
       expect(submitBody.status).toBe(200);
       const nextBody = expectSuccess<NextResponse>(
@@ -104,7 +113,7 @@ describe("v2 session handlers", () => {
       seed: trainingStart.session.seed,
       sessionId: trainingStart.session.sessionId,
       spot: trainingStart.spot,
-      actionId: "CHECK",
+      actionId: getValidAction(trainingStart.spot),
     })
     );
     expect("result" in trainingSubmit).toBe(true);
@@ -123,7 +132,7 @@ describe("v2 session handlers", () => {
       seed: practiceStart.session.seed,
       sessionId: practiceStart.session.sessionId,
       spot: practiceStart.spot,
-      actionId: "CHECK",
+      actionId: getValidAction(practiceStart.spot),
     })
     );
     expect("recorded" in practiceSubmit && practiceSubmit.recorded).toBe(true);
@@ -148,7 +157,7 @@ describe("v2 session handlers", () => {
       seed: start.session.seed,
       sessionId: start.session.sessionId,
       spot: start.spot,
-      actionId: "CHECK",
+      actionId: getValidAction(start.spot),
     }));
     expect("recorded" in submit && submit.recorded).toBe(true);
 
@@ -186,7 +195,7 @@ describe("v2 session handlers", () => {
         seed: start.session.seed,
         sessionId: start.session.sessionId,
         spot: start.spot,
-        actionId: "CHECK",
+        actionId: getValidAction(start.spot),
       })
     );
     expect("result" in submit).toBe(true);
@@ -215,12 +224,13 @@ describe("v2 session handlers", () => {
       })
     );
 
+    const idempotentAction = getValidAction(start.spot);
     const first = expectSuccess<SubmitTrainingResponse | SubmitPracticeResponse>(
       await handleSubmit({
         seed: start.session.seed,
         sessionId: start.session.sessionId,
         spot: start.spot,
-        actionId: "CHECK",
+        actionId: idempotentAction,
       })
     );
     const second = expectSuccess<SubmitTrainingResponse | SubmitPracticeResponse>(
@@ -228,7 +238,7 @@ describe("v2 session handlers", () => {
         seed: start.session.seed,
         sessionId: start.session.sessionId,
         spot: start.spot,
-        actionId: "CHECK",
+        actionId: idempotentAction,
       })
     );
 
@@ -240,11 +250,12 @@ describe("v2 session handlers", () => {
     const record = await getSessionRecord(start.session.sessionId, start.session.seed);
     expect(record?.entries.length).toBe(1);
 
+    const conflictingAction = idempotentAction === "FOLD" ? "CALL" : "FOLD";
     const conflicting = await handleSubmit({
       seed: start.session.seed,
       sessionId: start.session.sessionId,
       spot: start.spot,
-      actionId: "FOLD",
+      actionId: conflictingAction,
     });
     expect(conflicting.status).toBe(409);
     if (conflicting.status === 409 && "error" in conflicting.body) {

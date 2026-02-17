@@ -43,7 +43,7 @@ describe("SpotPack loader", () => {
             board: [],
             history: [],
             heroToAct: "BTN",
-          } as Spot,
+          } as unknown as Spot,
           meta: {
             street: "PREFLOP",
             heroPosition: "BTN",
@@ -64,7 +64,7 @@ describe("SpotPack loader", () => {
             board: [],
             history: ["RAISE"],
             heroToAct: "BTN",
-          } as Spot,
+          } as unknown as Spot,
           meta: {
             street: "PREFLOP",
             heroPosition: "BTN",
@@ -101,7 +101,7 @@ describe("SpotPack loader", () => {
             board: ["Ah", "Kd", "Qc"],
             history: ["CHECK"],
             heroToAct: "BTN",
-          } as Spot,
+          } as unknown as Spot,
           meta: {
             street: "FLOP",
             heroPosition: "BTN",

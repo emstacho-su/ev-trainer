@@ -22,6 +22,17 @@ function jsonPost(url: string, payload: unknown): Request {
   });
 }
 
+/** Pick an action that the mock solver will accept for this spot. */
+function getValidAction(spot: Record<string, unknown>): string {
+  const board = spot.board as string[] | undefined;
+  if (!board || board.length === 0) return "FOLD"; // preflop
+  const history = (spot.history ?? []) as string[];
+  const facesBet = history.some(
+    (a: string) => a.startsWith("BET_") || a.startsWith("RAISE_") || a === "CALL"
+  );
+  return facesBet ? "FOLD" : "CHECK";
+}
+
 function invalidJsonPost(url: string): Request {
   return new Request(url, {
     method: "POST",
@@ -118,12 +129,13 @@ describe("session API route contracts", () => {
     );
     const startedBody = await readJson(started);
 
+    const validAction = getValidAction(startedBody.spot as Record<string, unknown>);
     const ok = await submitRoute(
       jsonPost("http://localhost/api/session/submit", {
         seed: (startedBody.session as { seed: string }).seed,
         sessionId: (startedBody.session as { sessionId: string }).sessionId,
         spot: startedBody.spot,
-        actionId: "CHECK",
+        actionId: validAction,
       })
     );
     expect(ok.status).toBe(200);
@@ -138,7 +150,7 @@ describe("session API route contracts", () => {
         seed: "submit-seed",
         sessionId: "does-not-exist",
         spot: startedBody.spot,
-        actionId: "CHECK",
+        actionId: validAction,
       })
     );
     expect(invalidId.status).toBe(404);
@@ -163,7 +175,7 @@ describe("session API route contracts", () => {
         seed,
         sessionId,
         spot: startedBody.spot,
-        actionId: "CHECK",
+        actionId: getValidAction(startedBody.spot as Record<string, unknown>),
       })
     );
 

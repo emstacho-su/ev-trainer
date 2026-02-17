@@ -28,6 +28,15 @@ function expectOk<T extends object>(result: ApiResult<T>): T {
   return result.body;
 }
 
+/** Pick an action that the mock solver will accept for this spot. */
+function getValidAction(spot: { board: string[]; history: string[] }): string {
+  if (spot.board.length === 0) return "FOLD";
+  const facesBet = spot.history.some(
+    (a: string) => a.startsWith("BET_") || a.startsWith("RAISE_") || a === "CALL"
+  );
+  return facesBet ? "FOLD" : "CHECK";
+}
+
 async function collectDecisionSequence(input: {
   mode: "TRAINING" | "PRACTICE";
   seed: string;
@@ -52,7 +61,7 @@ async function collectDecisionSequence(input: {
       seed: start.session.seed,
       sessionId: start.session.sessionId,
       spot: currentSpot,
-      actionId: "CHECK",
+      actionId: getValidAction(currentSpot),
     });
     expect(submit.status).toBe(200);
 

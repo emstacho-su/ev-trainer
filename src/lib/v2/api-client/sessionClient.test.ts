@@ -19,6 +19,15 @@ import {
 } from "./sessionClient";
 import { clearSessionRegistry } from "../../runtime/v2SessionRegistry";
 
+/** Pick an action that the mock solver will accept for this spot. */
+function getValidAction(spot: { board: string[]; history: string[] }): string {
+  if (spot.board.length === 0) return "FOLD";
+  const facesBet = spot.history.some(
+    (a: string) => a.startsWith("BET_") || a.startsWith("RAISE_") || a === "CALL"
+  );
+  return facesBet ? "FOLD" : "CHECK";
+}
+
 function toResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -84,7 +93,7 @@ describe("sessionClient UI smoke", () => {
       seed: started.session.seed,
       sessionId: started.session.sessionId,
       spot: started.spot,
-      actionId: "CHECK",
+      actionId: getValidAction(started.spot),
     });
 
     expect("result" in submitted).toBe(true);
@@ -119,7 +128,7 @@ describe("sessionClient UI smoke", () => {
       seed: started.session.seed,
       sessionId: started.session.sessionId,
       spot: started.spot,
-      actionId: "CHECK",
+      actionId: getValidAction(started.spot),
     });
 
     expect("recorded" in submitted && submitted.recorded).toBe(true);

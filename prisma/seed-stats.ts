@@ -9,7 +9,7 @@
  */
 
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
@@ -317,9 +317,9 @@ async function seed() {
     const entries: {
       index: number;
       spotId: string;
-      spot: object;
+      spot: Prisma.InputJsonValue;
       actionId: string;
-      result: object | null;
+      result: Prisma.NullableJsonNullValueInput | Prisma.InputJsonValue;
       isFlagged: boolean;
       createdAt: Date;
     }[] = [];
@@ -409,7 +409,7 @@ async function seed() {
         },
         decisionIndex: entryCount,
         decisionsPerSession: entryCount,
-        currentSpot: null,
+        currentSpot: Prisma.DbNull,
         isComplete: true,
         createdAt,
         updatedAt: new Date(createdAt.getTime() + entryCount * 30_000),

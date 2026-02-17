@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTrainerConfig } from '@/lib/v2/hooks/useTrainerConfig';
 import { writeSessionRecord } from '@/lib/v2/storage/sessionStorage';
 import { useAnimationPreferences } from '@/app/providers/AnimationProvider';
 import { useAudio } from '@/hooks/useAudio';
 import { cn } from '@/lib/utils';
+import { useSearchParams } from 'next/navigation';
 import ConfigCard from './ConfigCard';
 import ModeToggle from './ModeToggle';
 import GameSetup from './GameSetup';
@@ -23,11 +24,23 @@ import DrillSuggestions from './DrillSuggestions';
 export default function TrainerLobby() {
   const { config, updateConfig, isLoading } = useTrainerConfig();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { animationsEnabled, toggleAnimations } = useAnimationPreferences();
   const { audioEnabled, toggleAudio } = useAudio();
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Apply drill filters from URL params (from WeaknessBreakdown "Drill this" button)
+  useEffect(() => {
+    const heroPosition = searchParams.get('heroPosition');
+    const villainPosition = searchParams.get('villainPosition');
+    if (heroPosition && config) {
+      const updates: Record<string, unknown> = {};
+      if (heroPosition) updates.positions = [heroPosition];
+      updateConfig(updates);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const canStart = useMemo(() => {
     if (!config) return false;
@@ -69,7 +82,12 @@ export default function TrainerLobby() {
           });
         }
 
-        router.push(`/session/${sessionId}?seed=${seed}`);
+        // Route postflop mode to dedicated postflop training page
+        if (config.mode === 'FLOP') {
+          router.push(`/postflop-training?sessionId=${sessionId}&seed=${seed}`);
+        } else {
+          router.push(`/session/${sessionId}?seed=${seed}`);
+        }
       } else {
         const data = await res.json().catch(() => null);
         const msg =

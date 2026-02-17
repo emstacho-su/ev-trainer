@@ -13,8 +13,8 @@ function createPreflopSpot(heroToAct: string, historyLength: number): Spot {
     potBb: 1.5,
     board: [],
     history: Array(historyLength).fill("ACTION"),
-    heroToAct: heroToAct as any,
-  };
+    heroToAct: heroToAct,
+  } as unknown as Spot;
 }
 
 function createPostflopSpot(): Spot {
@@ -28,8 +28,8 @@ function createPostflopSpot(): Spot {
     potBb: 10,
     board: ["Ah", "Kd", "Qc"],
     history: ["ACTION"],
-    heroToAct: "BTN" as any,
-  };
+    heroToAct: "BTN",
+  } as unknown as Spot;
 }
 
 describe("classifyPreflopScenario", () => {
