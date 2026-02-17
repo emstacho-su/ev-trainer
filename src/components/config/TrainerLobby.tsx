@@ -12,7 +12,8 @@ import DrillSuggestions from './DrillSuggestions';
 
 /**
  * Lobby screen for trainer configuration.
- * Renders config cards (essentials + advanced filters) with a Start Training button.
+ * Parameters card contains core settings + collapsible filters.
+ * Drill suggestions displayed horizontally below parameters.
  * Config state is loaded from / saved to localStorage via useTrainerConfig.
  */
 export default function TrainerLobby() {
@@ -39,9 +40,10 @@ export default function TrainerLobby() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           seed: crypto.randomUUID(),
-          mode: config.mode,
+          mode: 'TRAINING',
           packId: 'default',
           filters: {
+            street: config.mode === 'PREFLOP' ? 'PREFLOP' : 'FLOP',
             positions: config.positions,
             potTypes: config.potTypes,
           },
@@ -89,69 +91,74 @@ export default function TrainerLobby() {
         </p>
       </div>
 
-      {/* Essentials + Drill Suggestions */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <ConfigCard title="Essentials" subtitle="Core training settings">
-          <div className="space-y-4">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
-                Training Mode
-              </label>
-              <ModeToggle
-                value={config.mode}
-                onChange={(mode) => updateConfig({ mode })}
-              />
-            </div>
-            <GameSetup
-              gameType={config.gameType}
-              tableSize={config.tableSize}
-              stackDepth={config.stackDepth}
-              villainAlwaysRaise={config.villainAlwaysRaise}
-              onChange={(updates) => updateConfig(updates)}
+      {/* Parameters (core settings + filters) */}
+      <ConfigCard title="Parameters" subtitle="Configure your training session">
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+              Training Mode
+            </label>
+            <ModeToggle
+              value={config.mode}
+              onChange={(mode) => updateConfig({ mode })}
             />
           </div>
-        </ConfigCard>
+          <GameSetup
+            gameType={config.gameType}
+            tableSize={config.tableSize}
+            stackDepth={config.stackDepth}
+            villainAlwaysRaise={config.villainAlwaysRaise}
+            onChange={(updates) => updateConfig(updates)}
+          />
 
-        <ConfigCard title="Drill Suggestions" subtitle="Your weakest spots">
-          <DrillSuggestions onSelectDrill={(drill) => updateConfig(drill)} />
-        </ConfigCard>
-      </div>
-
-      {/* Advanced Filters (collapsible) */}
-      <details
-        open={isAdvancedOpen}
-        onToggle={(e) =>
-          setIsAdvancedOpen((e.target as HTMLDetailsElement).open)
-        }
-      >
-        <summary className="cursor-pointer select-none text-sm font-semibold text-stone-700 dark:text-stone-300">
-          <span className="ml-1">Advanced Filters</span>
-          <span className="ml-2 text-xs text-stone-400">
-            {isAdvancedOpen ? '▼' : '▶'}
-          </span>
-        </summary>
-        <div className="mt-3 grid gap-4 lg:grid-cols-2">
-          <ConfigCard title="Position Filters">
-            <PositionFilters
-              selected={config.positions}
-              onChange={(positions) =>
-                updateConfig({ positions: positions as typeof config.positions })
-              }
-            />
-          </ConfigCard>
-          <ConfigCard title="Pot Type Filters">
-            <PotTypeFilters
-              selected={config.potTypes}
-              onChange={(potTypes) =>
-                updateConfig({ potTypes: potTypes as typeof config.potTypes })
-              }
-            />
-          </ConfigCard>
+          {/* Advanced Filters (collapsible, inside Parameters) */}
+          <details
+            open={isAdvancedOpen}
+            onToggle={(e) =>
+              setIsAdvancedOpen((e.target as HTMLDetailsElement).open)
+            }
+          >
+            <summary className="cursor-pointer select-none text-sm font-semibold text-stone-700 dark:text-stone-300">
+              <span className="ml-1">Advanced Filters</span>
+              <span className="ml-2 text-xs text-stone-400">
+                {isAdvancedOpen ? '▼' : '▶'}
+              </span>
+            </summary>
+            <div className="mt-3 grid gap-4 lg:grid-cols-2">
+              <div>
+                <p className="mb-2 text-sm font-medium text-stone-700 dark:text-stone-300">
+                  Position Filters
+                </p>
+                <PositionFilters
+                  selected={config.positions}
+                  onChange={(positions) =>
+                    updateConfig({ positions: positions as typeof config.positions })
+                  }
+                />
+              </div>
+              <div>
+                <p className="mb-2 text-sm font-medium text-stone-700 dark:text-stone-300">
+                  Pot Type Filters
+                </p>
+                <PotTypeFilters
+                  selected={config.potTypes}
+                  onChange={(potTypes) =>
+                    updateConfig({ potTypes: potTypes as typeof config.potTypes })
+                  }
+                />
+              </div>
+            </div>
+          </details>
         </div>
-      </details>
+      </ConfigCard>
+
+      {/* Drill Suggestions (horizontal, below Parameters) */}
+      <ConfigCard title="Drill Suggestions" subtitle="Your weakest spots">
+        <DrillSuggestions onSelectDrill={(drill) => updateConfig(drill)} />
+      </ConfigCard>
 
       {/* Start Training */}
-      <div className="space-y-2">
+      <div className="space-y-2 text-center">
         {!canStart && (
           <p className="text-sm text-red-500">
             Select at least one position and pot type
