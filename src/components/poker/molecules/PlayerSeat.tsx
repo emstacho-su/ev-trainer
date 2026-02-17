@@ -61,30 +61,31 @@ export function PlayerSeat({
         </div>
       )}
 
-      {/* Villain card backs above info box when in hand */}
-      {!isHero && inHand && (
-        <div className="flex gap-0.5">
-          <CardBack size="sm" />
-          <CardBack size="sm" />
-        </div>
-      )}
-
-      {/* Info box: avatar (villain only) + position/stack */}
+      {/* Villain: avatar left, cards + text stacked on the right */}
       {!isHero ? (
         <div className="flex items-center gap-1.5">
           <PlayerAvatar />
-          <div
-            className={cn(
-              'flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px]',
-              isActive ? 'bg-gray-700' : 'bg-gray-800',
+          <div className="flex flex-col items-center gap-1">
+            {/* Card backs centered over the text box */}
+            {inHand && (
+              <div className="flex gap-0.5">
+                <CardBack size="sm" />
+                <CardBack size="sm" />
+              </div>
             )}
-          >
-            <span className="text-xs font-bold text-white uppercase tracking-wide">
-              {position}
-            </span>
-            <span className="text-sm font-semibold text-gray-300">
-              {stackBB.toFixed(1)} BB
-            </span>
+            <div
+              className={cn(
+                'flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px]',
+                isActive ? 'bg-gray-700' : 'bg-gray-800',
+              )}
+            >
+              <span className="text-xs font-bold text-white uppercase tracking-wide">
+                {position}
+              </span>
+              <span className="text-sm font-semibold text-gray-300">
+                {stackBB.toFixed(1)} BB
+              </span>
+            </div>
           </div>
         </div>
       ) : (
