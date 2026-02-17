@@ -298,35 +298,123 @@ export default function PreflopTrainingSession() {
 
   // Keyboard shortcuts - uses refs so handler never goes stale
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
       // Ignore if typing in an input
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
       // Next hand shortcuts (Space/Enter) - only in revealed state
       if ((e.key === ' ' || e.key === 'Enter') && uiStateRef.current === 'revealed') {
         e.preventDefault();
-        handleNext();
+
+        // Inline handleNext logic
+        if (!sessionIdRef.current || uiStateRef.current !== 'revealed') return;
+
+        setUiState('idle');
+        setGrade(null);
+        setSelectedActionId(null);
+        setIsLoading(true);
+
+        try {
+          const response = await fetch('/api/session/next', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              seed: seedRef.current,
+              sessionId: sessionIdRef.current,
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            if (errorData.error?.code === 'SESSION_COMPLETE') {
+              setSessionComplete(true);
+              return;
+            }
+            throw new Error('Failed to get next hand');
+          }
+
+          const data = await response.json();
+          setCurrentSpot(data.spot);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Unknown error');
+        } finally {
+          setIsLoading(false);
+        }
+
         return;
       }
 
       // Action shortcuts - only in idle state with a spot loaded
       if (uiStateRef.current !== 'idle' || !currentSpotRef.current) return;
 
+      let actionId: ActionId | null = null;
+
       if (e.key === '1' || e.key.toLowerCase() === 'f') {
         e.preventDefault();
-        handleSubmitAction('FOLD');
+        actionId = 'FOLD';
       } else if (e.key === '2' || e.key.toLowerCase() === 'c') {
         e.preventDefault();
-        handleSubmitAction('CALL');
+        actionId = 'CALL';
       } else if (e.key === '3' || e.key.toLowerCase() === 'r') {
         e.preventDefault();
-        handleSubmitAction('RAISE_2.5BB');
+        actionId = 'RAISE_2.5BB';
+      }
+
+      if (!actionId) return;
+
+      // Inline handleSubmitAction logic
+      if (!currentSpotRef.current || !sessionIdRef.current || uiStateRef.current !== 'idle') return;
+
+      setUiState('submitted');
+      setSelectedActionId(actionId);
+      setIsLoading(true);
+
+      try {
+        const response = await fetch('/api/session/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            seed: seedRef.current,
+            sessionId: sessionIdRef.current,
+            spot: currentSpotRef.current,
+            actionId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit action');
+        }
+
+        const data = await response.json();
+
+        // Wait 500ms for reveal delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        setGrade(data.result);
+        setUiState('revealed');
+
+        // Update accuracy tracking
+        if (data.result.isBestAction) {
+          setCorrectCount(prev => prev + 1);
+        }
+        setHandCount(prev => prev + 1);
+
+        // For guests: track hand count and check limit
+        incrementGuestHandCount();
+        if (isGuestLimitExceeded()) {
+          setIsGuestLimitReached(true);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+        setUiState('idle');
+      } finally {
+        setIsLoading(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleNext, handleSubmitAction]);
+  }, []);
 
   const accuracy = handCount > 0 ? (correctCount / handCount) * 100 : 0;
 
