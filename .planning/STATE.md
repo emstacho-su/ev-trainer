@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 11 of 12 (Supabase Database Integration)
-Plan: 11-06 complete, 11-08 pending
+Plan: 11-08 complete, 11-09 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 11-06-PLAN.md (Stats data layer rewrite)
+Last activity: 2026-02-17 -- Completed 11-08-PLAN.md (Codebase cleanup)
 
-Progress: [████████████████████░] ~99% (68 plans complete)
+Progress: [████████████████████░] ~99% (69 plans complete)
 
 ## Performance Metrics
 
@@ -280,6 +280,9 @@ Recent decisions affecting current work:
 - 11-06: Check-then-insert pattern for daily_stats/spot_stats upserts
 - 11-06: Cookie-based Supabase auth replaces Bearer token auth in stats routes
 - 11-06: Stats page components unchanged -- response shapes preserved exactly
+- 11-08: Inline Zod validation in postflop route rather than keeping middleware directory for one function
+- 11-08: Delete aggregation.ts and drillSuggestions.ts (only consumed by deleted controllers, replaced by Supabase statsService)
+- 11-08: Keep @types/express and @types/cors since Express solver route still uses them
 
 ### Pending Todos
 
@@ -302,6 +305,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 11-06-PLAN.md (Stats data layer rewrite)
+Stopped at: Completed 11-08-PLAN.md (Codebase cleanup)
 Resume file: None
-Next: Execute 11-08-PLAN.md
+Next: Execute 11-09-PLAN.md
