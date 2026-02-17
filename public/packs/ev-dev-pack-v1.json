@@ -12,9 +12,27 @@
         "schemaVersion": "1",
         "spotId": "spot-001",
         "gameType": "NLHE",
-        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
-        "positions": ["SB", "BB"],
-        "stacksBb": { "SB": 20, "BB": 20 },
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
         "potBb": 1.5,
         "board": [],
         "history": [],
@@ -33,12 +51,36 @@
         "schemaVersion": "1",
         "spotId": "spot-002",
         "gameType": "NLHE",
-        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
-        "positions": ["BTN", "BB"],
-        "stacksBb": { "BTN": 40, "BB": 40 },
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
         "potBb": 6,
-        "board": ["Ah", "Kd", "7c"],
-        "history": ["CHECK"],
+        "board": [
+          "Ah",
+          "Kd",
+          "7c"
+        ],
+        "history": [
+          "CHECK"
+        ],
         "heroToAct": "BTN"
       },
       "meta": {
@@ -54,12 +96,38 @@
         "schemaVersion": "1",
         "spotId": "spot-003",
         "gameType": "NLHE",
-        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
-        "positions": ["BTN", "SB"],
-        "stacksBb": { "BTN": 60, "SB": 60 },
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
         "potBb": 9,
-        "board": ["Qs", "Jh", "4d", "2c"],
-        "history": ["CALL", "CHECK"],
+        "board": [
+          "Qs",
+          "Jh",
+          "4d",
+          "2c"
+        ],
+        "history": [
+          "CALL",
+          "CHECK"
+        ],
         "heroToAct": "BTN"
       },
       "meta": {
@@ -75,12 +143,36 @@
         "schemaVersion": "1",
         "spotId": "spot-004",
         "gameType": "NLHE",
-        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
-        "positions": ["BTN", "BB"],
-        "stacksBb": { "BTN": 100, "BB": 100 },
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
         "potBb": 6,
-        "board": ["9h", "8d", "2s"],
-        "history": ["CHECK"],
+        "board": [
+          "9h",
+          "8d",
+          "2s"
+        ],
+        "history": [
+          "CHECK"
+        ],
         "heroToAct": "BB"
       },
       "meta": {
@@ -96,12 +188,40 @@
         "schemaVersion": "1",
         "spotId": "spot-005",
         "gameType": "NLHE",
-        "blinds": { "sb": 0.5, "bb": 1, "ante": 0 },
-        "positions": ["CO", "BTN"],
-        "stacksBb": { "CO": 200, "BTN": 200 },
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 200,
+          "HJ": 200,
+          "CO": 200,
+          "BTN": 200,
+          "SB": 200,
+          "BB": 200
+        },
         "potBb": 12,
-        "board": ["Ad", "Td", "6c", "3s", "2h"],
-        "history": ["CALL", "CHECK", "CHECK"],
+        "board": [
+          "Ad",
+          "Td",
+          "6c",
+          "3s",
+          "2h"
+        ],
+        "history": [
+          "CALL",
+          "CHECK",
+          "CHECK"
+        ],
         "heroToAct": "CO"
       },
       "meta": {

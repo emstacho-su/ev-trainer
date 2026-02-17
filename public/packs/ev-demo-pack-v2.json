@@ -1,0 +1,8891 @@
+{
+  "schemaVersion": "1",
+  "packId": "ev-demo-pack-v2",
+  "name": "EV Demo Pack v2",
+  "description": "Comprehensive demo pack with 100 preflop and 100 postflop spots.",
+  "author": "EV Trainer",
+  "version": "2.0.0",
+  "createdAt": "2026-02-17T15:21:22.486Z",
+  "spots": [
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-001",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-002",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-003",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-004",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-005",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-006",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-007",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-008",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-009",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-010",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-011",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-012",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-013",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-014",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-015",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-016",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-017",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-018",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-019",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-020",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-021",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-022",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-023",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-024",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-025",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 1.5,
+        "board": [],
+        "history": [],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-026",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-027",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-028",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-029",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-030",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-031",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-032",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-033",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-034",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-035",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-036",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "HJ",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-037",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "HJ",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-038",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "HJ",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-039",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "HJ",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-040",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "HJ",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-041",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-042",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-043",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-044",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-045",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "UTG",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-046",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-047",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-048",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-049",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-050",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-051",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-052",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-053",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-054",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-055",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "UTG"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "UTG",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-056",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-057",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-058",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-059",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-060",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "HJ"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "HJ",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-061",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-062",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-063",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-064",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-065",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-066",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-067",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-068",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-069",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-070",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-071",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "SB",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-072",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "SB",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-073",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "SB",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-074",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "SB",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-075",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 10,
+        "board": [],
+        "history": [
+          "RAISE",
+          "RAISE"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "CO",
+        "villainPosition": "SB",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-076",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-077",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-078",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-079",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-080",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-081",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-082",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-083",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-084",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-085",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-086",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "SB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-087",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "SB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-088",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "SB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-089",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "SB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-090",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "BB",
+        "villainPosition": "SB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-091",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-092",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-093",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-094",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-095",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-096",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-097",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-098",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-099",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-100",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 3.5,
+        "board": [],
+        "history": [
+          "RAISE"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "PREFLOP",
+        "heroPosition": "SB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-101",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 6,
+        "board": [
+          "Ah",
+          "Kd",
+          "7c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-102",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 6,
+        "board": [
+          "Ks",
+          "Qh",
+          "2d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-103",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 6,
+        "board": [
+          "Qc",
+          "Jd",
+          "Ts"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-104",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 6,
+        "board": [
+          "9h",
+          "8d",
+          "7c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-105",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 12,
+        "board": [
+          "8s",
+          "7h",
+          "6d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-106",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 12,
+        "board": [
+          "7c",
+          "6d",
+          "5h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-107",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 6,
+        "board": [
+          "Ah",
+          "8d",
+          "3c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-108",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 6,
+        "board": [
+          "Kd",
+          "7h",
+          "2s"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-109",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 6,
+        "board": [
+          "Qc",
+          "5d",
+          "2h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-110",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 6,
+        "board": [
+          "Jh",
+          "Th",
+          "4h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-111",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 6,
+        "board": [
+          "9d",
+          "6d",
+          "2d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-112",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 6,
+        "board": [
+          "8c",
+          "5c",
+          "3c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-113",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 12,
+        "board": [
+          "Kh",
+          "Kd",
+          "7c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-114",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 12,
+        "board": [
+          "9s",
+          "9h",
+          "3d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-115",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 6,
+        "board": [
+          "5c",
+          "5d",
+          "2h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-116",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 6,
+        "board": [
+          "Ah",
+          "Td",
+          "6c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-117",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 6,
+        "board": [
+          "Kc",
+          "9h",
+          "4d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-118",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 6,
+        "board": [
+          "Qd",
+          "8s",
+          "3h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-119",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 6,
+        "board": [
+          "Jc",
+          "7h",
+          "2d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-120",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 6,
+        "board": [
+          "Ts",
+          "6d",
+          "3c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-121",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 12,
+        "board": [
+          "9h",
+          "5c",
+          "2s"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-122",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 12,
+        "board": [
+          "As",
+          "Qs",
+          "5s"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-123",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 6,
+        "board": [
+          "Kh",
+          "Jh",
+          "8h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-124",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 6,
+        "board": [
+          "Qd",
+          "Td",
+          "7d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-125",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 6,
+        "board": [
+          "Ac",
+          "Kh",
+          "Qd"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-126",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 6,
+        "board": [
+          "Kd",
+          "Qc",
+          "Js"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-127",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 6,
+        "board": [
+          "Qh",
+          "Jd",
+          "Tc"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-128",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 6,
+        "board": [
+          "Ad",
+          "5h",
+          "4c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-129",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 12,
+        "board": [
+          "Kc",
+          "4d",
+          "3h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-130",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 12,
+        "board": [
+          "7s",
+          "6h",
+          "5d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-131",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 6,
+        "board": [
+          "Ah",
+          "Kd",
+          "7c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-132",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 6,
+        "board": [
+          "Ks",
+          "Qh",
+          "2d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-133",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 6,
+        "board": [
+          "Qc",
+          "Jd",
+          "Ts"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-134",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 6,
+        "board": [
+          "9h",
+          "8d",
+          "7c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-135",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 6,
+        "board": [
+          "8s",
+          "7h",
+          "6d"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-136",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 6,
+        "board": [
+          "7c",
+          "6d",
+          "5h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-137",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 12,
+        "board": [
+          "Ah",
+          "8d",
+          "3c"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-138",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 12,
+        "board": [
+          "Kd",
+          "7h",
+          "2s"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-139",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 6,
+        "board": [
+          "Qc",
+          "5d",
+          "2h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-140",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 6,
+        "board": [
+          "Jh",
+          "Th",
+          "4h"
+        ],
+        "history": [
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "FLOP",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-141",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 9,
+        "board": [
+          "Ah",
+          "Kd",
+          "7c",
+          "2c"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-142",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 9,
+        "board": [
+          "Ks",
+          "Qh",
+          "2d",
+          "2h"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-143",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 18,
+        "board": [
+          "Qc",
+          "Jd",
+          "Ts",
+          "2h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-144",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 18,
+        "board": [
+          "9h",
+          "8d",
+          "7c",
+          "2s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-145",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 9,
+        "board": [
+          "8s",
+          "7h",
+          "6d",
+          "3c"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-146",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 9,
+        "board": [
+          "7c",
+          "6d",
+          "5h",
+          "3d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-147",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 9,
+        "board": [
+          "Ah",
+          "8d",
+          "3c",
+          "3s"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-148",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 9,
+        "board": [
+          "Kd",
+          "7h",
+          "2s",
+          "4c"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-149",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 18,
+        "board": [
+          "Qc",
+          "5d",
+          "2h",
+          "4d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-150",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 18,
+        "board": [
+          "Jh",
+          "Th",
+          "4h",
+          "4d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-151",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 9,
+        "board": [
+          "9d",
+          "6d",
+          "2d",
+          "4s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-152",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 9,
+        "board": [
+          "8c",
+          "5c",
+          "3c",
+          "5d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-153",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 9,
+        "board": [
+          "Kh",
+          "Kd",
+          "7c",
+          "5c"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-154",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 9,
+        "board": [
+          "9s",
+          "9h",
+          "3d",
+          "5h"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-155",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 18,
+        "board": [
+          "5c",
+          "5d",
+          "2h",
+          "6d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-156",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 18,
+        "board": [
+          "Ah",
+          "Td",
+          "6c",
+          "5s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-157",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 9,
+        "board": [
+          "Kc",
+          "9h",
+          "4d",
+          "6d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-158",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 9,
+        "board": [
+          "Qd",
+          "8s",
+          "3h",
+          "6h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-159",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 9,
+        "board": [
+          "Jc",
+          "7h",
+          "2d",
+          "6s"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-160",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 9,
+        "board": [
+          "Ts",
+          "6d",
+          "3c",
+          "7d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-161",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 18,
+        "board": [
+          "9h",
+          "5c",
+          "2s",
+          "7h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-162",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 18,
+        "board": [
+          "As",
+          "Qs",
+          "5s",
+          "7h"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-163",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 9,
+        "board": [
+          "Kh",
+          "Jh",
+          "8h",
+          "7h"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-164",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 9,
+        "board": [
+          "Qd",
+          "Td",
+          "7d",
+          "8c"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-165",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 9,
+        "board": [
+          "Ac",
+          "Kh",
+          "Qd",
+          "8c"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-166",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 9,
+        "board": [
+          "Kd",
+          "Qc",
+          "Js",
+          "8d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-167",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 18,
+        "board": [
+          "Qh",
+          "Jd",
+          "Tc",
+          "8h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-168",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 18,
+        "board": [
+          "Ad",
+          "5h",
+          "4c",
+          "9d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-169",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 9,
+        "board": [
+          "Kc",
+          "4d",
+          "3h",
+          "9h"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-170",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 9,
+        "board": [
+          "7s",
+          "6h",
+          "5d",
+          "Tc"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "TURN",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-171",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 12,
+        "board": [
+          "Ah",
+          "Kd",
+          "7c",
+          "2c",
+          "4s"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-172",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 12,
+        "board": [
+          "Ks",
+          "Qh",
+          "2d",
+          "2h",
+          "5d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-173",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 24,
+        "board": [
+          "Qc",
+          "Jd",
+          "Ts",
+          "2h",
+          "5d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-174",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 24,
+        "board": [
+          "9h",
+          "8d",
+          "7c",
+          "2s",
+          "5h"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-175",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 12,
+        "board": [
+          "8s",
+          "7h",
+          "6d",
+          "3c",
+          "5s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-176",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 12,
+        "board": [
+          "7c",
+          "6d",
+          "5h",
+          "3d",
+          "6h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-177",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 12,
+        "board": [
+          "Ah",
+          "8d",
+          "3c",
+          "3s",
+          "6h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-178",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 12,
+        "board": [
+          "Kd",
+          "7h",
+          "2s",
+          "4c",
+          "6s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-179",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 24,
+        "board": [
+          "Qc",
+          "5d",
+          "2h",
+          "4d",
+          "7d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-180",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 24,
+        "board": [
+          "Jh",
+          "Th",
+          "4h",
+          "4d",
+          "7d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-181",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 12,
+        "board": [
+          "9d",
+          "6d",
+          "2d",
+          "4s",
+          "7s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-182",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 12,
+        "board": [
+          "8c",
+          "5c",
+          "3c",
+          "5d",
+          "8d"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-183",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 12,
+        "board": [
+          "Kh",
+          "Kd",
+          "7c",
+          "5c",
+          "8c"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-184",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 12,
+        "board": [
+          "9s",
+          "9h",
+          "3d",
+          "5h",
+          "8d"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-185",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 24,
+        "board": [
+          "5c",
+          "5d",
+          "2h",
+          "6d",
+          "9c"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-186",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 24,
+        "board": [
+          "Ah",
+          "Td",
+          "6c",
+          "5s",
+          "8s"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-187",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 12,
+        "board": [
+          "Kc",
+          "9h",
+          "4d",
+          "6d",
+          "9c"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 40,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-188",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 12,
+        "board": [
+          "Qd",
+          "8s",
+          "3h",
+          "6h",
+          "9h"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-189",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 12,
+        "board": [
+          "Jc",
+          "7h",
+          "2d",
+          "6s",
+          "9s"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-190",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 12,
+        "board": [
+          "Ts",
+          "6d",
+          "3c",
+          "7d",
+          "Tc"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-191",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 24,
+        "board": [
+          "9h",
+          "5c",
+          "2s",
+          "7h",
+          "Th"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 20,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-192",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 24,
+        "board": [
+          "As",
+          "Qs",
+          "5s",
+          "7h",
+          "Td"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-193",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 12,
+        "board": [
+          "Kh",
+          "Jh",
+          "8h",
+          "7h",
+          "Th"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 60,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-194",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 12,
+        "board": [
+          "Qd",
+          "Td",
+          "7d",
+          "8c",
+          "Jc"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-195",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 12,
+        "board": [
+          "Ac",
+          "Kh",
+          "Qd",
+          "8c",
+          "Ts"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "BB",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-196",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 20,
+          "HJ": 20,
+          "CO": 20,
+          "BTN": 20,
+          "SB": 20,
+          "BB": 20
+        },
+        "potBb": 12,
+        "board": [
+          "Kd",
+          "Qc",
+          "Js",
+          "8d",
+          "Jc"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 20,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-197",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 40,
+          "HJ": 40,
+          "CO": 40,
+          "BTN": 40,
+          "SB": 40,
+          "BB": 40
+        },
+        "potBb": 24,
+        "board": [
+          "Qh",
+          "Jd",
+          "Tc",
+          "8h",
+          "Js"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK"
+        ],
+        "heroToAct": "CO"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "CO",
+        "villainPosition": "BB",
+        "effectiveStackBb": 40,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-198",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 60,
+          "HJ": 60,
+          "CO": 60,
+          "BTN": 60,
+          "SB": 60,
+          "BB": 60
+        },
+        "potBb": 24,
+        "board": [
+          "Ad",
+          "5h",
+          "4c",
+          "9d",
+          "Qc"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BB",
+        "villainPosition": "CO",
+        "effectiveStackBb": 60,
+        "potType": "3BP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-199",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 100,
+          "HJ": 100,
+          "CO": 100,
+          "BTN": 100,
+          "SB": 100,
+          "BB": 100
+        },
+        "potBb": 12,
+        "board": [
+          "Kc",
+          "4d",
+          "3h",
+          "9h",
+          "Qd"
+        ],
+        "history": [
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "BTN"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "BTN",
+        "villainPosition": "SB",
+        "effectiveStackBb": 100,
+        "potType": "SRP"
+      }
+    },
+    {
+      "spot": {
+        "schemaVersion": "1",
+        "spotId": "spot-200",
+        "gameType": "NLHE",
+        "blinds": {
+          "sb": 0.5,
+          "bb": 1,
+          "ante": 0
+        },
+        "positions": [
+          "UTG",
+          "HJ",
+          "CO",
+          "BTN",
+          "SB",
+          "BB"
+        ],
+        "stacksBb": {
+          "UTG": 150,
+          "HJ": 150,
+          "CO": 150,
+          "BTN": 150,
+          "SB": 150,
+          "BB": 150
+        },
+        "potBb": 12,
+        "board": [
+          "7s",
+          "6h",
+          "5d",
+          "Tc",
+          "Qs"
+        ],
+        "history": [
+          "CHECK",
+          "BET",
+          "CALL",
+          "CHECK",
+          "CHECK",
+          "CHECK"
+        ],
+        "heroToAct": "SB"
+      },
+      "meta": {
+        "street": "RIVER",
+        "heroPosition": "SB",
+        "villainPosition": "BTN",
+        "effectiveStackBb": 150,
+        "potType": "SRP"
+      }
+    }
+  ]
+}
