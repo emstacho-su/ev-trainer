@@ -131,11 +131,15 @@ Plans:
   3. User can filter by position and pot type (SRP, 3BP, 4BP)
   4. User can drill specific position matchups (e.g., BB vs SB, CO vs BTN)
   5. User can quick-drill weak spots identified from statistics
-**Plans**: TBD
+**Plans**: 6 plans
 
 Plans:
-- [ ] 06-01: TBD
-- [ ] 06-02: TBD
+- [ ] 06-01-PLAN.md — Config types, validation, localStorage persistence, database sync
+- [ ] 06-02-PLAN.md — Filter components (PositionFilters, PotTypeFilters, ModeToggle, GameSetup, ConfigCard)
+- [ ] 06-03-PLAN.md — Lobby screen with config cards and Start Training
+- [ ] 06-04-PLAN.md — Session sidebar drawer with mid-session filters and toast notifications
+- [ ] 06-05-PLAN.md — Drill suggestions and session summary screen
+- [ ] 06-06-PLAN.md — Visual verification checkpoint
 
 ### Phase 7: Range Visualization
 **Goal**: Users can view detailed range analysis with hero/villain comparison during training
