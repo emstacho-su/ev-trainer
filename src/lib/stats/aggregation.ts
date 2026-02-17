@@ -12,6 +12,7 @@ import type {
   StatsFilters,
   SessionDetail,
   SessionEntryDetail,
+  FlaggedEntry,
 } from "./types";
 
 const LOW_CONFIDENCE_THRESHOLD = 20; // Minimum hands for confident stats
@@ -230,6 +231,7 @@ export async function getSessionDetail(
           spotId: true,
           actionId: true,
           result: true,
+          isFlagged: true,
         },
       },
     },
@@ -242,6 +244,7 @@ export async function getSessionDetail(
     index: e.index,
     spotId: e.spotId,
     actionId: e.actionId,
+    isFlagged: e.isFlagged,
     result: e.result as SessionEntryDetail["result"],
   }));
 
@@ -286,4 +289,73 @@ export async function deleteUserSession(
   });
 
   return true;
+}
+
+/**
+ * Toggle isFlagged on a session entry (ownership verified via session).
+ * Returns the updated entry or null if not found / not owned.
+ */
+export async function toggleEntryFlag(
+  sessionId: string,
+  entryIndex: number,
+  userId: string
+): Promise<{ isFlagged: boolean } | null> {
+  // Verify session ownership
+  const session = await prisma.session.findFirst({
+    where: { id: sessionId, userId },
+    select: { id: true },
+  });
+
+  if (!session) return null;
+
+  // Find the entry by sessionId + index
+  const entry = await prisma.sessionEntry.findUnique({
+    where: { sessionId_index: { sessionId, index: entryIndex } },
+    select: { id: true, isFlagged: true },
+  });
+
+  if (!entry) return null;
+
+  // Toggle flag
+  const updated = await prisma.sessionEntry.update({
+    where: { id: entry.id },
+    data: { isFlagged: !entry.isFlagged },
+    select: { isFlagged: true },
+  });
+
+  return { isFlagged: updated.isFlagged };
+}
+
+/**
+ * Get all flagged entries for a user with session context.
+ */
+export async function getFlaggedEntries(
+  userId: string
+): Promise<FlaggedEntry[]> {
+  const entries = await prisma.sessionEntry.findMany({
+    where: {
+      isFlagged: true,
+      session: { userId },
+    },
+    include: {
+      session: {
+        select: { createdAt: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return entries.map((e) => {
+    const result = e.result as Record<string, unknown> | null;
+    return {
+      id: e.id,
+      sessionId: e.sessionId,
+      index: e.index,
+      spotId: e.spotId,
+      actionId: e.actionId,
+      sessionDate: e.session.createdAt,
+      grade: (result?.grade as string) ?? "UNKNOWN",
+      evDiff: Number(result?.evDiff ?? 0),
+    };
+  });
 }

@@ -11,6 +11,8 @@ import {
   getSessionList,
   getSessionDetail,
   deleteUserSession,
+  toggleEntryFlag,
+  getFlaggedEntries,
 } from "../../lib/stats/aggregation";
 import type {
   PerformanceStatsResponse,
@@ -245,6 +247,67 @@ export async function deleteSessionEndpoint(
     console.error("Error deleting session:", error);
     res.status(500).json({
       error: { code: "INTERNAL_ERROR", message: "Failed to delete session" },
+    });
+  }
+}
+
+/**
+ * PATCH /api/stats/sessions/:sessionId/entries/:entryIndex/flag
+ * Toggles the isFlagged state for a session entry.
+ */
+export async function toggleHandFlag(
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+    const sessionIdParam = req.params.sessionId;
+    const entryIndexParam = req.params.entryIndex;
+
+    const sessionId = typeof sessionIdParam === "string" ? sessionIdParam : "";
+    const entryIndex = parseInt(String(entryIndexParam), 10);
+
+    if (!sessionId || isNaN(entryIndex)) {
+      res.status(400).json({
+        error: { code: "INVALID_ARGUMENT", message: "Session ID and entry index are required" },
+      });
+      return;
+    }
+
+    const result = await toggleEntryFlag(sessionId, entryIndex, userId);
+
+    if (!result) {
+      res.status(404).json({
+        error: { code: "NOT_FOUND", message: "Session entry not found" },
+      });
+      return;
+    }
+
+    res.status(200).json({ isFlagged: result.isFlagged });
+  } catch (error) {
+    console.error("Error toggling hand flag:", error);
+    res.status(500).json({
+      error: { code: "INTERNAL_ERROR", message: "Failed to toggle hand flag" },
+    });
+  }
+}
+
+/**
+ * GET /api/stats/flagged
+ * Returns all flagged session entries for the authenticated user.
+ */
+export async function getFlaggedHands(
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const userId = req.user!.userId;
+    const entries = await getFlaggedEntries(userId);
+    res.status(200).json({ entries });
+  } catch (error) {
+    console.error("Error fetching flagged hands:", error);
+    res.status(500).json({
+      error: { code: "INTERNAL_ERROR", message: "Failed to fetch flagged hands" },
     });
   }
 }

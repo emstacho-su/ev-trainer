@@ -83,6 +83,7 @@ export interface SessionEntryDetail {
   index: number;
   spotId: string;
   actionId: string;
+  isFlagged?: boolean;
   result: {
     grade: string;
     evDiff: number;
@@ -92,4 +93,16 @@ export interface SessionEntryDetail {
       frequency: number;
     }>;
   } | null;
+}
+
+// Flagged entry with session context for the flagged hands list
+export interface FlaggedEntry {
+  id: string;
+  sessionId: string;
+  index: number;
+  spotId: string;
+  actionId: string;
+  sessionDate: Date;
+  grade: string;
+  evDiff: number;
 }

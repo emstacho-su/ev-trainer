@@ -12,6 +12,8 @@ import {
   getSessionHistory,
   getSessionDetailEndpoint,
   deleteSessionEndpoint,
+  toggleHandFlag,
+  getFlaggedHands,
 } from "../controllers/stats.controller";
 
 const router = Router();
@@ -22,5 +24,7 @@ router.get("/positions", requireAuth, getPositionStats);
 router.get("/sessions", requireAuth, getSessionHistory);
 router.get("/sessions/:sessionId", requireAuth, getSessionDetailEndpoint);
 router.delete("/sessions/:sessionId", requireAuth, deleteSessionEndpoint);
+router.patch("/sessions/:sessionId/entries/:entryIndex/flag", requireAuth, toggleHandFlag);
+router.get("/flagged", requireAuth, getFlaggedHands);
 
 export default router;
