@@ -15,14 +15,16 @@ import { MetricCardsSkeleton, ChartSkeleton, HeatmapSkeleton, TableSkeleton } fr
 import PositionHeatmap from "./components/PositionHeatmap";
 import WeaknessBreakdown from "./components/WeaknessBreakdown";
 import SessionHistory from "./components/SessionHistory";
+import FlaggedHandsList from "./components/FlaggedHandsList";
 import PerformanceChart from "./components/PerformanceChart";
 
-type Tab = "performance" | "positions" | "sessions";
+type Tab = "performance" | "positions" | "sessions" | "flagged";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "performance", label: "Performance" },
   { id: "positions", label: "Positions" },
   { id: "sessions", label: "Sessions" },
+  { id: "flagged", label: "Flagged" },
 ];
 
 export default function StatsPage() {
@@ -96,6 +98,13 @@ export default function StatsPage() {
         {activeTab === "sessions" && (
           <Suspense fallback={<TableSkeleton rows={10} />}>
             <SessionHistory />
+          </Suspense>
+        )}
+
+        {/* Flagged tab */}
+        {activeTab === "flagged" && (
+          <Suspense fallback={<TableSkeleton rows={5} />}>
+            <FlaggedHandsList />
           </Suspense>
         )}
       </div>
