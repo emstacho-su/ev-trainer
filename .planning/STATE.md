@@ -12,16 +12,16 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 Phase: 6 of 10 (Trainer Configuration)
 Plan: 2 of 6 in Phase 6
 Status: In progress
-Last activity: 2026-02-17 -- Completed 06-02 filter components
+Last activity: 2026-02-17 -- Completed 06-01 config foundation
 
-Progress: [████████████░░░░] ~54% (34 plans complete)
+Progress: [████████████░░░░] ~56% (35 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 34
-- Average duration: 6.5 min
-- Total execution time: 220 min
+- Total plans completed: 35
+- Average duration: 6.4 min
+- Total execution time: 225 min
 
 **By Phase:**
 
@@ -34,8 +34,8 @@ Progress: [████████████░░░░] ~54% (34 plans comp
 | 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-02 (0 min - skipped), 05-03 (4 min), 05-05 (1 min), 05-06 (1 min), 05-07 (1 min)
-- Trend: Phase 5 averaging 2.0 min (small bug fixes and gap closure plans)
+- Last 5 plans: 05-05 (1 min), 05-06 (1 min), 05-07 (1 min), 06-02 (2 min), 06-01 (5 min)
+- Trend: Phase 6 plans slightly longer (config + API + migration work)
 
 *Updated after each plan completion*
 
@@ -157,6 +157,10 @@ Recent decisions affecting current work:
 - 05-07: Color coding for metrics: white for Hand #, blue-400 for Accuracy %, green-400 for Correct count
 - 05-07: Info bar styling: bg-gray-800 with border-b border-gray-700 for visual separation
 - 05-07: Metric display pattern: uppercase text-xs labels above text-lg bold values
+- 06-01: ConfigPosition/ConfigPotType as separate types from engine types for config context
+- 06-01: typeof localStorage check (not typeof window) for SSR safety in test environments
+- 06-01: Fire-and-forget server sync pattern (localStorage primary, server background)
+- 06-01: getAccessToken reads from localStorage (integrates with auth token storage)
 - 06-02: Toggle chips use Set-based selection with minimum-1 enforcement
 - 06-02: GameSetup uses partial onChange pattern for individual field updates
 - 06-02: Static preset arrays for position filters (domain-fixed)
@@ -177,7 +181,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:46 UTC
-Stopped at: Completed 06-02-PLAN.md (filter components)
+Last session: 2026-02-17 02:48 UTC
+Stopped at: Completed 06-01-PLAN.md (config foundation)
 Resume file: None
 Next: Phase 6 — 06-03 through 06-06 remaining
