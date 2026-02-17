@@ -69,6 +69,7 @@ model SessionEntry {
   spot      Json     // Full Spot data
   actionId  String
   result    Json?    // DecisionGrade, nullable until graded
+  isFlagged Boolean  @default(false)
   createdAt DateTime @default(now())
 
   // Relations
@@ -77,6 +78,7 @@ model SessionEntry {
   // Indexes
   @@unique([sessionId, index])
   @@index([sessionId, index])
+  @@index([sessionId, isFlagged])
 }
 
 // SpotStat model for per-spot performance tracking
