@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 7 - Range Visualization
+**Current focus:** Phase 8 - Statistics & Analytics
 
 ## Current Position
 

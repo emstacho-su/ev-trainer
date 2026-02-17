@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Table UI Foundation** - Oval table layout, card/chip visuals, dark theme, responsive design
 - [x] **Phase 5: Preflop Training** - Opening/3bet/4bet scenarios with immediate EV grading (2 minor issues deferred)
 - [x] **Phase 6: Trainer Configuration** - Mode toggles, filters, targeted drilling from stats
-- [ ] **Phase 7: Range Visualization** - 13x13 range grid modal with action frequencies and equity breakdown
+- [x] **Phase 7: Range Visualization** - 13x13 range grid modal with action frequencies and equity breakdown
 - [ ] **Phase 8: Statistics & Analytics** - Performance graphs, session history, weakness detection
 - [ ] **Phase 9: Animations** - Card dealing, chip movement, EV reveal, action highlights
 - [ ] **Phase 10: Postflop Training** - Flop/turn/river decision points with multi-street progression
@@ -158,11 +158,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Range types, helpers, color scheme, and dependencies
-- [ ] 07-02-PLAN.md — RangeGridCell and RangeGridView components with stacked bars
-- [ ] 07-03-PLAN.md — ActionLegend and EquityBreakdown with tabbed views
-- [ ] 07-04-PLAN.md — RangeGridModal integration with PokerTable View Ranges button
-- [ ] 07-05-PLAN.md — Gap closure: wire heroRange/villainRange from session page to PokerTable
+- [x] 07-01-PLAN.md — Range types, helpers, color scheme, and dependencies
+- [x] 07-02-PLAN.md — RangeGridCell and RangeGridView components with stacked bars
+- [x] 07-03-PLAN.md — ActionLegend and EquityBreakdown with tabbed views
+- [x] 07-04-PLAN.md — RangeGridModal integration with PokerTable View Ranges button
+- [x] 07-05-PLAN.md — Gap closure: wire heroRange/villainRange from session page to PokerTable
 
 ### Phase 8: Statistics & Analytics
 **Goal**: Users can track performance trends and identify weaknesses over time
