@@ -7,12 +7,14 @@
 import app from "./app";
 import sessionRoutes from "./routes/session.routes";
 import configRoutes from "./routes/config.routes";
+import drillRoutes from "./routes/drill.routes";
 import { setSessionStoreBackend } from "../lib/v2/sessionStore";
 import { PrismaSessionStoreBackend } from "../lib/v2/storage/prismaSessionStore";
 
 // Mount routes
 app.use("/api/session", sessionRoutes);
 app.use("/api/config", configRoutes);
+app.use("/api/drills", drillRoutes);
 
 // Swap session store backend to Prisma
 const prismaBackend = new PrismaSessionStoreBackend();
