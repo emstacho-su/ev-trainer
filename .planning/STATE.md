@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
-Plan: 08-05 complete (08-01, 08-04, 08-05 done), Phase 9 in progress
+Plan: 09-05 complete, Phase 8 (08-01/04/05 done) and Phase 9 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 08-05 session history component
+Last activity: 2026-02-17 -- Completed 09-05 chip animation & sound effects
 
-Progress: [███████████████░] ~85% (51 plans complete)
+Progress: [███████████████░] ~87% (52 plans complete)
 
 ## Performance Metrics
 
@@ -211,6 +211,9 @@ Recent decisions affecting current work:
 - 08-04: Dark theme applied to existing BreakdownTable for consistency
 - 08-05: Client-side sorting on current page with server-side pagination
 - 08-05: Optimistic local state removal on delete (instant UI feedback)
+- 09-05: Chip animate in with scale+opacity (CHIP_SLIDE 250ms), exit with CHIP_COLLECT 300ms
+- 09-05: playSoundRef pattern for stable sound calls in keyboard event handlers with empty deps
+- 09-05: playSound added to useCallback dependency arrays for handler functions
 
 ### Pending Todos
 
@@ -228,7 +231,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:35 UTC
-Stopped at: Completed 08-05-PLAN.md (session history component)
+Last session: 2026-02-17 05:34 UTC
+Stopped at: Completed 09-05-PLAN.md (chip animation & sound effects)
 Resume file: None
-Next: Continue Phase 8 remaining plans (08-02, 08-03, 08-06, 08-07) and Phase 9
+Next: Continue Phase 9 (09-07) and Phase 8 remaining plans
