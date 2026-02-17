@@ -113,11 +113,13 @@ Plans:
   3. User can train 3bet pot scenarios (4bet, call, fold)
   4. User can train blind defense scenarios (BB vs positions, SB vs BB)
   5. Preflop action history displays correctly on table
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md — Scenario classification and filter extension
+- [ ] 05-02-PLAN.md — Table and ActionButton UI extensions
+- [ ] 05-03-PLAN.md — Training session orchestrator and guest limiting
+- [ ] 05-04-PLAN.md — Human verification checkpoint
 
 ### Phase 6: Trainer Configuration
 **Goal**: Users can customize training mode, filters, and drill specific weak spots
