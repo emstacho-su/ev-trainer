@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 6 of 10 (Trainer Configuration)
-Plan: 3 of 6 in Phase 6
+Plan: 4 of 6 in Phase 6
 Status: In progress
-Last activity: 2026-02-17 -- Completed 06-03 lobby screen
+Last activity: 2026-02-17 -- Completed 06-04 session sidebar
 
-Progress: [████████████░░░░] ~58% (36 plans complete)
+Progress: [████████████░░░░] ~60% (37 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 36
-- Average duration: 6.3 min
-- Total execution time: 227 min
+- Total plans completed: 37
+- Average duration: 6.2 min
+- Total execution time: 229 min
 
 **By Phase:**
 
@@ -34,7 +34,7 @@ Progress: [████████████░░░░] ~58% (36 plans comp
 | 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-06 (1 min), 05-07 (1 min), 06-02 (2 min), 06-01 (5 min), 06-03 (2 min)
+- Last 5 plans: 05-07 (1 min), 06-02 (2 min), 06-01 (5 min), 06-03 (2 min), 06-04 (2 min)
 - Trend: Phase 6 plans slightly longer (config + API + migration work)
 
 *Updated after each plan completion*
@@ -167,6 +167,9 @@ Recent decisions affecting current work:
 - 06-03: Native details/summary for collapsible advanced filters (no JS dependency)
 - 06-03: canStart = positions.length > 0 && potTypes.length > 0 (minimum validation)
 - 06-03: crypto.randomUUID() for session seed (browser-native, unique per session)
+- 06-04: Toast auto-dismiss default 3000ms for info toasts in sidebar
+- 06-04: Click-outside via mousedown event on document for sidebar close
+- 06-04: Backdrop and sidebar as sibling elements in fragment for independent z-index
 
 ### Pending Todos
 
@@ -184,7 +187,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:52 UTC
-Stopped at: Completed 06-03-PLAN.md (lobby screen)
+Last session: 2026-02-17 02:53 UTC
+Stopped at: Completed 06-04-PLAN.md (session sidebar)
 Resume file: None
-Next: Phase 6 — 06-04 through 06-06 remaining
+Next: Phase 6 — 06-05 through 06-06 remaining
