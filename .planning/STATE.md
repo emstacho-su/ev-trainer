@@ -12,9 +12,9 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 Phase: 9 of 10 (Animations)
 Plan: 4 of 7 in Phase 9
 Status: In progress
-Last activity: 2026-02-17 -- Completed 09-04 audio infrastructure (AudioManager, useAudio hook)
+Last activity: 2026-02-17 -- Completed 09-01 animation foundation (Motion, timing constants, preferences hook)
 
-Progress: [██████████████░░] ~74% (44 plans complete)
+Progress: [██████████████░░] ~75% (45 plans complete)
 
 ## Performance Metrics
 
@@ -194,6 +194,9 @@ Recent decisions affecting current work:
 - 09-04: Lazy audio init on first playSound call to comply with browser autoplay policy
 - 09-04: Separate localStorage key (ev-trainer-audio-enabled) from animation toggle
 - 09-04: Promise.allSettled for sound loading so one missing file does not block others
+- 09-01: Motion v12 as animation library (package name "motion", import from "motion/react")
+- 09-01: reducedMotion='always' when user disables, 'user' otherwise (OS detection)
+- 09-01: localStorage key 'ev-trainer-animations-enabled' for animation toggle persistence
 
 ### Pending Todos
 
@@ -211,7 +214,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:15 UTC
-Stopped at: Completed 09-04-PLAN.md (audio infrastructure — AudioManager, useAudio hook)
+Last session: 2026-02-17 05:25 UTC
+Stopped at: Completed 09-01-PLAN.md (animation foundation — Motion, timing constants, preferences hook)
 Resume file: None
 Next: Continue Phase 9 plans
