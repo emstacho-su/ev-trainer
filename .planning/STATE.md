@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 11 of 12 (Supabase Database Integration)
-Plan: 11-07 complete, 11-08 pending
+Plan: 11-05 complete, 11-08 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 11-07-PLAN.md (Spot service & seed script)
+Last activity: 2026-02-17 -- Completed 11-05-PLAN.md (Session data layer rewrite)
 
-Progress: [████████████████████░] ~99% (66 plans complete)
+Progress: [████████████████████░] ~99% (67 plans complete)
 
 ## Performance Metrics
 
@@ -268,6 +268,10 @@ Recent decisions affecting current work:
 - 11-07: Unified loader tries Supabase first, falls back to bundled packs silently
 - 11-07: Stack bucket filter converted to min/max range for Supabase query
 - 11-07: Default is_system=true filter on Supabase queries
+- 11-05: Fire-and-forget Supabase persistence alongside in-memory source of truth during active play
+- 11-05: Idempotent session creation using session_id + seed lookup before insert
+- 11-05: GET [id] falls back to Supabase for historical sessions not in memory
+- 11-05: DELETE route added for authenticated session removal
 
 ### Pending Todos
 
@@ -290,6 +294,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 11-07-PLAN.md (Spot service & seed script)
+Stopped at: Completed 11-05-PLAN.md (Session data layer rewrite)
 Resume file: None
 Next: Execute 11-08-PLAN.md
