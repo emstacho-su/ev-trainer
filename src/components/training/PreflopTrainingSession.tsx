@@ -10,6 +10,7 @@ import {
   incrementGuestHandCount,
   isGuestLimitExceeded,
 } from '@/lib/v2/guestLimiting';
+import { useAudio } from '@/hooks/useAudio';
 
 type UIState = 'idle' | 'submitted' | 'revealed';
 
@@ -168,6 +169,10 @@ export default function PreflopTrainingSession() {
   const [error, setError] = useState<string | null>(null);
   const [selectedActionId, setSelectedActionId] = useState<ActionId | null>(null);
 
+  const { playSound } = useAudio();
+  const playSoundRef = useRef(playSound);
+  playSoundRef.current = playSound;
+
   // Refs for stable keyboard handler access
   const uiStateRef = useRef(uiState);
   const currentSpotRef = useRef(currentSpot);
@@ -205,6 +210,7 @@ export default function PreflopTrainingSession() {
       const data = await response.json();
       setSessionId(data.session.sessionId);
       setCurrentSpot(data.spot);
+      playSound('card-deal');
       setHandCount(0);
       setCorrectCount(0);
       setSessionComplete(false);
@@ -214,13 +220,14 @@ export default function PreflopTrainingSession() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [playSound]);
 
   const handleSubmitAction = useCallback(async (actionId: ActionId) => {
     if (!currentSpotRef.current || !sessionIdRef.current || uiStateRef.current !== 'idle') return;
 
     setUiState('submitted');
     setSelectedActionId(actionId);
+    playSound('chip-slide');
     setIsLoading(true);
 
     try {
@@ -246,6 +253,7 @@ export default function PreflopTrainingSession() {
 
       setGrade(data.result);
       setUiState('revealed');
+      playSound(data.result.isBestAction ? 'ev-correct' : 'ev-incorrect');
 
       // Update accuracy tracking
       if (data.result.isBestAction) {
@@ -264,7 +272,7 @@ export default function PreflopTrainingSession() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [playSound]);
 
   const handleNext = useCallback(async () => {
     if (!sessionIdRef.current || uiStateRef.current !== 'revealed') return;
@@ -295,12 +303,13 @@ export default function PreflopTrainingSession() {
 
       const data = await response.json();
       setCurrentSpot(data.spot);
+      playSound('card-deal');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [playSound]);
 
   // Keyboard shortcuts - uses refs so handler never goes stale
   useEffect(() => {
@@ -341,6 +350,7 @@ export default function PreflopTrainingSession() {
 
           const data = await response.json();
           setCurrentSpot(data.spot);
+          playSoundRef.current('card-deal');
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Unknown error');
         } finally {
@@ -369,6 +379,7 @@ export default function PreflopTrainingSession() {
 
       setUiState('submitted');
       setSelectedActionId(actionId);
+      playSoundRef.current('chip-slide');
       setIsLoading(true);
 
       try {
@@ -394,6 +405,7 @@ export default function PreflopTrainingSession() {
 
         setGrade(data.result);
         setUiState('revealed');
+        playSoundRef.current(data.result.isBestAction ? 'ev-correct' : 'ev-incorrect');
 
         // Update accuracy tracking
         if (data.result.isBestAction) {
