@@ -202,6 +202,22 @@ function parseFilters(value: unknown): SpotFilterInput | null {
       raw.effectiveStackBbBucket as SpotFilterInput["effectiveStackBbBucket"];
   }
 
+  // Multi-select positions array (sent by lobby as "positions")
+  if (raw.positions !== undefined) {
+    if (!Array.isArray(raw.positions)) return null;
+    const positions = raw.positions as unknown[];
+    if (!positions.every(p => typeof p === "string" && Positions.includes(p as any))) return null;
+    filters.heroPositions = positions as SpotFilterInput["heroPositions"];
+  }
+
+  // Multi-select pot types array (sent by lobby as "potTypes")
+  if (raw.potTypes !== undefined) {
+    if (!Array.isArray(raw.potTypes)) return null;
+    const pots = raw.potTypes as unknown[];
+    if (!pots.every(p => typeof p === "string" && (p === "ANY" || PotTypes.includes(p as any)))) return null;
+    filters.potTypes = pots as SpotFilterInput["potTypes"];
+  }
+
   return filters;
 }
 
@@ -270,16 +286,16 @@ function buildSessionSnapshot(record: SessionRecord): SessionSnapshot {
 function makeMockSolverOutput(spot: Spot, actionId: ActionId): SolverNodeOutput {
   const rng = createSeededRng(combineSeed([spot.spotId, actionId]));
 
-  // For preflop spots (no board cards), generate Fold/Call/Raise actions
+  // For preflop spots (no board cards), generate Fold/Call/Raise actions with multiple sizes
   if (spot.board.length === 0) {
-    // Generate frequencies that sum to 1.0
-    const foldFreq = 0.1 + rng.next() * 0.3;  // 10-40%
-    const callFreq = 0.2 + rng.next() * 0.4;  // 20-60%
-    const raiseFreq = 1.0 - foldFreq - callFreq;
+    const foldFreq = 0.1 + rng.next() * 0.3;
+    const callFreq = 0.2 + rng.next() * 0.3;
+    const raise22Freq = (1.0 - foldFreq - callFreq) * (0.1 + rng.next() * 0.2);
+    const raise25Freq = (1.0 - foldFreq - callFreq) * (0.3 + rng.next() * 0.2);
+    const raise30Freq = 1.0 - foldFreq - callFreq - raise22Freq - raise25Freq;
 
-    // Generate EVs with raise typically highest, fold lowest
-    const raiseEv = Math.round((rng.next() * 2 + 1) * 100) / 100;  // 1.00 to 3.00 BB
-    const callEv = Math.round((raiseEv - 0.5 - rng.next() * 0.5) * 100) / 100;
+    const bestEv = Math.round((rng.next() * 2 + 1) * 100) / 100;
+    const callEv = Math.round((bestEv - 0.3 - rng.next() * 0.5) * 100) / 100;
     const foldEv = Math.round((callEv - 0.5 - rng.next() * 0.5) * 100) / 100;
 
     return {
@@ -288,7 +304,9 @@ function makeMockSolverOutput(spot: Spot, actionId: ActionId): SolverNodeOutput 
       actions: [
         { actionId: "FOLD", frequency: foldFreq, ev: foldEv },
         { actionId: "CALL", frequency: callFreq, ev: callEv },
-        { actionId: "RAISE_2.5BB", frequency: raiseFreq, ev: raiseEv },
+        { actionId: "RAISE_2.2X", frequency: raise22Freq, ev: Math.round((bestEv - 0.1 - rng.next() * 0.3) * 100) / 100 },
+        { actionId: "RAISE_2.5X", frequency: raise25Freq, ev: bestEv },
+        { actionId: "RAISE_3.0X", frequency: raise30Freq, ev: Math.round((bestEv - 0.05 - rng.next() * 0.2) * 100) / 100 },
       ],
     };
   }
@@ -299,12 +317,14 @@ function makeMockSolverOutput(spot: Spot, actionId: ActionId): SolverNodeOutput 
   );
 
   if (facesBet) {
-    // Facing bet: Fold/Call/Raise
     const foldFreq = 0.1 + rng.next() * 0.3;
-    const callFreq = 0.2 + rng.next() * 0.4;
-    const raiseFreq = 1.0 - foldFreq - callFreq;
-    const raiseEv = Math.round((rng.next() * 2 + 1) * 100) / 100;
-    const callEv = Math.round((raiseEv - 0.5 - rng.next() * 0.5) * 100) / 100;
+    const callFreq = 0.2 + rng.next() * 0.3;
+    const raise22Freq = (1.0 - foldFreq - callFreq) * (0.1 + rng.next() * 0.2);
+    const raise25Freq = (1.0 - foldFreq - callFreq) * (0.3 + rng.next() * 0.2);
+    const raise30Freq = 1.0 - foldFreq - callFreq - raise22Freq - raise25Freq;
+
+    const bestEv = Math.round((rng.next() * 2 + 1) * 100) / 100;
+    const callEv = Math.round((bestEv - 0.3 - rng.next() * 0.5) * 100) / 100;
     const foldEv = Math.round((callEv - 0.5 - rng.next() * 0.5) * 100) / 100;
 
     return {
@@ -313,23 +333,33 @@ function makeMockSolverOutput(spot: Spot, actionId: ActionId): SolverNodeOutput 
       actions: [
         { actionId: "FOLD", frequency: foldFreq, ev: foldEv },
         { actionId: "CALL", frequency: callFreq, ev: callEv },
-        { actionId: "RAISE_2.5BB", frequency: raiseFreq, ev: raiseEv },
+        { actionId: "RAISE_2.2X", frequency: raise22Freq, ev: Math.round((bestEv - 0.1 - rng.next() * 0.3) * 100) / 100 },
+        { actionId: "RAISE_2.5X", frequency: raise25Freq, ev: bestEv },
+        { actionId: "RAISE_3.0X", frequency: raise30Freq, ev: Math.round((bestEv - 0.05 - rng.next() * 0.2) * 100) / 100 },
       ],
     };
   }
 
-  // Not facing bet: Check/Bet
-  const checkFreq = 0.3 + rng.next() * 0.4;
-  const betFreq = 1.0 - checkFreq;
+  // Not facing bet: Check + multiple bet sizes
+  const checkFreq = 0.2 + rng.next() * 0.3;
+  const remaining = 1.0 - checkFreq;
+  const bet33Freq = remaining * (0.1 + rng.next() * 0.2);
+  const bet50Freq = remaining * (0.15 + rng.next() * 0.15);
+  const bet75Freq = remaining * (0.2 + rng.next() * 0.2);
+  const bet100Freq = remaining - bet33Freq - bet50Freq - bet75Freq;
+
   const checkEv = Math.round((rng.next() * 2 - 0.5) * 100) / 100;
-  const betEv = Math.round((checkEv + rng.next() * 1.5) * 100) / 100;
+  const bestBetEv = Math.round((checkEv + 0.5 + rng.next() * 1.5) * 100) / 100;
 
   return {
     status: "ok",
     units: "bb",
     actions: [
       { actionId: "CHECK", frequency: checkFreq, ev: checkEv },
-      { actionId: "BET_75PCT", frequency: betFreq, ev: betEv },
+      { actionId: "BET_33PCT", frequency: bet33Freq, ev: Math.round((bestBetEv - 0.1 - rng.next() * 0.3) * 100) / 100 },
+      { actionId: "BET_50PCT", frequency: bet50Freq, ev: Math.round((bestBetEv - 0.05 - rng.next() * 0.2) * 100) / 100 },
+      { actionId: "BET_75PCT", frequency: bet75Freq, ev: bestBetEv },
+      { actionId: "BET_100PCT", frequency: bet100Freq, ev: Math.round((bestBetEv - 0.1 - rng.next() * 0.2) * 100) / 100 },
     ],
   };
 }

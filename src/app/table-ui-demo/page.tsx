@@ -8,11 +8,13 @@ import { SessionControls } from '@/components/poker/organisms/SessionControls';
 
 type ActionState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
 
+const ACTION_IDS = ['FOLD', 'CALL', 'RAISE_2.5X'] as const;
+
 interface HandScenario {
   heroCards: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>;
   communityCards: Array<{ rank: string; suit: 'h' | 'd' | 'c' | 's' }>;
   pot: number;
-  correctAction: 'fold' | 'call' | 'raise';
+  correctAction: string;
   potType: 'SRP' | '3BP' | '4BP';
   evs: Record<string, number>;
   frequencies: Record<string, number>;
@@ -23,46 +25,46 @@ const MOCK_HANDS: HandScenario[] = [
     heroCards: [{ rank: 'A', suit: 's' }, { rank: 'K', suit: 'h' }],
     communityCards: [{ rank: 'Q', suit: 's' }, { rank: 'J', suit: 'h' }, { rank: 'T', suit: 'd' }],
     pot: 15.5,
-    correctAction: 'raise',
+    correctAction: 'RAISE_2.5X',
     potType: '3BP',
-    evs: { fold: -1.0, call: 0.85, raise: 2.15 },
-    frequencies: { fold: 0.0, call: 0.35, raise: 0.65 },
+    evs: { FOLD: -1.0, CALL: 0.85, 'RAISE_2.5X': 2.15 },
+    frequencies: { FOLD: 0.0, CALL: 0.35, 'RAISE_2.5X': 0.65 },
   },
   {
     heroCards: [{ rank: '7', suit: 'h' }, { rank: '2', suit: 'd' }],
     communityCards: [{ rank: 'A', suit: 'c' }, { rank: 'K', suit: 's' }, { rank: 'Q', suit: 'd' }],
     pot: 8.0,
-    correctAction: 'fold',
+    correctAction: 'FOLD',
     potType: 'SRP',
-    evs: { fold: -0.5, call: -2.30, raise: -4.10 },
-    frequencies: { fold: 0.95, call: 0.05, raise: 0.0 },
+    evs: { FOLD: -0.5, CALL: -2.30, 'RAISE_2.5X': -4.10 },
+    frequencies: { FOLD: 0.95, CALL: 0.05, 'RAISE_2.5X': 0.0 },
   },
   {
     heroCards: [{ rank: 'J', suit: 's' }, { rank: 'J', suit: 'd' }],
     communityCards: [{ rank: '8', suit: 'h' }, { rank: '5', suit: 'c' }, { rank: '2', suit: 's' }],
     pot: 12.0,
-    correctAction: 'call',
+    correctAction: 'CALL',
     potType: '3BP',
-    evs: { fold: -1.0, call: 1.45, raise: 0.60 },
-    frequencies: { fold: 0.05, call: 0.70, raise: 0.25 },
+    evs: { FOLD: -1.0, CALL: 1.45, 'RAISE_2.5X': 0.60 },
+    frequencies: { FOLD: 0.05, CALL: 0.70, 'RAISE_2.5X': 0.25 },
   },
   {
     heroCards: [{ rank: 'A', suit: 'h' }, { rank: 'A', suit: 'd' }],
     communityCards: [],
     pot: 3.5,
-    correctAction: 'raise',
+    correctAction: 'RAISE_2.5X',
     potType: 'SRP',
-    evs: { fold: -1.0, call: 1.20, raise: 3.80 },
-    frequencies: { fold: 0.0, call: 0.15, raise: 0.85 },
+    evs: { FOLD: -1.0, CALL: 1.20, 'RAISE_2.5X': 3.80 },
+    frequencies: { FOLD: 0.0, CALL: 0.15, 'RAISE_2.5X': 0.85 },
   },
   {
     heroCards: [{ rank: 'K', suit: 'c' }, { rank: 'Q', suit: 'c' }],
     communityCards: [{ rank: '9', suit: 'c' }, { rank: '6', suit: 'c' }, { rank: '2', suit: 'h' }],
     pot: 20.0,
-    correctAction: 'raise',
+    correctAction: 'RAISE_2.5X',
     potType: '4BP',
-    evs: { fold: -2.0, call: 1.60, raise: 3.25 },
-    frequencies: { fold: 0.0, call: 0.40, raise: 0.60 },
+    evs: { FOLD: -2.0, CALL: 1.60, 'RAISE_2.5X': 3.25 },
+    frequencies: { FOLD: 0.0, CALL: 0.40, 'RAISE_2.5X': 0.60 },
   },
 ];
 
@@ -72,25 +74,22 @@ export default function TableUIDemo() {
   const [handIndex, setHandIndex] = useState(0);
   const [handNumber, setHandNumber] = useState(1);
   const [sessionActive, setSessionActive] = useState(false);
-  const [actionStates, setActionStates] = useState<Record<string, ActionState>>({
-    fold: 'idle',
-    call: 'idle',
-    raise: 'idle',
-  });
+  const defaultStates = () => Object.fromEntries(ACTION_IDS.map(id => [id, 'idle' as ActionState]));
+  const [actionStates, setActionStates] = useState<Record<string, ActionState>>(defaultStates);
   const [revealedEvs, setRevealedEvs] = useState<Record<string, number>>({});
   const [revealedFreqs, setRevealedFreqs] = useState<Record<string, number>>({});
 
   const hand = MOCK_HANDS[handIndex];
 
   const resetActions = useCallback(() => {
-    setActionStates({ fold: 'idle', call: 'idle', raise: 'idle' });
+    setActionStates(Object.fromEntries(ACTION_IDS.map(id => [id, 'idle' as ActionState])));
     setRevealedEvs({});
     setRevealedFreqs({});
   }, []);
 
   const loadHand = useCallback((index: number) => {
     setHandIndex(index % MOCK_HANDS.length);
-    setActionStates({ fold: 'idle', call: 'idle', raise: 'idle' });
+    setActionStates(Object.fromEntries(ACTION_IDS.map(id => [id, 'idle' as ActionState])));
     setRevealedEvs({});
     setRevealedFreqs({});
   }, []);
@@ -119,19 +118,15 @@ export default function TableUIDemo() {
     resetActions();
   }, [resetActions]);
 
-  const handleAction = useCallback((action: 'fold' | 'call' | 'raise') => {
+  const handleAction = useCallback((actionId: string) => {
     if (!sessionActive) return;
-    // Mark selected
-    setActionStates((prev) => ({ ...prev, [action]: 'selected' }));
+    setActionStates((prev) => ({ ...prev, [actionId]: 'selected' }));
 
-    // After delay, reveal all with correct/incorrect
     setTimeout(() => {
       const correct = hand.correctAction;
-      setActionStates({
-        fold: correct === 'fold' ? 'revealed-correct' : 'revealed-incorrect',
-        call: correct === 'call' ? 'revealed-correct' : 'revealed-incorrect',
-        raise: correct === 'raise' ? 'revealed-correct' : 'revealed-incorrect',
-      });
+      setActionStates(
+        Object.fromEntries(ACTION_IDS.map(id => [id, id === correct ? 'revealed-correct' : 'revealed-incorrect']))
+      );
       setRevealedEvs(hand.evs);
       setRevealedFreqs(hand.frequencies);
     }, 600);
@@ -160,7 +155,7 @@ export default function TableUIDemo() {
 
   const players = tableSize === '9max' ? players9max : players6max;
 
-  const isRevealed = actionStates.fold.startsWith('revealed');
+  const isRevealed = actionStates.FOLD?.startsWith('revealed') ?? false;
 
   return (
     <div className="h-screen bg-[hsl(var(--background))] flex flex-col overflow-hidden">
@@ -213,27 +208,13 @@ export default function TableUIDemo() {
         />
 
         <ActionPanel
-          actions={[
-            {
-              action: 'fold',
-              state: sessionActive ? actionStates.fold : 'disabled',
-              ev: revealedEvs.fold,
-              frequency: revealedFreqs.fold,
-            },
-            {
-              action: 'call',
-              label: sessionActive ? `Call ${hand.pot > 10 ? '5' : '2'} BB` : 'Call',
-              state: sessionActive ? actionStates.call : 'disabled',
-              ev: revealedEvs.call,
-              frequency: revealedFreqs.call,
-            },
-            {
-              action: 'raise',
-              state: sessionActive ? actionStates.raise : 'disabled',
-              ev: revealedEvs.raise,
-              frequency: revealedFreqs.raise,
-            },
-          ]}
+          actions={ACTION_IDS.map(id => ({
+            actionId: id,
+            label: id === 'FOLD' ? 'Fold' : id === 'CALL' ? 'Call' : 'Raise 2.5x',
+            state: sessionActive ? (actionStates[id] ?? 'idle') : 'disabled',
+            ev: revealedEvs[id],
+            frequency: revealedFreqs[id],
+          }))}
           onAction={handleAction}
         />
       </div>

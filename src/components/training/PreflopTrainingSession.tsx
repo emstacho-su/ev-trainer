@@ -141,11 +141,17 @@ function derivePotType(history: ActionId[]): 'SRP' | '3BP' | '4BP' | undefined {
   return undefined;
 }
 
-// Map ActionId to simple action type
-function mapActionId(actionId: ActionId): 'fold' | 'call' | 'raise' {
-  if (actionId === 'FOLD') return 'fold';
-  if (actionId === 'CALL' || actionId === 'CHECK') return 'call';
-  return 'raise';
+// Map ActionId to display label
+function actionLabel(actionId: ActionId): string {
+  if (actionId === 'FOLD') return 'Fold';
+  if (actionId === 'CALL') return 'Call';
+  if (actionId === 'CHECK') return 'Check';
+  if (actionId === 'RAISE_2.2X') return 'Raise 2.2x';
+  if (actionId === 'RAISE_2.5X') return 'Raise 2.5x';
+  if (actionId === 'RAISE_3.0X') return 'Raise 3.0x';
+  if (actionId.startsWith('RAISE_')) return 'Raise';
+  if (actionId.startsWith('BET_')) return 'Bet';
+  return actionId;
 }
 
 export default function PreflopTrainingSession() {
@@ -347,17 +353,13 @@ export default function PreflopTrainingSession() {
       // Action shortcuts - only in idle state with a spot loaded
       if (uiStateRef.current !== 'idle' || !currentSpotRef.current) return;
 
+      const actionIds: ActionId[] = ['FOLD', 'CALL', 'RAISE_2.2X', 'RAISE_2.5X', 'RAISE_3.0X'];
+      const keyNum = parseInt(e.key);
       let actionId: ActionId | null = null;
 
-      if (e.key === '1' || e.key.toLowerCase() === 'f') {
+      if (keyNum >= 1 && keyNum <= actionIds.length) {
         e.preventDefault();
-        actionId = 'FOLD';
-      } else if (e.key === '2' || e.key.toLowerCase() === 'c') {
-        e.preventDefault();
-        actionId = 'CALL';
-      } else if (e.key === '3' || e.key.toLowerCase() === 'r') {
-        e.preventDefault();
-        actionId = 'RAISE_2.5BB';
+        actionId = actionIds[keyNum - 1];
       }
 
       if (!actionId) return;
@@ -422,19 +424,9 @@ export default function PreflopTrainingSession() {
   const buildActionPanelData = () => {
     if (!currentSpot) return [];
 
-    const actions: Array<{
-      action: 'fold' | 'call' | 'raise';
-      label?: string;
-      state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
-      ev?: number;
-      frequency?: number;
-      isUserChoice?: boolean;
-    }> = [];
+    const baseActions: ActionId[] = ['FOLD', 'CALL', 'RAISE_2.2X', 'RAISE_2.5X', 'RAISE_3.0X'];
 
-    const baseActions: ActionId[] = ['FOLD', 'CALL', 'RAISE_2.5BB'];
-
-    for (const actionId of baseActions) {
-      const simpleAction = mapActionId(actionId);
+    return baseActions.map((actionId) => {
       const isUserChoice = selectedActionId === actionId;
 
       let state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect' = 'idle';
@@ -444,32 +436,27 @@ export default function PreflopTrainingSession() {
       if (uiState === 'submitted') {
         state = isUserChoice ? 'selected' : 'disabled';
       } else if (uiState === 'revealed' && grade) {
-        const actionData = grade.allActions?.find(a => mapActionId(a.actionId) === simpleAction);
-
+        const actionData = grade.allActions?.find(a => a.actionId === actionId);
         if (actionData) {
           ev = actionData.ev;
           frequency = actionData.frequency;
         }
-
         if (isUserChoice) {
           state = grade.isBestAction ? 'revealed-correct' : 'revealed-incorrect';
         } else {
-          // Non-user actions: show as revealed-correct (neutral) for feedback
           state = 'revealed-correct';
         }
       }
 
-      actions.push({
-        action: simpleAction,
-        label: simpleAction === 'raise' ? 'Raise' : undefined,
+      return {
+        actionId,
+        label: actionLabel(actionId),
         state,
         ev,
         frequency,
         isUserChoice,
-      });
-    }
-
-    return actions;
+      };
+    });
   };
 
   // Start screen
@@ -613,14 +600,7 @@ export default function PreflopTrainingSession() {
       <div className="p-4">
         <ActionPanel
           actions={buildActionPanelData()}
-          onAction={(action) => {
-            const actionMap: Record<string, ActionId> = {
-              fold: 'FOLD',
-              call: 'CALL',
-              raise: 'RAISE_2.5BB',
-            };
-            handleSubmitAction(actionMap[action]);
-          }}
+          onAction={(actionId) => handleSubmitAction(actionId as ActionId)}
         />
       </div>
 

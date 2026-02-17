@@ -190,12 +190,6 @@ function dealHeroCards(
   return [card1, card2];
 }
 
-function mapSimpleAction(actionId: ActionId): 'fold' | 'call' | 'raise' {
-  if (actionId === 'FOLD') return 'fold';
-  if (actionId === 'CALL' || actionId === 'CHECK') return 'call';
-  return 'raise';
-}
-
 /**
  * Determine if hero faces an outstanding bet.
  * Postflop: if all prior actions in history are CHECKs (or history is empty), no bet facing.
@@ -203,18 +197,51 @@ function mapSimpleAction(actionId: ActionId): 'fold' | 'call' | 'raise' {
  */
 function heroFacesBet(spot: Spot): boolean {
   if (spot.board.length === 0) return true; // preflop always faces BB
-  // Postflop: check if any action in history is a bet/raise
   return spot.history.some(
     a => a.startsWith('BET_') || a.startsWith('RAISE_') || a === 'CALL'
   );
 }
 
 /** Get the action IDs appropriate for the current spot context. */
-function getAvailableActions(spot: Spot): ActionId[] {
+function getAvailableActions(spot: Spot): { actionId: ActionId; label: string }[] {
   if (heroFacesBet(spot)) {
-    return ['FOLD', 'CALL', 'RAISE_2.5BB'];
+    if (spot.board.length === 0) {
+      // Preflop: Fold, Call, multiple raise sizes
+      return [
+        { actionId: 'FOLD', label: 'Fold' },
+        { actionId: 'CALL', label: 'Call' },
+        { actionId: 'RAISE_2.2X', label: 'Raise 2.2x' },
+        { actionId: 'RAISE_2.5X', label: 'Raise 2.5x' },
+        { actionId: 'RAISE_3.0X', label: 'Raise 3.0x' },
+      ];
+    }
+    // Postflop facing bet
+    return [
+      { actionId: 'FOLD', label: 'Fold' },
+      { actionId: 'CALL', label: 'Call' },
+      { actionId: 'RAISE_2.2X', label: 'Raise 2.2x' },
+      { actionId: 'RAISE_2.5X', label: 'Raise 2.5x' },
+      { actionId: 'RAISE_3.0X', label: 'Raise 3.0x' },
+    ];
   }
-  return ['CHECK', 'BET_75PCT'];
+  // Postflop not facing bet: Check + multiple bet sizes
+  return [
+    { actionId: 'CHECK', label: 'Check' },
+    { actionId: 'BET_33PCT', label: 'Bet 33%' },
+    { actionId: 'BET_50PCT', label: 'Bet 50%' },
+    { actionId: 'BET_75PCT', label: 'Bet 75%' },
+    { actionId: 'BET_100PCT', label: 'Bet 100%' },
+  ];
+}
+
+/** Score a decision: 1 if +EV & highest freq, 0.5 if +EV but not highest freq, 0 if -EV. */
+function scoreDecision(grade: DecisionGrade, actionId: ActionId): number {
+  const userAction = grade.allActions?.find(a => a.actionId === actionId);
+  if (!userAction || userAction.ev <= 0) return 0;
+  // Find highest frequency action
+  const maxFreq = Math.max(...(grade.allActions?.map(a => a.frequency) ?? [0]));
+  if (Math.abs(userAction.frequency - maxFreq) < 0.001) return 1;
+  return 0.5;
 }
 
 // ---------- Page component ----------
@@ -347,9 +374,8 @@ export default function SessionPage() {
 
       if ('result' in response) {
         setGrade(response.result);
-        if (response.result.isBestAction) {
-          setCorrectCount(prev => prev + 1);
-        }
+        const score = scoreDecision(response.result, actionId);
+        setCorrectCount(prev => prev + score);
       }
 
       setHandCount(prev => prev + 1);
@@ -430,7 +456,7 @@ export default function SessionPage() {
     }
   }, [loadSession, router, seed, session, uiState]);
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts: 1-5 for action buttons by position
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -444,14 +470,10 @@ export default function SessionPage() {
       if (uiStateRef.current !== 'idle' || !currentSpotRef.current) return;
 
       const actions = getAvailableActions(currentSpotRef.current);
-      let actionId: ActionId | null = null;
-      if (e.key === '1' || e.key.toLowerCase() === 'f') actionId = actions[0]; // Fold or Check
-      else if (e.key === '2' || e.key.toLowerCase() === 'c') actionId = actions[1]; // Call or Bet
-      else if (e.key === '3' || e.key.toLowerCase() === 'r') actionId = actions[2] ?? null; // Raise (if available)
-
-      if (actionId) {
+      const keyNum = parseInt(e.key);
+      if (keyNum >= 1 && keyNum <= actions.length) {
         e.preventDefault();
-        void handleSubmitAction(actionId);
+        void handleSubmitAction(actions[keyNum - 1].actionId);
       }
     };
 
@@ -461,21 +483,14 @@ export default function SessionPage() {
 
   // Determine available actions based on spot context
   const availableActions = useMemo(
-    () => (currentSpot ? getAvailableActions(currentSpot) : ['FOLD', 'CALL', 'RAISE_2.5BB'] as ActionId[]),
+    () => (currentSpot ? getAvailableActions(currentSpot) : [{ actionId: 'FOLD' as ActionId, label: 'Fold' }, { actionId: 'CALL' as ActionId, label: 'Call' }]),
     [currentSpot]
   );
 
   // Build action data for ActionPanel
   const actionPanelData = useMemo(() => {
-    return availableActions.map((actionId) => {
-      const simpleAction = mapSimpleAction(actionId);
+    return availableActions.map(({ actionId, label }) => {
       const isUserChoice = selectedActionId === actionId;
-
-      // Label mapping for display
-      let label: string | undefined;
-      if (actionId === 'CHECK') label = 'Check';
-      else if (actionId === 'BET_75PCT') label = 'Bet';
-      else if (actionId.startsWith('RAISE_')) label = 'Raise';
 
       let state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect' = 'idle';
       let ev: number | undefined;
@@ -484,22 +499,21 @@ export default function SessionPage() {
       if (uiState === 'submitted') {
         state = isUserChoice ? 'selected' : 'disabled';
       } else if (uiState === 'revealed' && grade) {
-        // Match by exact actionId first, then by simple action type
-        const actionData = grade.allActions?.find(a => a.actionId === actionId)
-          ?? grade.allActions?.find(a => mapSimpleAction(a.actionId) === simpleAction);
+        const actionData = grade.allActions?.find(a => a.actionId === actionId);
         if (actionData) {
           ev = actionData.ev;
           frequency = actionData.frequency;
         }
         if (isUserChoice) {
-          state = grade.isBestAction ? 'revealed-correct' : 'revealed-incorrect';
+          const score = scoreDecision(grade, selectedActionId!);
+          state = score >= 1 ? 'revealed-correct' : score > 0 ? 'revealed-correct' : 'revealed-incorrect';
         } else {
           state = 'revealed-correct';
         }
       }
 
       return {
-        action: simpleAction,
+        actionId,
         label,
         state,
         ev,
@@ -546,7 +560,7 @@ export default function SessionPage() {
               </div>
               <div className="flex flex-col">
                 <span className="text-xs text-gray-400 uppercase tracking-wide">Correct</span>
-                <span className="text-lg font-bold text-green-400">{correctCount}/{handCount}</span>
+                <span className="text-lg font-bold text-green-400">{correctCount % 1 === 0 ? correctCount : correctCount.toFixed(1)}/{handCount}</span>
               </div>
             </div>
           </div>
@@ -615,11 +629,7 @@ export default function SessionPage() {
           <div className="p-4">
             <ActionPanel
               actions={actionPanelData}
-              onAction={(action) => {
-                // Find the actual actionId that maps to this simple action
-                const actionId = availableActions.find(a => mapSimpleAction(a) === action);
-                if (actionId) void handleSubmitAction(actionId);
-              }}
+              onAction={(actionId) => void handleSubmitAction(actionId as ActionId)}
             />
           </div>
 

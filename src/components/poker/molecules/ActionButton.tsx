@@ -17,8 +17,8 @@ function getBarColor(frequency: number | undefined): string {
 }
 
 interface ActionButtonProps {
-  action: 'fold' | 'call' | 'raise';
-  label?: string;
+  actionId: string;
+  label: string;
   state: ActionButtonState;
   ev?: number;
   frequency?: number;
@@ -27,9 +27,7 @@ interface ActionButtonProps {
   className?: string;
 }
 
-export function ActionButton({ action, label, state, ev, frequency, isUserChoice, onClick, className }: ActionButtonProps) {
-  const defaultLabel = action.charAt(0).toUpperCase() + action.slice(1);
-  const displayLabel = label ?? defaultLabel;
+export function ActionButton({ actionId: _actionId, label, state, ev, frequency, isUserChoice, onClick, className }: ActionButtonProps) {
   const isRevealed = state.startsWith('revealed');
   const isCorrect = state === 'revealed-correct';
   const isIncorrect = state === 'revealed-incorrect';
@@ -40,21 +38,18 @@ export function ActionButton({ action, label, state, ev, frequency, isUserChoice
         onClick={onClick}
         disabled={state === 'disabled' || isRevealed}
         className={cn(
-          'relative px-6 py-3 rounded-lg font-bold text-lg transition-all text-white',
+          'relative px-4 py-3 rounded-lg font-bold text-base transition-all text-white',
           'focus:outline-none focus:ring-2 focus:ring-offset-2',
           state === 'idle' && 'bg-gray-700 hover:bg-gray-600 focus:ring-gray-500',
           state === 'disabled' && 'bg-gray-800 text-gray-500 cursor-not-allowed',
           state === 'selected' && 'bg-blue-600 ring-2 ring-blue-400',
-          // Revealed states: frequency-based background color
           isRevealed && getFrequencyBg(frequency),
-          // Fallback if no frequency data
           isRevealed && frequency === undefined && isCorrect && 'bg-[hsl(var(--action-positive))]',
           isRevealed && frequency === undefined && isIncorrect && 'bg-[hsl(var(--action-negative))]',
-          // User's choice always gets blue ring
           isRevealed && isUserChoice && 'ring-2 ring-blue-400',
         )}
       >
-        <span>{displayLabel}</span>
+        <span>{label}</span>
         {isRevealed && ev !== undefined && (
           <span className="ml-2 text-sm font-normal">{ev > 0 ? '+' : ''}{ev.toFixed(2)} BB</span>
         )}

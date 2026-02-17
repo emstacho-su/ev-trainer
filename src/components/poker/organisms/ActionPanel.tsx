@@ -1,16 +1,18 @@
 import { cn } from '@/lib/utils';
 import { ActionButton } from '../molecules/ActionButton';
 
+export interface ActionPanelItem {
+  actionId: string;
+  label: string;
+  state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
+  ev?: number;
+  frequency?: number;
+  isUserChoice?: boolean;
+}
+
 interface ActionPanelProps {
-  actions: Array<{
-    action: 'fold' | 'call' | 'raise';
-    label?: string;
-    state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
-    ev?: number;
-    frequency?: number;
-    isUserChoice?: boolean;
-  }>;
-  onAction?: (action: 'fold' | 'call' | 'raise') => void;
+  actions: ActionPanelItem[];
+  onAction?: (actionId: string) => void;
   className?: string;
 }
 
@@ -21,12 +23,12 @@ export function ActionPanel({
 }: ActionPanelProps) {
   return (
     <div className={cn('bg-gray-900 rounded-lg p-4 shadow-xl', className)}>
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         {actions.map((actionData) => (
           <ActionButton
-            key={actionData.action}
+            key={actionData.actionId}
             {...actionData}
-            onClick={() => onAction?.(actionData.action)}
+            onClick={() => onAction?.(actionData.actionId)}
             className="flex-1"
           />
         ))}
