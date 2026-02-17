@@ -25,7 +25,22 @@ interface PokerTableProps {
   potType?: 'SRP' | '3BP' | '4BP';
   dealerPosition: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
   tableSize?: TableSize;
+  actionHistory?: string[];
   className?: string;
+}
+
+// Convert action history IDs to readable text format
+function actionHistoryToText(history: string[]): string {
+  if (history.length === 0) return 'First to act';
+
+  const actions = history.map(id => {
+    // ActionId format: 'FOLD', 'CALL', 'BET_2.5BB', 'RAISE_3.0BB'
+    const [type, size] = id.split('_');
+    if (size) return `${type} ${size}`;
+    return type;
+  });
+
+  return actions.join(' → ');
 }
 
 // Elliptical seat placement for perfect symmetry.
@@ -95,6 +110,7 @@ export function PokerTable({
   potType,
   dealerPosition,
   tableSize = '6max',
+  actionHistory,
   className,
 }: PokerTableProps) {
   const seatPositions = tableSize === '9max' ? SEAT_POSITIONS_9MAX : SEAT_POSITIONS_6MAX;
@@ -180,6 +196,11 @@ export function PokerTable({
         )}
         <CommunityCards cards={communityCards} />
         <PotDisplay amount={pot} />
+
+        {/* Action history summary */}
+        <div className="text-xs text-gray-400 text-center mt-1">
+          {actionHistoryToText(actionHistory ?? [])}
+        </div>
       </div>
     </div>
   );
