@@ -52,7 +52,8 @@ export default function TrainerLobby() {
       if (res.status === 201 || res.ok) {
         const data = await res.json();
         const sessionId = data.session?.sessionId ?? data.sessionId;
-        router.push(`/session?sessionId=${sessionId}`);
+        const seed = data.session?.seed ?? data.seed ?? '';
+        router.push(`/session/${sessionId}?seed=${seed}`);
       } else {
         const data = await res.json().catch(() => null);
         const msg =
