@@ -78,7 +78,7 @@ export default function PositionHeatmap() {
         setLoading(true);
         setError(null);
 
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("access_token");
         const params = new URLSearchParams();
         const startDate = searchParams.get("startDate");
         const endDate = searchParams.get("endDate");
