@@ -165,20 +165,26 @@ export default function TableUIDemo() {
 
   return (
     <div className="h-screen bg-[hsl(var(--background))] flex flex-col overflow-hidden">
-      {/* Top bar: demo controls only */}
-      <div className="flex items-center justify-end px-6 py-2 shrink-0 gap-3">
-        <button
-          onClick={() => setTableSize(tableSize === '6max' ? '9max' : '6max')}
-          className="px-3 py-1.5 bg-blue-700 text-white rounded-md text-sm"
-        >
-          {tableSize}
-        </button>
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="px-3 py-1.5 bg-gray-700 text-white rounded-md text-sm"
-        >
-          Theme
-        </button>
+      {/* Top bar: info bar + demo controls */}
+      <div className="flex items-center justify-between px-6 py-2 shrink-0">
+        <InfoBar
+          potType={sessionActive ? hand.potType : 'SRP'}
+          sessionInfo={sessionActive ? `Hand ${handNumber} / ${MOCK_HANDS.length}` : 'Press Start'}
+        />
+        <div className="flex gap-3">
+          <button
+            onClick={() => setTableSize(tableSize === '6max' ? '9max' : '6max')}
+            className="px-3 py-1.5 bg-blue-700 text-white rounded-md text-sm"
+          >
+            {tableSize}
+          </button>
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="px-3 py-1.5 bg-gray-700 text-white rounded-md text-sm"
+          >
+            Theme
+          </button>
+        </div>
       </div>
 
       {/* Table area */}
@@ -192,13 +198,6 @@ export default function TableUIDemo() {
           className="h-full max-h-full mx-auto"
         />
 
-        {/* Info bar overlaid near the board area */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40">
-          <InfoBar
-            potType={sessionActive ? hand.potType : 'SRP'}
-            sessionInfo={sessionActive ? `Hand ${handNumber} / ${MOCK_HANDS.length}` : 'Press Start'}
-          />
-        </div>
       </div>
 
       {/* Bottom area: session controls + action panel */}

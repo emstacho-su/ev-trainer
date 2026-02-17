@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import { Card } from '../atoms/Card';
-import { CardBack } from '../atoms/CardBack';
 
 interface PlayerSeatProps {
   position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
@@ -17,13 +16,11 @@ function PlayerAvatar() {
   return (
     <svg
       viewBox="0 0 32 32"
-      className="w-8 h-8"
+      className="w-7 h-7 shrink-0"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Head circle */}
       <circle cx="16" cy="11" r="6" stroke="#6b7280" strokeWidth="1.5" fill="#374151" />
-      {/* Body/shoulders arc */}
       <path
         d="M6 28c0-5.523 4.477-10 10-10s10 4.477 10 10"
         stroke="#6b7280"
@@ -55,7 +52,7 @@ export function PlayerSeat({
       )}
     >
       {/* Hero: show cards above info box */}
-      {hasVisibleCards && showCards && (
+      {isHero && hasVisibleCards && showCards && (
         <div className="flex gap-1">
           {cards!.map((card, i) => (
             <Card key={i} rank={card.rank} suit={card.suit} size="sm" />
@@ -63,29 +60,36 @@ export function PlayerSeat({
         </div>
       )}
 
-      {/* Villain: show avatar icon above info box, no card backs */}
-      {!isHero && (
-        <PlayerAvatar />
+      {/* Villain: avatar to the left of info box */}
+      {!isHero ? (
+        <div className="flex items-center gap-1.5">
+          <PlayerAvatar />
+          <div
+            className={cn(
+              'flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px]',
+              isActive ? 'bg-gray-700' : 'bg-gray-800',
+            )}
+          >
+            <span className="text-xs font-bold text-white uppercase tracking-wide">
+              {position}
+            </span>
+            <span className="text-sm font-semibold text-gray-300">
+              {stackBB.toFixed(1)} BB
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px] bg-blue-600 ring-2 ring-blue-400"
+        >
+          <span className="text-xs font-bold text-white uppercase tracking-wide">
+            {position}
+          </span>
+          <span className="text-sm font-semibold text-gray-300">
+            {stackBB.toFixed(1)} BB
+          </span>
+        </div>
       )}
-
-      {/* Player info box: position + stack */}
-      <div
-        className={cn(
-          'flex flex-col items-center rounded-md px-4 py-1.5 min-w-[70px]',
-          isHero
-            ? 'bg-blue-600 ring-2 ring-blue-400'
-            : isActive
-              ? 'bg-gray-700'
-              : 'bg-gray-800',
-        )}
-      >
-        <span className="text-xs font-bold text-white uppercase tracking-wide">
-          {position}
-        </span>
-        <span className="text-sm font-semibold text-gray-300">
-          {stackBB.toFixed(1)} BB
-        </span>
-      </div>
     </div>
   );
 }
