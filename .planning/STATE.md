@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 9 - Animations
+**Current focus:** Phase 8 - Statistics & Analytics / Phase 9 - Animations (parallel)
 
 ## Current Position
 
-Phase: 9 of 10 (Animations)
-Plan: 4 of 7 in Phase 9
+Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
+Plan: 1 of 7 in Phase 8 complete, Phase 9 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 09-01 animation foundation (Motion, timing constants, preferences hook)
+Last activity: 2026-02-17 -- Completed 08-01 stats API with Prisma aggregation
 
-Progress: [██████████████░░] ~75% (45 plans complete)
+Progress: [██████████████░░] ~77% (46 plans complete)
 
 ## Performance Metrics
 
@@ -197,6 +197,10 @@ Recent decisions affecting current work:
 - 09-01: Motion v12 as animation library (package name "motion", import from "motion/react")
 - 09-01: reducedMotion='always' when user disables, 'user' otherwise (OS detection)
 - 09-01: localStorage key 'ev-trainer-animations-enabled' for animation toggle persistence
+- 08-01: Server-side Prisma groupBy for all stats aggregation (no client-side reduce)
+- 08-01: 20-hand confidence threshold for position stat confidence flag
+- 08-01: Auto granularity: session (<7d), day (<90d), week (>90d)
+- 08-01: Top 5 biggest mistakes by absolute EV diff descending
 
 ### Pending Todos
 
@@ -214,7 +218,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:25 UTC
-Stopped at: Completed 09-01-PLAN.md (animation foundation — Motion, timing constants, preferences hook)
+Last session: 2026-02-17 05:28 UTC
+Stopped at: Completed 08-01-PLAN.md (stats API with Prisma aggregation)
 Resume file: None
-Next: Continue Phase 9 plans
+Next: Continue Phase 8 plans (08-02+) and Phase 9 plans
