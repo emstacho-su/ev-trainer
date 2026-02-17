@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 6 of 10 (Trainer Configuration)
-Plan: 4 of 6 in Phase 6
+Plan: 5 of 6 in Phase 6
 Status: In progress
-Last activity: 2026-02-17 -- Completed 06-04 session sidebar
+Last activity: 2026-02-17 -- Completed 06-05 drill suggestions
 
-Progress: [████████████░░░░] ~60% (37 plans complete)
+Progress: [████████████░░░░] ~62% (38 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 37
+- Total plans completed: 38
 - Average duration: 6.2 min
-- Total execution time: 229 min
+- Total execution time: 234 min
 
 **By Phase:**
 
@@ -34,7 +34,7 @@ Progress: [████████████░░░░] ~60% (37 plans comp
 | 05-preflop-training | 7/7 ✓ | 14 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-07 (1 min), 06-02 (2 min), 06-01 (5 min), 06-03 (2 min), 06-04 (2 min)
+- Last 5 plans: 06-02 (2 min), 06-01 (5 min), 06-03 (2 min), 06-04 (2 min), 06-05 (5 min)
 - Trend: Phase 6 plans slightly longer (config + API + migration work)
 
 *Updated after each plan completion*
@@ -170,6 +170,9 @@ Recent decisions affecting current work:
 - 06-04: Toast auto-dismiss default 3000ms for info toasts in sidebar
 - 06-04: Click-outside via mousedown event on document for sidebar close
 - 06-04: Backdrop and sidebar as sibling elements in fragment for independent z-index
+- 06-05: Minimum 10 decisions threshold for drill suggestion eligibility
+- 06-05: Sort by avgEvLoss descending for worst-first drill suggestions
+- 06-05: DrillSuggestions beside Essentials card in lg:grid-cols-2 layout
 
 ### Pending Todos
 
@@ -187,7 +190,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 02:53 UTC
-Stopped at: Completed 06-04-PLAN.md (session sidebar)
+Last session: 2026-02-17 02:59 UTC
+Stopped at: Completed 06-05-PLAN.md (drill suggestions)
 Resume file: None
-Next: Phase 6 — 06-05 through 06-06 remaining
+Next: Phase 6 — 06-06 remaining
