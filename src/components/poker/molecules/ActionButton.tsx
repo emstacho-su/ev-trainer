@@ -2,17 +2,18 @@ import { cn } from '@/lib/utils';
 
 type ActionButtonState = 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
 
-function getFrequencyColor(frequency: number | undefined, isUserChoice: boolean, state: ActionButtonState): string {
-  // Only apply frequency coloring in revealed states
-  if (!state.startsWith('revealed')) return '';
+function getFrequencyBg(frequency: number | undefined): string {
+  if (frequency === undefined) return '';
+  if (frequency >= 0.6) return 'bg-green-600';
+  if (frequency > 0.0) return 'bg-yellow-600';
+  return 'bg-red-600';
+}
 
-  if (isUserChoice) return 'ring-2 ring-blue-500';  // User's choice highlighted
-  if (frequency === undefined) return '';             // No coloring pre-reveal
-
-  // Frequency-weighted coloring
-  if (frequency >= 0.6) return 'bg-green-600';       // Highest-frequency solver action
-  if (frequency > 0.0) return 'bg-yellow-600';        // Lower-frequency solver action
-  return 'bg-red-600';                                // Non-solver action (0% frequency)
+function getBarColor(frequency: number | undefined): string {
+  if (frequency === undefined) return 'bg-white';
+  if (frequency >= 0.6) return 'bg-green-400';
+  if (frequency > 0.0) return 'bg-yellow-400';
+  return 'bg-red-400';
 }
 
 interface ActionButtonProps {
@@ -33,10 +34,8 @@ export function ActionButton({ action, label, state, ev, frequency, isUserChoice
   const isCorrect = state === 'revealed-correct';
   const isIncorrect = state === 'revealed-incorrect';
 
-  const frequencyColor = getFrequencyColor(frequency, isUserChoice ?? false, state);
-
   return (
-    <div className={cn('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-1.5', className)}>
       <button
         onClick={onClick}
         disabled={state === 'disabled' || isRevealed}
@@ -46,10 +45,13 @@ export function ActionButton({ action, label, state, ev, frequency, isUserChoice
           state === 'idle' && 'bg-gray-700 hover:bg-gray-600 focus:ring-gray-500',
           state === 'disabled' && 'bg-gray-800 text-gray-500 cursor-not-allowed',
           state === 'selected' && 'bg-blue-600 ring-2 ring-blue-400',
-          // Frequency-based coloring in revealed states (overrides default revealed colors)
-          isRevealed && !frequencyColor && isCorrect && 'bg-[hsl(var(--action-positive))] ring-2 ring-green-400',
-          isRevealed && !frequencyColor && isIncorrect && 'bg-[hsl(var(--action-negative))] ring-2 ring-red-400',
-          frequencyColor
+          // Revealed states: frequency-based background color
+          isRevealed && getFrequencyBg(frequency),
+          // Fallback if no frequency data
+          isRevealed && frequency === undefined && isCorrect && 'bg-[hsl(var(--action-positive))]',
+          isRevealed && frequency === undefined && isIncorrect && 'bg-[hsl(var(--action-negative))]',
+          // User's choice always gets blue ring
+          isRevealed && isUserChoice && 'ring-2 ring-blue-400',
         )}
       >
         <span>{displayLabel}</span>
@@ -58,12 +60,16 @@ export function ActionButton({ action, label, state, ev, frequency, isUserChoice
         )}
       </button>
       {isRevealed && frequency !== undefined && (
-        <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-          <div
-            className={cn('absolute left-0 top-0 h-full transition-all', isCorrect ? 'bg-green-500' : 'bg-red-500')}
-            style={{ width: `${frequency * 100}%` }}
-          />
-          <span className="absolute right-1 top-0 text-xs text-white leading-none">{(frequency * 100).toFixed(0)}%</span>
+        <div className="w-full">
+          <div className="relative w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+            <div
+              className={cn('absolute left-0 top-0 h-full rounded-full transition-all duration-500', getBarColor(frequency))}
+              style={{ width: `${Math.max(frequency * 100, 2)}%` }}
+            />
+          </div>
+          <div className="text-xs text-gray-300 text-center mt-0.5 font-medium">
+            {(frequency * 100).toFixed(0)}%
+          </div>
         </div>
       )}
     </div>

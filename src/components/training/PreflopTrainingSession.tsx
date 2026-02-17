@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Spot } from '@/lib/engine/spot';
 import type { ActionId } from '@/lib/engine/types';
 import type { DecisionGrade } from '@/lib/engine/trainingOrchestrator';
@@ -12,17 +12,6 @@ import {
 } from '@/lib/v2/guestLimiting';
 
 type UIState = 'idle' | 'submitted' | 'revealed';
-
-interface SessionSnapshot {
-  sessionId: string;
-  seed: string;
-  mode: 'TRAINING' | 'PRACTICE';
-  packId: string;
-  decisionIndex: number;
-  decisionsPerSession: number;
-  isComplete: boolean;
-  filters: Record<string, unknown>;
-}
 
 interface Player {
   position: 'BTN' | 'SB' | 'BB' | 'UTG' | 'HJ' | 'CO' | 'UTG+1' | 'MP' | 'UTG+2';
@@ -41,13 +30,12 @@ function spotToPlayers(spot: Spot): Player[] {
 
   for (const position of spot.positions) {
     const isHero = position === spot.heroToAct;
-    const isFolded = false; // Preflop training - no folded players shown
 
     players.push({
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
-      isActive: isHero,
-      isFolded,
+      isActive: !isHero, // Villains are "in hand" (show card backs), hero shows face-up cards
+      isFolded: false,
       isHero,
       showCards: isHero,
     });
@@ -59,8 +47,7 @@ function spotToPlayers(spot: Spot): Player[] {
 // Parse action history to derive pot type
 function derivePotType(history: ActionId[]): 'SRP' | '3BP' | '4BP' | undefined {
   const raiseCount = history.filter(a => a.startsWith('RAISE_') || a.startsWith('BET_')).length;
-  if (raiseCount === 0) return 'SRP';
-  if (raiseCount === 1) return 'SRP';
+  if (raiseCount <= 1) return 'SRP';
   if (raiseCount === 2) return '3BP';
   if (raiseCount >= 3) return '4BP';
   return undefined;
@@ -70,7 +57,7 @@ function derivePotType(history: ActionId[]): 'SRP' | '3BP' | '4BP' | undefined {
 function mapActionId(actionId: ActionId): 'fold' | 'call' | 'raise' {
   if (actionId === 'FOLD') return 'fold';
   if (actionId === 'CALL' || actionId === 'CHECK') return 'call';
-  return 'raise'; // BET, RAISE, ALL_IN
+  return 'raise';
 }
 
 export default function PreflopTrainingSession() {
@@ -87,37 +74,17 @@ export default function PreflopTrainingSession() {
   const [error, setError] = useState<string | null>(null);
   const [selectedActionId, setSelectedActionId] = useState<ActionId | null>(null);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Next hand shortcuts (Space/Enter) - only in revealed state
-      if ((e.key === ' ' || e.key === 'Enter') && uiState === 'revealed') {
-        e.preventDefault();
-        handleNext();
-        return;
-      }
+  // Refs for stable keyboard handler access
+  const uiStateRef = useRef(uiState);
+  const currentSpotRef = useRef(currentSpot);
+  const sessionIdRef = useRef(sessionId);
+  const seedRef = useRef(seed);
+  uiStateRef.current = uiState;
+  currentSpotRef.current = currentSpot;
+  sessionIdRef.current = sessionId;
+  seedRef.current = seed;
 
-      // Action shortcuts - only in idle state
-      if (uiState !== 'idle' || !currentSpot) return;
-
-      if (e.key === '1' || e.key.toLowerCase() === 'f') {
-        e.preventDefault();
-        handleSubmitAction('FOLD');
-      } else if (e.key === '2' || e.key.toLowerCase() === 'c') {
-        e.preventDefault();
-        handleSubmitAction('CALL');
-      } else if (e.key === '3' || e.key.toLowerCase() === 'r') {
-        e.preventDefault();
-        // Find first raise action in available actions
-        handleSubmitAction('RAISE_2.5BB'); // Default raise for now
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiState, currentSpot]);
-
-  const handleStart = async () => {
+  const handleStart = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -133,6 +100,7 @@ export default function PreflopTrainingSession() {
           mode: 'TRAINING',
           packId: 'ev-dev-pack-v1',
           filters: { street: 'PREFLOP' },
+          decisionsPerSession: 10000,
         }),
       });
 
@@ -152,10 +120,10 @@ export default function PreflopTrainingSession() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const handleSubmitAction = async (actionId: ActionId) => {
-    if (!currentSpot || !sessionId || uiState !== 'idle') return;
+  const handleSubmitAction = useCallback(async (actionId: ActionId) => {
+    if (!currentSpotRef.current || !sessionIdRef.current || uiStateRef.current !== 'idle') return;
 
     setUiState('submitted');
     setSelectedActionId(actionId);
@@ -166,9 +134,9 @@ export default function PreflopTrainingSession() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          seed,
-          sessionId,
-          spot: currentSpot,
+          seed: seedRef.current,
+          sessionId: sessionIdRef.current,
+          spot: currentSpotRef.current,
           actionId,
         }),
       });
@@ -202,10 +170,10 @@ export default function PreflopTrainingSession() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const handleNext = async () => {
-    if (!sessionId || uiState !== 'revealed') return;
+  const handleNext = useCallback(async () => {
+    if (!sessionIdRef.current || uiStateRef.current !== 'revealed') return;
 
     setUiState('idle');
     setGrade(null);
@@ -217,8 +185,8 @@ export default function PreflopTrainingSession() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          seed,
-          sessionId,
+          seed: seedRef.current,
+          sessionId: sessionIdRef.current,
         }),
       });
 
@@ -238,11 +206,43 @@ export default function PreflopTrainingSession() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // Keyboard shortcuts - uses refs so handler never goes stale
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      // Next hand shortcuts (Space/Enter) - only in revealed state
+      if ((e.key === ' ' || e.key === 'Enter') && uiStateRef.current === 'revealed') {
+        e.preventDefault();
+        handleNext();
+        return;
+      }
+
+      // Action shortcuts - only in idle state with a spot loaded
+      if (uiStateRef.current !== 'idle' || !currentSpotRef.current) return;
+
+      if (e.key === '1' || e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        handleSubmitAction('FOLD');
+      } else if (e.key === '2' || e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        handleSubmitAction('CALL');
+      } else if (e.key === '3' || e.key.toLowerCase() === 'r') {
+        e.preventDefault();
+        handleSubmitAction('RAISE_2.5BB');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNext, handleSubmitAction]);
 
   const accuracy = handCount > 0 ? (correctCount / handCount) * 100 : 0;
 
-  // Build action panel data
+  // Build action panel data with isUserChoice for ActionButton
   const buildActionPanelData = () => {
     if (!currentSpot) return [];
 
@@ -252,9 +252,9 @@ export default function PreflopTrainingSession() {
       state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
       ev?: number;
       frequency?: number;
+      isUserChoice?: boolean;
     }> = [];
 
-    // Always show Fold, Call, Raise for preflop
     const baseActions: ActionId[] = ['FOLD', 'CALL', 'RAISE_2.5BB'];
 
     for (const actionId of baseActions) {
@@ -265,10 +265,9 @@ export default function PreflopTrainingSession() {
       let ev: number | undefined;
       let frequency: number | undefined;
 
-      if (uiState === 'submitted' && isUserChoice) {
-        state = 'selected';
+      if (uiState === 'submitted') {
+        state = isUserChoice ? 'selected' : 'disabled';
       } else if (uiState === 'revealed' && grade) {
-        // Find this action in grade results
         const actionData = grade.allActions?.find(a => mapActionId(a.actionId) === simpleAction);
 
         if (actionData) {
@@ -279,7 +278,8 @@ export default function PreflopTrainingSession() {
         if (isUserChoice) {
           state = grade.isBestAction ? 'revealed-correct' : 'revealed-incorrect';
         } else {
-          state = 'revealed-correct'; // Show all actions in revealed state
+          // Non-user actions: show as revealed-correct (neutral) for feedback
+          state = 'revealed-correct';
         }
       }
 
@@ -289,6 +289,7 @@ export default function PreflopTrainingSession() {
         state,
         ev,
         frequency,
+        isUserChoice,
       });
     }
 
@@ -395,9 +396,12 @@ export default function PreflopTrainingSession() {
       {/* Info bar */}
       <div className="p-4 bg-gray-900 text-white flex justify-between items-center">
         <div className="flex gap-6">
-          <span>Hand #{handCount + 1}</span>
+          <span className="font-semibold">Hand #{handCount + 1}</span>
           <span>Accuracy: {accuracy.toFixed(1)}%</span>
           <span>Correct: {correctCount}/{handCount}</span>
+        </div>
+        <div className="text-sm text-gray-500">
+          {currentSpot.heroToAct} | {currentSpot.history.length === 0 ? 'RFI' : `${currentSpot.history.length} prior action(s)`}
         </div>
       </div>
 
@@ -406,7 +410,7 @@ export default function PreflopTrainingSession() {
         <div className="w-full max-w-6xl">
           <PokerTable
             players={players}
-            communityCards={[]} // Preflop - no community cards
+            communityCards={[]}
             pot={currentSpot.potBb}
             potType={potType}
             dealerPosition={dealerPosition}
@@ -421,7 +425,6 @@ export default function PreflopTrainingSession() {
         <ActionPanel
           actions={buildActionPanelData()}
           onAction={(action) => {
-            // Map simple action back to ActionId
             const actionMap: Record<string, ActionId> = {
               fold: 'FOLD',
               call: 'CALL',

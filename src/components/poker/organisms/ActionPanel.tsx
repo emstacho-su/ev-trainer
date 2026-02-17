@@ -8,6 +8,7 @@ interface ActionPanelProps {
     state: 'idle' | 'disabled' | 'selected' | 'revealed-correct' | 'revealed-incorrect';
     ev?: number;
     frequency?: number;
+    isUserChoice?: boolean;
   }>;
   onAction?: (action: 'fold' | 'call' | 'raise') => void;
   className?: string;

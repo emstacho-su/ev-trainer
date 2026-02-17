@@ -68,9 +68,9 @@ const SEAT_RY = 40;
 const BET_RX = 30;
 const BET_RY = 28;
 
-// Dealer button ring (between seats and bets)
-const DEALER_RX = 37;
-const DEALER_RY = 35;
+// Dealer button ring (closer to center to avoid overlapping seat labels)
+const DEALER_RX = 33;
+const DEALER_RY = 31;
 
 function buildPositions(seatOrder: readonly string[], rx: number, ry: number): Record<string, { top: string; left: string }> {
   const count = seatOrder.length;
@@ -88,7 +88,7 @@ function buildDealerPositions(seatOrder: readonly string[]): Record<string, { to
   const count = seatOrder.length;
   const result: Record<string, { top: string; left: string }> = {};
   for (let i = 0; i < count; i++) {
-    const angle = -90 - (i * 360) / count + 8; // 8° offset toward previous seat
+    const angle = -90 - (i * 360) / count + 15; // 15° offset toward previous seat
     result[seatOrder[i]] = ellipsePos(angle, DEALER_RX, DEALER_RY);
   }
   return result;
