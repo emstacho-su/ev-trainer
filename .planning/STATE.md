@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 12 of 12 (Dashboard & Training Config Popout)
-Plan: 12-01 complete, 12-02 through 12-04 pending
+Plan: 12-02 complete, 12-03 through 12-04 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 12-01-PLAN.md (Dashboard + TrainingConfigDialog)
+Last activity: 2026-02-17 -- Completed 12-02-PLAN.md (Training page with embedded session loop)
 
-Progress: [████████████████████░] ~99% (62 plans complete)
+Progress: [████████████████████░] ~99% (63 plans complete)
 
 ## Performance Metrics
 
@@ -249,6 +249,10 @@ Recent decisions affecting current work:
 - 12-01: DrillSuggestions navigate to /training with URL params (heroPosition, potType)
 - 12-01: TrainingConfigDialog uses native dialog matching RangeGridModal pattern exactly
 - 12-01: Session-level fields locked via disabled fieldset with opacity-50 visual cue
+- 12-02: Suspense wrapper around TrainingPage for useSearchParams SSR compatibility
+- 12-02: Postflop mode redirects to /postflop-training (stays separate this phase)
+- 12-02: Back arrow links to / (dashboard) not /lobby
+- 12-02: ActionPanel shown in both idle/submitted and revealed states (separate render blocks)
 
 ### Pending Todos
 
@@ -271,6 +275,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 12-01-PLAN.md (Dashboard + TrainingConfigDialog)
-Resume file: None
-Next: Continue Phase 12 (12-02 through 12-04)
+Stopped at: Completed 12-02-PLAN.md (Training page with embedded session loop)
+Resume file: .planning/phases/12-dashboard-training-popout/12-RESUME.md
+Next: `/gsd:execute-phase 12` — will auto-skip 12-01, 12-02 and resume from 12-03
