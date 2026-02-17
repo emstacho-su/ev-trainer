@@ -25,6 +25,24 @@ const LOW_CONFIDENCE_THRESHOLD = 20;
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 100;
 
+/** Get userId from auth or return 401. In dev, falls back to first user in DB. */
+async function getUserId(req: Request, res: Response): Promise<string | null> {
+  if (req.user?.userId) return req.user.userId;
+  if (process.env.NODE_ENV === "production") {
+    res.status(401).json({ error: { code: "UNAUTHORIZED", message: "Authentication required" } });
+    return null;
+  }
+  // Dev fallback: use first user in database
+  const mod = await import("../../lib/prisma/client");
+  const prisma = mod.default;
+  const user = await prisma.user.findFirst({ select: { id: true } });
+  if (!user) {
+    res.status(401).json({ error: { code: "NO_USER", message: "No users in database. Run seed script." } });
+    return null;
+  }
+  return user.id;
+}
+
 /**
  * Parse date range from query params with defaults.
  * Default: last 30 days.
@@ -67,7 +85,8 @@ export async function getPerformanceStats(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const filters = parseDateFilters(req.query as Record<string, unknown>);
 
     const metrics = await getDailyStats(userId, filters);
@@ -104,7 +123,8 @@ export async function getPositionStats(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const filters = parseDateFilters(req.query as Record<string, unknown>);
 
     const stats = await getPositionBreakdown(userId, filters);
@@ -137,7 +157,8 @@ export async function getSessionHistory(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const filters = parseDateFilters(req.query as Record<string, unknown>);
 
     const page = Math.max(1, parseInt(String(req.query.page), 10) || 1);
@@ -184,7 +205,8 @@ export async function getSessionDetailEndpoint(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const sessionIdParam = req.params.sessionId;
     const sessionId = typeof sessionIdParam === "string" ? sessionIdParam : "";
 
@@ -222,7 +244,8 @@ export async function deleteSessionEndpoint(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const sessionIdParam = req.params.sessionId;
     const sessionId = typeof sessionIdParam === "string" ? sessionIdParam : "";
 
@@ -260,7 +283,8 @@ export async function toggleHandFlag(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const sessionIdParam = req.params.sessionId;
     const entryIndexParam = req.params.entryIndex;
 
@@ -301,7 +325,8 @@ export async function getFlaggedHands(
   res: Response
 ): Promise<void> {
   try {
-    const userId = req.user!.userId;
+    const userId = await getUserId(req, res);
+    if (!userId) return;
     const entries = await getFlaggedEntries(userId);
     res.status(200).json({ entries });
   } catch (error) {

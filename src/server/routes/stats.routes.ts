@@ -5,7 +5,11 @@
  */
 
 import { Router } from "express";
-import { requireAuth } from "../auth/auth.middleware";
+import { requireAuth, optionalAuth } from "../auth/auth.middleware";
+
+// In dev mode, use optionalAuth so the dashboard works without login UI.
+// In production, switch back to requireAuth once login page exists.
+const authMiddleware = process.env.NODE_ENV === "production" ? requireAuth : optionalAuth;
 import {
   getPerformanceStats,
   getPositionStats,
@@ -18,13 +22,13 @@ import {
 
 const router = Router();
 
-// All stats routes require authentication
-router.get("/performance", requireAuth, getPerformanceStats);
-router.get("/positions", requireAuth, getPositionStats);
-router.get("/sessions", requireAuth, getSessionHistory);
-router.get("/sessions/:sessionId", requireAuth, getSessionDetailEndpoint);
-router.delete("/sessions/:sessionId", requireAuth, deleteSessionEndpoint);
-router.patch("/sessions/:sessionId/entries/:entryIndex/flag", requireAuth, toggleHandFlag);
-router.get("/flagged", requireAuth, getFlaggedHands);
+// All stats routes require authentication (optionalAuth in dev until login UI exists)
+router.get("/performance", authMiddleware, getPerformanceStats);
+router.get("/positions", authMiddleware, getPositionStats);
+router.get("/sessions", authMiddleware, getSessionHistory);
+router.get("/sessions/:sessionId", authMiddleware, getSessionDetailEndpoint);
+router.delete("/sessions/:sessionId", authMiddleware, deleteSessionEndpoint);
+router.patch("/sessions/:sessionId/entries/:entryIndex/flag", authMiddleware, toggleHandFlag);
+router.get("/flagged", authMiddleware, getFlaggedHands);
 
 export default router;
