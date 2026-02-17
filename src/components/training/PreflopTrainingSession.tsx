@@ -107,13 +107,12 @@ function spotToPlayers(spot: Spot): Player[] {
     const hasFolded = action?.actionId === 'FOLD';
 
     // Determine bet to show as chip
-    // For positions that haven't acted yet, show blind bets
     let bet: number | undefined;
     if (action) {
-      // Player acted: show their current bet (0 for fold/check)
+      // Player acted: show their current bet (0 for fold/check means no chip display)
       bet = action.betBb > 0 ? action.betBb : undefined;
-    } else if (!isHero) {
-      // Player hasn't acted yet: show blind bets
+    } else {
+      // Player hasn't acted yet: show blind bets for SB/BB (even for hero)
       if (position === 'SB') bet = 0.5;
       else if (position === 'BB') bet = 1.0;
     }
@@ -121,7 +120,7 @@ function spotToPlayers(spot: Spot): Player[] {
     players.push({
       position: position as Player['position'],
       stackBB: spot.stacksBb[position],
-      isActive: !isHero && !hasFolded,
+      isActive: !hasFolded,
       isFolded: hasFolded,
       isHero,
       showCards: isHero,
