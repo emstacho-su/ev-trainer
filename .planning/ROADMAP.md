@@ -22,6 +22,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Statistics & Analytics** - Performance graphs, session history, weakness detection
 - [ ] **Phase 9: Animations** - Card dealing, chip movement, EV reveal, action highlights
 - [ ] **Phase 10: Postflop Training** - Flop/turn/river decision points with multi-street progression
+- [ ] **Phase 11: Supabase Database Integration** - Supabase setup, user accounts, practice spot DB, data layer rewrite
+- [ ] **Phase 12: Dashboard & Training Config Popout** - Dashboard home page, training config as centered popout over poker table, navigation restructure
 
 ## Phase Details
 
@@ -229,3 +231,38 @@ Plans:
 - [ ] 10-05-PLAN.md — PostflopTrainingSession main component + postflop API client
 - [ ] 10-06-PLAN.md — Hand summary screen + /postflop-training page with training loop
 - [ ] 10-07-PLAN.md — Human verification checkpoint (POST-01 through POST-06)
+
+### Phase 11: Supabase Database Integration
+**Goal**: Migrate from Express/PostgreSQL/Prisma backend to Supabase with user accounts, practice spot hand database, and fully rewritten data layer
+**Depends on**: Phase 2 (replaces backend foundation), Phase 3 (replaces auth)
+**Requirements**: TBD
+**Success Criteria** (what must be TRUE):
+  1. Supabase project configured with database schema for users, sessions, hands, and stats
+  2. User account creation and authentication via Supabase Auth (replaces custom JWT/Argon2)
+  3. Practice spot hand database stores and retrieves solver-generated training hands
+  4. All existing data layer (SessionStore, Prisma queries, Express API routes) migrated to Supabase client
+  5. Data layer rewrite provides same functionality with Supabase as backend
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 11 to break down)
+
+### Phase 12: Dashboard & Training Config Popout
+**Goal**: Transform the lobby into a dashboard hub and the training config into a GTO-Wizard-style centered popout overlaying the poker table
+**Depends on**: Phase 6 (trainer configuration), Phase 5 (preflop training)
+**Requirements**: None (new user-defined scope)
+**Success Criteria** (what must be TRUE):
+  1. Dashboard at `/` shows training card and drill suggestions as the app's home page
+  2. Clicking training card navigates to `/training` with config popout auto-opened over the poker table
+  3. Config popout is a centered dialog with semi-transparent backdrop (table visible but dimmed behind)
+  4. Starting training closes the popout and begins the session on the same page (no route change)
+  5. Config popout can be reopened mid-session with locked session-level fields
+  6. All existing `/lobby` links updated to point to `/` or `/training` as appropriate
+  7. `/lobby` route remains functional for backward compatibility
+**Plans**: 4 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — Dashboard page at / + TrainingConfigDialog component
+- [ ] 12-02-PLAN.md — Training page at /training with embedded training loop and config dialog overlay
+- [ ] 12-03-PLAN.md — Update all /lobby references + AppHeader navigation restructure
+- [ ] 12-04-PLAN.md — Human verification checkpoint (all 7 success criteria)
