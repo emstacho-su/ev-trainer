@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 12 - Dashboard & Training Config Popout
+**Current focus:** Phase 11 - Supabase Database Integration
 
 ## Current Position
 
-Phase: 12 of 12 (Dashboard & Training Config Popout)
-Plan: 12-03 complete, 12-04 pending
+Phase: 11 of 12 (Supabase Database Integration)
+Plan: 11-03 complete, 11-04 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 12-03-PLAN.md (Lobby reference migration & AppHeader nav update)
+Last activity: 2026-02-17 -- Completed 11-03-PLAN.md (AuthProvider and middleware)
 
-Progress: [████████████████████░] ~99% (64 plans complete)
+Progress: [████████████████████░] ~99% (65 plans complete)
 
 ## Performance Metrics
 
@@ -257,6 +257,11 @@ Recent decisions affecting current work:
 - 12-03: Root path isActive uses exact match (pathname === '/') to avoid false positives
 - 12-03: WeaknessBreakdown drill navigation goes to /training (not /) since it starts a training session
 - 12-03: Summary page 'New session' links to /training, 'Back' links to / (different intents)
+- 11-03: AuthProvider uses getSession() for initial load + onAuthStateChange for updates
+- 11-03: Auth context provides { user, loading } -- minimal surface for consumers
+- 11-03: Protected routes: /stats, /review, /summary -- all training routes remain guest-accessible
+- 11-03: OAuth callback redirects to next param or / on success, /login?error on failure
+- 11-03: Email confirmation uses verifyOtp with token_hash and type params
 
 ### Pending Todos
 
@@ -279,6 +284,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Completed 12-03-PLAN.md (Lobby reference migration & AppHeader nav update)
-Resume file: .planning/phases/12-dashboard-training-popout/12-RESUME.md
-Next: `/gsd:execute-phase 12` — will auto-skip 12-01, 12-02, 12-03 and resume from 12-04
+Stopped at: Completed 11-03-PLAN.md (AuthProvider and middleware)
+Resume file: None
+Next: Execute 11-04-PLAN.md (Login/signup pages with Supabase Auth)
