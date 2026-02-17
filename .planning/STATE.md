@@ -12,9 +12,9 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
 Plan: 1 of 7 in Phase 8 complete, Phase 9 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 09-03 ActionButton EV reveal animations
+Last activity: 2026-02-17 -- Completed 09-02 card deal and flip animations
 
-Progress: [██████████████░░] ~78% (47 plans complete)
+Progress: [██████████████░░] ~80% (48 plans complete)
 
 ## Performance Metrics
 
@@ -203,6 +203,9 @@ Recent decisions affecting current work:
 - 08-01: Top 5 biggest mistakes by absolute EV diff descending
 - 09-03: AnimatePresence overlay pattern for background color transitions (motion.div absolute z-0)
 - 09-03: Removed getFrequencyBg — Motion overlay handles all reveal colors uniformly
+- 09-02: Perspective 600px for 3D card flip depth
+- 09-02: Sequential deal+flip: flip starts after CARD_DEAL delay completes
+- 09-02: AnimatedCard wraps Card/CardBack for all card rendering with consistent animation
 
 ### Pending Todos
 
@@ -220,7 +223,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:31 UTC
-Stopped at: Completed 09-03-PLAN.md (ActionButton EV reveal animations)
+Last session: 2026-02-17 05:29 UTC
+Stopped at: Completed 09-02-PLAN.md (card deal and flip animations)
 Resume file: None
-Next: Continue Phase 9 wave 2 plans (09-02, 09-05, 09-06) and Phase 8 plans
+Next: Continue Phase 9 wave 2 plans (09-05, 09-06) and Phase 8 plans
