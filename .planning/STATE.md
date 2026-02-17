@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 10 of 10 (Postflop Training)
-Plan: 10-01 complete, 10-02 through 10-07 pending
+Plan: 10-02 complete, 10-03 through 10-07 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 10-01-PLAN.md (PostflopSpot types + BoardTexture classification)
+Last activity: 2026-02-17 -- Completed 10-02-PLAN.md (postflop solver bridge)
 
-Progress: [█████████████████] ~91% (55 plans complete)
+Progress: [█████████████████] ~93% (56 plans complete)
 
 ## Performance Metrics
 
@@ -223,6 +223,10 @@ Recent decisions affecting current work:
 - 10-01: Ace-high rainbow boards (AKQ) classified as RAINBOW not CONNECTED
 - 10-01: PAIRED priority over all suit-based classifications (trips board = PAIRED)
 - 10-01: CONNECTED requires maxGap<=3 AND no Ace on board
+- 10-02: Direct async call instead of Web Worker for Phase 10 (mock solver < 1ms)
+- 10-02: djb2 hash for deterministic mock output keyed on board+street+pot+stack+position
+- 10-02: 50ms artificial delay in solverClient to test loading states
+- 10-02: Inline DEFAULT_ACTION_ABSTRACTION in route (no DEFAULT_ABSTRACTION export exists)
 
 ### Pending Todos
 
@@ -241,6 +245,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17 06:08 UTC
-Stopped at: Completed 10-01-PLAN.md (PostflopSpot types + BoardTexture classification)
+Stopped at: Completed 10-02-PLAN.md (postflop solver bridge)
 Resume file: None
-Next: Continue Phase 10 (10-02 through 10-07)
+Next: Continue Phase 10 (10-03 through 10-07)
