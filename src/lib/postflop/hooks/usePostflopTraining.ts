@@ -4,11 +4,12 @@
 // Hook that orchestrates postflop training: hand generation, user decisions,
 // solver calls, villain action delays, and street advancement.
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { usePostflopSession } from '../session/postflopSession';
 import { generatePostflopHand } from '../utils/handGenerator';
 import { fetchPostflopSolution } from '../api/postflopApiClient';
 import { sampleVillainAction } from '../utils/villainSampler';
+import type { SolverNodeOutput, SolverActionOutput } from '../../engine/solverAdapter';
 import type { PostflopConfig } from '../../solver/postflopTypes';
 import type { Card } from '../../solver/types';
 import type { Street } from '../types';
@@ -22,11 +23,9 @@ function buildSolverConfig(
   heroPosition: 'IP' | 'OOP',
 ): PostflopConfig {
   return {
-    // CFRConfig fields (not used by mock solver, stubbed for type compliance)
     maxIterations: 100,
     targetExploitability: 0.5,
     checkConvergenceEvery: 10,
-    // PostflopConfig fields
     street,
     board,
     heroRange: [],
@@ -65,12 +64,30 @@ export function usePostflopTraining() {
   const [isLoading, setIsLoading] = useState(false);
   const [villainActionLabel, setVillainActionLabel] = useState<string | null>(null);
 
+  // Pre-fetched solver actions for current street (available before user decides)
+  const [streetActions, setStreetActions] = useState<SolverActionOutput[]>([]);
+
   // Store the full 5-card board for street advancement
   const fullBoardRef = useRef<Card[]>([]);
+  // Store pre-fetched solver output for use after user decides
+  const solverOutputRef = useRef<SolverNodeOutput | null>(null);
+
+  /** Fetch solver output for a given street configuration and store it. */
+  const prefetchSolver = useCallback(
+    async (street: Street, board: Card[], potBb: number, stackBb: number, heroPosition: 'IP' | 'OOP') => {
+      setStreetActions([]);
+      const config = buildSolverConfig(street, board, potBb, stackBb, heroPosition);
+      const output = await fetchPostflopSolution(config);
+      solverOutputRef.current = output;
+      setStreetActions(output.actions);
+    },
+    [],
+  );
 
   const startNewHand = useCallback(() => {
     const spot = generatePostflopHand();
     fullBoardRef.current = [...spot.board];
+    solverOutputRef.current = null;
     dispatch({
       type: 'START_HAND',
       payload: {
@@ -81,7 +98,10 @@ export function usePostflopTraining() {
         heroPosition: spot.heroPosition,
       },
     });
-  }, [dispatch]);
+    // Pre-fetch solver output for the flop
+    const flopBoard = spot.board.slice(0, 3);
+    prefetchSolver('FLOP', flopBoard, spot.potBb, spot.stackBb, spot.heroPosition);
+  }, [dispatch, prefetchSolver]);
 
   const handleUserDecision = useCallback(
     async (actionId: string) => {
@@ -89,31 +109,35 @@ export function usePostflopTraining() {
       setIsLoading(true);
 
       try {
-        const config = buildSolverConfig(
-          state.currentStreet,
-          state.board,
-          state.potBb,
-          state.stackBb,
-          state.heroPosition,
-        );
+        // Use pre-fetched solver output (already available from prefetch)
+        let output = solverOutputRef.current;
+        if (!output) {
+          // Fallback: fetch if somehow not pre-fetched
+          const config = buildSolverConfig(
+            state.currentStreet,
+            state.board,
+            state.potBb,
+            state.stackBb,
+            state.heroPosition,
+          );
+          output = await fetchPostflopSolution(config);
+        }
 
-        const output = await fetchPostflopSolution(config);
         dispatch({ type: 'SOLVER_OUTPUT', payload: { output } });
         setIsLoading(false);
 
-        // Determine next street's board from full 5-card board
+        // Determine next street
         const nextStreet: Street | null =
           state.currentStreet === 'FLOP' ? 'TURN' :
           state.currentStreet === 'TURN' ? 'RIVER' :
           null;
 
-        // After solver output: villain action with delay
+        // Villain action with delay
         await new Promise((resolve) => setTimeout(resolve, 500));
 
         const villainAction = sampleVillainAction(output);
         setVillainActionLabel(villainAction);
 
-        // Show villain action label for 1000ms then advance street
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setVillainActionLabel(null);
 
@@ -121,15 +145,18 @@ export function usePostflopTraining() {
           const nextBoardSize = BOARD_SIZE[nextStreet];
           const nextBoard = fullBoardRef.current.slice(0, nextBoardSize);
           dispatch({ type: 'ADVANCE_STREET', payload: { nextBoard } });
+          // Pre-fetch solver for next street
+          prefetchSolver(nextStreet, nextBoard, state.potBb, state.stackBb, state.heroPosition);
         } else {
           // River complete -> summary
           dispatch({ type: 'ADVANCE_STREET', payload: { nextBoard: state.board } });
+          setStreetActions([]);
         }
       } catch {
         setIsLoading(false);
       }
     },
-    [dispatch, state.currentStreet, state.board, state.potBb, state.stackBb, state.heroPosition],
+    [dispatch, state.currentStreet, state.board, state.potBb, state.stackBb, state.heroPosition, prefetchSolver],
   );
 
   return {
@@ -137,5 +164,6 @@ export function usePostflopTraining() {
     handleUserDecision,
     isLoading,
     villainActionLabel,
+    streetActions,
   };
 }

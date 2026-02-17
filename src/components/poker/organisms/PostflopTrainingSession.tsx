@@ -56,7 +56,7 @@ const STREET_ORDER = { FLOP: 0, TURN: 1, RIVER: 2 } as const;
 
 function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTrainingSessionProps) {
   const { state, dispatch } = usePostflopSession();
-  const { startNewHand, handleUserDecision, isLoading, villainActionLabel } = usePostflopTraining();
+  const { startNewHand, handleUserDecision, isLoading, villainActionLabel, streetActions } = usePostflopTraining();
 
   const {
     machineState,
@@ -101,7 +101,8 @@ function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTraining
 
   // Determine StreetActionPanel props
   const currentDecision = decisions[currentStreet];
-  const solverActions = currentDecision?.solverOutput?.actions ?? [];
+  // Use pre-fetched street actions for display; fall back to solver output from decision after reveal
+  const solverActions = currentDecision?.solverOutput?.actions ?? streetActions;
   const selectedActionId = currentDecision?.actionId ?? null;
 
   // Is the current street after a deviation?
