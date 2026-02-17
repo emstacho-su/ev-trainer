@@ -34,6 +34,8 @@ import {
   updateSessionRecord,
   updateFromSessionDetail,
 } from "../../../lib/v2/storage/sessionStorage";
+import type { RangeData } from "../../../lib/range/types";
+import { getHandAtPosition } from "../../../lib/range/gridLayout";
 
 // ---------- Spot → PokerTable conversion ----------
 
@@ -244,6 +246,55 @@ function scoreDecision(grade: DecisionGrade, actionId: ActionId): number {
   return 0.5;
 }
 
+/**
+ * Generate deterministic mock range data for all 169 canonical hands.
+ * Uses seeded RNG so the same spot always produces the same range.
+ * The hero and villain get different seeds to produce distinct ranges.
+ */
+function generateMockRangeData(seed: string, spotId: string, player: 'hero' | 'villain'): RangeData {
+  const rng = createSeededRng(combineSeed([seed, spotId, `range-${player}`]));
+  const hands: RangeData['hands'] = [];
+
+  for (let row = 0; row < 13; row++) {
+    for (let col = 0; col < 13; col++) {
+      const hand = getHandAtPosition(row, col);
+      if (!hand) continue;
+
+      const r = rng.next();
+      // Premium hands (pairs AA-QQ, AKs, AQs) mostly raise
+      const isPremium = (row === col && row <= 2) || (row === 0 && col <= 2 && col !== row);
+      // Marginal hands fold more
+      const isMarginal = row > 8 && col > 8;
+
+      let foldFreq: number, callFreq: number, raiseFreq: number;
+      if (isPremium) {
+        raiseFreq = 0.7 + r * 0.25;
+        callFreq = (1 - raiseFreq) * (0.3 + rng.next() * 0.4);
+        foldFreq = 1 - raiseFreq - callFreq;
+      } else if (isMarginal) {
+        foldFreq = 0.5 + r * 0.4;
+        callFreq = (1 - foldFreq) * (0.3 + rng.next() * 0.4);
+        raiseFreq = 1 - foldFreq - callFreq;
+      } else {
+        foldFreq = 0.1 + r * 0.4;
+        raiseFreq = (1 - foldFreq) * (0.3 + rng.next() * 0.5);
+        callFreq = 1 - foldFreq - raiseFreq;
+      }
+
+      const actions: RangeData['hands'][number]['actions'] = [];
+      if (raiseFreq > 0.01) actions.push({ type: 'raise', frequency: raiseFreq });
+      if (callFreq > 0.01) actions.push({ type: 'call', frequency: callFreq });
+      if (foldFreq > 0.01) actions.push({ type: 'fold', frequency: foldFreq });
+
+      if (actions.length > 0) {
+        hands.push({ hand, actions });
+      }
+    }
+  }
+
+  return { hands, totalCombos: hands.length };
+}
+
 // ---------- Page component ----------
 
 function toSummaryHref(detail: SessionDetailResponse): string {
@@ -275,6 +326,8 @@ export default function SessionPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [heroRange, setHeroRange] = useState<RangeData | null>(null);
+  const [villainRange, setVillainRange] = useState<RangeData | null>(null);
   const { config, updateConfig } = useTrainerConfig();
 
   // Refs for stable keyboard handler access
@@ -381,6 +434,12 @@ export default function SessionPage() {
       setHandCount(prev => prev + 1);
       setUiState('revealed');
 
+      // Generate mock range data now that a decision has been made
+      if (seed && currentSpot) {
+        setHeroRange(generateMockRangeData(seed, currentSpot.spotId, 'hero'));
+        setVillainRange(generateMockRangeData(seed, currentSpot.spotId, 'villain'));
+      }
+
       updateSessionRecord(session.sessionId, (previous) => ({
         session,
         currentSpot,
@@ -406,6 +465,8 @@ export default function SessionPage() {
 
     setUiState('idle');
     setGrade(null);
+    setHeroRange(null);
+    setVillainRange(null);
     setSelectedActionId(null);
     setErrorMessage(null);
 
@@ -621,6 +682,8 @@ export default function SessionPage() {
                 dealerPosition={dealerPosition}
                 heroPosition={currentSpot.heroToAct as Player['position']}
                 tableSize="6max"
+                heroRange={heroRange ?? undefined}
+                villainRange={villainRange ?? undefined}
               />
             </div>
           </div>
