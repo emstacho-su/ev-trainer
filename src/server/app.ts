@@ -1,26 +1,18 @@
 /**
- * Overview: Express application configuration with security middleware.
- * Interacts with: All route handlers and middleware chain.
- * Importance: Central application setup with security-first middleware ordering.
+ * Overview: Express application for solver compute route.
+ * Interacts with: Postflop solver route handler.
+ * Importance: Hosts the CPU-intensive solver endpoint on Express (separate from Next.js).
+ *
+ * This Express server has a single purpose: serve the postflop solver route.
+ * All other functionality (auth, sessions, stats) is handled by Next.js + Supabase.
  */
 
 import express from "express";
-import helmet from "helmet";
 import cors from "cors";
-import compression from "compression";
-import rateLimit from "express-rate-limit";
-import cookieParser from "cookie-parser";
 
-import { errorHandler } from "./middleware/error.middleware";
-import healthRoutes from "./routes/health.routes";
-import authRoutes from "./auth/auth.routes";
-import oauthRoutes from "./oauth/oauth.routes";
 import postflopRoutes from "./routes/postflop.routes";
 
 const app = express();
-
-// Security middleware - must be first
-app.use(helmet());
 
 // CORS configuration
 app.use(
@@ -30,53 +22,10 @@ app.use(
   })
 );
 
-// Rate limiting for API protection
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: {
-    error: {
-      code: "RATE_LIMIT_EXCEEDED",
-      message: "Too many requests, please try again later",
-    },
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-app.use(limiter);
-
-// Compression for response bodies
-app.use(compression());
-
 // Body parsing
 app.use(express.json({ limit: "10kb" }));
-app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
-// Cookie parsing for refresh tokens
-app.use(cookieParser());
-
-// Stricter rate limit for auth endpoints
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // 20 requests per 15 min (stricter than general API)
-  message: {
-    error: {
-      code: 'AUTH_RATE_LIMIT_EXCEEDED',
-      message: 'Too many authentication attempts, please try again later',
-    },
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Routes
-app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api/oauth', oauthRoutes);
-app.use("/health", healthRoutes);
-app.use('/api/postflop', postflopRoutes);
-
-// Error handler - must be last
-app.use(errorHandler);
+// Solver route -- the only Express endpoint
+app.use("/api/postflop", postflopRoutes);
 
 export default app;

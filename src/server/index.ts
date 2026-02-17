@@ -1,34 +1,19 @@
 /**
- * Overview: Express server entry point.
- * Interacts with: Express app and route mounting.
- * Importance: Starts HTTP server and handles uncaught errors.
+ * Overview: Express server entry point for solver compute.
+ * Interacts with: Express app hosting postflop solver route.
+ * Importance: Starts HTTP server for CPU-intensive solver requests.
+ *
+ * The server's only job is hosting the postflop solver compute route.
+ * All other backend functionality is handled by Next.js API routes + Supabase.
  */
 
 import app from "./app";
-import sessionRoutes from "./routes/session.routes";
-import configRoutes from "./routes/config.routes";
-import drillRoutes from "./routes/drill.routes";
-import statsRoutes from "./routes/stats.routes";
-import { setSessionStoreBackend } from "../lib/v2/sessionStore";
-import { PrismaSessionStoreBackend } from "../lib/v2/storage/prismaSessionStore";
-
-// Mount routes
-app.use("/api/session", sessionRoutes);
-app.use("/api/config", configRoutes);
-app.use("/api/drills", drillRoutes);
-app.use("/api/stats", statsRoutes);
-
-// Swap session store backend to Prisma
-const prismaBackend = new PrismaSessionStoreBackend();
-setSessionStoreBackend(prismaBackend);
-console.log("Session store backend: Prisma (PostgreSQL)");
 
 const PORT = process.env.PORT || 4000;
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-  console.log(`Session API: http://localhost:${PORT}/api/session`);
+  console.log(`Solver server running on port ${PORT}`);
+  console.log(`Solver endpoint: http://localhost:${PORT}/api/postflop/solve`);
 });
 
 // Graceful shutdown
