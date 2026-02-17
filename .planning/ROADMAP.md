@@ -170,11 +170,15 @@ Plans:
   3. User can see spot-level breakdown showing weakest areas
   4. User can view session history with replay option
   5. Heatmap visualization shows positional strengths and weaknesses
-**Plans**: TBD
+**Plans**: 6 plans
 
 Plans:
-- [ ] 08-01: TBD
-- [ ] 08-02: TBD
+- [ ] 08-01-PLAN.md — Stats API with Prisma aggregation (server-side data processing)
+- [ ] 08-02-PLAN.md — Dashboard layout with hero metrics and filter bar
+- [ ] 08-03-PLAN.md — Performance chart with Recharts and metric toggle
+- [ ] 08-04-PLAN.md — Position heatmap and weakness breakdown with drill buttons
+- [ ] 08-05-PLAN.md — Session history with pagination, sorting, and deletion
+- [ ] 08-06-PLAN.md — Human verification checkpoint
 
 ### Phase 9: Animations
 **Goal**: GTO Nexus-style smooth animations enhance training experience
