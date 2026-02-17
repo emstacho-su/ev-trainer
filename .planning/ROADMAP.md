@@ -175,16 +175,18 @@ Plans:
   4. User can view session history with replay option
   5. Heatmap visualization shows positional strengths and weaknesses
   6. User can flag difficult hands during review for later practice
-**Plans**: 7 plans
+**Plans**: 9 plans
 
 Plans:
-- [ ] 08-01-PLAN.md — Stats API with Prisma aggregation (server-side data processing)
-- [ ] 08-02-PLAN.md — Dashboard layout with hero metrics and filter bar
-- [ ] 08-03-PLAN.md — Performance chart with Recharts and metric toggle (integrated into Performance tab)
-- [ ] 08-04-PLAN.md — Position heatmap and weakness breakdown with drill buttons (integrated into Positions tab)
-- [ ] 08-05-PLAN.md — Session history with pagination, sorting, and deletion (integrated into Sessions tab)
-- [ ] 08-06-PLAN.md — Human verification checkpoint
-- [ ] 08-07-PLAN.md — Flagged hands feature with flag/unflag API and review list
+- [x] 08-01-PLAN.md — Stats API with Prisma aggregation (server-side data processing)
+- [x] 08-02-PLAN.md — Dashboard layout with hero metrics and filter bar
+- [x] 08-03-PLAN.md — Performance chart with Recharts and metric toggle (integrated into Performance tab)
+- [x] 08-04-PLAN.md — Position heatmap and weakness breakdown with drill buttons (integrated into Positions tab)
+- [x] 08-05-PLAN.md — Session history with pagination, sorting, and deletion (integrated into Sessions tab)
+- [x] 08-06-PLAN.md — Human verification checkpoint
+- [x] 08-07-PLAN.md — Flagged hands feature with flag/unflag API and review list
+- [ ] 08-08-PLAN.md — Gap closure: position, scenario, and street filter controls + auth token fix
+- [ ] 08-09-PLAN.md — Gap closure: session replay mode with hand-by-hand review cards
 
 ### Phase 9: Animations
 **Goal**: GTO Nexus-style smooth animations enhance training experience
