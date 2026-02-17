@@ -3,8 +3,8 @@
 // based on board hash without running full CFR+ iterations.
 
 import type { SolverNodeOutput, SolverActionOutput } from '../../engine/solverAdapter';
-import type { PostflopConfig } from '../../solver/postflopSolver';
-import { POSTFLOP_ACTIONS } from '../../solver/postflopSolver';
+import type { PostflopConfig } from '../../solver/postflopTypes';
+import { POSTFLOP_ACTIONS } from '../../solver/postflopTypes';
 
 /**
  * Simple djb2 hash function for deterministic output from a string key.

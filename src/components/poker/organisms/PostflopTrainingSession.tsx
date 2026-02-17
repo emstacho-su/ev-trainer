@@ -9,7 +9,15 @@ import { usePostflopTraining } from '@/lib/postflop/hooks/usePostflopTraining';
 import { PokerTable } from './PokerTable';
 import { StreetActionPanel } from '../molecules/StreetActionPanel';
 import { SpotContextLabel } from '../molecules/SpotContextLabel';
+import { HandSummaryModal } from '../molecules/HandSummaryModal';
 import type { Card } from '@/lib/solver/types';
+
+interface PostflopTrainingSessionProps {
+  /** Called when user clicks "Next Hand" in summary modal. */
+  onNextHand?: () => void;
+  /** Called when user clicks "Replay" in summary modal. */
+  onReplay?: () => void;
+}
 
 /** Convert Card ('Ah', 'Kc') to PokerTable card format. */
 function parseCard(card: Card): { rank: string; suit: 'h' | 'd' | 'c' | 's' } {
@@ -46,8 +54,8 @@ function deriveHeroRole(preflopHistory: string, heroPosition: 'IP' | 'OOP'): 'Ag
 /** Street ordering for deviation comparison. */
 const STREET_ORDER = { FLOP: 0, TURN: 1, RIVER: 2 } as const;
 
-function PostflopTrainingSessionInner() {
-  const { state } = usePostflopSession();
+function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTrainingSessionProps) {
+  const { state, dispatch } = usePostflopSession();
   const { startNewHand, handleUserDecision, isLoading, villainActionLabel } = usePostflopTraining();
 
   const {
@@ -203,25 +211,29 @@ function PostflopTrainingSessionInner() {
         </div>
       )}
 
-      {/* Summary state */}
-      {machineState === 'summary' && (
-        <div className="px-4 pb-4 text-center">
-          <p className="text-gray-300 text-lg font-semibold mb-2">Hand Complete</p>
-          <p className="text-gray-400 text-sm">
-            {deviatedStreet
-              ? `Deviated from solver line on the ${deviatedStreet.toLowerCase()}.`
-              : 'Stayed on solver line throughout the hand.'}
-          </p>
-        </div>
+      {/* Summary modal */}
+      {machineState === 'summary' && state.summary && (
+        <HandSummaryModal
+          summary={state.summary}
+          onNextHand={() => {
+            dispatch({ type: 'RESET' });
+            startNewHand();
+            onNextHand?.();
+          }}
+          onReplay={() => {
+            dispatch({ type: 'RESET' });
+            onReplay?.();
+          }}
+        />
       )}
     </div>
   );
 }
 
-export function PostflopTrainingSession() {
+export function PostflopTrainingSession({ onNextHand, onReplay }: PostflopTrainingSessionProps = {}) {
   return (
     <PostflopSessionProvider>
-      <PostflopTrainingSessionInner />
+      <PostflopTrainingSessionInner onNextHand={onNextHand} onReplay={onReplay} />
     </PostflopSessionProvider>
   );
 }

@@ -9,7 +9,7 @@ import { usePostflopSession } from '../session/postflopSession';
 import { generatePostflopHand } from '../utils/handGenerator';
 import { fetchPostflopSolution } from '../api/postflopApiClient';
 import { sampleVillainAction } from '../utils/villainSampler';
-import type { PostflopConfig } from '../../solver/postflopSolver';
+import type { PostflopConfig } from '../../solver/postflopTypes';
 import type { Card } from '../../solver/types';
 import type { Street } from '../types';
 

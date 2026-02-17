@@ -4,7 +4,7 @@
 
 // TODO: Replace with Web Worker + real CFR+ solver for production
 
-import type { PostflopConfig } from '../../solver/postflopSolver';
+import type { PostflopConfig } from '../../solver/postflopTypes';
 import type { SolverNodeOutput } from '../../engine/solverAdapter';
 import { mockSolvePostflop } from './mockPostflopSolver';
 

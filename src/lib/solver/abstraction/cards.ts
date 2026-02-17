@@ -175,3 +175,42 @@ export function getBucketId(card1: Card, card2: Card): number | undefined {
   const abstraction = buildPreflopAbstraction();
   return abstraction.get(canonical);
 }
+
+// ── Postflop stubs ────────────────────────────────────────────────────
+// These exports are referenced by postflopSolver.ts but not yet implemented.
+// Stubbed here to unblock the build. Real implementations will come when
+// the full postflop solver replaces the mock solver.
+
+/** Default number of postflop equity buckets. */
+export const DEFAULT_POSTFLOP_BUCKETS = 50;
+
+/** A postflop bucket is an integer index into the bucketed equity range. */
+export type PostflopBucket = number;
+
+/** Alias for generateAllHands (expected by postflopSolver.ts). */
+export const getValidHands = generateAllHands;
+
+/** Calculate expected hand strength (Monte Carlo). Stub returns 0.5. */
+export function calculateEHS(_hand: Hand, _board: Card[], _iterations?: number): number {
+  return 0.5;
+}
+
+/** Assign a hand to an equity bucket. Stub returns bucket 0. */
+export function assignBucket(_ehs: number, _numBuckets?: number): PostflopBucket {
+  return 0;
+}
+
+/** Get postflop bucket boundaries. Stub returns empty array. */
+export function getPostflopBuckets(_numBuckets?: number): number[] {
+  return [];
+}
+
+/** Build a postflop info set ID from player, bucket, board, and history. */
+export function buildPostflopInfoSetId(
+  player: number,
+  bucket: PostflopBucket,
+  board: string,
+  history: string,
+): string {
+  return `${player}:B${bucket}:${board}:${history}`;
+}

@@ -3,7 +3,7 @@
 // swap to real API call in production.
 
 import type { SolverNodeOutput } from '../../engine/solverAdapter';
-import type { PostflopConfig } from '../../solver/postflopSolver';
+import type { PostflopConfig } from '../../solver/postflopTypes';
 import { solvePostflopNode } from '../solver/solverClient';
 
 /**
