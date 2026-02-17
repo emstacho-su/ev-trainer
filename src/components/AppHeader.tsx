@@ -5,21 +5,22 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
-  { href: '/lobby', label: 'Lobby' },
+  { href: '/', label: 'Dashboard' },
+  { href: '/training', label: 'Training' },
   { href: '/stats', label: 'Stats' },
 ] as const;
 
 export default function AppHeader() {
   const pathname = usePathname();
 
-  // Hide header on session pages to avoid distraction during training
-  if (pathname.startsWith('/session/')) return null;
+  // Hide header on session and training pages to avoid distraction during training
+  if (pathname.startsWith('/session/') || pathname.startsWith('/training')) return null;
 
   return (
     <header className="border-b border-stone-200 bg-white dark:border-stone-700 dark:bg-stone-900">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link
-          href="/lobby"
+          href="/"
           className="text-lg font-bold text-stone-900 dark:text-stone-100"
         >
           EV Trainer
@@ -27,7 +28,9 @@ export default function AppHeader() {
 
         <nav className="flex items-center gap-1">
           {NAV_LINKS.map(({ href, label }) => {
-            const isActive = pathname === href || pathname.startsWith(href + '/');
+            const isActive = href === '/'
+              ? pathname === '/'
+              : pathname === href || pathname.startsWith(href + '/');
             return (
               <Link
                 key={href}
