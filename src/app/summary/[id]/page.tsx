@@ -105,7 +105,48 @@ export default function SummaryPlaceholderPage() {
         setAggregates(nextAggregates);
       } catch (error) {
         if (!mounted) return;
-        const message = error instanceof Error ? error.message : "Failed to load summary.";
+
+        // Fallback to localStorage data when API fails
+        const localRecord = readSessionRecord(sessionId);
+        if (localRecord) {
+          // Build a detail-like object from localStorage if session is complete
+          if (localRecord.session.isComplete || localRecord.aggregates) {
+            setDetail({
+              ok: true,
+              session: localRecord.session,
+              reviewAvailable: localRecord.reviewAvailable ?? false,
+              entries: [],
+            } as SessionDetailResponse);
+
+            if (localRecord.aggregates) {
+              setAggregates(localRecord.aggregates);
+            } else {
+              // Provide basic aggregates from what we have
+              const durationMs = resolveDurationMs(localRecord);
+              setAggregates({
+                volume: localRecord.session.decisionsPerSession,
+                meanEvLoss: 0,
+                bestActionRate: 0,
+                durationMs,
+              });
+            }
+            return;
+          }
+        }
+
+        // No localStorage fallback available -- show user-friendly error
+        const apiError = error as { status?: number; code?: string };
+        let message: string;
+        if (apiError.status === 404 && apiError.code === "SESSION_EXPIRED") {
+          message =
+            "This session has expired. Guest sessions are temporary. Sign up to save your progress.";
+        } else if (apiError.status === 500) {
+          message =
+            "Something went wrong loading your session. Try refreshing the page.";
+        } else {
+          message =
+            error instanceof Error ? error.message : "Failed to load summary.";
+        }
         setErrorMessage(message);
       } finally {
         if (mounted) setLoading(false);

@@ -21,73 +21,96 @@ export async function GET(
   const url = new URL(request.url);
   const seed = url.searchParams.get("seed") ?? undefined;
 
-  // Determine auth state
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const userId = user?.id ?? undefined;
+  try {
+    // Determine auth state
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    const userId = user?.id ?? undefined;
 
-  // Try in-memory first (active session)
-  const result = await handleGetSession(sessionId, seed, userId);
-
-  // If in-memory has it, return that
-  if (result.status === 200) {
-    return NextResponse.json(result.body, { status: result.status });
-  }
-
-  // If not found in-memory but user is authenticated, try Supabase for historical sessions
-  if (user && seed && result.status === 404) {
+    // Try in-memory first (active session)
+    let result: { status: number; body: unknown };
     try {
-      const dbSession = await getSessionWithEntries(supabase, sessionId, seed);
-      if (dbSession) {
-        // Verify ownership
-        if (dbSession.user_id && dbSession.user_id !== user.id) {
-          return NextResponse.json(
-            { error: { code: "FORBIDDEN", message: "Cannot access another user's session" } },
-            { status: 403 }
-          );
-        }
+      result = await handleGetSession(sessionId, seed, userId);
+    } catch (err) {
+      console.error("[session/[id]] handleGetSession threw:", err);
+      // Treat as not found so we can try Supabase fallback
+      result = { status: 404, body: { error: { code: "NOT_FOUND", message: "session not found" } } };
+    }
 
-        const isComplete = dbSession.is_complete;
-        const reviewAvailable = isComplete;
+    // If in-memory has it, return that
+    if (result.status === 200) {
+      return NextResponse.json(result.body, { status: result.status });
+    }
 
-        const sessionSnapshot = {
-          sessionId: dbSession.session_id,
-          seed: dbSession.seed,
-          mode: dbSession.mode,
-          packId: "ev-dev-pack-v1", // Pack ID not stored in DB; use default
-          decisionIndex: dbSession.decision_index,
-          decisionsPerSession: dbSession.decisions_per_session,
-          isComplete,
-          filters: dbSession.filters as Record<string, unknown>,
-        };
+    // If not found in-memory but user is authenticated, try Supabase for historical sessions
+    if (user && seed && result.status === 404) {
+      try {
+        const dbSession = await getSessionWithEntries(supabase, sessionId, seed);
+        if (dbSession) {
+          // Verify ownership
+          if (dbSession.user_id && dbSession.user_id !== user.id) {
+            return NextResponse.json(
+              { error: { code: "FORBIDDEN", message: "Cannot access another user's session" } },
+              { status: 403 }
+            );
+          }
 
-        if (!reviewAvailable) {
+          const isComplete = dbSession.is_complete;
+          const reviewAvailable = isComplete;
+
+          const sessionSnapshot = {
+            sessionId: dbSession.session_id,
+            seed: dbSession.seed,
+            mode: dbSession.mode,
+            packId: "ev-dev-pack-v1", // Pack ID not stored in DB; use default
+            decisionIndex: dbSession.decision_index,
+            decisionsPerSession: dbSession.decisions_per_session,
+            isComplete,
+            filters: dbSession.filters as Record<string, unknown>,
+          };
+
+          if (!reviewAvailable) {
+            return NextResponse.json({
+              ok: true,
+              session: sessionSnapshot,
+              reviewAvailable: false,
+            });
+          }
+
           return NextResponse.json({
             ok: true,
             session: sessionSnapshot,
-            reviewAvailable: false,
+            reviewAvailable: true,
+            entries: dbSession.session_entries.map((entry) => ({
+              index: entry.index,
+              spotId: entry.spot_id,
+              spot: entry.spot,
+              actionId: entry.action_id,
+              result: entry.result,
+            })),
           });
         }
-
-        return NextResponse.json({
-          ok: true,
-          session: sessionSnapshot,
-          reviewAvailable: true,
-          entries: dbSession.session_entries.map((entry) => ({
-            index: entry.index,
-            spotId: entry.spot_id,
-            spot: entry.spot,
-            actionId: entry.action_id,
-            result: entry.result,
-          })),
-        });
+      } catch (err) {
+        console.error("[session/[id]] Supabase fetch error:", err);
       }
-    } catch (err) {
-      console.error("[session/[id]] Supabase fetch error:", err);
     }
-  }
 
-  return NextResponse.json(result.body, { status: result.status });
+    // For guest users when session not found, return a specific message
+    if (!user && result.status === 404) {
+      return NextResponse.json(
+        { error: { code: "SESSION_EXPIRED", message: "Session expired. Guest sessions are not persisted across server restarts." } },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(result.body, { status: result.status });
+  } catch (err) {
+    console.error("[session/[id]] Unhandled GET error:", err);
+    return NextResponse.json(
+      { error: { code: "INTERNAL", message: "Something went wrong loading this session." } },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(
