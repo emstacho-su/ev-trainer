@@ -76,29 +76,29 @@ export default function ReviewPage() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-4 p-6">
-      <Link href="/" className="text-sm underline">
-        Back home
+      <Link href="/lobby" className="text-sm text-gray-400 underline hover:text-gray-200">
+        Back to lobby
       </Link>
-      <h1 className="text-2xl font-semibold">Session Review</h1>
-      <p className="text-sm text-stone-600">
+      <h1 className="text-2xl font-semibold text-gray-100">Session Review</h1>
+      <p className="text-sm text-gray-400">
         sessionId: <span className="font-mono">{sessionId || "unknown"}</span>
       </p>
 
-      {loading ? <p className="text-sm text-stone-600">Loading review...</p> : null}
+      {loading ? <p className="text-sm text-gray-400">Loading review...</p> : null}
       {errorMessage ? (
-        <p className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded border border-red-500/50 bg-red-900/30 p-3 text-sm text-red-200">
           {errorMessage}
         </p>
       ) : null}
       {blockedMessage ? (
-        <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+        <p className="rounded border border-amber-500/50 bg-amber-900/30 p-3 text-sm text-amber-200">
           {blockedMessage}
         </p>
       ) : null}
 
       {!loading && !errorMessage && !blockedMessage ? (
         entries.length === 0 ? (
-          <p className="rounded border border-stone-300 bg-white p-3 text-sm text-stone-600">
+          <p className="rounded border border-gray-700 bg-gray-800 p-3 text-sm text-gray-400">
             No review entries found for this session.
           </p>
         ) : (

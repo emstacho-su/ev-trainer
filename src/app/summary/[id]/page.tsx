@@ -133,40 +133,48 @@ export default function SummaryPlaceholderPage() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-4 p-6">
-      <Link href="/" className="text-sm underline">
-        Back home
+      <Link href="/lobby" className="text-sm text-gray-400 underline hover:text-gray-200">
+        Back to lobby
       </Link>
-      <h1 className="text-2xl font-semibold">Session Summary</h1>
-      <p className="text-sm text-stone-600">
+      <h1 className="text-2xl font-semibold text-gray-100">Session Summary</h1>
+      <p className="text-sm text-gray-400">
         sessionId: <span className="font-mono">{sessionId || "unknown"}</span>
       </p>
-      <p className="text-sm text-stone-600">mode: {mode}</p>
-      {loading ? <p className="text-sm text-stone-600">Loading summary...</p> : null}
+      <p className="text-sm text-gray-400">mode: {mode}</p>
+      {loading ? <p className="text-sm text-gray-400">Loading summary...</p> : null}
       {errorMessage ? (
-        <p className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded border border-red-500/50 bg-red-900/30 p-3 text-sm text-red-200">
           {errorMessage}
         </p>
       ) : null}
 
       {detail && !detail.session.isComplete ? (
-        <section className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+        <section className="rounded border border-amber-500/50 bg-amber-900/30 p-3 text-sm text-amber-200">
           Session not complete yet. Finish all decisions to unlock summary review.
         </section>
       ) : null}
 
       {safeAggregates ? <SummaryStatsCards aggregates={safeAggregates} /> : null}
 
-      <button
-        type="button"
-        disabled={!reviewEnabled}
-        onClick={() => {
-          if (!seed) return;
-          router.push(`/review/${sessionId}?seed=${encodeURIComponent(seed)}`);
-        }}
-        className="rounded bg-stone-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        Review session
-      </button>
+      <div className="flex gap-3">
+        <button
+          type="button"
+          disabled={!reviewEnabled}
+          onClick={() => {
+            if (!seed) return;
+            router.push(`/review/${sessionId}?seed=${encodeURIComponent(seed)}`);
+          }}
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Review session
+        </button>
+        <Link
+          href="/lobby"
+          className="rounded border border-gray-600 px-4 py-2 text-gray-300 hover:bg-gray-800"
+        >
+          New session
+        </Link>
+      </div>
     </main>
   );
 }

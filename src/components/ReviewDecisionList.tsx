@@ -19,8 +19,8 @@ export default function ReviewDecisionList({
   onSelect,
 }: ReviewDecisionListProps) {
   return (
-    <section className="rounded-lg border border-stone-300 bg-white p-4">
-      <h2 className="text-lg font-semibold">Decisions</h2>
+    <section className="rounded-lg border border-gray-700 bg-gray-800 p-4">
+      <h2 className="text-lg font-semibold text-gray-100">Decisions</h2>
       <ul className="mt-3 space-y-2">
         {entries.map((entry, index) => {
           const loss = readEvLossVsBest(entry);
@@ -31,13 +31,15 @@ export default function ReviewDecisionList({
                 type="button"
                 onClick={() => onSelect(index)}
                 className={`w-full rounded border p-3 text-left text-sm ${
-                  index === selectedIndex ? "border-stone-900" : "border-stone-200"
+                  index === selectedIndex
+                    ? "border-blue-500 bg-gray-700"
+                    : "border-gray-600 hover:bg-gray-700/50"
                 }`}
               >
-                <p>
+                <p className="text-gray-200">
                   #{entry.index + 1} · {entry.actionId}
                 </p>
-                <p className="text-stone-600">
+                <p className="text-gray-400">
                   evLossVsBest: {loss.toFixed(3)} · best: {isBest ? "yes" : "no"}
                 </p>
               </button>
