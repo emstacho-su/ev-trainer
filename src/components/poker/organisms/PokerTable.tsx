@@ -1,6 +1,8 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { motion, AnimatePresence } from 'motion/react';
+import { ANIM, EASE } from '@/lib/ui/animationTiming';
 import { PlayerSeat } from '../molecules/PlayerSeat';
 import { CommunityCards } from '../molecules/CommunityCards';
 import { PotDisplay } from '../molecules/PotDisplay';
@@ -153,38 +155,46 @@ export function PokerTable({
       })}
 
       {/* Bet chips on inner ring */}
-      {players.map((player) => {
-        if (!player.bet || player.bet <= 0) return null;
-        const pos = betPositions[player.position];
-        if (!pos) return null;
+      <AnimatePresence>
+        {players.map((player) => {
+          if (!player.bet || player.bet <= 0) return null;
+          const pos = betPositions[player.position];
+          if (!pos) return null;
 
-        return (
-          <div
-            key={`bet-${player.position}`}
-            className="absolute z-20"
-            style={{
-              top: pos.top,
-              left: pos.left,
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            <Chip amount={player.bet} size="sm" />
-          </div>
-        );
-      })}
+          return (
+            <motion.div
+              key={`bet-${player.position}`}
+              className="absolute z-20"
+              style={{
+                top: pos.top,
+                left: pos.left,
+                transform: 'translate(-50%, -50%)',
+              }}
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.3, transition: { duration: ANIM.CHIP_COLLECT, ease: EASE.OUT } }}
+              transition={{ duration: ANIM.CHIP_SLIDE, ease: EASE.OUT }}
+            >
+              <Chip amount={player.bet} size="sm" />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
 
       {/* Dealer button */}
       {dealerOffsets[dealerPosition] && (
-        <div
+        <motion.div
+          layoutId="dealer-button"
           className="absolute z-20"
           style={{
             top: dealerOffsets[dealerPosition].top,
             left: dealerOffsets[dealerPosition].left,
             transform: 'translate(-50%, -50%)',
           }}
+          transition={{ layout: { duration: ANIM.DEALER_SLIDE, ease: EASE.OUT } }}
         >
           <DealerButton />
-        </div>
+        </motion.div>
       )}
 
       {/* Center: pot type label, community cards, pot amount */}
