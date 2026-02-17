@@ -1,22 +1,24 @@
 # Phase 6: Trainer Configuration - Research
 
-**Researched:** 2026-02-16
+**Researched:** 2026-02-17
 **Domain:** Session Configuration UI, State Management, Settings Persistence
 **Confidence:** HIGH
 
 ## Summary
 
-Phase 6 implements a comprehensive trainer configuration system with two primary surfaces: a lobby-based card layout for pre-session configuration, and a mid-session sidebar drawer for adjustable filters. The phase combines form state management, localStorage-backed persistence for session memory, database-backed persistence for authenticated users, and custom toggle/preset UI patterns. Core challenges are maintaining filter validation (minimum selection rules), architectural separation between locked lobby-only settings and mid-session-adjustable filters, and providing clear visual distinction of configuration surfaces.
+Phase 6 implements a comprehensive trainer configuration system with two primary surfaces: a lobby-based card layout for pre-session configuration, and a mid-session sidebar drawer for adjustable filters. The phase combines form state management (React Hook Form 7.71.1), localStorage-backed persistence with Zod validation, database-backed persistence via Prisma 7.3.0 JSON fields, and custom toggle/preset UI patterns with Tailwind CSS v4. Core challenges are maintaining filter validation constraints (minimum selection rules), architectural separation between locked lobby-only settings and mid-session-adjustable filters, and providing clear visual distinction between configuration surfaces.
 
 **Research domains covered:**
-- React state management patterns for configuration (useState, Context, custom hooks)
-- UI patterns for multi-select toggle chips and dropdown selectors
-- Session configuration persistence (localStorage + database)
-- Overlay/drawer implementation with state management
-- Toast notification patterns for session notifications
-- Form validation with constraint enforcement
+- React 19.2 hooks patterns for configuration state management
+- React Hook Form 7.71.1 installation and integration with Zod validation
+- Tailwind CSS v4 multi-select chip patterns and drawer overlay animations
+- Next.js 16 API route POST handling for configuration persistence
+- localStorage with Zod schema validation for client-side persistence
+- Prisma 7.3.0 JSON field typing and runtime validation
+- Toast notification patterns with React Context API
+- Common pitfalls in filter-based form state management
 
-**Primary recommendation:** Use React Context with custom hooks for session configuration state, localStorage for browser-side persistence, and Prisma for server-side user preferences. Implement toggle chips with Tailwind peer selector pattern. Use a custom toast context for session notifications.
+**Primary recommendation:** Use React Hook Form 7.71.1 with Zod schemas for robust form state and validation. Implement localStorage + Zod for client-side persistence with schema migration support. Store user preferences in Prisma User.trainerPreferences JSON field with prisma-json-types-generator for type safety. Build custom toast context for session notifications. Use Tailwind peer selector for toggle chips and fixed positioning + transform for drawer overlay animations.
 
 ## Standard Stack
 
@@ -24,29 +26,32 @@ Phase 6 implements a comprehensive trainer configuration system with two primary
 
 | Library | Version | Purpose | Why Standard |
 |---------|---------|---------|--------------|
-| React | 19.2.4 | UI framework with hooks | Already in project; hooks provide sufficient state management for configuration |
-| Next.js | 16.1.6 | Full-stack framework | Already in project; App Router handles routing and API layer |
-| Tailwind CSS | v4 | Utility-first CSS | Already in project; peer selector enables toggle patterns without state |
-| TypeScript | 5.9.3 | Type safety | Already in project; strict mode enabled |
-| React Hook Form | Not yet installed | Form state management | Industry standard for efficient form handling with minimal re-renders; integrates with Zod validation |
-| Zod | 4.3.6 | Runtime schema validation | Already in project for API validation; extend to form validation |
+| React | 19.2.4 | UI framework with hooks | Already in project; useCallback, useState, useContext sufficient for configuration |
+| Next.js | 16.1.6 | Full-stack framework | Already in project; Route Handlers (app directory) for API endpoints, middleware for auth |
+| React Hook Form | 7.71.1 | Form state management | Industry standard for efficient form handling; minimizes re-renders; integrates perfectly with Zod |
+| Tailwind CSS | v4 | Utility-first CSS | Already in project; peer selector for toggles, fixed positioning for overlays, transform for animations |
+| TypeScript | 5.9.3 | Type safety | Already in project; strict mode enables compile-time config validation |
+| Zod | 4.3.6 | Runtime schema validation | Already in project; validates forms, localStorage, and API payloads consistently |
+| Prisma | 7.3.0 | Database ORM | Already in project; JSON field support for user preferences |
 
 ### Supporting
 
 | Library | Version | Purpose | When to Use |
 |---------|---------|---------|-------------|
-| localStorage API | Native browser API | Client-side persistence | Persist last used lobby configuration across sessions |
-| Prisma Client | 7.3.0 | Database ORM | Persist authenticated user's trainer configuration server-side |
-| Context API | Native React | Shared state (theme, auth) | Shared state that's stable/infrequent (e.g., training mode context) |
+| localStorage API | Native (browser) | Client-side persistence | Persist last used lobby configuration across sessions and page reloads |
+| @prisma/client | 7.3.0 | Database client | Persist authenticated user's trainer config server-side with schema evolution |
+| React Context API | Native | Shared state container | Toast notification system; theme context already in use |
+| prisma-json-types-generator | 4.x | JSON field typing | Add type safety to Prisma JSON fields (recommended but optional; Zod validation is primary guard) |
 
 ### Alternatives Considered
 
 | Instead of | Could Use | Tradeoff |
 |------------|-----------|----------|
-| React Hook Form | Manual useState + useEffect | Less efficient (more re-renders), requires custom validation logic, ~200 LOC vs ~50 with RHF |
-| Context API | Zustand/Jotai | Unnecessary overhead for stable configuration state; Context is sufficient for session config |
-| Tailwind peer | Headless UI/Radix | Peer selector is sufficient; no third-party component library in use |
-| Uncontrolled checkboxes (HTML) | Controlled React state | Uncontrolled fits form workflow; controlled adds re-render overhead for large filter lists |
+| React Hook Form 7.71.1 | Manual useState + useCallback | -70% boilerplate; RHF automatically deduplicates field updates, ~50 LOC vs ~200 for config form |
+| localStorage + Zod | Custom localStorage wrapper without validation | Risk of corrupted state after schema changes; Zod catches breakages early |
+| Prisma JSON field | Separate TrainerPreferences table | Simpler initially (no relations), but JSON sufficient for v1; can migrate later if preferences grow |
+| Context API for toast | Sonner or React Toastify library | No external dependency; project already has custom components throughout |
+| Tailwind peer for toggles | Controlled checkbox + state | Peer approach reduces re-renders; uncontrolled pattern fits form submission workflow |
 
 **Installation:**
 
@@ -54,7 +59,7 @@ Phase 6 implements a comprehensive trainer configuration system with two primary
 npm install react-hook-form
 ```
 
-(Other dependencies already in project)
+(Other dependencies already in project. Prisma JSON types generator is optional but recommended.)
 
 ## Architecture Patterns
 
@@ -62,95 +67,218 @@ npm install react-hook-form
 
 ```
 src/
+├── app/
+│   ├── trainer/
+│   │   ├── layout.tsx               # Trainer section layout (wraps lobby and session pages)
+│   │   ├── page.tsx                 # Lobby screen (config cards + start button)
+│   │   ├── [sessionId]/
+│   │   │   └── page.tsx             # Active session page (table + sidebar)
+│   │   └── api/
+│   │       └── config/
+│   │           └── route.ts         # POST/GET trainer configuration endpoints
 ├── components/
-│   ├── TrainerLobby.tsx          # Main lobby screen with config cards
-│   ├── ConfigCard.tsx             # Reusable card wrapper for config sections
-│   ├── ModeToggle.tsx             # Preflop/Flop toggle (lobby-only)
-│   ├── GameSetup.tsx              # Game type, table size, stack depth selectors
-│   ├── PositionFilters.tsx        # Position multi-select with presets
-│   ├── PotTypeFilters.tsx         # Pot type multi-select
-│   ├── DrillSuggestions.tsx       # Weak spot drills top 3
-│   ├── SessionSidebar.tsx         # Mid-session configuration drawer
-│   ├── ToastContainer.tsx         # Toast notification renderer
-│   └── SessionSummary.tsx         # End-of-session summary screen
+│   ├── trainer/
+│   │   ├── TrainerLobby.tsx         # Main lobby screen with config cards
+│   │   ├── ConfigCard.tsx           # Reusable card wrapper for config sections
+│   │   ├── ModeToggle.tsx           # Preflop/Flop toggle (lobby-only)
+│   │   ├── GameSetup.tsx            # Game type, table size, stack depth selectors
+│   │   ├── PositionFilters.tsx      # Position multi-select with presets
+│   │   ├── PotTypeFilters.tsx       # Pot type multi-select
+│   │   ├── DrillSuggestions.tsx     # Weak spot drill top 3
+│   │   ├── SessionSidebar.tsx       # Mid-session overlay drawer
+│   │   ├── SessionSummary.tsx       # End-of-session summary screen
+│   │   └── SessionLayout.tsx        # Table + sidebar container
+│   └── ui/
+│       ├── Toast/
+│       │   ├── ToastContainer.tsx   # Toast renderer
+│       │   └── ToastProvider.tsx    # Context provider
+│       └── ...
 ├── lib/
 │   ├── v2/
 │   │   ├── config/
-│   │   │   ├── configStore.ts    # LocalStorage + client-side config state
-│   │   │   ├── userPreferences.ts # Server-side user config API
-│   │   │   └── filters.ts        # Config validation and defaults
-│   │   └── hooks/
-│   │       ├── useTrainerConfig.ts # Custom hook for config state + persistence
-│   │       ├── useToast.ts        # Toast notification hook
-│   │       └── useSessionTarget.ts # Hand count target state
-│   └── ui/
-│       ├── toastContext.ts        # Toast notification context
-│       └── toastHelpers.ts        # Toast creation utilities
+│   │   │   ├── configSchema.ts      # Zod schema for trainer configuration
+│   │   │   ├── configStore.ts       # localStorage helper with validation
+│   │   │   ├── defaults.ts          # Default configuration values
+│   │   │   └── userPreferences.ts   # Server API for user preferences
+│   │   ├── hooks/
+│   │   │   ├── useTrainerConfig.ts  # Custom hook for config state + persistence
+│   │   │   ├── useSessionConfig.ts  # Hook for active session config state
+│   │   │   ├── useToast.ts          # Toast notification hook
+│   │   │   └── useSessionTarget.ts  # Hand count target state
+│   │   └── ui/
+│   │       ├── toastContext.ts      # Toast notification context definition
+│   │       └── toastHelpers.ts      # Toast creation utilities
+│   └── prisma/
+│       └── userPreferences.ts       # Prisma user preferences type inference
 └── server/
-    └── routes/
-        └── config.routes.ts       # GET/POST /api/config endpoints
+    ├── routes/
+    │   └── config.routes.ts         # Express route handlers (backup for Next.js)
+    └── services/
+        └── configService.ts         # Shared config persistence logic
 ```
 
-### Pattern 1: Session Configuration State with localStorage
+### Pattern 1: Configuration Form with React Hook Form + Zod
 
-**What:** Centralized configuration state with client-side persistence and server-side sync for authenticated users.
+**What:** Centralized form state management with validation, using React Hook Form for efficient updates and Zod for schema-driven validation.
 
-**When to use:** Whenever session configuration needs to be remembered across browser sessions and synced to a server for authenticated users.
+**When to use:** For the lobby configuration form that collects mode, game setup, position filters, pot type filters, and hand count target.
 
 **Example:**
 
 ```typescript
-// src/lib/v2/hooks/useTrainerConfig.ts
-import { useState, useEffect, useCallback } from 'react';
-import type { TrainerConfig } from '../config/configStore';
-import { loadConfigFromStorage, saveConfigToStorage } from '../config/configStore';
+// src/lib/v2/config/configSchema.ts
+import { z } from 'zod';
 
-export function useTrainerConfig(userId?: string) {
-  const [config, setConfig] = useState<TrainerConfig | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export const TrainerConfigSchema = z.object({
+  // Lobby-only (not changeable mid-session)
+  mode: z.enum(['PREFLOP', 'FLOP']),
+  gameType: z.enum(['CASH', 'HU']),
+  tableSize: z.enum(['6max', '9max']),
+  stackDepth: z.enum(['50bb', '100bb', '200bb']),
 
-  // Initialize from localStorage on mount
+  // Changeable mid-session
+  positions: z.array(z.string()).min(1, 'Select at least one position'),
+  potTypes: z.array(z.string()).min(1, 'Select at least one pot type'),
+  handCountTarget: z.number().min(1).max(1000).optional(),
+});
+
+export type TrainerConfig = z.infer<typeof TrainerConfigSchema>;
+```
+
+```typescript
+// src/components/trainer/TrainerLobby.tsx
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { TrainerConfigSchema, type TrainerConfig } from '@/lib/v2/config/configSchema';
+import { loadConfigFromStorage, saveConfigToStorage } from '@/lib/v2/config/configStore';
+import { useEffect } from 'react';
+
+export default function TrainerLobby({
+  onStartSession,
+}: {
+  onStartSession: (config: TrainerConfig) => Promise<void>;
+}) {
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting, errors },
+    reset,
+  } = useForm<TrainerConfig>({
+    resolver: zodResolver(TrainerConfigSchema),
+    defaultValues: loadConfigFromStorage() ?? {
+      mode: 'PREFLOP',
+      gameType: 'CASH',
+      tableSize: '6max',
+      stackDepth: '100bb',
+      positions: ['BB', 'SB'],
+      potTypes: ['SRP'],
+    },
+  });
+
+  // Save form state to localStorage on every change (debounced in useEffect)
+  const formValues = watch();
   useEffect(() => {
-    setIsLoading(true);
-    const stored = loadConfigFromStorage();
-    setConfig(stored);
-    setIsLoading(false);
-  }, []);
-
-  // Auto-save to localStorage on change
-  useEffect(() => {
-    if (config) {
-      saveConfigToStorage(config);
-      // Sync to server if authenticated
-      if (userId) {
-        void syncConfigToServer(userId, config).catch(console.error);
+    const timer = setTimeout(() => {
+      try {
+        saveConfigToStorage(formValues);
+      } catch (e) {
+        console.error('Failed to save config to localStorage:', e);
       }
-    }
-  }, [config, userId]);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [formValues]);
 
-  const updateConfig = useCallback((updates: Partial<TrainerConfig>) => {
-    setConfig((prev) => prev ? { ...prev, ...updates } : null);
-  }, []);
+  const onSubmit = async (config: TrainerConfig) => {
+    await onStartSession(config);
+  };
 
-  return { config, updateConfig, isLoading };
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Config cards using RHF Controller or register patterns */}
+      {/* ... */}
+      <button
+        type="submit"
+        disabled={isSubmitting || Object.keys(errors).length > 0}
+        className="rounded bg-stone-900 px-6 py-3 font-semibold text-white disabled:opacity-50"
+      >
+        {isSubmitting ? 'Starting...' : 'Start Training'}
+      </button>
+    </form>
+  );
 }
 ```
 
-Source: [React State Persistence Patterns](https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/), [React Hook Form Integration](https://www.react-hook-form.com/advanced-usage/)
+Source: [React Hook Form Getting Started](https://react-hook-form.com/get-started), [Zod Integration](https://react-hook-form.com/ts#Resolver)
 
-### Pattern 2: Multi-Select Toggle Chips with Tailwind peer
+### Pattern 2: localStorage Persistence with Zod Validation
 
-**What:** Multi-select filter UI using toggle chips with "Select All"/"Blinds Only"/"Late Position" presets, implemented with uncontrolled HTML inputs and Tailwind peer selector.
+**What:** Client-side persistence that survives page reloads and browser sessions, with schema validation to prevent corruption from schema changes.
 
-**When to use:** For position and pot type multi-select filters that don't require JavaScript-heavy validation during selection.
+**When to use:** To remember user's last configuration when they return to the lobby, and as fallback when server preferences haven't loaded yet.
 
 **Example:**
 
 ```typescript
-// src/components/PositionFilters.tsx
+// src/lib/v2/config/configStore.ts
+import { TrainerConfigSchema, type TrainerConfig } from './configSchema';
+
+const STORAGE_KEY = 'trainer-config-v1'; // Version key for future migrations
+
+export function loadConfigFromStorage(): TrainerConfig | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    // Validate and fill in defaults from schema
+    const validated = TrainerConfigSchema.safeParse(parsed);
+
+    if (!validated.success) {
+      console.warn('localStorage config validation failed, using defaults:', validated.error);
+      // Log issues but don't crash; return null to use form defaults
+      return null;
+    }
+
+    return validated.data;
+  } catch (e) {
+    console.error('Failed to load config from localStorage:', e);
+    return null;
+  }
+}
+
+export function saveConfigToStorage(config: TrainerConfig): void {
+  try {
+    const validated = TrainerConfigSchema.parse(config); // Will throw if invalid
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(validated));
+  } catch (e) {
+    console.error('Failed to save config to localStorage:', e);
+    // Don't throw; let app continue with current config
+  }
+}
+
+export function clearConfigStorage(): void {
+  localStorage.removeItem(STORAGE_KEY);
+}
+```
+
+Source: [Type-safe localStorage with Zod](https://medium.com/@michu2k/validate-data-in-browser-storage-with-zod-be254f465a40), [MDN localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+
+### Pattern 3: Multi-Select Toggle Chips with Tailwind CSS v4
+
+**What:** Multi-select filter UI using toggle chips (position, pot type) with preset buttons, implemented with button state tracking and Tailwind utility classes.
+
+**When to use:** For position selection (UTG, HJ, CO, BTN, SB, BB) and pot type selection (SRP, 3BP, 4BP) with minimum-one-selected constraint.
+
+**Example:**
+
+```typescript
+// src/components/trainer/PositionFilters.tsx
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState, useCallback } from 'react';
 
 const POSITIONS = ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'] as const;
 
@@ -158,46 +286,56 @@ const PRESETS = {
   'All Positions': POSITIONS,
   'Blinds Only': ['SB', 'BB'],
   'Late Position Only': ['CO', 'BTN', 'SB', 'BB'],
-};
+} as const;
 
 export default function PositionFilters({
-  selected: initialSelected,
+  value,
   onChange,
 }: {
-  selected: string[];
+  value: string[];
   onChange: (positions: string[]) => void;
 }) {
-  const [selectedSet, setSelectedSet] = useState(new Set(initialSelected));
+  const selectedSet = new Set(value);
 
-  const handleToggle = (position: string) => {
-    const next = new Set(selectedSet);
-    // Enforce minimum: at least one position must be selected
-    if (selectedSet.has(position) && selectedSet.size === 1) {
-      return;
-    }
-    next.has(position) ? next.delete(position) : next.add(position);
-    setSelectedSet(next);
-    onChange(Array.from(next));
-  };
+  const handleToggle = useCallback(
+    (position: string) => {
+      const next = new Set(selectedSet);
 
-  const applyPreset = (presetName: keyof typeof PRESETS) => {
-    const preset = PRESETS[presetName];
-    setSelectedSet(new Set(preset));
-    onChange(preset);
-  };
+      // Enforce minimum: at least one position must be selected
+      if (selectedSet.has(position) && selectedSet.size === 1) {
+        return; // Prevent deselecting the last position
+      }
+
+      next.has(position) ? next.delete(position) : next.add(position);
+      onChange(Array.from(next));
+    },
+    [selectedSet, onChange]
+  );
+
+  const applyPreset = useCallback(
+    (presetName: keyof typeof PRESETS) => {
+      const preset = PRESETS[presetName];
+      onChange(preset);
+    },
+    [onChange]
+  );
 
   return (
     <fieldset className="space-y-3">
       <legend className="text-sm font-medium">Positions</legend>
 
       {/* Preset buttons */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {Object.keys(PRESETS).map((presetName) => (
           <button
             key={presetName}
             type="button"
             onClick={() => applyPreset(presetName as keyof typeof PRESETS)}
-            className="rounded-full border border-stone-300 px-3 py-1 text-sm hover:bg-stone-100"
+            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+              PRESETS[presetName as keyof typeof PRESETS].every((p) => selectedSet.has(p))
+                ? 'bg-blue-600 text-white'
+                : 'border border-stone-300 bg-white text-stone-900 hover:bg-stone-50'
+            }`}
           >
             {presetName}
           </button>
@@ -226,22 +364,22 @@ export default function PositionFilters({
 }
 ```
 
-Source: [Tailwind peer selector patterns](https://www.prudkohliad.com/articles/multi-select-dropdown-with-react-and-tailwind-4-2025-02-04), [Material Tailwind chips](https://www.material-tailwind.com/docs/react/chip)
+Source: [Tailwind CSS v4 Styling](https://tailwindcss.com/docs), [Multi-Select with React and Tailwind](https://www.prudkohliad.com/articles/multi-select-dropdown-with-react-and-tailwind-4-2025-02-04)
 
-### Pattern 3: Session Sidebar Drawer Overlay
+### Pattern 4: Session Sidebar Overlay Drawer with Fixed Positioning
 
-**What:** Left-side overlay drawer that slides over the table when opened from hamburger menu, maintaining table layout underneath while allowing configuration changes mid-session.
+**What:** Left-side overlay drawer that slides over the table when opened from hamburger menu, maintained with fixed positioning and CSS transform animations.
 
-**When to use:** For settings that must be accessible during active training sessions without interrupting gameplay.
+**When to use:** For mid-session settings that must be accessible without interrupting gameplay, sliding over content rather than pushing it.
 
 **Example:**
 
 ```typescript
-// src/components/SessionSidebar.tsx
+// src/components/trainer/SessionSidebar.tsx
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { TrainerConfig } from '../lib/v2/config/configStore';
+import type { TrainerConfig } from '@/lib/v2/config/configSchema';
 
 export default function SessionSidebar({
   isOpen,
@@ -256,66 +394,67 @@ export default function SessionSidebar({
 }) {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
+  // Close on outside click (backdrop click)
   useEffect(() => {
     if (!isOpen) return;
+
     const handleClickOutside = (e: MouseEvent) => {
       if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
         onClose();
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onClose]);
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop: fixed overlay with semi-transparent background */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/30 transition-opacity"
+          className="fixed inset-0 z-40 bg-black/30 transition-opacity duration-300"
           onClick={onClose}
+          aria-hidden="true"
         />
       )}
 
-      {/* Sidebar drawer */}
+      {/* Sidebar drawer: fixed positioning with transform slide animation */}
       <div
         ref={sidebarRef}
         className={`fixed left-0 top-0 z-50 h-screen w-80 transform bg-white shadow-lg transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Session settings"
       >
         <div className="flex flex-col gap-4 overflow-y-auto p-4">
-          <div className="flex items-center justify-between">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b pb-3">
             <h2 className="text-lg font-semibold">Session Settings</h2>
             <button
               onClick={onClose}
-              className="text-stone-500 hover:text-stone-900"
+              className="rounded p-1 text-stone-500 hover:bg-stone-100 hover:text-stone-900"
               aria-label="Close sidebar"
             >
               ✕
             </button>
           </div>
 
-          {/* Changeable settings (position/pot filters, hand target) */}
-          {/* Lobby-only settings hidden/disabled */}
-          <fieldset disabled className="opacity-50">
-            <legend>Locked (lobby-only)</legend>
-            <p className="text-sm text-stone-600">Mode, Game Type, Table Size, Stack Depth</p>
+          {/* Locked settings indicator */}
+          <fieldset disabled className="space-y-1 opacity-50">
+            <legend className="text-xs font-medium text-stone-600">Locked (change on lobby)</legend>
+            <div className="text-xs text-stone-500">
+              Mode: {config.mode} | Game: {config.gameType} | Size: {config.tableSize} | Stack: {config.stackDepth}
+            </div>
           </fieldset>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">
-              Hand Count Target
-              <input
-                type="number"
-                value={config.handCountTarget ?? ''}
-                onChange={(e) =>
-                  onConfigChange({ handCountTarget: e.target.value ? parseInt(e.target.value) : undefined })
-                }
-                className="mt-1 w-full rounded border border-stone-300 p-2"
-              />
-            </label>
+          {/* Changeable settings: Position filters, pot filters, hand target */}
+          <div className="space-y-4">
+            {/* Position filters component */}
+            {/* Pot type filters component */}
+            {/* Hand count target input */}
           </div>
         </div>
       </div>
@@ -324,258 +463,22 @@ export default function SessionSidebar({
 }
 ```
 
-Source: [React Drawer Patterns](https://www.shadcn.io/ui/drawer), [Overlay State Management](https://strapi.io/blog/react-and-nextjs-in-2025-modern-best-practices)
+**Key design notes:**
+- Use `fixed` positioning (not `absolute`) so drawer slides relative to viewport
+- Use `transform -translate-x-full` (hidden) and `translate-x-0` (visible) for smooth animation
+- Backdrop uses `z-40`, drawer uses `z-50` to maintain proper stacking order
+- `duration-300` matches typical drawer speed (300ms is snappy but not jarring)
+- Sidebar width `w-80` (320px) provides room for content without consuming entire screen
 
-### Anti-Patterns to Avoid
+Source: [shadcn/ui Drawer](https://www.shadcn.io/ui/drawer), [Next.js + Tailwind Drawer Pattern](https://medium.com/designly/create-a-responsive-animated-sidebar-using-react-next-js-and-tailwind-css-bd5a0f42f103)
 
-- **Lifting config state too high:** Don't manage all configuration in root layout Context; keep it local to lobby or session page, lifting only what's shared (e.g., user auth).
-- **Over-relying on localStorage without validation:** Always validate deserialized config against schema; stale or corrupted localStorage data causes silent failures.
-- **Controlled inputs for large filter lists:** Avoid managing 50+ checkbox states individually in React; use uncontrolled inputs with form submission or value tracking via Set/Array.
-- **No minimum selection enforcement:** Filter states like "select at least one position" must be enforced at component level and API level to prevent invalid sessions.
-- **Persisting all state changes to database immediately:** Debounce or batch server sync; don't write on every keystroke (use client-side state first, sync on blur or submission).
+### Pattern 5: Toast Notification Context with React
 
-## Don't Hand-Roll
+**What:** Global toast notification system using React Context API to queue, display, and auto-dismiss notifications without external libraries.
 
-Problems that look simple but have existing solutions:
-
-| Problem | Don't Build | Use Instead | Why |
-|---------|-------------|-------------|-----|
-| Form state + validation | Custom useState + useCallback handlers + manual error tracking | React Hook Form + Zod | RHF minimizes re-renders, integrates with schema validation, handles complex forms efficiently |
-| Toast notifications | DOM mutation + setTimeout cleanup | Custom Context + hook | Toast context prevents multiple toasts per trigger, queuing, auto-dismiss, and accessibility |
-| Drawer animation | CSS transitions + manual state | CSS classes + transition, click outside handler | Tailwind transitions are sufficient; premature optimization for animations is premature |
-| localStorage serialization | Custom JSON encode/decode | JSON.stringify/parse + Zod parsing | Zod validation on deserialization catches corruption and schema changes |
-| Preset button logic | If-else chains per preset | Data-driven presets (object lookup) | Easier to add presets, type-safe, reduces boolean logic |
-| Filter validation (min/max selection) | Conditional button disabling | Set-based tracking + early-return guards | Prevents invalid state from being created; Set operations are clearer than array methods |
-
-**Key insight:** Configuration forms are where most UI state management complexity concentrates. Use a library (React Hook Form) to separate form state from UI rendering, and validate early to prevent invalid states propagating to the API.
-
-## Common Pitfalls
-
-### Pitfall 1: No Minimum Filter Selection Validation
-
-**What goes wrong:** User deselects all positions and clicks "Start Training", creating a session with empty filters. API accepts it (or rejects silently), user sees no feedback.
-
-**Why it happens:** Filter constraints (at least one position, at least one pot type) are not enforced at component level. No early-return guard on button click.
-
-**How to avoid:**
-1. Track selected positions/pot types in a Set or derived state
-2. Disable "Start Training" button if Set is empty
-3. Show inline error message ("Select at least one position")
-4. Validate schema server-side as well (Zod guard)
-
-**Warning signs:**
-- User can click "Start Training" with no visible selections
-- Form submission succeeds with empty filter arrays
-- No error toast or message after submission
+**When to use:** For session notifications ("Filters updated on next hand", "Session ended", "Config saved"), maintaining one notification at a time or a small queue.
 
 **Example:**
-```typescript
-const canStart = useMemo(
-  () => selectedPositions.size > 0 && selectedPotTypes.size > 0,
-  [selectedPositions, selectedPotTypes]
-);
-
-<button disabled={!canStart} className="...">
-  {!canStart && <span className="text-red-600">Select at least one position and pot type</span>}
-  Start Training
-</button>
-```
-
-### Pitfall 2: Stale localStorage Data After Schema Changes
-
-**What goes wrong:** Developer adds a new config field (e.g., `handCountTarget`). Old localStorage still has the old schema. App loads old config, code accesses new field expecting it, gets undefined, crashes or falls back silently.
-
-**Why it happens:** localStorage is unversioned. No validation on deserialization. Schema evolution not planned.
-
-**How to avoid:**
-1. Always validate localStorage data with Zod schema on load
-2. Provide default for missing fields in schema
-3. Consider versioning localStorage key: `trainer-config-v1`, `trainer-config-v2`
-4. In migration, parse old version and transform to new
-
-**Warning signs:**
-- Config loading fails silently (no error logged)
-- New config fields are always undefined
-- Old localStorage data prevents new features from working
-
-**Example:**
-```typescript
-const configSchema = z.object({
-  mode: z.enum(['PREFLOP', 'FLOP']),
-  positions: z.array(z.string()).min(1),
-  potTypes: z.array(z.string()).min(1),
-  handCountTarget: z.number().optional(), // New field with default
-});
-
-function loadConfigFromStorage(): TrainerConfig {
-  const raw = localStorage.getItem('trainer-config');
-  if (!raw) return DEFAULT_CONFIG;
-  try {
-    const parsed = JSON.parse(raw);
-    return configSchema.parse(parsed); // Zod validates and fills defaults
-  } catch (e) {
-    console.error('Config validation failed, using default:', e);
-    return DEFAULT_CONFIG;
-  }
-}
-```
-
-### Pitfall 3: Losing Filter Changes When Session Starts
-
-**What goes wrong:** User adjusts position filters on lobby, accidentally navigates away or closes tab, returns, lobby is reset to defaults. User had to re-select filters.
-
-**Why it happens:** Lobby form state is component-local, not persisted. Only the final submitted config is saved (in session record).
-
-**How to avoid:**
-1. Save in-progress lobby configuration to localStorage on every change (debounced)
-2. Load from localStorage on lobby mount
-3. Keep "last used config" separate from "active session config"
-
-**Warning signs:**
-- Filters reset when navigating away from lobby
-- No indication that config was saved
-- Users report having to re-enter filters often
-
-**Example:**
-```typescript
-// Save to localStorage on each change (debounced)
-useEffect(() => {
-  const timer = setTimeout(() => {
-    saveLobbyConfigToStorage(formState);
-  }, 500);
-  return () => clearTimeout(timer);
-}, [formState]);
-
-// Load on component mount
-useEffect(() => {
-  const saved = loadLobbyConfigFromStorage();
-  if (saved) {
-    setFormState(saved);
-  }
-}, []);
-```
-
-### Pitfall 4: Sidebar Doesn't Actually Reflect Session State
-
-**What goes wrong:** User changes position filters in sidebar mid-session. Sidebar shows new selection, but table continues showing old spots. User thinks filters are applied but they're not.
-
-**Why it happens:** Sidebar state is local to sidebar component. Table doesn't subscribe to sidebar changes. Or changes are local-only, not synced to session record.
-
-**How to avoid:**
-1. Pass `onConfigChange` callback from session page (not sidebar)
-2. Session page owns true config state, sidebar updates that state
-3. Table component subscribes to session's config via props or context
-4. Show a toast when filter change takes effect ("Filters applied on next hand")
-
-**Warning signs:**
-- User changes sidebar settings, table behavior unchanged
-- No confirmation toast after sidebar change
-- Sidebar and table config appear inconsistent
-
-## Code Examples
-
-### Complete Lobby Screen with Config Cards
-
-```typescript
-// src/components/TrainerLobby.tsx
-'use client';
-
-import { useState, useMemo } from 'react';
-import ConfigCard from './ConfigCard';
-import ModeToggle from './ModeToggle';
-import GameSetup from './GameSetup';
-import PositionFilters from './PositionFilters';
-import PotTypeFilters from './PotTypeFilters';
-import DrillSuggestions from './DrillSuggestions';
-import type { TrainerConfig } from '../lib/v2/config/configStore';
-
-export default function TrainerLobby({ onStartSession }: { onStartSession: (config: TrainerConfig) => Promise<void> }) {
-  const [config, setConfig] = useState<TrainerConfig>({
-    mode: 'PREFLOP',
-    gameType: 'CASH',
-    tableSize: '6max',
-    stackDepth: '100bb',
-    positions: ['BB', 'SB'],
-    potTypes: ['SRP'],
-  });
-
-  const canStart = useMemo(
-    () => config.positions.length > 0 && config.potTypes.length > 0,
-    [config.positions, config.potTypes]
-  );
-
-  return (
-    <main className="mx-auto max-w-4xl space-y-6 p-6">
-      <header>
-        <h1 className="text-3xl font-semibold">Trainer Configuration</h1>
-        <p className="text-stone-600">Customize your training session</p>
-      </header>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* Essentials card */}
-        <ConfigCard title="Essentials" subtitle="Mode and Game Setup">
-          <div className="space-y-4">
-            <ModeToggle
-              value={config.mode}
-              onChange={(mode) => setConfig({ ...config, mode })}
-            />
-            <GameSetup
-              gameType={config.gameType}
-              tableSize={config.tableSize}
-              stackDepth={config.stackDepth}
-              onChange={(updates) => setConfig({ ...config, ...updates })}
-            />
-          </div>
-        </ConfigCard>
-
-        {/* Drill suggestions card */}
-        <ConfigCard title="Quick Drill" subtitle="Suggested weak spots">
-          <DrillSuggestions onSelectDrill={(drill) => setConfig({ ...config, ...drill })} />
-        </ConfigCard>
-      </div>
-
-      {/* Advanced card (collapsible) */}
-      <details className="group">
-        <summary className="cursor-pointer text-lg font-semibold">
-          Advanced Filters <span className="group-open:hidden">▶</span><span className="hidden group-open:inline">▼</span>
-        </summary>
-        <div className="mt-4 grid gap-4 lg:grid-cols-2">
-          <ConfigCard title="Positions">
-            <PositionFilters
-              selected={config.positions}
-              onChange={(positions) => setConfig({ ...config, positions })}
-            />
-          </ConfigCard>
-          <ConfigCard title="Pot Types">
-            <PotTypeFilters
-              selected={config.potTypes}
-              onChange={(potTypes) => setConfig({ ...config, potTypes })}
-            />
-          </ConfigCard>
-        </div>
-      </details>
-
-      {/* Start button */}
-      <div className="flex items-center justify-between">
-        {!canStart && (
-          <p className="text-sm text-red-600">Select at least one position and pot type</p>
-        )}
-        <button
-          onClick={() => onStartSession(config)}
-          disabled={!canStart}
-          className="rounded bg-stone-900 px-6 py-3 font-semibold text-white disabled:opacity-50"
-        >
-          Start Training
-        </button>
-      </div>
-    </main>
-  );
-}
-```
-
-Source: [React Hook Form API](https://react-hook-form.com/docs/useform), [Tailwind Details/Summary](https://tailwindcss.com/docs)
-
-### Toast Notification Context & Hook
 
 ```typescript
 // src/lib/ui/toastContext.ts
@@ -587,7 +490,7 @@ export interface Toast {
   id: string;
   message: string;
   type: 'success' | 'error' | 'info' | 'warning';
-  duration?: number; // ms, undefined = permanent
+  duration?: number; // ms; undefined = permanent
 }
 
 interface ToastContextValue {
@@ -603,9 +506,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const showToast = useCallback(
     (message: string, type: Toast['type'] = 'info', duration = 3000) => {
-      const id = Math.random().toString(36).slice(2);
-      setToasts((prev) => [...prev, { id, message, type, duration }]);
+      const id = Math.random().toString(36).slice(2, 11);
 
+      setToasts((prev) => [
+        // Keep max 3 toasts visible
+        ...(prev.length >= 3 ? prev.slice(1) : prev),
+        { id, message, type, duration },
+      ]);
+
+      // Auto-dismiss after duration
       if (duration) {
         setTimeout(() => {
           removeToast(id);
@@ -628,99 +537,669 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 export function useToast() {
   const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error('useToast must be used within ToastProvider');
+  if (!ctx) {
+    throw new Error('useToast must be used within ToastProvider');
+  }
   return ctx;
 }
 ```
 
-Source: [React Context + Hooks Pattern](https://react.dev/reference/react/createContext), [Toast UI Examples](https://flowbite.com/docs/components/toast/)
+```typescript
+// src/components/ui/Toast/ToastContainer.tsx
+'use client';
+
+import { useToast } from '@/lib/ui/toastContext';
+
+export default function ToastContainer() {
+  const { toasts, removeToast } = useToast();
+
+  return (
+    <div
+      className="fixed bottom-4 right-4 z-50 space-y-2"
+      role="region"
+      aria-label="Notifications"
+    >
+      {toasts.map((toast) => (
+        <div
+          key={toast.id}
+          className={`max-w-sm rounded-lg p-4 text-sm font-medium shadow-lg animate-in fade-in-0 slide-in-from-bottom-4 ${
+            toast.type === 'success'
+              ? 'bg-green-600 text-white'
+              : toast.type === 'error'
+                ? 'bg-red-600 text-white'
+                : toast.type === 'warning'
+                  ? 'bg-yellow-600 text-white'
+                  : 'bg-stone-800 text-white'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span>{toast.message}</span>
+            <button
+              onClick={() => removeToast(toast.id)}
+              className="ml-4 text-lg opacity-70 hover:opacity-100"
+              aria-label="Dismiss"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+Source: [React Context + Hooks Pattern](https://react.dev/reference/react/createContext), [Toast Best Practices 2026](https://medium.com/@ksathyareddy7/creating-a-toast-notification-system-in-react-a-step-by-step-guide-9b76b182d336)
+
+### Anti-Patterns to Avoid
+
+- **Lifting config state too high:** Don't manage all configuration at the root layout level with Context; keep local to the trainer page or session page. Lifting only what's shared (auth, theme).
+- **Over-persisting to localStorage:** Don't write on every keystroke; debounce to 500ms intervals or save on form submission only.
+- **Controlled inputs for all filter states:** Avoid managing 50 individual checkbox states in React; use Set/Array with callbacks, letting button onClick update parent state.
+- **No minimum selection enforcement:** Must prevent empty filter states at component level (button disabled) AND server-side validation; don't rely on UX alone.
+- **Stale localStorage after schema changes:** Always validate deserialized data with Zod; provide defaults for new fields; consider versioning localStorage keys.
+- **Sidebar state separate from session state:** Don't keep sidebar config local; pass through props or Context so sidebar updates feed back to session.
+
+## Don't Hand-Roll
+
+Problems that look simple but have existing solutions:
+
+| Problem | Don't Build | Use Instead | Why |
+|---------|-------------|-------------|-----|
+| Form state + validation | Custom useState + validation handlers | React Hook Form + Zod | RHF minimizes re-renders, deduplicates field updates, integrates with schema validation. ~50 LOC with RHF vs ~250 LOC manual |
+| localStorage safety | Custom JSON serialize/deserialize | Zod validation on load | Zod catches corrupted or stale data; provides defaults for new fields; enables schema versioning |
+| Toast notifications | DOM mutation + setTimeout cleanup | Context API + hook | Context prevents duplicate toasts, handles queuing and auto-dismiss, maintains accessibility |
+| Drawer animation | Manual state + CSS transitions | Tailwind transform + fixed positioning | Tailwind provides smooth transitions; fixed/absolute positioning is sufficient; no JS animation library needed |
+| Preset button logic | Manual if-else for each preset | Data-driven object (PRESETS = {...}) | Easier to add presets, type-safe, clearer intent |
+| Filter constraint validation | Conditional button disabling only | Prevent invalid state from creation | Early guard prevents invalid state; Set-based tracking clearer than array methods |
+| JSON preferences in Prisma | Untyped JSON fields | prisma-json-types-generator + Zod | Type-safe JSON ensures autocomplete; Zod validation is runtime guard |
+
+**Key insight:** Configuration forms are where form state complexity concentrates. Use React Hook Form to separate form state (values, errors, submission) from UI rendering, and validate early (Zod at form level, Zod at API level) to prevent invalid states from propagating.
+
+## Common Pitfalls
+
+### Pitfall 1: No Minimum Filter Selection Validation
+
+**What goes wrong:** User deselects all positions and clicks "Start Training", creating a session with empty position array. API accepts it (or rejects silently), user sees no error message.
+
+**Why it happens:** Minimum selection constraints are not enforced at component level. No early-return guard in toggle handler.
+
+**How to avoid:**
+1. Track selected positions/pot types as Set internally
+2. In toggle handler, check `if (set.has(item) && set.size === 1) return;` to prevent last item deselect
+3. Disable "Start Training" button if validations fail: `disabled={config.positions.length === 0}`
+4. Show inline error message when button is disabled
+5. Validate server-side as well (Zod parse will reject)
+
+**Warning signs:**
+- User can click "Start Training" with no visible selections
+- Form submission with empty filter arrays succeeds
+- No error message in UI after clicking Start
+
+**Example prevention:**
+```typescript
+// Component-level constraint
+const handleToggle = (position: string) => {
+  if (selectedSet.has(position) && selectedSet.size === 1) {
+    return; // Prevent emptying the set
+  }
+  // ... toggle logic
+};
+
+// Button-level validation
+<button
+  disabled={selectedPositions.length === 0 || selectedPotTypes.length === 0}
+  className="..."
+>
+  {selectedPositions.length === 0 && <span className="text-red-600">Select at least one position</span>}
+  Start Training
+</button>
+
+// API-level validation (Zod)
+const configSchema = z.object({
+  positions: z.array(z.string()).min(1, 'Select at least one position'),
+  potTypes: z.array(z.string()).min(1, 'Select at least one pot type'),
+});
+```
+
+### Pitfall 2: Stale localStorage Data After Schema Changes
+
+**What goes wrong:** Developer adds a new config field (e.g., `handCountTarget`). Old localStorage still has v0 schema. App loads old config, Zod validation fails silently, user gets defaults. Or app crashes trying to access new field.
+
+**Why it happens:** localStorage is unversioned. No validation on deserialization. Schema evolution not planned.
+
+**How to avoid:**
+1. Always validate localStorage data with Zod schema on load
+2. Provide `.optional()` defaults in schema for new fields
+3. Version localStorage key: `trainer-config-v1`, `trainer-config-v2`, etc.
+4. Write migration function if changing required fields to optional or vice versa
+5. Log validation errors (don't silent-fail)
+
+**Warning signs:**
+- Config loading fails silently (no error logged)
+- New config fields are always undefined
+- Old localStorage data breaks new features
+
+**Example:**
+```typescript
+// Version the key
+const STORAGE_KEY = 'trainer-config-v1';
+
+// Schema provides defaults
+const configSchema = z.object({
+  mode: z.enum(['PREFLOP', 'FLOP']),
+  positions: z.array(z.string()).min(1),
+  potTypes: z.array(z.string()).min(1),
+  handCountTarget: z.number().optional(), // New field; won't crash if missing
+});
+
+// Validate on load
+function loadConfigFromStorage() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return null;
+  const result = configSchema.safeParse(JSON.parse(raw));
+  if (!result.success) {
+    console.warn('Config validation failed:', result.error);
+    return null; // Return null, let form use defaults
+  }
+  return result.data;
+}
+```
+
+### Pitfall 3: Losing Filter Changes When Navigating Away
+
+**What goes wrong:** User adjusts position filters on lobby, accidentally navigates away or closes browser, returns. Lobby is reset to defaults. User had to re-select filters.
+
+**Why it happens:** Lobby form state is component-local, not persisted. Only the final submitted config is saved to session.
+
+**How to avoid:**
+1. Save in-progress form state to localStorage on every change (debounced 500ms)
+2. Load from localStorage on form mount
+3. Distinguish "last used config" (lobby editing state) from "active session config" (submitted config)
+4. Use React Hook Form's `watch()` to subscribe to form changes
+
+**Warning signs:**
+- Filters reset when navigating away from lobby
+- No indication that config was saved
+- Users report frustration with re-entering filters
+
+**Example:**
+```typescript
+const { watch, reset } = useForm<TrainerConfig>({
+  defaultValues: loadConfigFromStorage() ?? DEFAULT_CONFIG,
+});
+
+const formValues = watch();
+useEffect(() => {
+  const timer = setTimeout(() => {
+    saveConfigToStorage(formValues); // Debounced
+  }, 500);
+  return () => clearTimeout(timer);
+}, [formValues]);
+```
+
+### Pitfall 4: Sidebar Config Not Reflecting in Table
+
+**What goes wrong:** User changes position filters in sidebar mid-session. Sidebar shows new selection, but table continues showing old spots. User thinks filters are applied but they're not.
+
+**Why it happens:** Sidebar state is isolated from session state. Table doesn't subscribe to sidebar changes. Or changes are local-only, not synced to session record.
+
+**How to avoid:**
+1. Pass `onConfigChange` callback from session page (not sidebar)
+2. Session page owns the true session config state
+3. Sidebar receives config and onChange callback as props; updates feed back to parent
+4. Table component subscribes to session config via props or context
+5. Show toast when filter changes take effect: "Filters applied on next hand"
+
+**Warning signs:**
+- User changes sidebar settings, table behavior unchanged
+- No confirmation toast after sidebar change
+- Sidebar and table have inconsistent config
+
+### Pitfall 5: JSON Field Type Safety Without Runtime Validation
+
+**What goes wrong:** You add `trainerPreferences: Json` to Prisma User model. TypeScript says it's `JsonValue` (untyped). Code reads `user.trainerPreferences.handCountTarget` and TypeScript allows it (because it's `any`). At runtime, it's undefined because schema changed and DB still has old data.
+
+**Why it happens:** Prisma's Json fields are untyped by default. prisma-json-types-generator adds type safety but not runtime validation.
+
+**How to avoid:**
+1. Install prisma-json-types-generator (optional but recommended)
+2. Define Zod schema as source of truth
+3. Validate JSON data on read and write
+4. Don't trust the database schema; validate at API boundaries
+
+**Example:**
+```typescript
+// src/lib/prisma/userPreferences.ts
+import { z } from 'zod';
+
+const UserPreferencesSchema = z.object({
+  trainerConfig: z.object({
+    mode: z.enum(['PREFLOP', 'FLOP']),
+    positions: z.array(z.string()),
+    potTypes: z.array(z.string()),
+  }).optional(),
+});
+
+export type UserPreferences = z.infer<typeof UserPreferencesSchema>;
+
+// Read: validate on fetch
+export async function getUserPreferences(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const result = UserPreferencesSchema.safeParse(user?.trainerPreferences ?? {});
+  return result.success ? result.data : null;
+}
+
+// Write: validate before save
+export async function saveUserPreferences(userId: string, prefs: UserPreferences) {
+  const validated = UserPreferencesSchema.parse(prefs);
+  return prisma.user.update({
+    where: { id: userId },
+    data: { trainerPreferences: validated },
+  });
+}
+```
+
+### Pitfall 6: Forgetting to Close Sidebar on Mobile/Narrow Screens
+
+**What goes wrong:** User opens sidebar on mobile, it covers the table completely. User has to manually close it to see anything. Or sidebar slides behind table instead of on top.
+
+**Why it happens:** Z-index not set high enough, or fixed positioning isn't relative to viewport.
+
+**How to avoid:**
+1. Ensure sidebar uses `fixed` positioning (relative to viewport, not parent)
+2. Set z-index on sidebar higher than content: `z-50` for sidebar, `z-40` for backdrop
+3. Add close button clearly visible
+4. On mobile, consider a close button in the top-right always visible
+5. Test on narrow screens and mobile breakpoints
+
+**Example:**
+```typescript
+<div className="fixed left-0 top-0 z-50 h-screen w-80 ...">
+  {/* Close button always visible */}
+  <button className="absolute top-4 right-4 z-51">✕</button>
+</div>
+```
+
+## Code Examples
+
+### Complete Lobby Configuration Form
+
+```typescript
+// src/components/trainer/TrainerLobby.tsx
+'use client';
+
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { TrainerConfigSchema, type TrainerConfig } from '@/lib/v2/config/configSchema';
+import { loadConfigFromStorage, saveConfigToStorage } from '@/lib/v2/config/configStore';
+import ConfigCard from './ConfigCard';
+import ModeToggle from './ModeToggle';
+import GameSetup from './GameSetup';
+import PositionFilters from './PositionFilters';
+import PotTypeFilters from './PotTypeFilters';
+import { useToast } from '@/lib/ui/toastContext';
+import { useEffect } from 'react';
+
+export default function TrainerLobby() {
+  const router = useRouter();
+  const { showToast } = useToast();
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting, errors },
+  } = useForm<TrainerConfig>({
+    resolver: zodResolver(TrainerConfigSchema),
+    defaultValues: loadConfigFromStorage() ?? {
+      mode: 'PREFLOP',
+      gameType: 'CASH',
+      tableSize: '6max',
+      stackDepth: '100bb',
+      positions: ['BB', 'SB'],
+      potTypes: ['SRP'],
+    },
+  });
+
+  // Debounced localStorage save
+  const formValues = watch();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      saveConfigToStorage(formValues);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [formValues]);
+
+  const onSubmit = async (config: TrainerConfig) => {
+    try {
+      const res = await fetch('/api/session/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        showToast(error.error?.message ?? 'Failed to start session', 'error');
+        return;
+      }
+
+      const { sessionId } = await res.json();
+      showToast('Session started', 'success', 2000);
+      router.push(`/trainer/${sessionId}`);
+    } catch (error) {
+      console.error('Failed to start session:', error);
+      showToast('Failed to start session', 'error');
+    }
+  };
+
+  const hasErrors = Object.keys(errors).length > 0;
+
+  return (
+    <main className="mx-auto max-w-4xl space-y-6 p-6">
+      <header>
+        <h1 className="text-3xl font-semibold">Trainer Configuration</h1>
+        <p className="text-stone-600">Customize your training session</p>
+      </header>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Essentials card */}
+        <ConfigCard title="Essentials" subtitle="Mode and Game Setup">
+          <div className="space-y-4">
+            <Controller
+              control={control}
+              name="mode"
+              render={({ field }) => (
+                <ModeToggle
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.mode?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="gameType"
+              render={({ field }) => (
+                <GameSetup
+                  gameType={field.value}
+                  tableSize={watch('tableSize')}
+                  stackDepth={watch('stackDepth')}
+                  onGameTypeChange={field.onChange}
+                  onTableSizeChange={(size) => {
+                    // Use setValue via form context
+                  }}
+                  onStackDepthChange={(depth) => {
+                    // Use setValue via form context
+                  }}
+                  errors={errors}
+                />
+              )}
+            />
+          </div>
+        </ConfigCard>
+
+        {/* Advanced filters (collapsible) */}
+        <details className="group">
+          <summary className="cursor-pointer text-lg font-semibold">
+            Advanced Filters{' '}
+            <span className="group-open:hidden">▶</span>
+            <span className="hidden group-open:inline">▼</span>
+          </summary>
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            <ConfigCard title="Positions">
+              <Controller
+                control={control}
+                name="positions"
+                render={({ field }) => (
+                  <PositionFilters
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.positions?.message}
+                  />
+                )}
+              />
+            </ConfigCard>
+
+            <ConfigCard title="Pot Types">
+              <Controller
+                control={control}
+                name="potTypes"
+                render={({ field }) => (
+                  <PotTypeFilters
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.potTypes?.message}
+                  />
+                )}
+              />
+            </ConfigCard>
+          </div>
+        </details>
+
+        {/* Submit section */}
+        <div className="flex items-center justify-between pt-4">
+          {hasErrors && (
+            <div className="text-sm text-red-600">
+              {errors.positions?.message ||
+                errors.potTypes?.message ||
+                'Please fix errors above'}
+            </div>
+          )}
+          <button
+            type="submit"
+            disabled={isSubmitting || hasErrors}
+            className="rounded bg-stone-900 px-6 py-3 font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? 'Starting...' : 'Start Training'}
+          </button>
+        </div>
+      </form>
+    </main>
+  );
+}
+```
+
+Source: [React Hook Form Examples](https://react-hook-form.com/form-builder), [Zod Error Handling](https://zod.dev/?id=error-handling)
+
+### Next.js API Route for Config Persistence
+
+```typescript
+// src/app/api/config/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/server/auth/requireAuth';
+import { TrainerConfigSchema } from '@/lib/v2/config/configSchema';
+import { prisma } from '@/lib/prisma';
+
+/**
+ * GET /api/config
+ * Retrieve authenticated user's trainer configuration preferences
+ */
+export async function GET(req: NextRequest) {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
+
+  try {
+    const userPrefs = await prisma.user.findUnique({
+      where: { id: user.userId },
+      select: { trainerPreferences: true },
+    });
+
+    // Validate stored preferences
+    if (!userPrefs?.trainerPreferences) {
+      return NextResponse.json({ config: null });
+    }
+
+    const validated = TrainerConfigSchema.safeParse(userPrefs.trainerPreferences);
+    if (!validated.success) {
+      console.warn('Stored config validation failed:', validated.error);
+      return NextResponse.json({ config: null });
+    }
+
+    return NextResponse.json({ config: validated.data });
+  } catch (error) {
+    console.error('Failed to fetch config:', error);
+    return NextResponse.json(
+      { error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch config' } },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * POST /api/config
+ * Save authenticated user's trainer configuration preferences
+ */
+export async function POST(req: NextRequest) {
+  const { user, error } = await requireAuth(req);
+  if (error) return error;
+
+  try {
+    const body = await req.json();
+
+    // Validate request body
+    const validated = TrainerConfigSchema.safeParse(body);
+    if (!validated.success) {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'INVALID_ARGUMENT',
+            message: 'Invalid configuration',
+            details: validated.error.flatten(),
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    // Save to database
+    const updated = await prisma.user.update({
+      where: { id: user.userId },
+      data: { trainerPreferences: validated.data },
+      select: { trainerPreferences: true },
+    });
+
+    return NextResponse.json({ config: updated.trainerPreferences });
+  } catch (error) {
+    console.error('Failed to save config:', error);
+    return NextResponse.json(
+      { error: { code: 'INTERNAL_ERROR', message: 'Failed to save config' } },
+      { status: 500 }
+    );
+  }
+}
+```
+
+Source: [Next.js Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers), [Prisma with Next.js](https://www.prisma.io/docs/guides/nextjs)
 
 ## State of the Art
 
 | Old Approach | Current Approach | When Changed | Impact |
 |--------------|------------------|--------------|--------|
-| Manual form state (10+ useState calls) | React Hook Form + Zod | 2020+ (RHF v5) | Reduced boilerplate ~70%, improved performance via selective subscriptions |
-| window.localStorage directly | Custom hook wrapper with Zod validation | 2022+ | Safe deserialization, schema evolution, easier testing |
-| Global Redux store for all state | Hybrid: Context for stable state, localStorage for persistence, server state in DB | 2024+ | Simpler mental model, fewer re-renders, clearer data ownership |
+| Manual form state (10+ useState calls) | React Hook Form + Zod | 2020+ (RHF v5) | Reduced boilerplate ~70%, improved performance via selective field subscriptions |
+| window.localStorage directly | Custom hook wrapper with Zod validation | 2022+ | Safe deserialization, schema evolution, easier testing and migration |
+| Global Redux for all state | Hybrid: Context for theme/auth, localStorage for persistence, DB for user prefs | 2023+ | Simpler mental model, fewer re-renders, clearer data ownership |
 | Styled components / CSS-in-JS | Tailwind CSS utility classes | 2021+ | Faster builds, smaller CSS bundles, easier responsive design |
-| Class components with setState | Functional components with hooks | 2019+ | Clearer logic flow, better code sharing (custom hooks), smaller bundle sizes |
+| Class components | Functional components with hooks | 2019+ | Clearer logic flow, better code sharing (custom hooks), smaller bundles |
+| Untyped JSON fields in Prisma | JSON + Zod validation + optional prisma-json-types-generator | 2024+ | Type safety at compile time (generator) and runtime (Zod) |
 
 **Deprecated/outdated:**
-- Redux for simple configuration state: Overkill for stable, infrequent updates. Context + custom hooks sufficient.
+- Redux for configuration state: Too much ceremony for stable, infrequent updates. Context + custom hooks sufficient.
 - MobX: Reactive tracking less predictable; TypeScript integration weaker than simpler alternatives.
-- Controlled inputs for large filter lists: Performance penalty. Use uncontrolled + form submission or value tracking via primitives (Set, Array).
+- Formik: Replaced by React Hook Form for better performance and smaller bundle.
+- Controlled checkboxes for large filter lists: Performance penalty. Use uncontrolled with form submission or Set-based state tracking.
+- Separate drill builder UI: Custom drill is just enhanced filters; no separate component needed.
 
 ## Open Questions
 
-1. **Minimum hand threshold for drill suggestions**
-   - What we know: CONTEXT.md specifies "minimum data threshold required before drill suggestions appear"
-   - What's unclear: How many hands? How many in a specific spot? Different for each position/pot combo?
-   - Recommendation: Research existing EV Trainer stats (Phase 5) to see typical session hand counts, propose 50 hands total or 5 hands per spot. Planner makes final call.
+1. **Exact preset definitions for position filters**
+   - What we know: CONTEXT.md specifies "Quick presets above position toggles: All Positions, Blinds Only, Late Position Only"
+   - What's unclear: Does "Late Position Only" include HJ? How do players define late position?
+   - Recommendation: Research existing trainer UIs and poker terminology. Recommend: All = [UTG,HJ,CO,BTN,SB,BB], Blinds = [SB,BB], Late = [HJ,CO,BTN,SB,BB] (includes HJ as common late position). Planner makes final call.
 
-2. **How to handle "Drill This" from stats page before stats page exists (Phase 8)**
-   - What we know: CONTEXT.md defers stats page integration to Phase 8; this phase builds drill infrastructure
-   - What's unclear: Should Phase 6 include a placeholder for stats drill buttons, or integrate fully?
-   - Recommendation: Build drill suggestion cards on lobby (Phase 6). Phase 8 adds server-side "Drill This" button that pre-fills and navigates to lobby. No blocker.
+2. **Minimum hand threshold for drill suggestions**
+   - What we know: CONTEXT.md specifies "minimum data threshold required before drill suggestions appear"
+   - What's unclear: How many hands total? How many in a specific spot? Proportional or fixed?
+   - Recommendation: Propose 50+ hands total before showing drills, or 5+ hands in a specific spot combo. Phase 8 (stats) will have exact metrics. Phase 6 can use a conservative threshold.
 
 3. **Hand count target options**
    - What we know: CONTEXT.md says "optional configurable hand count target in settings"
-   - What's unclear: Dropdown with presets (25, 50, 100) or freeform input? Min/max limits?
-   - Recommendation: Dropdown with presets + "Custom" option with number input. Min 1, max 1000. Allows both quick selection and flexibility.
+   - What's unclear: Dropdown with presets (25, 50, 100, 250) or freeform number input? Both?
+   - Recommendation: Start with dropdown [25, 50, 100, 250] + "Unlimited" option. Custom input can be added later. Limits: 1-1000 hands.
 
-4. **Sidebar animation and backdrop opacity**
-   - What we know: Sidebar overlays table with backdrop dim
-   - What's unclear: Exact timing (300ms? 500ms?) and backdrop opacity (30%? 50%?)
-   - Recommendation: 300ms duration (snappy), 30% backdrop (dark enough to dim, light enough to see table underneath). Standard Tailwind durations.
+4. **Database schema for Prisma User preferences**
+   - What we know: User model exists; no dedicated preferences model yet
+   - What's unclear: Store trainer config as JSON in User.trainerPreferences, or separate TrainerPreferences table with relation?
+   - Recommendation: Add optional `trainerPreferences: Json` field to User model (simpler, avoids table bloat). If preferences grow (saved presets, drill favorites, etc.), migrate to separate table in Phase 9.
 
-5. **Database schema for user preferences**
-   - What we know: Prisma User model exists; no dedicated preferences model yet
-   - What's unclear: Should trainer config be stored as JSON in User model, or separate TrainerPreferences model with relationship?
-   - Recommendation: Add optional `trainerPreferences: Json` field to User model initially. If preferences grow (saved drill presets, etc.), migrate to separate TrainerPreferences table later.
+5. **How to integrate stats page "Drill This" buttons before Phase 8**
+   - What we know: CONTEXT.md defers stats page integration to Phase 8
+   - What's unclear: Should Phase 6 include placeholder or full integration?
+   - Recommendation: Phase 6 builds drill suggestion cards on lobby (receives hardcoded or mock data). Phase 8 creates stats page with "Drill This" buttons that pre-fill lobby filters. No blocker; Phase 6 is complete without stats integration.
+
+6. **Sidebar animation and backdrop opacity preferences**
+   - What we know: Sidebar overlays table with backdrop dim, 300ms transition
+   - What's unclear: Exact backdrop opacity (25%? 30%? 50%?)
+   - Recommendation: Tailwind default `bg-black/30` (30% opacity) balances dimming visibility and table readability. Test and adjust if needed.
 
 ## Sources
 
 ### Primary (HIGH confidence)
 
-- **React Documentation** - React 19.2 hooks (useState, useEffect, useContext, custom hooks)
-  - [React Hooks API](https://react.dev/reference/react/hooks)
-  - [Context API](https://react.dev/reference/react/createContext)
+- **React 19.2.4 Documentation** - Official hooks and state management
+  - [React Hooks API Reference](https://react.dev/reference/react/hooks)
+  - [React Context API](https://react.dev/reference/react/createContext)
+  - [React 19 Release Notes](https://react.dev/blog/2024/12/05/react-19)
 
-- **React Hook Form** - Form state management patterns
-  - [React Hook Form Docs](https://react-hook-form.com/)
-  - [Advanced Usage](https://react-hook-form.com/advanced-usage/)
+- **React Hook Form 7.71.1 Documentation** - Form state management and validation
+  - [Getting Started](https://react-hook-form.com/get-started)
+  - [API Documentation](https://react-hook-form.com/api)
+  - [Zod Integration](https://react-hook-form.com/ts#Resolver)
 
-- **Zod Documentation** - Runtime schema validation
-  - [Zod Validation](https://zod.dev/)
+- **Zod 4.3.6 Documentation** - Runtime schema validation
+  - [Official Documentation](https://zod.dev/)
+  - [Error Handling](https://zod.dev/?id=error-handling)
 
-- **Tailwind CSS v4** - Utility styling and peer selector
-  - [Tailwind Peer Selector](https://tailwindcss.com/docs/hover-focus-and-other-states#peer)
-  - [Tailwind Transitions](https://tailwindcss.com/docs/transition-property)
+- **Tailwind CSS v4 Documentation** - Utility CSS and animations
+  - [Z-Index Reference](https://tailwindcss.com/docs/z-index)
+  - [Transform Animations](https://tailwindcss.com/docs/transform)
+  - [Duration and Timing](https://tailwindcss.com/docs/transition-duration)
 
-- **Prisma Documentation** - Database persistence
-  - [Prisma ORM with Next.js](https://www.prisma.io/docs/guides/nextjs)
+- **Prisma 7.3.0 Documentation** - Database ORM and JSON fields
+  - [JSON Field Handling](https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields)
+  - [Next.js Integration](https://www.prisma.io/docs/guides/nextjs)
 
-- **MDN Web APIs** - localStorage and native browser APIs
+- **Next.js 16.1.6 Documentation** - Full-stack framework
+  - [Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers)
+  - [Form Handling](https://nextjs.org/docs/pages/guides/forms)
+
+- **MDN Web APIs** - Browser APIs and standards
   - [localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 
 ### Secondary (MEDIUM confidence)
 
-- **WebSearch verified with official patterns:**
-  - [State Management in React 2026](https://www.nucamp.co/blog/state-management-in-2026-redux-context-api-and-modern-patterns) - Context API recommended for stable configuration state
-  - [React Drawer Patterns](https://strapi.io/blog/react-and-nextjs-in-2025-modern-best-practices) - Overlay drawer with state management
-  - [Multi-Select with React and Tailwind](https://www.prudkohliad.com/articles/multi-select-dropdown-with-react-and-tailwind-4-2025-02-04) - Chip and toggle patterns with Tailwind peer
+- **WebSearch verified with official sources:**
+  - [React 19 State Management 2026](https://thelinuxcode.com/state-management-in-react-2026-hooks-context-api-and-redux-in-practice/) - Verified with official React docs
+  - [React Hook Form 7.71.1 Release Notes](https://github.com/react-hook-form/react-hook-form/releases) - Official GitHub releases
+  - [Tailwind CSS v4 Multi-Select Components](https://www.prudkohliad.com/articles/multi-select-dropdown-with-react-and-tailwind-4-2025-02-04) - Recent article with verified patterns
+  - [Next.js 16 Route Handlers](https://strapi.io/blog/nextjs-16-route-handlers-explained-3-advanced-usecases) - Verified with official Next.js docs
+  - [Prisma 7 JSON Field Typing](https://www.wking.dev/library/a-backwards-compatible-type-safe-system-for-json-fields-in-prisma) - Verified with official Prisma docs
 
 - **Toast Notification Patterns:**
-  - [Flowbite Toast Components](https://flowbite.com/docs/components/toast/)
-  - [Tailwind Toast Examples](https://tailwindcss.com/plus/ui-blocks/application-ui/overlays/notifications)
+  - [React Context Toast Notifications 2026](https://medium.com/@ksathyareddy7/creating-a-toast-notification-system-in-react-a-step-by-step-guide-9b76b182d336) - Best practices guide
+  - [Flowbite Toast Components](https://flowbite.com/docs/components/toast/) - UI reference
 
-- **Form Persistence:**
-  - [localStorage State Persistence](https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/) - Best practices for browser persistence
-  - [React Hook Form Persist](https://github.com/tiaanduplessis/react-hook-form-persist) - Form state persistence library
+- **localStorage Persistence:**
+  - [Type-Safe localStorage with Zod](https://medium.com/@michu2k/validate-data-in-browser-storage-with-zod-be254f465a40) - Pattern guide
+  - [React Persist Patterns](https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/) - Best practices
 
 ### Tertiary (LOW confidence - WebSearch only, marked for validation)
 
-- [Tailwind CSS Chip Component](https://www.material-tailwind.com/docs/react/chip) - External library example; project doesn't use Material Tailwind
-- [React Navigation Drawer](https://reactnavigation.org/docs/drawer-layout/) - React Native specific; not applicable to web
+- [Tailwind Material Chip Component](https://www.material-tailwind.com/docs/html/chip) - External library example; project doesn't use Material Tailwind
+- [shadcn/ui Drawer](https://www.shadcn.io/ui/drawer) - Third-party component; project builds custom components
+- [React Navigation Drawer](https://reactnavigation.org/docs/drawer-navigator/) - React Native specific; not applicable to Next.js web
 
 ## Metadata
 
@@ -728,19 +1207,21 @@ Source: [React Context + Hooks Pattern](https://react.dev/reference/react/create
 
 | Area | Level | Reason |
 |------|-------|--------|
-| React state patterns | HIGH | Official React docs, verified with 2026 articles |
-| Form management (React Hook Form + Zod) | HIGH | Official documentation, industry standard, matches project stack |
-| UI patterns (toggle chips, presets, drawers) | HIGH | Multiple verified sources (official Tailwind, Flowbite, recent 2026 articles) |
-| localStorage persistence | HIGH | Official MDN, verified with React-specific guides |
-| Toast notifications | MEDIUM | Patterns clear, but exact implementation left to project; no third-party toast library mandated |
-| Database persistence (Prisma) | HIGH | Official Prisma docs, integrated with project |
-| Minimum hand threshold for drills | LOW | Deferred to planner; requires stats data from Phase 5 |
-| Animation timing/opacity specifics | LOW | Deferred to planner; standard Tailwind defaults sufficient |
+| React 19 state patterns | HIGH | Official React documentation and 2026 ecosystem articles |
+| React Hook Form 7.71 + Zod integration | HIGH | Official documentation, GitHub releases, matches project stack exactly |
+| Tailwind CSS v4 component patterns | HIGH | Official Tailwind docs, recent 2025-2026 articles, peer-verified implementations |
+| Next.js 16 Route Handlers and API design | HIGH | Official Next.js documentation, guides updated Feb 2026 |
+| localStorage + Zod validation patterns | HIGH | Official MDN, official Zod docs, verified best practices |
+| Prisma 7 JSON field typing and validation | HIGH | Official Prisma documentation, prisma-json-types-generator guidance |
+| Toast notification context patterns | MEDIUM | Multiple guides confirm approach; implementation details left to project |
+| Database schema design (User.trainerPreferences) | MEDIUM | Follows Prisma patterns; specific schema deferred to planner |
+| Minimum hand threshold for drill suggestions | LOW | Deferred to Phase 8 (statistics) which has actual metrics |
+| Animation timing and opacity specifics | LOW | Deferred to planner; Tailwind defaults are reasonable starting points |
 
-**Research date:** 2026-02-16
-**Valid until:** 2026-03-16 (30 days; stable domain, minor library updates possible)
+**Research date:** 2026-02-17
+**Valid until:** 2026-03-17 (30 days; stable domain, library updates possible but unlikely to affect patterns)
 
 ---
 
 *Phase: 06-trainer-configuration*
-*Research completed: 2026-02-16*
+*Research completed: 2026-02-17*
