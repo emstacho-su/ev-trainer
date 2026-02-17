@@ -155,7 +155,22 @@ async function main() {
   }
 
   const supabaseUrl = requireEnv('NEXT_PUBLIC_SUPABASE_URL')
-  const serviceRoleKey = requireEnv('SUPABASE_SERVICE_ROLE_KEY')
+
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('')
+    console.error('ERROR: SUPABASE_SERVICE_ROLE_KEY is not set.')
+    console.error('')
+    console.error('To fix this:')
+    console.error('  1. Go to Supabase Dashboard -> Settings -> API')
+    console.error('  2. Copy the "service_role" key (under "Project API keys")')
+    console.error('  3. Add it to your .env.local file:')
+    console.error('     SUPABASE_SERVICE_ROLE_KEY=eyJ...your-key-here')
+    console.error('')
+    console.error('See .env.local.example for a template of all required env vars.')
+    process.exit(1)
+  }
+
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   // Create admin client with service role key (bypasses RLS)
   const supabase = createClient<Database>(supabaseUrl, serviceRoleKey, {
