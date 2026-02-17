@@ -151,10 +151,14 @@ Plans:
   3. Current board cards displayed between range grids
   4. Equity breakdown shows hand category percentages for both players
   5. Overall action frequency summary displayed at bottom
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 07-01: TBD
+- [ ] 07-01-PLAN.md — Range types, helpers, color scheme, and dependencies
+- [ ] 07-02-PLAN.md — RangeGridCell and RangeGridView components with stacked bars
+- [ ] 07-03-PLAN.md — ActionLegend and EquityBreakdown with tabbed views
+- [ ] 07-04-PLAN.md — RangeGridModal integration with PokerTable View Ranges button
+- [ ] 07-05-PLAN.md — Human verification checkpoint
 
 ### Phase 8: Statistics & Analytics
 **Goal**: Users can track performance trends and identify weaknesses over time
