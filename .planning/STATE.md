@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 10 of 10 (Postflop Training)
-Plan: 10-05 complete, 10-06 through 10-07 pending
+Plan: 10-05 complete, 10-06 through 10-07 pending; 08-08 gap closure complete
 Status: In progress
-Last activity: 2026-02-17 -- Completed 10-05-PLAN.md (PostflopTrainingSession main component)
+Last activity: 2026-02-17 -- Completed 08-08-PLAN.md (filter controls gap closure)
 
-Progress: [███████████████████] ~97% (58 plans complete)
+Progress: [███████████████████] ~97% (59 plans complete)
 
 ## Performance Metrics
 
