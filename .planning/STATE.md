@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 10 of 10 (Postflop Training)
-Plan: 10-04 complete, 10-05 through 10-07 pending
+Plan: 10-05 complete, 10-06 through 10-07 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 10-04-PLAN.md (street action UI components)
+Last activity: 2026-02-17 -- Completed 10-05-PLAN.md (PostflopTrainingSession main component)
 
-Progress: [██████████████████] ~95% (57 plans complete)
+Progress: [███████████████████] ~97% (58 plans complete)
 
 ## Performance Metrics
 
@@ -233,6 +233,11 @@ Recent decisions affecting current work:
 - 10-04: PostflopActionButton uses static Tailwind (no motion animations) unlike preflop ActionButton
 - 10-04: actionId label mapping supports BET_XX and RAISE_X.X patterns with bb amount calculation
 - 10-04: SpotContextLabel formats pot type: 3BP->3b, 4BP->4b, SRP->SRP
+- 10-05: Direct solvePostflopNode call in API client (not HTTP fetch) since mock solver is client-side
+- 10-05: CFRConfig stub values for mock solver compatibility (heroRange/villainRange empty arrays)
+- 10-05: IP maps to BTN seat, OOP maps to BB seat for 2-player postflop table display
+- 10-05: Full 5-card board stored in ref, sliced per street (3 flop, 4 turn, 5 river)
+- 10-05: 500ms delay before villain action, 1000ms villain label display before street advance
 
 ### Pending Todos
 
@@ -250,7 +255,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 06:14 UTC
-Stopped at: Completed 10-04-PLAN.md (street action UI components)
+Last session: 2026-02-17 06:19 UTC
+Stopped at: Completed 10-05-PLAN.md (PostflopTrainingSession main component)
 Resume file: None
-Next: Continue Phase 10 (10-05 through 10-07)
+Next: Continue Phase 10 (10-06 through 10-07)
