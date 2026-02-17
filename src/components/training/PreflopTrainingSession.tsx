@@ -570,14 +570,28 @@ export default function PreflopTrainingSession() {
   return (
     <div className="flex flex-col h-screen bg-gray-950">
       {/* Info bar */}
-      <div className="p-4 bg-gray-900 text-white flex justify-between items-center">
-        <div className="flex gap-6">
-          <span className="font-semibold">Hand #{handCount + 1}</span>
-          <span>Accuracy: {accuracy.toFixed(1)}%</span>
-          <span>Correct: {correctCount}/{handCount}</span>
-        </div>
-        <div className="text-sm text-gray-500">
-          {currentSpot.heroToAct} | {currentSpot.history.length === 0 ? 'RFI' : `${currentSpot.history.length} prior action(s)`}
+      <div className="p-4 bg-gray-800 border-b border-gray-700">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex gap-8">
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">Hand</span>
+              <span className="text-lg font-bold text-white">#{handCount + 1}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">Accuracy</span>
+              <span className="text-lg font-bold text-blue-400">{accuracy.toFixed(1)}%</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-400 uppercase tracking-wide">Correct</span>
+              <span className="text-lg font-bold text-green-400">{correctCount}/{handCount}</span>
+            </div>
+          </div>
+          <div className="flex flex-col items-end">
+            <span className="text-xs text-gray-400 uppercase tracking-wide">Position</span>
+            <span className="text-sm font-semibold text-gray-300">
+              {currentSpot.heroToAct} | {currentSpot.history.length === 0 ? 'RFI' : `${currentSpot.history.length} prior action(s)`}
+            </span>
+          </div>
         </div>
       </div>
 
