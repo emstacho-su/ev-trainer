@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 10 - Postflop Training (continuing)
+**Current focus:** Phase 12 - Dashboard & Training Config Popout
 
 ## Current Position
 
-Phase: 10 of 10 (Postflop Training)
-Plan: 10-05 complete, 10-06 through 10-07 pending; Phase 8 gap closure complete (verified)
+Phase: 12 of 12 (Dashboard & Training Config Popout)
+Plan: 12-01 complete, 12-02 through 12-04 pending
 Status: In progress
-Last activity: 2026-02-17 -- Phase 8 gap closure verified (6/6 must-haves passed)
+Last activity: 2026-02-17 -- Completed 12-01-PLAN.md (Dashboard + TrainingConfigDialog)
 
-Progress: [████████████████████] ~98% (61 plans complete)
+Progress: [████████████████████░] ~99% (62 plans complete)
 
 ## Performance Metrics
 
@@ -245,6 +245,10 @@ Recent decisions affecting current work:
 - 08-08: Clear filters button removes non-date params only
 - 08-09: SessionReplay keyboard navigation: ArrowLeft/p (prev), ArrowRight/n (next), Escape (close)
 - 08-09: Replay toggle in SessionHistory expanded detail (replaySessionId state)
+- 12-01: Dashboard replaces redirect-to-lobby as app landing page
+- 12-01: DrillSuggestions navigate to /training with URL params (heroPosition, potType)
+- 12-01: TrainingConfigDialog uses native dialog matching RangeGridModal pattern exactly
+- 12-01: Session-level fields locked via disabled fieldset with opacity-50 visual cue
 
 ### Pending Todos
 
@@ -255,6 +259,10 @@ None yet.
 - Phase 5: Keyboard shortcuts not working (Tests 11, 12) — needs deeper investigation
 - Phase 5: Info bar metrics not visible (Test 13) — defer until hand logic complete
 
+### Roadmap Evolution
+
+- Phase 11 added: Supabase database integration (user accounts, practice spot DB, data layer rewrite)
+
 ### Blockers/Concerns
 
 - Research flag: Phase 1 may need targeted research on optimal abstraction bucket counts
@@ -263,6 +271,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Phase 8 gap closure verified (6/6 passed)
+Stopped at: Completed 12-01-PLAN.md (Dashboard + TrainingConfigDialog)
 Resume file: None
-Next: Continue Phase 10 (10-06 through 10-07)
+Next: Continue Phase 12 (12-02 through 12-04)
