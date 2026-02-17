@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Core value:** Players can practice poker decisions and receive solver-accurate EV feedback that helps them identify and fix leaks in their game.
-**Current focus:** Phase 8 - Statistics & Analytics / Phase 9 - Animations (parallel)
+**Current focus:** Phase 10 - Postflop Training (starting)
 
 ## Current Position
 
-Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
-Plan: 08-07 complete, Phase 8 (08-01/02/03/04/05/07 done, 08-06 pending) and Phase 9 in progress
+Phase: 10 of 10 (Postflop Training)
+Plan: 10-01 complete, 10-02 through 10-07 pending
 Status: In progress
-Last activity: 2026-02-17 -- Completed 08-07 flagged hands feature
+Last activity: 2026-02-17 -- Completed 10-01-PLAN.md (PostflopSpot types + BoardTexture classification)
 
-Progress: [████████████████] ~90% (54 plans complete)
+Progress: [█████████████████] ~91% (55 plans complete)
 
 ## Performance Metrics
 
@@ -220,6 +220,9 @@ Recent decisions affecting current work:
 - 08-02: oklch color format from shadcn merged with existing poker HSL tokens in globals.css
 - 08-07: Toggle API pattern for flag (PATCH toggles, not separate PUT true/false)
 - 08-07: Optimistic local state removal on unflag in FlaggedHandsList
+- 10-01: Ace-high rainbow boards (AKQ) classified as RAINBOW not CONNECTED
+- 10-01: PAIRED priority over all suit-based classifications (trips board = PAIRED)
+- 10-01: CONNECTED requires maxGap<=3 AND no Ace on board
 
 ### Pending Todos
 
@@ -237,7 +240,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:43 UTC
-Stopped at: Completed 08-07-PLAN.md (flagged hands feature)
+Last session: 2026-02-17 06:08 UTC
+Stopped at: Completed 10-01-PLAN.md (PostflopSpot types + BoardTexture classification)
 Resume file: None
-Next: Continue Phase 8 (08-06) and Phase 9 remaining plans
+Next: Continue Phase 10 (10-02 through 10-07)
