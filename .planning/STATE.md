@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 Phase: 8 of 10 (Statistics & Analytics) / Phase 9 (Animations) in parallel
-Plan: 1 of 7 in Phase 8 complete, Phase 9 in progress
+Plan: 09-06 of 7 in Phase 9, Phase 8 in progress
 Status: In progress
-Last activity: 2026-02-17 -- Completed 09-02 card deal and flip animations
+Last activity: 2026-02-17 -- Completed 09-06 dealer button slide & modal transition
 
-Progress: [██████████████░░] ~80% (48 plans complete)
+Progress: [██████████████░░] ~83% (50 plans complete)
 
 ## Performance Metrics
 
@@ -206,6 +206,9 @@ Recent decisions affecting current work:
 - 09-02: Perspective 600px for 3D card flip depth
 - 09-02: Sequential deal+flip: flip starts after CARD_DEAL delay completes
 - 09-02: AnimatedCard wraps Card/CardBack for all card rendering with consistent animation
+- 08-04: 6-level color scale for heatmap (green-600 to red-600 with opacity)
+- 08-04: Tab navigation on stats page (Performance/Positions/Sessions)
+- 08-04: Dark theme applied to existing BreakdownTable for consistency
 
 ### Pending Todos
 
@@ -223,7 +226,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 05:29 UTC
-Stopped at: Completed 09-02-PLAN.md (card deal and flip animations)
+Last session: 2026-02-17 06:00 UTC
+Stopped at: Completed 08-04-PLAN.md (position heatmap & weakness breakdown)
 Resume file: None
-Next: Continue Phase 9 wave 2 plans (09-05, 09-06) and Phase 8 plans
+Next: Continue Phase 8 remaining plans and Phase 9 wave 2 plans
