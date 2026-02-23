@@ -1,5 +1,16 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
+
+// Mock Supabase server client so routes don't call cookies() outside a request scope.
+// Returns a guest (unauthenticated) client — Supabase persistence paths are skipped.
+vi.mock("@/lib/supabase/server", () => ({
+  createClient: vi.fn().mockResolvedValue({
+    auth: {
+      getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+    },
+  }),
+}));
+
 import { GET as getSessionRoute } from "../app/api/session/[id]/route";
 import { POST as nextRoute } from "../app/api/session/next/route";
 import { POST as startRoute } from "../app/api/session/start/route";
@@ -244,6 +255,7 @@ describe("session API route contracts", () => {
       sessionContext("not-found")
     );
     expect(invalidId.status).toBe(404);
-    expect((await readJson(invalidId)).error).toMatchObject({ code: "NOT_FOUND" });
+    // Guest users get SESSION_EXPIRED (sessions don't persist across server restarts)
+    expect((await readJson(invalidId)).error).toMatchObject({ code: "SESSION_EXPIRED" });
   });
 });
