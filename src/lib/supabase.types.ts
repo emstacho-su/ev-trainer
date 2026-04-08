@@ -115,6 +115,51 @@ export type Database = {
           },
         ]
       }
+      solver_cache: {
+        Row: {
+          accessed_at: string
+          bet_tree_config: Json | null
+          board: string[]
+          canonical_hash: string
+          created_at: string
+          effective_stack_bb: number
+          exploitability: number | null
+          id: string
+          iterations: number | null
+          pot_bb: number
+          solver_output: Json
+          street: string
+        }
+        Insert: {
+          accessed_at?: string
+          bet_tree_config?: Json | null
+          board?: string[]
+          canonical_hash: string
+          created_at?: string
+          effective_stack_bb: number
+          exploitability?: number | null
+          id?: string
+          iterations?: number | null
+          pot_bb: number
+          solver_output: Json
+          street: string
+        }
+        Update: {
+          accessed_at?: string
+          bet_tree_config?: Json | null
+          board?: string[]
+          canonical_hash?: string
+          created_at?: string
+          effective_stack_bb?: number
+          exploitability?: number | null
+          id?: string
+          iterations?: number | null
+          pot_bb?: number
+          solver_output?: Json
+          street?: string
+        }
+        Relationships: []
+      }
       spot_stats: {
         Row: {
           avg_ev_loss: number

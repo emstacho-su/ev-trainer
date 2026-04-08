@@ -94,7 +94,7 @@ export async function cacheResult(
           board: request.publicState.board,
           pot_bb: request.publicState.potBb,
           effective_stack_bb: request.publicState.effectiveStackBb,
-          solver_output: output as unknown as Record<string, unknown>,
+          solver_output: JSON.parse(JSON.stringify(output)),
           iterations: metadata?.iterations ?? null,
           exploitability: metadata?.exploitability ?? null,
         },

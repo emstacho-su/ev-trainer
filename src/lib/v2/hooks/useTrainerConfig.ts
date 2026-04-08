@@ -10,7 +10,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { TrainerConfig } from "../config/types";
-import { loadConfigFromStorage, saveConfigToStorage } from "../config/configStore";
+import { loadConfigFromStorage, saveConfigToStorage, syncConfigToSupabase, loadConfigFromSupabase } from "../config/configStore";
 import { validateConfig } from "../config/validation";
 
 const DEBOUNCE_MS = 500;
@@ -43,6 +43,15 @@ export function useTrainerConfig(userId?: string) {
     if (userId) {
       void (async () => {
         try {
+          // Try Supabase first (direct DB access, no API route needed)
+          const supabaseConfig = await loadConfigFromSupabase();
+          if (supabaseConfig) {
+            setConfig(supabaseConfig);
+            saveConfigToStorage(supabaseConfig);
+            return;
+          }
+
+          // Fallback: try API route
           const res = await fetch(API_CONFIG_PATH, {
             headers: { Authorization: `Bearer ${getAccessToken()}` },
           });
@@ -81,22 +90,9 @@ export function useTrainerConfig(userId?: string) {
       // Save to localStorage
       saveConfigToStorage(config);
 
-      // Sync to server if authenticated
+      // Sync to Supabase for authenticated users (fire-and-forget)
       if (userId) {
-        void (async () => {
-          try {
-            await fetch(API_CONFIG_PATH, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getAccessToken()}`,
-              },
-              body: JSON.stringify(config),
-            });
-          } catch (error) {
-            console.warn("Failed to sync config to server:", error);
-          }
-        })();
+        syncConfigToSupabase(config).catch(() => {});
       }
     }, DEBOUNCE_MS);
 

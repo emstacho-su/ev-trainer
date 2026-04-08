@@ -46,8 +46,11 @@ const PREFLOP_HISTORIES = [
  * Generate a random postflop hand for training.
  * Returns a full PostflopSpot with 5-card board (flop shown first, turn/river used later),
  * 2 hero cards, random pot/stack sizes, and random positions.
+ *
+ * @param targetStackBb - If provided, uses this stack depth instead of random.
+ *                        Matches config store's stackDepth (50/100/200).
  */
-export function generatePostflopHand(): PostflopSpot {
+export function generatePostflopHand(targetStackBb?: number): PostflopSpot {
   const deck = shuffle(buildDeck());
 
   // Deal: 5 board cards + 2 hero cards from shuffled deck
@@ -57,8 +60,8 @@ export function generatePostflopHand(): PostflopSpot {
   // Random pot size: 20-100 BB, rounded to 0.5 BB
   const potBb = roundHalfBb(20 + Math.random() * 80);
 
-  // Random stack size: 50-300 BB (whole numbers)
-  const stackBb = Math.round(50 + Math.random() * 250);
+  // Stack size: use target if provided, otherwise random 50-300 BB
+  const stackBb = targetStackBb ?? Math.round(50 + Math.random() * 250);
 
   // Random position assignment
   const heroPosition: 'IP' | 'OOP' = Math.random() < 0.5 ? 'IP' : 'OOP';

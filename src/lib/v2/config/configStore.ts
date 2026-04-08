@@ -13,6 +13,56 @@ import { trainerConfigSchema, getDefaultConfig } from "./validation";
 const STORAGE_KEY = "trainer-config";
 
 /**
+ * Sync trainer config to Supabase profiles.trainer_preferences for cross-device persistence.
+ * Fire-and-forget — localStorage remains primary. Only runs client-side for authenticated users.
+ */
+export async function syncConfigToSupabase(config: TrainerConfig): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  try {
+    const { createClient } = await import("@/lib/supabase/client");
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase
+      .from("profiles")
+      .update({ trainer_preferences: JSON.parse(JSON.stringify(config)) })
+      .eq("id", user.id);
+  } catch {
+    // Non-critical: localStorage is primary
+  }
+}
+
+/**
+ * Load trainer config from Supabase profiles.trainer_preferences.
+ * Returns null if not authenticated or no server config exists.
+ */
+export async function loadConfigFromSupabase(): Promise<TrainerConfig | null> {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const { createClient } = await import("@/lib/supabase/client");
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("trainer_preferences")
+      .eq("id", user.id)
+      .single();
+
+    if (!data?.trainer_preferences) return null;
+
+    const result = trainerConfigSchema.safeParse(data.trainer_preferences);
+    return result.success ? (result.data as TrainerConfig) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Load trainer config from localStorage.
  *
  * - Returns default config if no stored value exists

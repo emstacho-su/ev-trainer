@@ -59,7 +59,7 @@ const BOARD_SIZE: Record<Street, number> = {
   RIVER: 5,
 };
 
-export function usePostflopTraining() {
+export function usePostflopTraining(options?: { targetStackBb?: number }) {
   const { state, dispatch } = usePostflopSession();
   const [isLoading, setIsLoading] = useState(false);
   const [villainActionLabel, setVillainActionLabel] = useState<string | null>(null);
@@ -85,7 +85,7 @@ export function usePostflopTraining() {
   );
 
   const startNewHand = useCallback(() => {
-    const spot = generatePostflopHand();
+    const spot = generatePostflopHand(options?.targetStackBb);
     fullBoardRef.current = [...spot.board];
     solverOutputRef.current = null;
     dispatch({

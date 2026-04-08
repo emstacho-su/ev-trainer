@@ -4,13 +4,19 @@
 // Main postflop training component integrating PokerTable, StreetActionPanel,
 // SpotContextLabel, and the postflop state machine.
 
+import { useState, useMemo } from 'react';
 import { PostflopSessionProvider, usePostflopSession } from '@/lib/postflop/session/postflopSession';
 import { usePostflopTraining } from '@/lib/postflop/hooks/usePostflopTraining';
+import { loadConfigFromStorage } from '@/lib/v2/config/configStore';
 import { PokerTable } from './PokerTable';
 import { StreetActionPanel } from '../molecules/StreetActionPanel';
 import { SpotContextLabel } from '../molecules/SpotContextLabel';
+import { LastRaiserIndicator } from '../molecules/LastRaiserIndicator';
 import { HandSummaryModal } from '../molecules/HandSummaryModal';
+import { RangeGridModal } from '@/components/range';
+import { extractRangeData } from '@/lib/engine/rangeExtractor';
 import type { Card } from '@/lib/solver/types';
+import type { RangeData } from '@/lib/range/types';
 
 interface PostflopTrainingSessionProps {
   /** Called when user clicks "Next Hand" in summary modal. */
@@ -54,9 +60,19 @@ function deriveHeroRole(preflopHistory: string, heroPosition: 'IP' | 'OOP'): 'Ag
 /** Street ordering for deviation comparison. */
 const STREET_ORDER = { FLOP: 0, TURN: 1, RIVER: 2 } as const;
 
+const EMPTY_RANGE: RangeData = { hands: [], totalCombos: 0 };
+
+/** Parse "50bb" | "100bb" | "200bb" to numeric value. */
+function parseStackDepth(depth: string): number {
+  return parseInt(depth.replace('bb', ''), 10);
+}
+
 function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTrainingSessionProps) {
   const { state, dispatch } = usePostflopSession();
-  const { startNewHand, handleUserDecision, isLoading, villainActionLabel, streetActions } = usePostflopTraining();
+  const config = useMemo(() => loadConfigFromStorage(), []);
+  const targetStackBb = parseStackDepth(config.stackDepth);
+  const { startNewHand, handleUserDecision, isLoading, villainActionLabel, streetActions } = usePostflopTraining({ targetStackBb });
+  const [rangeModalOpen, setRangeModalOpen] = useState(false);
 
   const {
     machineState,
@@ -117,6 +133,32 @@ function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTraining
   const preflopHistory = state.summary?.spot?.preflopHistory ?? 'BTN raised, BB called';
   const potType = derivePotType(preflopHistory);
   const heroRole = deriveHeroRole(preflopHistory, heroPosition);
+
+  // Last Raiser Indicator: show at the aggressor's seat
+  const aggressorSeat = heroRole === 'Aggressor' ? heroSeat : villainSeat;
+
+  // Range data extracted from solver output for current street
+  const solverOutput = currentDecision?.solverOutput;
+  const heroRange = useMemo<RangeData>(
+    () => solverOutput ? extractRangeData(solverOutput, 'hero') : EMPTY_RANGE,
+    [solverOutput],
+  );
+  const villainRange = useMemo<RangeData>(
+    () => solverOutput ? extractRangeData(solverOutput, 'villain') : EMPTY_RANGE,
+    [solverOutput],
+  );
+
+  // Hero hand in canonical form for highlighting in range grid
+  const heroHandCanonical = heroHand
+    ? (() => {
+        const r1 = heroHand[0].slice(0, -1);
+        const r2 = heroHand[1].slice(0, -1);
+        const s1 = heroHand[0].slice(-1);
+        const s2 = heroHand[1].slice(-1);
+        if (r1 === r2) return `${r1}${r2}`;
+        return s1 === s2 ? `${r1}${r2}s` : `${r1}${r2}o`;
+      })()
+    : undefined;
 
   // Idle state: show start button
   if (machineState === 'idle') {
@@ -187,15 +229,31 @@ function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTraining
         </div>
       )}
 
-      {/* Spot context label */}
-      <div className="flex justify-center px-4">
+      {/* Spot context label + LRI */}
+      <div className="flex items-center justify-center gap-3 px-4">
         <SpotContextLabel
           heroPosition={heroPosition}
           potType={potType}
           heroRole={heroRole}
           street={currentStreet}
         />
+        <LastRaiserIndicator
+          seat={aggressorSeat}
+          isVisible={true}
+        />
       </div>
+
+      {/* View Ranges button (visible after solver reveal) */}
+      {isRevealed && solverOutput && (
+        <div className="flex justify-center px-4">
+          <button
+            onClick={() => setRangeModalOpen(true)}
+            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium text-sm"
+          >
+            View Ranges
+          </button>
+        </div>
+      )}
 
       {/* Action panel */}
       {machineState !== 'summary' && (
@@ -227,6 +285,16 @@ function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTraining
           }}
         />
       )}
+
+      {/* Range visualization modal */}
+      <RangeGridModal
+        isOpen={rangeModalOpen}
+        onClose={() => setRangeModalOpen(false)}
+        heroRange={heroRange}
+        villainRange={villainRange}
+        currentBoard={board}
+        currentHand={heroHandCanonical}
+      />
     </div>
   );
 }
