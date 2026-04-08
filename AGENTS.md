@@ -1,8 +1,9 @@
 # AGENTS.md — GTO Practice Trainer
 
-## Hard workflow gate
-- Use cc-sdd prompts in this order: spec-init → requirements → design → tasks → implementation.
-- Do not write production code until `.kiro/specs/<SPEC_ID>/tasks.md` exists AND is committed.
+## Workflow gate
+- Follow phases in `.planning/SPRINT-ROADMAP.md` in order.
+- Each phase has success criteria and verification commands. Do not skip phases.
+- Reference `.planning/AUDIT.md` for findings and `.planning/SOLVER-COMPARISON.md` for solver decisions.
 
 ## Non-copy constraint
 - Do not copy GTOWizard proprietary UI, text, assets, datasets, solver outputs, or branding.

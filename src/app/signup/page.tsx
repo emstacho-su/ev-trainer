@@ -12,7 +12,6 @@ function OAuthButtons({ loading }: { loading: boolean }) {
     setOauthLoading(provider);
     const supabase = createClient();
     const redirectTo = `${window.location.origin}/auth/callback`;
-    console.log('[OAuth] redirectTo:', redirectTo);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -20,7 +19,6 @@ function OAuthButtons({ loading }: { loading: boolean }) {
       },
     });
     if (error) {
-      console.error('[OAuth] signInWithOAuth error:', error);
       setOauthLoading(null);
     }
   }
