@@ -7,9 +7,9 @@ import { validateSolverNodeOutput } from "./solverAdapter";
 import type { AsyncSolverAdapter } from "./solverTypes";
 import type { Street } from "./types";
 import { mockSolve } from "./mockSolver";
-import { canonicalHash } from "./canonicalHash";
 import { PreflopRangeAdapter } from "./preflopRangeAdapter";
 import { PostflopSolverAdapter } from "./postflopSolverAdapter";
+import { buildCacheKey, getCachedResult, cacheResult } from "./solverCache";
 
 /**
  * Mock adapter wrapping the existing mockSolve function.
@@ -17,13 +17,7 @@ import { PostflopSolverAdapter } from "./postflopSolverAdapter";
  */
 class MockSolverAdapter implements AsyncSolverAdapter {
   async solve(request: SolverRequest): Promise<SolverNodeOutput> {
-    const hash = canonicalHash({
-      street: request.publicState.street,
-      board: request.publicState.board,
-      potBb: request.publicState.potBb,
-      effectiveStackBb: request.publicState.effectiveStackBb,
-      history: request.history.actions,
-    });
+    const hash = buildCacheKey(request);
     return mockSolve(hash);
   }
 }
@@ -60,12 +54,32 @@ export function getSolverAdapter(street: Street): AsyncSolverAdapter {
 
 /**
  * Route a solver request to the correct adapter and validate the output.
+ * Checks two-tier cache before solving; stores result after solve.
  * This is the primary entry point for solver requests.
  */
 export async function routeSolverRequest(
   request: SolverRequest
 ): Promise<SolverNodeOutput> {
+  const cacheKey = buildCacheKey(request);
+
+  // Check cache first (IndexedDB -> Supabase)
+  const cached = await getCachedResult(cacheKey);
+  if (cached.output) {
+    console.debug(`[solver-cache] HIT (${cached.source}): ${cacheKey.slice(0, 40)}...`);
+    return validateSolverNodeOutput(cached.output);
+  }
+
+  console.debug(`[solver-cache] MISS: ${cacheKey.slice(0, 40)}...`);
+
+  // Solve via adapter
   const adapter = getSolverAdapter(request.publicState.street);
   const output = await adapter.solve(request);
-  return validateSolverNodeOutput(output);
+  const validated = validateSolverNodeOutput(output);
+
+  // Store in cache (fire-and-forget)
+  cacheResult(cacheKey, request, validated, {
+    exploitability: validated.exploitability,
+  }).catch(() => {});
+
+  return validated;
 }
