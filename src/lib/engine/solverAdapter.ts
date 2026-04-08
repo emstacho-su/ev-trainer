@@ -1,6 +1,7 @@
 // src/lib/engine/solverAdapter.ts
 
 import type { ActionId, Position, Street } from "./types";
+import type { SolverConfig } from "./solverTypes";
 
 export interface NodePublicState {
   street: Street;
@@ -36,6 +37,7 @@ export interface SolverRequest {
   history: NodeHistory;
   toAct: Position;
   rangeContext?: string;
+  solverConfig?: SolverConfig;
 }
 
 export type SolverResponse = SolverNodeOutput;
