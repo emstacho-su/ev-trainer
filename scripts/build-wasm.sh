@@ -52,10 +52,10 @@ if [ ! -d "$WASM_SRC" ]; then
   exit 1
 fi
 
-# Build range module (bundler target for webpack)
+# Build range module (web target for Worker + test compatibility)
 echo "Building range module..."
 cd "$WASM_SRC"
-wasm-pack build --out-dir "$PKG_DIR/range" rust/range
+wasm-pack build --target web --out-dir "$PKG_DIR/range" rust/range
 echo "  Done."
 
 # Build solver-st module (web target for Worker loading)
