@@ -154,27 +154,42 @@ export function PokerTable({
         );
       })}
 
-      {/* Bet chips on inner ring */}
+      {/* Bet chips on inner ring — slide from seat toward pot */}
       <AnimatePresence>
         {players.map((player) => {
           if (!player.bet || player.bet <= 0) return null;
-          const pos = betPositions[player.position];
-          if (!pos) return null;
+          const betPos = betPositions[player.position];
+          const seatPos = seatPositions[player.position];
+          if (!betPos || !seatPos) return null;
+
+          // Slide direction: from seat toward bet position (inward)
+          const dx = parseFloat(seatPos.left) - parseFloat(betPos.left);
+          const dy = parseFloat(seatPos.top) - parseFloat(betPos.top);
+          const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+          const slideX = (dx / mag) * 30;
+          const slideY = (dy / mag) * 30;
 
           return (
             <div
               key={`bet-${player.position}`}
               className="absolute z-20"
               style={{
-                top: pos.top,
-                left: pos.left,
+                top: betPos.top,
+                left: betPos.left,
                 transform: 'translate(-50%, -50%)',
               }}
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.3 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.3, transition: { duration: ANIM.CHIP_COLLECT, ease: EASE.OUT } }}
+                layout
+                initial={{ opacity: 0, scale: 0.5, x: slideX, y: slideY }}
+                animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.6,
+                  x: -slideX * 0.5,
+                  y: -slideY * 0.5,
+                  transition: { duration: ANIM.CHIP_COLLECT, ease: EASE.OUT },
+                }}
                 transition={{ duration: ANIM.CHIP_SLIDE, ease: EASE.OUT }}
               >
                 <Chip amount={player.bet} size="sm" />

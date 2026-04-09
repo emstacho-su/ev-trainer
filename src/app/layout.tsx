@@ -4,6 +4,7 @@ import { AuthProvider } from './providers/AuthProvider';
 import { ToastProvider } from '@/lib/ui/toastContext';
 import ToastContainer from '@/lib/ui/ToastContainer';
 import AppHeader from '@/components/AppHeader';
+import { Onboarding } from '@/components/Onboarding';
 import './globals.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ToastProvider>
                 <AppHeader />
                 {children}
+                <Onboarding />
                 <ToastContainer />
               </ToastProvider>
             </AuthProvider>

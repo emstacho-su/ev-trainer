@@ -5,6 +5,8 @@
 // SpotContextLabel, and the postflop state machine.
 
 import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ANIM, EASE } from '@/lib/ui/animationTiming';
 import { PostflopSessionProvider, usePostflopSession } from '@/lib/postflop/session/postflopSession';
 import { usePostflopTraining } from '@/lib/postflop/hooks/usePostflopTraining';
 import { loadConfigFromStorage } from '@/lib/v2/config/configStore';
@@ -180,29 +182,36 @@ function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTraining
 
   return (
     <div className="flex flex-col h-full gap-4">
-      {/* Street indicator */}
+      {/* Street indicator — animated highlight */}
       <div className="flex items-center justify-between px-4 pt-2">
         <div className="flex gap-3">
           {(['FLOP', 'TURN', 'RIVER'] as const).map((street) => (
-            <span
+            <motion.span
               key={street}
-              className={`text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded ${
-                street === currentStreet
-                  ? 'bg-blue-600 text-white'
-                  : decisions[street]
-                  ? 'bg-gray-700 text-gray-300'
-                  : 'bg-gray-800 text-gray-500'
-              }`}
+              animate={{
+                backgroundColor: street === currentStreet ? 'rgb(37 99 235)' : decisions[street] ? 'rgb(55 65 81)' : 'rgb(31 41 55)',
+                color: street === currentStreet ? 'rgb(255 255 255)' : decisions[street] ? 'rgb(209 213 219)' : 'rgb(107 114 128)',
+              }}
+              transition={{ duration: 0.2, ease: EASE.OUT }}
+              className="text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded"
             >
               {street}
-            </span>
+            </motion.span>
           ))}
         </div>
-        {deviatedStreet && (
-          <span className="text-xs text-orange-400 uppercase tracking-wider">
-            Off-line since {deviatedStreet}
-          </span>
-        )}
+        <AnimatePresence>
+          {deviatedStreet && (
+            <motion.span
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: ANIM.EV_REVEAL, ease: EASE.OUT }}
+              className="text-xs text-orange-400 uppercase tracking-wider"
+            >
+              Off-line since {deviatedStreet}
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Poker table */}
@@ -255,20 +264,29 @@ function PostflopTrainingSessionInner({ onNextHand, onReplay }: PostflopTraining
         </div>
       )}
 
-      {/* Action panel */}
-      {machineState !== 'summary' && (
-        <div className="px-4 pb-4">
-          <StreetActionPanel
-            actions={isDeciding ? solverActions : solverActions}
-            selectedActionId={selectedActionId}
-            isRevealed={isRevealed}
-            isDeviated={isDeviated}
-            potBb={potBb}
-            onAction={handleUserDecision}
-            disabled={!isDeciding}
-          />
-        </div>
-      )}
+      {/* Action panel — fade transition between streets */}
+      <AnimatePresence mode="wait">
+        {machineState !== 'summary' && (
+          <motion.div
+            key={currentStreet}
+            className="px-4 pb-4"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15, ease: EASE.OUT }}
+          >
+            <StreetActionPanel
+              actions={isDeciding ? solverActions : solverActions}
+              selectedActionId={selectedActionId}
+              isRevealed={isRevealed}
+              isDeviated={isDeviated}
+              potBb={potBb}
+              onAction={handleUserDecision}
+              disabled={!isDeciding}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Summary modal */}
       {machineState === 'summary' && state.summary && (
