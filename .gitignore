@@ -5,6 +5,8 @@ node_modules/
 .next/
 dist/
 coverage/
+test-results/
+playwright-report/
 
 # vitest / vite cache
 .vite/
