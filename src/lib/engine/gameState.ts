@@ -34,6 +34,13 @@ export interface GameState {
   readonly history: readonly ActionId[];
   /** Whether a position is all-in. */
   readonly allIn: Readonly<Record<Position, boolean>>;
+  /**
+   * Whether a position retains the right to make a standard raise.
+   * TDA Rule 41: if an all-in wager is less than a full raise, betting is
+   * not reopened to players who already acted since the last full aggression.
+   * true = can still raise, false = can only call/fold (all-in still allowed).
+   */
+  readonly raiseRights: Readonly<Record<Position, boolean>>;
   /** Community cards. */
   readonly board: readonly string[];
   /** Blind structure. */
@@ -178,11 +185,13 @@ export function createInitialGameState(spot: Spot): GameState {
   const stacks: Record<string, number> = {};
   const bets: Record<string, number> = {};
   const allIn: Record<string, boolean> = {};
+  const raiseRights: Record<string, boolean> = {};
 
   for (const pos of positions) {
     stacks[pos] = stacksBb[pos];
     bets[pos] = 0;
     allIn[pos] = false;
+    raiseRights[pos] = true;
   }
 
   let pot = 0;
@@ -239,6 +248,7 @@ export function createInitialGameState(spot: Spot): GameState {
     actedThisStreet: [],
     history: [...history],
     allIn: allIn as Record<Position, boolean>,
+    raiseRights: raiseRights as Record<Position, boolean>,
     board: [...board],
     blinds: { ...blinds },
     streetComplete: false,
@@ -323,13 +333,18 @@ export function computeLegalActions(gs: GameState): LegalActions {
   const canCall = true;
   const canFold = true;
 
-  // Can raise if stack > call amount AND meets min raise
+  // Can raise if stack > call amount AND meets min raise AND raise rights not locked
   const remainingAfterCall = playerStack - callAmount;
   const minRaiseTotal = currentHigh + gs.lastRaiseIncrement;
   const maxRaiseTotal = playerStack + playerBet;
 
-  // Can raise if we have chips beyond the call amount
-  const canRaise = remainingAfterCall > NUM_EPS && maxRaiseTotal >= minRaiseTotal - NUM_EPS;
+  // TDA Rule 41: if a prior short all-in closed this player's raise rights,
+  // they may only call, fold, or go all-in themselves -- not make a standard raise.
+  const hasRaiseRights = gs.raiseRights[gs.toAct];
+  const canRaise =
+    hasRaiseRights &&
+    remainingAfterCall > NUM_EPS &&
+    maxRaiseTotal >= minRaiseTotal - NUM_EPS;
 
   return {
     canCheck: false,
@@ -432,6 +447,7 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
   const stacks = { ...gs.stacks };
   const bets = { ...gs.bets };
   const allIn = { ...gs.allIn };
+  const raiseRights = { ...gs.raiseRights };
   let activePositions = [...gs.activePositions];
   let pot = gs.pot;
   let lastAggressor = gs.lastAggressor;
@@ -440,6 +456,11 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
   const history = [...gs.history, actionId];
 
   const currentHigh = highBet(gs.bets);
+  /** Mark a full aggression: reopen rights for everyone else, close for aggressor. */
+  const reopenActionFor = (aggressor: Position) => {
+    for (const p of gs.positions) raiseRights[p] = true;
+    raiseRights[aggressor] = false;
+  };
 
   switch (parsed.type) {
     case "FOLD": {
@@ -448,7 +469,8 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
     }
 
     case "CHECK": {
-      // No chip movement
+      // No chip movement. Player consumed their turn — rights stay as they were.
+      raiseRights[pos] = false;
       break;
     }
 
@@ -460,6 +482,8 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
         stacks[pos] = 0;
         allIn[pos] = true;
       }
+      // Caller passed on raising this sequence — rights close until someone else raises.
+      raiseRights[pos] = false;
       break;
     }
 
@@ -474,6 +498,8 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
         stacks[pos] = 0;
         allIn[pos] = true;
       }
+      // Opening bet reopens action for everyone else.
+      reopenActionFor(pos);
       break;
     }
 
@@ -489,6 +515,8 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
         stacks[pos] = 0;
         allIn[pos] = true;
       }
+      // Standard raises are always at or above minRaise (validated above) -> full aggression.
+      reopenActionFor(pos);
       break;
     }
 
@@ -501,8 +529,15 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
         if (raiseIncrement >= lastRaiseIncrement - NUM_EPS) {
           // Full raise — reopens action
           lastRaiseIncrement = raiseIncrement;
+          reopenActionFor(pos);
+        } else {
+          // Short all-in — does NOT reopen for prior actors
+          raiseRights[pos] = false;
         }
         lastAggressor = pos;
+      } else {
+        // All-in call (stack too small to raise) — rights close for this player only
+        raiseRights[pos] = false;
       }
       bets[pos] = newBet;
       stacks[pos] = 0;
@@ -581,6 +616,7 @@ export function applyAction(gs: GameState, actionId: ActionId): GameState {
     actedThisStreet,
     history,
     allIn: allIn as Record<Position, boolean>,
+    raiseRights: raiseRights as Record<Position, boolean>,
     board: gs.board,
     blinds: gs.blinds,
     streetComplete,
