@@ -22,6 +22,6 @@ export default defineConfig({
     command: 'npx next dev --webpack',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 30000,
+    timeout: 180000,
   },
 });
