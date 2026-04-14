@@ -1,8 +1,24 @@
 // src/lib/engine/spot.ts
 
-import { createHash } from "node:crypto";
 import type { ActionId, Position } from "./types";
 import { Positions } from "./types";
+
+/**
+ * Deterministic synchronous hash that works in both Node.js and browsers.
+ * Uses FNV-1a with multiple rounds to produce a 64-char hex digest.
+ */
+function syncHash(input: string): string {
+  let result = "";
+  for (let round = 0; round < 8; round++) {
+    let h = 0x811c9dc5 ^ (round * 0x9e3779b9);
+    for (let i = 0; i < input.length; i++) {
+      h ^= input.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    result += (h >>> 0).toString(16).padStart(8, "0");
+  }
+  return result;
+}
 
 export const SpotSchemaVersion = "1" as const;
 export type SpotSchemaVersion = typeof SpotSchemaVersion;
@@ -210,7 +226,7 @@ export function computeSpotId(input: Omit<Spot, "spotId">): string {
     heroToAct: input.heroToAct,
   };
   const canonicalJson = stableStringify(payload);
-  return createHash("sha256").update(canonicalJson).digest("hex");
+  return syncHash(canonicalJson);
 }
 
 // Validates Spot invariants; optionally verifies the spotId hash.

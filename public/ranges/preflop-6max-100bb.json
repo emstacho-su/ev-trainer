@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "1",
-  "generatedAt": "2026-04-08T03:42:13.422Z",
+  "schemaVersion": "2",
+  "generatedAt": "2026-04-09T15:33:12.736Z",
   "stackDepthBb": 100,
-  "method": "static-gto-approximate",
+  "method": "gto-aggregate-v2",
   "scenarios": {
     "UTG_RFI": {
       "status": "ok",
@@ -324,6 +324,166 @@
         }
       ]
     },
+    "BB_vs_UTG_RAISE": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.55,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.35,
+          "ev": 0.21
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.01,
+          "ev": 0.285
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.07,
+          "ev": 0.3
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.02,
+          "ev": 0.27
+        }
+      ]
+    },
+    "BB_vs_HJ_RAISE": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.52,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.37,
+          "ev": 0.24499999999999997
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.01,
+          "ev": 0.33249999999999996
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.07,
+          "ev": 0.35
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.03,
+          "ev": 0.315
+        }
+      ]
+    },
+    "BB_vs_CO_RAISE": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.48,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.38,
+          "ev": 0.27999999999999997
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.02,
+          "ev": 0.38
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.08,
+          "ev": 0.4
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.04,
+          "ev": 0.36000000000000004
+        }
+      ]
+    },
+    "BB_vs_BTN_RAISE": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.4,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.42,
+          "ev": 0.315
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.02,
+          "ev": 0.4275
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.1,
+          "ev": 0.45
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.06,
+          "ev": 0.405
+        }
+      ]
+    },
+    "BB_vs_SB_RAISE": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.35,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.4,
+          "ev": 0.35
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.03,
+          "ev": 0.475
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.14,
+          "ev": 0.5
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.08,
+          "ev": 0.45
+        }
+      ]
+    },
     "UTG_vs_3BET": {
       "status": "ok",
       "units": "bb",
@@ -449,6 +609,230 @@
           "actionId": "RAISE_3.0X",
           "frequency": 0.06,
           "ev": 0.5850000000000001
+        }
+      ]
+    },
+    "SB_vs_3BET": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.48,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.35,
+          "ev": 0.315
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.03,
+          "ev": 0.4275
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.1,
+          "ev": 0.45
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.04,
+          "ev": 0.405
+        }
+      ]
+    },
+    "BTN_vs_4BET": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.5,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.35,
+          "ev": 0.385
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.03,
+          "ev": 0.5225
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.08,
+          "ev": 0.55
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.04,
+          "ev": 0.49500000000000005
+        }
+      ]
+    },
+    "CO_vs_4BET": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.55,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.32,
+          "ev": 0.35
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.02,
+          "ev": 0.475
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.07,
+          "ev": 0.5
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.04,
+          "ev": 0.45
+        }
+      ]
+    },
+    "SB_vs_4BET": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.52,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.33,
+          "ev": 0.315
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.03,
+          "ev": 0.4275
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.08,
+          "ev": 0.45
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.04,
+          "ev": 0.405
+        }
+      ]
+    },
+    "BB_vs_4BET": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.48,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.35,
+          "ev": 0.35
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.03,
+          "ev": 0.475
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.09,
+          "ev": 0.5
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.05,
+          "ev": 0.45
+        }
+      ]
+    },
+    "SB_vs_BB": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0.24,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.24,
+          "ev": 0.42
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.09,
+          "ev": 0.57
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.35,
+          "ev": 0.6
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.08,
+          "ev": 0.54
+        }
+      ]
+    },
+    "BB_vs_SB_LIMP": {
+      "status": "ok",
+      "units": "bb",
+      "exploitability": 0.5,
+      "actions": [
+        {
+          "actionId": "FOLD",
+          "frequency": 0,
+          "ev": -0.5
+        },
+        {
+          "actionId": "CALL",
+          "frequency": 0.6,
+          "ev": 0.35
+        },
+        {
+          "actionId": "RAISE_2.2X",
+          "frequency": 0.06,
+          "ev": 0.475
+        },
+        {
+          "actionId": "RAISE_2.5X",
+          "frequency": 0.26,
+          "ev": 0.5
+        },
+        {
+          "actionId": "RAISE_3.0X",
+          "frequency": 0.08,
+          "ev": 0.45
         }
       ]
     }

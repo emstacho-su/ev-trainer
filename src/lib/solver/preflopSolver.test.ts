@@ -132,7 +132,7 @@ describe('Preflop Solver', () => {
       expect(Number.isFinite(solution.result.exploitability)).toBe(true);
     });
 
-    it('exploitability decreases with more iterations', { timeout: 30000 }, () => {
+    it('exploitability decreases with more iterations', () => {
       // Run with few iterations
       const config1 = createTestSolverConfig({ maxIterations: 20 });
       const solution1 = solvePreflopScenario(config1);

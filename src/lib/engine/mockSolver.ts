@@ -1,6 +1,5 @@
 // src/lib/engine/mockSolver.ts
 
-import { createHash } from "node:crypto";
 import type { SolverNodeOutput } from "./solverAdapter";
 import type { CanonicalNode } from "./nodeTypes";
 import { buildCanonicalNodeHash } from "./canonicalHash";
@@ -26,7 +25,8 @@ export function mockSolve(request: CanonicalNode): SolverNodeOutput {
   const freqB = 1 - freqA;
   const baseEv = ((seed % 2001) - 1000) / 100; // -10.00 .. 10.00
 
-  const nodeId = createHash("sha256").update(`mock:${nodeHash}`).digest("hex");
+  // Derive a deterministic mock node ID from the hash
+  const nodeId = nodeHash;
 
   return {
     nodeId: `mock:${nodeId.slice(0, 12)}`,

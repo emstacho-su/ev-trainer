@@ -76,18 +76,36 @@ const SCENARIOS: ScenarioDef[] = [
   { key: "BTN_RFI", heroPosition: "BTN", history: [], description: "BTN opens" },
   { key: "SB_RFI", heroPosition: "SB", history: [], description: "SB opens" },
 
-  // Facing open (hero faces a single raise)
-  { key: "HJ_vs_RAISE", heroPosition: "HJ", history: ["RAISE"], description: "HJ vs UTG open" },
+  // Facing open (hero faces a single raise) — generic keys
+  { key: "HJ_vs_RAISE", heroPosition: "HJ", history: ["RAISE"], description: "HJ vs open" },
   { key: "CO_vs_RAISE", heroPosition: "CO", history: ["RAISE"], description: "CO vs open" },
   { key: "BTN_vs_RAISE", heroPosition: "BTN", history: ["RAISE"], description: "BTN vs open" },
   { key: "SB_vs_RAISE", heroPosition: "SB", history: ["RAISE"], description: "SB vs open" },
   { key: "BB_vs_RAISE", heroPosition: "BB", history: ["RAISE"], description: "BB vs open" },
+
+  // BB defense by opener position
+  { key: "BB_vs_UTG_RAISE", heroPosition: "BB", history: ["RAISE"], description: "BB vs UTG open" },
+  { key: "BB_vs_HJ_RAISE", heroPosition: "BB", history: ["RAISE"], description: "BB vs HJ open" },
+  { key: "BB_vs_CO_RAISE", heroPosition: "BB", history: ["RAISE"], description: "BB vs CO open" },
+  { key: "BB_vs_BTN_RAISE", heroPosition: "BB", history: ["RAISE"], description: "BB vs BTN open" },
+  { key: "BB_vs_SB_RAISE", heroPosition: "BB", history: ["RAISE"], description: "BB vs SB open" },
 
   // Facing 3-bet (hero opened, faces a re-raise)
   { key: "UTG_vs_3BET", heroPosition: "UTG", history: ["RAISE", "RAISE"], description: "UTG faces 3-bet" },
   { key: "HJ_vs_3BET", heroPosition: "HJ", history: ["RAISE", "RAISE"], description: "HJ faces 3-bet" },
   { key: "CO_vs_3BET", heroPosition: "CO", history: ["RAISE", "RAISE"], description: "CO faces 3-bet" },
   { key: "BTN_vs_3BET", heroPosition: "BTN", history: ["RAISE", "RAISE"], description: "BTN faces 3-bet" },
+  { key: "SB_vs_3BET", heroPosition: "SB", history: ["RAISE", "RAISE"], description: "SB faces 3-bet" },
+
+  // Facing 4-bet (hero 3-bet, faces a 4-bet)
+  { key: "BTN_vs_4BET", heroPosition: "BTN", history: ["RAISE", "RAISE", "RAISE"], description: "BTN faces 4-bet" },
+  { key: "CO_vs_4BET", heroPosition: "CO", history: ["RAISE", "RAISE", "RAISE"], description: "CO faces 4-bet" },
+  { key: "SB_vs_4BET", heroPosition: "SB", history: ["RAISE", "RAISE", "RAISE"], description: "SB faces 4-bet" },
+  { key: "BB_vs_4BET", heroPosition: "BB", history: ["RAISE", "RAISE", "RAISE"], description: "BB faces 4-bet" },
+
+  // Blind battles
+  { key: "SB_vs_BB", heroPosition: "SB", history: [], description: "SB heads-up vs BB" },
+  { key: "BB_vs_SB_LIMP", heroPosition: "BB", history: ["CALL"], description: "BB vs SB limp" },
 ];
 
 // ─── GTO-approximate static ranges ─────────────────────────────────────────
@@ -125,7 +143,7 @@ function staticRange(
 }
 
 const STATIC_RANGES: Record<string, ScenarioOutput> = {
-  // RFI: FOLD + RAISE (no calling/limping in GTO 6-max RFI)
+  // ── RFI: FOLD + RAISE (no calling/limping in GTO 6-max RFI) ──────
   //                       fold  call  r2.2  r2.5  r3.0   baseEv
   UTG_RFI: staticRange(     85,    0,    2,   11,    2,   0.85),
   HJ_RFI: staticRange(      81,    0,    3,   13,    3,   0.90),
@@ -133,7 +151,7 @@ const STATIC_RANGES: Record<string, ScenarioOutput> = {
   BTN_RFI: staticRange(     56,    0,    8,   28,    8,   1.10),
   SB_RFI: staticRange(      64,    0,    6,   24,    6,   0.80),
 
-  // Facing open: FOLD + CALL + 3BET
+  // ── Facing open: FOLD + CALL + 3BET (generic) ────────────────────
   //                       fold  call  r2.2  r2.5  r3.0   baseEv
   HJ_vs_RAISE: staticRange( 72,   18,    1,    7,    2,   0.65),
   CO_vs_RAISE: staticRange(  65,   22,    2,    8,    3,   0.75),
@@ -141,12 +159,33 @@ const STATIC_RANGES: Record<string, ScenarioOutput> = {
   SB_vs_RAISE: staticRange(  62,   20,    3,   10,    5,   0.55),
   BB_vs_RAISE: staticRange(  45,   35,    3,   12,    5,   0.40),
 
-  // Facing 3-bet: tight defense (fold + call + 4bet)
+  // ── BB defense by opener position ────────────────────────────────
+  //                           fold  call  r2.2  r2.5  r3.0   baseEv
+  BB_vs_UTG_RAISE: staticRange( 55,   35,    1,    7,    2,   0.30),
+  BB_vs_HJ_RAISE: staticRange(  52,   37,    1,    7,    3,   0.35),
+  BB_vs_CO_RAISE: staticRange(  48,   38,    2,    8,    4,   0.40),
+  BB_vs_BTN_RAISE: staticRange( 40,   42,    2,   10,    6,   0.45),
+  BB_vs_SB_RAISE: staticRange(  35,   40,    3,   14,    8,   0.50),
+
+  // ── Facing 3-bet: tight defense (fold + call + 4bet) ─────────────
   //                       fold  call  r2.2  r2.5  r3.0   baseEv
   UTG_vs_3BET: staticRange(  55,   35,    1,    6,    3,   0.50),
   HJ_vs_3BET: staticRange(   52,   35,    2,    7,    4,   0.55),
   CO_vs_3BET: staticRange(   48,   37,    2,    8,    5,   0.60),
   BTN_vs_3BET: staticRange(  42,   40,    3,    9,    6,   0.65),
+  SB_vs_3BET: staticRange(   48,   35,    3,   10,    4,   0.45),
+
+  // ── Facing 4-bet: very tight (fold + call + 5bet shove) ──────────
+  //                       fold  call  r2.2  r2.5  r3.0   baseEv
+  BTN_vs_4BET: staticRange(  50,   35,    3,    8,    4,   0.55),
+  CO_vs_4BET: staticRange(   55,   32,    2,    7,    4,   0.50),
+  SB_vs_4BET: staticRange(   52,   33,    3,    8,    4,   0.45),
+  BB_vs_4BET: staticRange(   48,   35,    3,    9,    5,   0.50),
+
+  // ── Blind battles ────────────────────────────────────────────────
+  //                       fold  call  r2.2  r2.5  r3.0   baseEv
+  SB_vs_BB: staticRange(     24,   24,    9,   35,    8,   0.60),
+  BB_vs_SB_LIMP: staticRange( 0,   60,    6,   26,    8,   0.50),
 };
 
 // ─── Scenario key derivation ────────────────────────────────────────────────
@@ -159,17 +198,34 @@ export function deriveScenarioKey(
   heroPosition: string,
   history: string[]
 ): string | null {
-  if (history.length === 0) return `${heroPosition}_RFI`;
+  // RFI — no prior aggression (only folds before us)
+  if (history.length === 0 || history.every(a => a === "FOLD")) {
+    return `${heroPosition}_RFI`;
+  }
 
   const raiseCount = history.filter(
     (a) => a.startsWith("RAISE") || a.startsWith("BET")
   ).length;
+  const callCount = history.filter(a => a === "CALL").length;
 
-  if (raiseCount === 1 && history.length === 1) {
+  // Facing a single open (1 raise, possibly folds before)
+  if (raiseCount === 1 && callCount === 0) {
     return `${heroPosition}_vs_RAISE`;
   }
-  if (raiseCount === 2 && history.length === 2) {
+
+  // Facing a 3-bet (2 raises in history)
+  if (raiseCount === 2) {
     return `${heroPosition}_vs_3BET`;
+  }
+
+  // Facing a 4-bet (3 raises in history)
+  if (raiseCount === 3) {
+    return `${heroPosition}_vs_4BET`;
+  }
+
+  // BB facing SB limp (SB completed, no raise)
+  if (heroPosition === "BB" && callCount >= 1 && raiseCount === 0) {
+    return "BB_vs_SB_LIMP";
   }
 
   return null;
@@ -185,10 +241,10 @@ function main() {
   );
 
   const database: RangeDatabase = {
-    schemaVersion: "1",
+    schemaVersion: "2",
     generatedAt: new Date().toISOString(),
     stackDepthBb: 100,
-    method: "static-gto-approximate",
+    method: "gto-aggregate-v2",
     scenarios: {},
   };
 

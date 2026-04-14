@@ -1,8 +1,24 @@
 // src/lib/engine/canonicalHash.ts
 
-import { createHash } from "node:crypto";
 import type { ActionId } from "./types";
 import type { CanonicalNode } from "./nodeTypes";
+
+/**
+ * Deterministic synchronous hash that works in both Node.js and browsers.
+ * Uses FNV-1a with multiple rounds to produce a 64-char hex digest.
+ */
+function syncHash(input: string): string {
+  let result = "";
+  for (let round = 0; round < 8; round++) {
+    let h = 0x811c9dc5 ^ (round * 0x9e3779b9);
+    for (let i = 0; i < input.length; i++) {
+      h ^= input.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    result += (h >>> 0).toString(16).padStart(8, "0");
+  }
+  return result;
+}
 
 const NUMBER_EPS = 1e-12;
 
@@ -172,7 +188,7 @@ export function buildCanonicalNodeHash(input: CanonicalNode): string {
   };
 
   const canonicalJson = stableStringify(payload);
-  return createHash("sha256").update(canonicalJson).digest("hex");
+  return syncHash(canonicalJson);
 }
 
 export const __internal = {

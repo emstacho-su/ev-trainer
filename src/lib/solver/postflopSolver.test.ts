@@ -66,7 +66,7 @@ describe('solvePostflopSubgame', () => {
   });
 
   describe('flop solving', () => {
-    it('solves a basic flop scenario', { timeout: 15000 }, () => {
+    it('solves a basic flop scenario', () => {
       const config: PostflopConfig = {
         maxIterations: 5,
         targetExploitability: 100,
@@ -96,7 +96,7 @@ describe('solvePostflopSubgame', () => {
       expect(solution.buckets).toBeDefined();
     });
 
-    it('creates info sets using bucket-based abstraction', { timeout: 15000 }, () => {
+    it('creates info sets using bucket-based abstraction', () => {
       const config: PostflopConfig = {
         maxIterations: 10,
         targetExploitability: 10,
@@ -128,7 +128,7 @@ describe('solvePostflopSubgame', () => {
       expect(hasBucketNotation).toBe(true);
     });
 
-    it('reduces complexity vs per-hand abstraction', { timeout: 15000 }, () => {
+    it('reduces complexity vs per-hand abstraction', () => {
       const config: PostflopConfig = {
         maxIterations: 5,
         targetExploitability: 100,
@@ -160,7 +160,7 @@ describe('solvePostflopSubgame', () => {
   });
 
   describe('turn solving', () => {
-    it('solves a turn scenario', { timeout: 15000 }, () => {
+    it('solves a turn scenario', () => {
       const config: PostflopConfig = {
         maxIterations: 10,
         targetExploitability: 10,
@@ -189,7 +189,7 @@ describe('solvePostflopSubgame', () => {
   });
 
   describe('river solving', () => {
-    it('solves a river scenario', { timeout: 15000 }, () => {
+    it('solves a river scenario', () => {
       const config: PostflopConfig = {
         maxIterations: 10,
         targetExploitability: 10,
@@ -218,7 +218,7 @@ describe('solvePostflopSubgame', () => {
   });
 
   describe('convergence', () => {
-    it('produces strategies that converge over iterations', { timeout: 15000 }, () => {
+    it('produces strategies that converge over iterations', () => {
       const config: PostflopConfig = {
         maxIterations: 5,
         targetExploitability: 100,
@@ -251,7 +251,7 @@ describe('solvePostflopSubgame', () => {
 });
 
 describe('toSolverNodeOutputPostflop', () => {
-  it('converts solution to SolverNodeOutput format', { timeout: 15000 }, () => {
+  it('converts solution to SolverNodeOutput format', () => {
     const config: PostflopConfig = {
       maxIterations: 5,
       targetExploitability: 100,
@@ -288,7 +288,7 @@ describe('toSolverNodeOutputPostflop', () => {
     validateSolverNodeOutput(output);
   });
 
-  it('produces valid probability distributions', { timeout: 15000 }, () => {
+  it('produces valid probability distributions', () => {
     const config: PostflopConfig = {
       maxIterations: 5,
       targetExploitability: 100,
@@ -329,7 +329,7 @@ describe('toSolverNodeOutputPostflop', () => {
     }
   });
 
-  it('handles unsolved info sets', { timeout: 15000 }, () => {
+  it('handles unsolved info sets', () => {
     const config: PostflopConfig = {
       maxIterations: 5,
       targetExploitability: 100,

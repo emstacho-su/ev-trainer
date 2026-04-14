@@ -13,22 +13,41 @@ interface RangeDatabase {
 /**
  * Derive a scenario key from a solver request.
  * Maps publicState (position, history) to a scenario identifier matching the range database.
+ *
+ * Supports: RFI, vs_RAISE, vs_3BET, vs_4BET, BB defense by opener, SB vs BB, BB vs SB limp.
  */
 function deriveScenarioKey(request: SolverRequest): string | null {
   const position = request.toAct;
   const history = request.history.actions;
 
-  if (history.length === 0) return `${position}_RFI`;
+  // RFI — no prior aggression (only folds before us)
+  if (history.length === 0 || history.every((a) => a === "FOLD")) {
+    return `${position}_RFI`;
+  }
 
   const raiseCount = history.filter(
-    (a) => a.startsWith("RAISE") || a.startsWith("BET")
+    (a) => a.startsWith("RAISE") || a.startsWith("BET"),
   ).length;
+  const callCount = history.filter((a) => a === "CALL").length;
 
-  if (raiseCount === 1 && history.length === 1) {
+  // Facing a single open (1 raise, possibly folds before)
+  if (raiseCount === 1 && callCount === 0) {
     return `${position}_vs_RAISE`;
   }
-  if (raiseCount === 2 && history.length === 2) {
+
+  // Facing a 3-bet (2 raises in history)
+  if (raiseCount === 2) {
     return `${position}_vs_3BET`;
+  }
+
+  // Facing a 4-bet (3 raises in history)
+  if (raiseCount === 3) {
+    return `${position}_vs_4BET`;
+  }
+
+  // BB facing SB limp (SB completed, no raise)
+  if (position === "BB" && callCount >= 1 && raiseCount === 0) {
+    return "BB_vs_SB_LIMP";
   }
 
   return null;
@@ -54,17 +73,13 @@ export class PreflopRangeAdapter implements AsyncSolverAdapter {
       // In client context, fetch from public URL
       const isServer = typeof window === "undefined";
 
-      let database: RangeDatabase;
-      if (isServer) {
-        const { readFileSync } = await import("node:fs");
-        const { resolve } = await import("node:path");
-        const filePath = resolve(process.cwd(), "public/ranges/preflop-6max-100bb.json");
-        const raw = readFileSync(filePath, "utf-8");
-        database = JSON.parse(raw);
-      } else {
-        const response = await fetch("/ranges/preflop-6max-100bb.json");
-        database = await response.json();
-      }
+      // Always use fetch — this adapter is called from client hooks.
+      // On server, construct absolute URL; on client, relative URL works.
+      const baseUrl = isServer
+        ? `http://localhost:${process.env.PORT || 3000}`
+        : "";
+      const response = await fetch(`${baseUrl}/ranges/preflop-6max-100bb.json`);
+      const database: RangeDatabase = await response.json();
 
       for (const [key, output] of Object.entries(database.scenarios)) {
         this.ranges.set(key, output as SolverNodeOutput);
