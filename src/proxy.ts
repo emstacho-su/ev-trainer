@@ -9,7 +9,7 @@ import { updateSession } from '@/lib/supabase/middleware';
  * 2. Propagates refreshed cookies to request and response
  * 3. Redirects unauthenticated users away from protected routes
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
 
