@@ -23,6 +23,7 @@ import { useTrainerConfig } from '@/lib/v2/hooks/useTrainerConfig';
 import type { Spot } from '@/lib/engine/spot';
 import type { ActionId, Position } from '@/lib/engine/types';
 import type { DecisionGrade } from '@/lib/engine/trainingOrchestrator';
+import { createInitialGameState, computeLegalActions } from '@/lib/engine/gameState';
 import { createSeededRng, combineSeed } from '@/lib/engine/rng';
 import type { SessionSnapshot } from '@/lib/v2/api/sessionHandlers';
 import {
@@ -212,19 +213,45 @@ function isPreflopRfi(spot: Spot): boolean {
   return spot.board.length === 0 && spot.history.every(a => a === 'FOLD');
 }
 
-/** Get the action IDs appropriate for the current spot context. */
+/** Get the action IDs appropriate for the current spot context using GameState rules. */
 function getAvailableActions(spot: Spot): { actionId: ActionId; label: string }[] {
-  if (isPreflopRfi(spot)) {
-    return [
-      { actionId: 'FOLD', label: 'Fold' },
-      { actionId: 'RAISE_3.0X', label: 'Raise 3x' },
-    ];
-  }
-  if (heroFacesBet(spot)) {
-    if (spot.board.length === 0) {
+  try {
+    const gs = createInitialGameState(spot);
+    const legal = computeLegalActions(gs);
+
+    const actions: { actionId: ActionId; label: string }[] = [];
+
+    if (legal.canFold) actions.push({ actionId: 'FOLD', label: 'Fold' });
+    if (legal.canCheck) actions.push({ actionId: 'CHECK', label: 'Check' });
+    if (legal.canCall) actions.push({ actionId: 'CALL', label: 'Call' });
+
+    if (legal.canRaise) {
+      actions.push({ actionId: 'RAISE_3.0X', label: 'Raise 3x' });
+    }
+
+    if (legal.canBet) {
+      actions.push(
+        { actionId: 'BET_33PCT', label: 'Bet 33%' },
+        { actionId: 'BET_50PCT', label: 'Bet 50%' },
+        { actionId: 'BET_75PCT', label: 'Bet 75%' },
+        { actionId: 'BET_100PCT', label: 'Bet 100%' },
+      );
+    }
+
+    // Fallback if somehow empty
+    if (actions.length === 0) {
       return [
         { actionId: 'FOLD', label: 'Fold' },
         { actionId: 'CALL', label: 'Call' },
+      ];
+    }
+
+    return actions;
+  } catch {
+    // Fallback to legacy logic if GameState creation fails
+    if (isPreflopRfi(spot)) {
+      return [
+        { actionId: 'FOLD', label: 'Fold' },
         { actionId: 'RAISE_3.0X', label: 'Raise 3x' },
       ];
     }
@@ -234,13 +261,6 @@ function getAvailableActions(spot: Spot): { actionId: ActionId; label: string }[
       { actionId: 'RAISE_3.0X', label: 'Raise 3x' },
     ];
   }
-  return [
-    { actionId: 'CHECK', label: 'Check' },
-    { actionId: 'BET_33PCT', label: 'Bet 33%' },
-    { actionId: 'BET_50PCT', label: 'Bet 50%' },
-    { actionId: 'BET_75PCT', label: 'Bet 75%' },
-    { actionId: 'BET_100PCT', label: 'Bet 100%' },
-  ];
 }
 
 /** Score a decision: 1 if +EV & highest freq, 0.5 if +EV but not highest freq, 0 if -EV. */

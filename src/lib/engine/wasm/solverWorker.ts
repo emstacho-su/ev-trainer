@@ -157,29 +157,87 @@ const workerApi = {
 
     const numActions = gameManager.num_actions();
     const results = gameManager.get_results();
-    const actionsStr = gameManager.actions_after(new Uint32Array(0), numActions);
-    const actionNames = actionsStr.split(",").filter(Boolean);
+    const actionsStr = gameManager.actions_after(new Uint32Array(0));
+    // WASM actions are slash-delimited: "Check:0/Bet:7/Bet:13"
+    const actionNames = actionsStr.split("/").filter(Boolean);
 
-    // Parse results: strategy array is the first numActions * numCombos values
-    // For simplicity, compute average strategy across all combos
+    // Determine the current player and combo count
+    const currentPlayer = gameManager.current_player(); // "oop" | "ip" | "terminal" | "chance"
+    const isTerminal = currentPlayer === "terminal";
+    const isChance = currentPlayer === "chance";
+    const playerIndex = currentPlayer === "ip" ? 1 : 0;
+
+    // Get number of combos per player
+    const oopCombos = gameManager.private_cards(0);
+    const ipCombos = gameManager.private_cards(1);
+    const numOop = oopCombos.length;
+    const numIp = ipCombos.length;
+    const numCombos = playerIndex === 0 ? numOop : numIp;
+
     const actions: SolveResult["actions"] = [];
-    for (let a = 0; a < actionNames.length; a++) {
-      actions.push({
-        actionId: actionNames[a],
-        frequency: 0,
-        ev: 0,
-      });
-    }
 
-    // The results array packing depends on the WASM module version.
-    // This is a simplified extraction -- the real implementation will
-    // need to match the exact packing format of get_results().
-    // For now, use equal frequencies as placeholder until WASM is available.
-    if (actions.length > 0) {
-      const equalFreq = 1.0 / actions.length;
-      for (const action of actions) {
-        action.frequency = equalFreq;
-        action.ev = 0;
+    // Unpack results according to the postflop-solver packing format:
+    // [0]: OOP pot, [1]: IP pot, [2]: is_empty_flag
+    // [3 .. 3+numOop]: OOP weights
+    // [3+numOop .. 3+numOop+numIp]: IP weights
+    // If is_empty_flag == 0: normalized weights, equity, EV, EV ratios (2*N each)
+    // If not terminal/chance: strategy array (numActions * numCombos)
+    // If not terminal/chance and is_empty_flag == 0: EV detail (numActions * numCombos)
+    const isEmptyFlag = results[2];
+
+    if (!isTerminal && !isChance && numActions > 0 && numCombos > 0) {
+      // Calculate offset to strategy data
+      let offset = 3 + numOop + numIp; // past weights
+      if (isEmptyFlag > 0) {
+        offset += numOop + numIp; // weights repeated
+      } else {
+        offset += numOop + numIp; // normalized weights
+        offset += numOop + numIp; // equity
+        offset += numOop + numIp; // EV
+        offset += numOop + numIp; // EV ratios
+      }
+
+      const strategyOffset = offset;
+      const evDetailOffset = strategyOffset + numActions * numCombos;
+
+      // Get the current player's weights for weighted averaging
+      const weightsOffset = 3 + (playerIndex === 0 ? 0 : numOop);
+      let totalWeight = 0;
+      for (let c = 0; c < numCombos; c++) {
+        totalWeight += results[weightsOffset + c];
+      }
+
+      // Extract average strategy and EV per action, weighted by combo frequency
+      for (let a = 0; a < actionNames.length; a++) {
+        let weightedFreq = 0;
+        let weightedEv = 0;
+
+        for (let c = 0; c < numCombos; c++) {
+          const w = results[weightsOffset + c];
+          if (w < 1e-7) continue;
+
+          const strategy = results[strategyOffset + a * numCombos + c];
+          weightedFreq += w * strategy;
+
+          // EV detail is available when is_empty_flag == 0
+          if (isEmptyFlag === 0 && evDetailOffset + a * numCombos + c < results.length) {
+            weightedEv += w * results[evDetailOffset + a * numCombos + c];
+          }
+        }
+
+        const avgFreq = totalWeight > 1e-7 ? weightedFreq / totalWeight : 0;
+        const avgEv = totalWeight > 1e-7 ? weightedEv / totalWeight : 0;
+
+        actions.push({
+          actionId: actionNames[a],
+          frequency: Math.round(avgFreq * 10000) / 10000,
+          ev: Math.round(avgEv * 100) / 100,
+        });
+      }
+    } else {
+      // Terminal or chance node — no strategy to extract
+      for (const name of actionNames) {
+        actions.push({ actionId: name, frequency: 0, ev: 0 });
       }
     }
 

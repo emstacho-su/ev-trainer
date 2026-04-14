@@ -61,7 +61,7 @@ export interface WasmGameManager {
   num_actions(): number;
 
   /** Get actions available after appending indices. Returns comma-separated action string. */
-  actions_after(append: Uint32Array, numActions: number): string;
+  actions_after(append: Uint32Array): string;
 
   /** Bitmask of dealable cards at a chance node. */
   possible_cards(): bigint;

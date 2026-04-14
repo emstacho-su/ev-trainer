@@ -84,7 +84,7 @@ describe("Postflop Solver WASM", () => {
       gm.free();
     });
 
-    it("initializes and solves a simple flop spot", { timeout: 30000 }, () => {
+    it("initializes and solves a simple flop spot", () => {
       const gm = solverModule.GameManager.new();
 
       // Build ranges: OOP = "QQ+,AK", IP = "TT+,AQ+"
@@ -186,6 +186,107 @@ describe("Postflop Solver WASM", () => {
       expect(typeof actions).toBe("string");
       // Root node should have check + bet actions for OOP
       expect(actions.length).toBeGreaterThan(0);
+
+      gm.free();
+    });
+
+    it("extracts real strategy frequencies that sum to ~1.0", { timeout: 300_000 }, () => {
+      const gm = solverModule.GameManager.new();
+
+      // Use narrow ranges + fewer bet sizes for faster solving
+      const oopRange = parseRange("QQ+,AKs");
+      const ipRange = parseRange("TT+,AQs+");
+      const board = new Uint8Array([4 * 12 + 2, 4 * 11 + 1, 4 * 5 + 0]);
+
+      gm.init(
+        oopRange, ipRange, board, 20, 180, 0, 0, false,
+        "67%", "",        // OOP flop: single bet size, no raise
+        "67%", "", "",    // OOP turn
+        "67%", "", "",    // OOP river
+        "67%", "",        // IP flop
+        "67%", "",        // IP turn
+        "67%", "",        // IP river
+        1.5, 0.67, 0.1, "", ""
+      );
+
+      gm.allocate_memory(false);
+
+      // Run 20 iterations — enough to differentiate strategy, fast enough for CI
+      for (let i = 0; i < 20; i++) {
+        gm.solve_step(i);
+      }
+      gm.finalize();
+
+      // Navigate to root node
+      gm.apply_history(new Uint32Array(0));
+
+      const numActions = gm.num_actions();
+      const results = gm.get_results();
+      const actionsStr = gm.actions_after(new Uint32Array(0));
+      // WASM actions are slash-delimited: "Check:0/Bet:7/Bet:13"
+      const actionNames = actionsStr.split("/").filter(Boolean);
+
+      const currentPlayer = gm.current_player();
+      const playerIndex = currentPlayer === "ip" ? 1 : 0;
+
+      const oopCombos = gm.private_cards(0);
+      const ipCombos = gm.private_cards(1);
+      const numOop = oopCombos.length;
+      const numIp = ipCombos.length;
+      const numCombos = playerIndex === 0 ? numOop : numIp;
+
+      // Verify basic packing: [0]=oop pot, [1]=ip pot, [2]=is_empty_flag
+      expect(results[0]).toBeGreaterThan(0); // OOP pot
+      expect(results[1]).toBeGreaterThan(0); // IP pot
+      const isEmptyFlag = results[2];
+      expect(isEmptyFlag).toBe(0); // Both ranges should be active
+
+      // Calculate strategy offset using the packing format
+      let offset = 3 + numOop + numIp; // weights
+      offset += numOop + numIp; // normalized weights
+      offset += numOop + numIp; // equity
+      offset += numOop + numIp; // EV
+      offset += numOop + numIp; // EV ratios
+      const strategyOffset = offset;
+
+      // Extract weighted average strategy
+      const weightsOffset = 3 + (playerIndex === 0 ? 0 : numOop);
+      let totalWeight = 0;
+      for (let c = 0; c < numCombos; c++) {
+        totalWeight += results[weightsOffset + c];
+      }
+      expect(totalWeight).toBeGreaterThan(0);
+
+      // Extract per-action average frequency
+      const frequencies: number[] = [];
+      for (let a = 0; a < numActions; a++) {
+        let weightedFreq = 0;
+        for (let c = 0; c < numCombos; c++) {
+          const w = results[weightsOffset + c];
+          if (w < 1e-7) continue;
+          const strategy = results[strategyOffset + a * numCombos + c];
+          weightedFreq += w * strategy;
+        }
+        frequencies.push(totalWeight > 0 ? weightedFreq / totalWeight : 0);
+      }
+
+      // Frequencies should sum to ~1.0
+      const freqSum = frequencies.reduce((s, f) => s + f, 0);
+      expect(freqSum).toBeCloseTo(1.0, 2);
+
+      // Each frequency should be in [0, 1]
+      for (const freq of frequencies) {
+        expect(freq).toBeGreaterThanOrEqual(-0.001);
+        expect(freq).toBeLessThanOrEqual(1.001);
+      }
+
+      // We should have action names matching numActions
+      expect(actionNames.length).toBe(numActions);
+
+      // Strategy shouldn't be all equal (solver should differentiate)
+      const allEqual = frequencies.every((f) => Math.abs(f - frequencies[0]) < 0.01);
+      // With 100 iterations this should have differentiated at least somewhat
+      // (but we don't assert this strictly as it depends on convergence)
 
       gm.free();
     });

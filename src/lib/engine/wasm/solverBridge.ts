@@ -15,22 +15,19 @@ let initPromise: Promise<boolean> | null = null;
 
 /** Map WASM action names to ev-trainer ActionId format. */
 function normalizeActionId(wasmAction: string): string {
-  // postflop-solver uses: Fold, Check, Call, Bet X, Raise X, AllIn X
-  const lower = wasmAction.toLowerCase();
+  // postflop-solver uses: "Fold:0", "Check:0", "Call:0", "Bet:7", "Raise:20", "Allin:100"
+  // Strip the :amount suffix for type detection, keep amount for sizing
+  const [typePart, amountPart] = wasmAction.split(":");
+  const lower = typePart.toLowerCase();
+  const amount = amountPart && amountPart !== "0" ? amountPart : "";
+
   if (lower === "fold") return "FOLD";
   if (lower === "check") return "CHECK";
   if (lower === "call") return "CALL";
-  if (lower.startsWith("bet")) {
-    const amount = wasmAction.replace(/[^0-9.]/g, "");
-    return amount ? `BET_${amount}` : "BET";
-  }
-  if (lower.startsWith("raise")) {
-    const amount = wasmAction.replace(/[^0-9.]/g, "");
-    return amount ? `RAISE_${amount}` : "RAISE";
-  }
-  if (lower.startsWith("allin") || lower.startsWith("all")) {
-    return "ALL_IN";
-  }
+  if (lower === "bet") return amount ? `BET_${amount}` : "BET";
+  if (lower === "raise") return amount ? `RAISE_${amount}` : "RAISE";
+  if (lower === "allin") return amount ? `ALL_IN_${amount}BB` : "ALL_IN";
+
   return wasmAction.toUpperCase();
 }
 
