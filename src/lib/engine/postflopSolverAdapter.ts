@@ -7,6 +7,7 @@ import type { SolverNodeOutput, SolverRequest } from "./solverAdapter";
 import type { AsyncSolverAdapter, SolverProgress } from "./solverTypes";
 import type { PostflopSolveConfig } from "./wasm/wasmTypes";
 import { DEFAULT_BET_SIZES } from "./wasm/wasmTypes";
+import { recordSolverEvent } from "./solverTelemetry";
 
 /**
  * PostflopSolverAdapter routes to the WASM solver when available,
@@ -72,18 +73,26 @@ export class PostflopSolverAdapter implements AsyncSolverAdapter {
    */
   async solve(request: SolverRequest): Promise<SolverNodeOutput> {
     await this.ensureInit();
+    const street = request.publicState.street;
 
     if (this.wasmAvailable) {
       try {
         const bridge = await import("./wasm/solverBridge");
         const config = this.toWasmConfig(request);
-        return await bridge.solvePostflop(config);
-      } catch {
-        // WASM solve failed -- fall through to mock
+        const result = await bridge.solvePostflop(config);
+        recordSolverEvent({ path: "wasm", street });
+        return result;
+      } catch (err) {
+        recordSolverEvent({
+          path: "mock-fallback-failed",
+          street,
+          error: err instanceof Error ? err.message : String(err),
+        });
       }
+    } else {
+      recordSolverEvent({ path: "mock-fallback-unavailable", street });
     }
 
-    // Fallback: use existing mock postflop solver
     return this.mockSolve(request);
   }
 
@@ -95,15 +104,24 @@ export class PostflopSolverAdapter implements AsyncSolverAdapter {
     onProgress: (progress: SolverProgress) => void
   ): Promise<SolverNodeOutput> {
     await this.ensureInit();
+    const street = request.publicState.street;
 
     if (this.wasmAvailable) {
       try {
         const bridge = await import("./wasm/solverBridge");
         const config = this.toWasmConfig(request);
-        return await bridge.solvePostflop(config, onProgress);
-      } catch {
-        // Fall through to mock
+        const result = await bridge.solvePostflop(config, onProgress);
+        recordSolverEvent({ path: "wasm", street });
+        return result;
+      } catch (err) {
+        recordSolverEvent({
+          path: "mock-fallback-failed",
+          street,
+          error: err instanceof Error ? err.message : String(err),
+        });
       }
+    } else {
+      recordSolverEvent({ path: "mock-fallback-unavailable", street });
     }
 
     return this.mockSolve(request);
